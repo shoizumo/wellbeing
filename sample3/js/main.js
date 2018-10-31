@@ -116,29 +116,35 @@
     // material.depthWrite = false;
 
 
-    geometry = new THREE.Geometry();
+    let R = 3;
+    geometry = new THREE.SphereBufferGeometry(R, 36, 36) ;
+    //geometry = new THREE.PlaneBufferGeometry(100, 100);
 
-    let vertices = [
-      new THREE.Vector3(0, 1, 0),
-      new THREE.Vector3(-1, -1, 0),
-      new THREE.Vector3(1, -1, 0),
-    ];
+    let num = geometry.attributes.position.count;
+    geometry.addAttribute('displacement', new THREE.BufferAttribute(new Float32Array(num), 1));
 
-    let faces = [
-      new THREE.Face3(0, 1, 2),
-    ];
-
-    geometry.vertices = vertices;
-    geometry.faces = faces;
 
     material = new THREE.RawShaderMaterial({
       vertexShader: vs,
       fragmentShader: fs,
       uniforms: {
-        //map: {type: "t", value: earthmapLand}
+        // Map
+        map: {type: "t", value: earthmapLand},
+        //材質色
+        color: {type: "c", value: new THREE.Color(0xff2200)},
+        //テクスチャ座標のスライド量
+        amplitude: {type: "f", value: 1.0},
+        // テクスチャ画像
+        //texture: {type: "t", value: earthmapLand},
       },
+      transparent: true,
+
     });
 
+    //material.uniforms.texture.value.wrapS = THREE.RepeatWrapping;
+    //material.uniforms.texture.value.wrapT = THREE.RepeatWrapping;
+
+    //let mesh = new THREE.Mesh(geometry, material);
     let mesh = new THREE.Mesh(geometry, material);
     scene.add(mesh);
 
