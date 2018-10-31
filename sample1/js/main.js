@@ -55,10 +55,10 @@
     canvasHeight = window.innerHeight;
     targetDOM = document.getElementById('webgl');
 
-    let earthmapLand = Loader = new THREE.TextureLoader();
+    let earthmapLandLoader = Loader = new THREE.TextureLoader();
     let earthBumpLoader = new THREE.TextureLoader();
-    earthTexture = earthmapLand.load('img/earthmap_land.png', () => {
-      moonTexture = earthBumpLoader.load('img/earthbump.jpg', init);
+    earthmapLand = earthmapLandLoader.load('img/earthmap_land.png', () => {
+      earthBump = earthBumpLoader.load('img/earthbump.jpg', init);
     });
 
   }, false);
@@ -83,8 +83,8 @@
     // material and geometory
     // material = new THREE.MeshLambertMaterial(MATERIAL_PARAM);
     material = new THREE.MeshBasicMaterial(MATERIAL_PARAM);
-    material.map = earthTexture;
-    material.bumpMap = moonTexture;
+    material.map = earthmapLand;
+    material.bumpMap = earthBump;
     material.bumpScale = 0.5;
     //material.specularMap = THREE.ImageUtils.loadTexture('img/earthspec.jpg');
     //material.specular  = new THREE.Color('gray');
@@ -201,4 +201,3 @@
     renderer.render(scene, camera);
   }
 })();
-
