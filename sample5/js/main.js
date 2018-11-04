@@ -5,6 +5,8 @@
   let targetDOM = null;
   let run = true;
   let isDown = false;
+  let isClick = false;
+  let isdDblclick = false;
   // three objects
   let scene;
   let camera;
@@ -20,16 +22,16 @@
   let axesHelper;
   // texture
   let earthmapLand;
-  let earthBump;
+  let earthOriginal;
   let textureImg;
 
   // constant variables
   const RENDERER_PARAM = {
     // clearColor: 0x333333
-    clearColor: 0xaaaaaa
+    clearColor: 0x333333
   };
   const MATERIAL_PARAM = {
-    color: 0xffffff,
+    color: 0x333333,
     // specular: 0xffffff
     transparent: true,
     opacity: 0.80
@@ -66,13 +68,19 @@
     window.addEventListener('mouseup', () => {
         isDown = false;
     }, false);
+    window.addEventListener('click', () => {
+        isClick = true;
+    }, false);
+    window.addEventListener('dblclick', () => {
+        isdDblclick = true;
+    }, false);
 
     // texture
     let earthmapLandLoader = Loader = new THREE.TextureLoader();
-    let earthBumpLoader = new THREE.TextureLoader();
+    let earthOriginalLoader = new THREE.TextureLoader();
     let textureImgLoader = new THREE.TextureLoader();
     earthmapLand = earthmapLandLoader.load('img/earthmap_land.png', () => {
-      earthBump = earthBumpLoader.load('img/earthbump.jpg', () => {
+      earthOriginal = earthOriginalLoader.load('img/earthmap.jpg', () => {
         textureImg = textureImgLoader.load('img/sample.png', loadShader);
       })
     });
@@ -106,19 +114,6 @@
     targetDOM.appendChild(renderer.domElement);
     controls = new THREE.OrbitControls(camera, renderer.domElement);
 
-    // material and geometory
-    // material = new THREE.MeshLambertMaterial(MATERIAL_PARAM);
-
-    // material = new THREE.MeshBasicMaterial(MATERIAL_PARAM);
-    // material.map = earthmapLand;
-    // material.bumpMap = earthBump;
-    // material.bumpScale = 0.5;
-    // //material.specularMap = THREE.ImageUtils.loadTexture('img/earthspec.jpg');
-    // //material.specular  = new THREE.Color('gray');
-    // material.transparent = true;
-    // material.side = THREE.DoubleSide;
-    // material.depthWrite = false;
-
 
     let R = 3;
     geometry = new THREE.SphereBufferGeometry(R, 36, 36) ;
@@ -133,17 +128,19 @@
       fragmentShader: fs,
       uniforms: {
         // Map
-        map: {type: "t", value: earthmapLand},
+        map: {type: "t", value: earthOriginal},
+        land: {type: "t", value: earthmapLand},
         textureImg: {type: "t", value: textureImg},
+        isText: {type: "bool", value: true},
         //材質色
         color: {type: "c", value: new THREE.Color(0xff2200)},
         //テクスチャ座標のスライド量
         amplitude: {type: "f", value: 1.0},
       },
       side: THREE.DoubleSide,
-      depthWrite: false,
-      transparent: true,
-      opacity: 0.5,
+      //depthWrite: false,
+      //transparent: true,
+      //opacity: 0.5,
     });
 
     //let mesh = new THREE.Mesh(geometry, material);
@@ -246,11 +243,17 @@
     if (run) {
       requestAnimationFrame(render);
     }
+    //console.log(material.uniforms);
 
     if (isDown === true) {
-      // earthMesh.rotation.y += 0.002;
-      // cloudMesh.rotation.y += 0.003;
+      material.uniforms.isText.value = false;
+      console.log('down');
+    }else{
+      material.uniforms.isText.value = true;
+      console.log('up');
     }
+    console.log(material.uniforms.isText);
+    //material.uniforms.isText.needsUpdate = true;
 
     renderer.render(scene, camera);
   }

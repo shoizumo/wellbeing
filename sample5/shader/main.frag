@@ -4,7 +4,9 @@ precision mediump float;
 uniform vec3 color;
 // uniform sampler2D texture;
 uniform sampler2D map;
+uniform sampler2D land;
 uniform sampler2D textureImg;
+uniform bool isText;
 
 
 //バーテックスシェーダーから転送された変数
@@ -26,8 +28,14 @@ void main() {
 
 
     vec4 mColor = texture2D(map, vUv);
+    vec4 lColor = texture2D(land, vUv);
     vec4 tcolor = texture2D(textureImg, vUv);
     vec4 white = vec4(1.0, 1.0, 1.0, 1.0);
-    gl_FragColor = tcolor * mColor;
-    gl_FragColor.a = gl_FragColor.a * 0.5;
+    if(isText == false){
+        gl_FragColor = lColor;
+    }
+    else{
+        gl_FragColor = tcolor * mColor;
+    }
+    //gl_FragColor.a = gl_FragColor.a * 0.5;
 }
