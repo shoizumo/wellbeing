@@ -12,17 +12,13 @@ void main(void) {
     //テクセルの取得
     vec4 destColor = texture2D(texture, vUv);
 
-    vec2 position = ( gl_FragCoord.xy / resolution.xy );
-    position.x *= cos(4.0);
-    position.y += sin(2.0);
-
+    vec2 position = (gl_FragCoord.xy / resolution.xy);
     float t = (time) * (position.y);
-    float f	= (time) * (position.y);
-    float g = sin(length(t * f)) ;
-    vec4 sourceColor = vec4((g),position.y+(g),tan(g),1.0);
+    float wave = sin(t * t * t * 10.0) ;
+    vec4 sourceColor = vec4(wave, wave, position.y+wave, 1.0);
 
     //描画色の決定
-    gl_FragColor = mix(destColor, sourceColor, 0.5);
+    gl_FragColor = mix(destColor, sourceColor, 0.01);
 
 }
 
