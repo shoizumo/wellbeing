@@ -4,4 +4,4 @@ sample3: base earth
 sample4: mix texture color
 sample5: change texture function
 sample6: postprocessing
-sample7: monochrome, border
+sample7: monochrome, border(sin wave)

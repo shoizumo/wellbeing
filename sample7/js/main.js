@@ -32,7 +32,7 @@
   // constant variables
   const RENDERER_PARAM = {
     // clearColor: 0x333333
-    clearColor: 0x333333
+    clearColor: 0x555555
   };
   const MATERIAL_PARAM = {
     color: 0x333333,
