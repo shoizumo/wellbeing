@@ -14,6 +14,7 @@
   let renderer;
   let geometry;
   let material;
+  let mesh;
   let earthSize;
   let earthMesh;
   let wireframeSphere;
@@ -32,14 +33,9 @@
   // constant variables
   const RENDERER_PARAM = {
     // clearColor: 0x333333
-    clearColor: 0x000000
+    clearColor: 0x111111
   };
-  const MATERIAL_PARAM = {
-    color: 0x333333,
-    // specular: 0xffffff
-    transparent: true,
-    opacity: 0.80
-  };
+
   const DIRECTIONAL_LIGHT_PARAM = {
     // color: 0xffffff,
     color: 0x42f4cb,
@@ -150,10 +146,8 @@
       //opacity: 0.5,
     });
 
-    //let mesh = new THREE.Mesh(geometry, material);
-    let mesh = new THREE.Mesh(geometry, material);
+    mesh = new THREE.Mesh(geometry, material);
     scene.add(mesh);
-
 
     // lights
     directionalLight = new THREE.DirectionalLight(
@@ -183,6 +177,8 @@
 
   // rendering
   function render() {
+    mesh.rotation.x += 3.141592 * 2 / 90 / 60 / 60;
+
     if (run) {
       requestAnimationFrame(render);
     }
@@ -229,9 +225,7 @@
           resolution: {type: "v2", value: [canvasWidth, canvasHeight]},
           time: {type: "f", value: time},
         },
-        //バーテックスシェーダ―プログラム
         vertexShader: vsPost,
-        //フラグメントシェーダープログラム
         fragmentShader: fsPost,
       })
     );
@@ -242,13 +236,13 @@
 
     //レンダラターゲットの生成
     postprocessing.renderTarget = new THREE.WebGLRenderTarget(
-        targetDOM.clientWidth,  //横幅
-        targetDOM.clientHeight, //縦幅
+        targetDOM.clientWidth,
+        targetDOM.clientHeight,
         {
-          minFilter: THREE.LinearFilter, //補間方法の指定（テクスチャ画像よりも小さなオブジェクト）
-          magFilter: THREE.LinearFilter, //補間方法の指定（テクスチャ画像よりも大きなオブジェクト）
-          format: THREE.RGBFormat,       //テクスチャ画像のフォーマット
-          stencilBuffer: false           //ステンシルバッファを無効化
+          minFilter: THREE.LinearFilter,
+          magFilter: THREE.LinearFilter,
+          format: THREE.RGBFormat,
+          stencilBuffer: false
         }
     );
 
