@@ -6,6 +6,10 @@ precision mediump float;
 
 uniform float time;
 uniform vec2 resolution;
+uniform sampler2D texture;
+
+varying vec2 vUv;
+
 
 // --------[ Original ShaderToy begins here ]---------- //
 float N21(vec2 p) {
@@ -81,6 +85,11 @@ float layer(vec2 st) {
 
 void main()
 {
+
+    //テクセルの取得
+    vec4 destColor = texture2D(texture, vUv);
+
+
     vec2 uv = (gl_FragCoord.xy - 0.5 * resolution.xy) / resolution.y;
     
     float m = 0.;
@@ -107,7 +116,17 @@ void main()
     vec3 col = (m - gradient.y) * baseColor;
     //vec3 col = m * baseColor;
     // Output to screen
-    gl_FragColor = vec4(col, 0.0);
+
+    //vec4 color = mix(destColor, vec4(col, 1.0), 0.6);
+    float mixRatio;
+    if(destColor.b < 0.1){
+        mixRatio = 1.0;
+    }else{
+        mixRatio = 0.0;
+    }
+    vec4 color = mix(destColor, vec4(col, 1.0), mixRatio);
+
+    gl_FragColor = vec4(color);
 
 }
 // --------[ Original ShaderToy ends here ]---------- //
