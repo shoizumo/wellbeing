@@ -2,12 +2,8 @@
  * Original shader from: https://www.shadertoy.com/view/XtcfDM
  */
 
-#ifdef GL_ES
 precision mediump float;
-#endif
 
-
-// glslsandbox uniforms
 uniform float time;
 uniform vec2 resolution;
 
@@ -71,7 +67,7 @@ float layer(vec2 st) {
     	m += getLine(gv, p[4], p[j]);
         vec2 temp = (gv - p[j]) * 100.;
         m += 1./dot(temp, temp) * (sin(10. * time + fract(p[j].x) * 20.) * 0.5 + 0.5);
-        
+
     }
     
     m += getLine(gv, p[1], p[3]);
@@ -88,20 +84,28 @@ void main()
     vec2 uv = (gl_FragCoord.xy - 0.5 * resolution.xy) / resolution.y;
     
     float m = 0.;
-    
-    float theta = time * 0.1;
-    mat2 rot = mat2(cos(theta), -sin(theta), sin(theta), cos(theta));
-    vec2 gradient = uv;
-    uv = rot * uv;
+
+    // rotation
+//    float theta = time * 0.1;
+//    mat2 rot = mat2(cos(theta), -sin(theta), sin(theta), cos(theta));
+      vec2 gradient = uv;
+//    uv = rot * uv;
     
     for (float i = 0.; i < 1.0 ; i += 0.25) {
-    	float depth = fract(i + time * 0.1);
-        m += layer(uv * mix(10., 0.5, depth) + i * 20.) * smoothstep(0., 0.2, depth) * smoothstep(1., 0.8, depth);
+        // speed
+    	float depth = fract(i + time * 0.05);
+        //m += layer(uv * mix(10., 0.5, depth) + i * 20.) * smoothstep(0., 0.2, depth) * smoothstep(1., 0.8, depth);
+        // number of star
+        m += layer(uv * mix(100., 0.5, depth) + i * 20.) * smoothstep(0., 0.2, depth) * smoothstep(1., 0.8, depth);
     }
     
-    vec3 baseColor = sin(vec3(3.45, 6.56, 8.78) * time * 0.2) * 0.5 + 0.5;
-    
+    //vec3 baseColor = sin(vec3(3.45, 6.56, 8.78) * time * 0.2) * 0.5 + 0.5;
+    vec3 baseColor = sin(vec3(1.0) * time * 0.2) * 0.5 + 0.5;
+    //vec3 baseColor = vec3(0.5);
+
+    // gradient
     vec3 col = (m - gradient.y) * baseColor;
+    //vec3 col = m * baseColor;
     // Output to screen
     gl_FragColor = vec4(col, 0.0);
 
