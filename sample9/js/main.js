@@ -122,8 +122,8 @@
     geometry = new THREE.SphereBufferGeometry(R, 36, 36) ;
     //geometry = new THREE.PlaneBufferGeometry(100, 100);
 
-    let num = geometry.attributes.position.count;
-    geometry.addAttribute('displacement', new THREE.BufferAttribute(new Float32Array(num), 1));
+    // let num = geometry.attributes.position.count;
+    // geometry.addAttribute('displacement', new THREE.BufferAttribute(new Float32Array(num), 1));
 
 
     material = new THREE.RawShaderMaterial({
@@ -136,9 +136,9 @@
         textureImg: {type: "t", value: textureImg},
         isText: {type: "bool", value: true},
         //材質色
-        color: {type: "c", value: new THREE.Color(0xff2200)},
+        //color: {type: "c", value: new THREE.Color(0xff2200)},
         //テクスチャ座標のスライド量
-        amplitude: {type: "f", value: 1.0},
+        //amplitude: {type: "f", value: 1.0},
       },
       side: THREE.DoubleSide,
       //depthWrite: false,
@@ -148,6 +148,15 @@
 
     mesh = new THREE.Mesh(geometry, material);
     scene.add(mesh);
+    mesh.position.y = -0.5;
+    mesh.position.z = 7.0;
+    mesh.rotation.x -= 0.5;
+
+    console.log(mesh.geometry.attributes.position.count);
+    console.log(mesh.geometry.attributes.position);
+    console.log(mesh.geometry.attributes.position.getX(0));
+    console.log(mesh.geometry.attributes.position.getY(0));
+    console.log(mesh.geometry.attributes.position.getZ(0));
 
     // lights
     directionalLight = new THREE.DirectionalLight(
@@ -177,7 +186,7 @@
 
   // rendering
   function render() {
-    mesh.rotation.x += 3.141592 * 2 / 90 / 60 / 60;
+    mesh.rotation.x += 3.141592 * 2 / 90 / 60 / 60 * 10; // 1round/90m
 
     if (run) {
       requestAnimationFrame(render);
