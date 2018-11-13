@@ -159,7 +159,7 @@
       //opacity: 0.5,
     });
 
-    mesh = new THREE.Mesh(geometry, material);
+    mesh = new THREE.Line(geometry, material);
     scene.add(mesh);
     // mesh.position.y = -0.5;
     // mesh.position.z = 7.0;
