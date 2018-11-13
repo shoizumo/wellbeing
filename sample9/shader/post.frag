@@ -89,7 +89,7 @@ void main()
         float depth = fract(i + time * 0.02);
         //m += layer(uv * mix(10., 0.5, depth) + i * 20.) * smoothstep(0., 0.2, depth) * smoothstep(1., 0.8, depth);
         // number of star
-        m += layer(uv * mix(50., 0.5, depth) + i * 20.) * smoothstep(0., 0.2, depth) * smoothstep(1., 0.8, depth);
+        m += layer(uv * mix(30., 0.05, depth) + i * 20.) * smoothstep(0., 0.5, depth) * smoothstep(1., 0.8, depth);
     }
     
     //vec3 baseColor = sin(vec3(3.45, 6.56, 8.78) * time * 0.2) * 0.5 + 0.5;

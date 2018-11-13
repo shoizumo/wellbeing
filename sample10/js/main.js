@@ -119,7 +119,7 @@
 
 
     let R = 3;
-    geometry = new THREE.SphereBufferGeometry(R, 36, 36) ;
+    geometry = new THREE.SphereBufferGeometry(R, 360, 360) ;
     //geometry = new THREE.PlaneBufferGeometry(100, 100);
 
     // let num = geometry.attributes.position.count;
