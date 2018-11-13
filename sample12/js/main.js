@@ -79,7 +79,7 @@
     let earthmapLandLoader = Loader = new THREE.TextureLoader();
     let earthOriginalLoader = new THREE.TextureLoader();
     let textureImgLoader = new THREE.TextureLoader();
-    earthmapLand = earthmapLandLoader.load('img/earthmap_land.png', () => {
+    earthmapLand = earthmapLandLoader.load('img/earthbump.jpg', () => {
       earthOriginal = earthOriginalLoader.load('img/earthmap.jpg', () => {
         textureImg = textureImgLoader.load('img/sample.png', loadShader);
       })
@@ -119,15 +119,15 @@
 
 
     let R = 3;
-    geometry = new THREE.SphereBufferGeometry(R, 360, 360) ;
+    geometry = new THREE.SphereBufferGeometry(R, 720, 720) ;
     let vertices = geometry.attributes.position.array;
     let displacement = new THREE.Float32Attribute( vertices.length * 3, 3 );
     for ( let i = 0; i < vertices.length / 3; i++ ) {
 
       displacement.setXYZ( i ,
-        R / 100 * ( 0.5 - Math.random() ),
-        R / 100 * ( 0.5 - Math.random() ),
-        R / 100 * ( 0.5 - Math.random() )
+          (0.5 - Math.random()) / 20,
+          (0.5 - Math.random()) / 20,
+          (0.5 - Math.random()) / 20
       );
     }
     geometry.addAttribute( 'displacement', displacement );
@@ -143,6 +143,8 @@
         textureImg: {type: "t", value: textureImg},
         isText: {type: "bool", value: true},
         amplitude: { type: "f", value: 0.0 },
+        size: {type: 'f', value: 32.0
+    },
       },
       side: THREE.DoubleSide,
       //depthWrite: false,
@@ -151,7 +153,8 @@
     });
 
     // mesh = new THREE.Mesh(geometry, material);
-    mesh = new THREE.Line(geometry, material);
+    // mesh = new THREE.Line(geometry, material);
+    mesh = new THREE.Points(geometry, material);
     console.log(mesh);
     scene.add(mesh);
     mesh.position.y = -0.5;

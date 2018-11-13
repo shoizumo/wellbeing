@@ -16,9 +16,9 @@ void main() {
     vec4 mColor = texture2D(map, vUv);
     vec4 lColor = texture2D(land, vUv);
     vec4 tcolor = texture2D(textureImg, vUv);
-    vec4 white = vec4(1.0, 1.0, 1.0, 1.0);
+    vec4 white = vec4(0.5, 0.5, 0.5, 0.0);
     if(isText == false){
-        gl_FragColor = lColor;
+        gl_FragColor = white - lColor;
     }
     else{
         gl_FragColor = tcolor * mColor;
