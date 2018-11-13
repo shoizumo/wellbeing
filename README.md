@@ -9,3 +9,4 @@ sample8: sand wave
 sample9: star network
 sample10: change vertex position 
 sample11: vertexShader art sample
+sample12: point
