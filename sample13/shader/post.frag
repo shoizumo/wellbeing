@@ -109,7 +109,8 @@ void main()
     }
     vec4 color = mix(destColor, vec4(col, 1.0), mixRatio);
 
-    gl_FragColor = vec4(color);
+    //gl_FragColor = vec4(color);
+    gl_FragColor = vec4(destColor);
 
 }
 

@@ -29,7 +29,7 @@
 
   // constant variables
   const RENDERER_PARAM = {
-    // clearColor: 0x333333
+    //clearColor: 0xffffff
     clearColor: 0x111111
   };
 
@@ -155,13 +155,13 @@
         size: {type: 'f', value: 32.0},
         time: {type: "f", value: time},
       },
-      side: THREE.DoubleSide,
+      side: THREE.FrontSide, //DoubleSide,
       //depthWrite: false,
       //transparent: true,
       //opacity: 0.5,
     });
 
-    // mesh = new THREE.Mesh(geometry, material);
+    //mesh = new THREE.Mesh(geometry, material);
     mesh = new THREE.Line(geometry, material);
     // mesh = new THREE.Points(geometry, material);
     console.log(mesh);
