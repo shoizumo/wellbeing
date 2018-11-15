@@ -30,7 +30,7 @@
   // constant variables
   const RENDERER_PARAM = {
     //clearColor: 0xffffff
-    clearColor: 0x111111
+    clearColor: 0x000000
   };
 
   const DIRECTIONAL_LIGHT_PARAM = {
@@ -58,6 +58,9 @@
       renderer.setSize(window.innerWidth, window.innerHeight);
       camera.aspect = window.innerWidth / window.innerHeight;
       camera.updateProjectionMatrix();
+      canvasWidth = window.innerWidth;
+      canvasHeight = window.innerHeight;
+
     }, false);
     window.addEventListener('mousedown', () => {
             isDown = true;
@@ -231,6 +234,7 @@
     //平面オブジェクト用テクスチャ画像を更新
     postprocessing.plane.material.uniforms.texture.value = postprocessing.renderTarget;
     postprocessing.plane.material.uniforms.time.value = clock.getElapsedTime();
+    postprocessing.plane.material.uniforms.resolution.value = [canvasWidth, canvasHeight];
 
     //平面オブジェクトをレンダリング
     renderer.render(postprocessing.scene, postprocessing.camera );

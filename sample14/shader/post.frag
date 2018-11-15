@@ -52,23 +52,28 @@ float layer(vec2 st) {
     
     float dx=15./resolution.y;
 
-    vec2 p[6];
+    vec2 p[9];
     p[0] = getPos(id, vec2(-1., -1.));
     p[1] = getPos(id, vec2(-1.,  0.));
     p[2] = getPos(id, vec2(-1.,  1.));
     p[3] = getPos(id, vec2( 0., -1.));
     p[4] = getPos(id, vec2( 0.,  0.));
     p[5] = getPos(id, vec2( 0.,  1.));
+    p[6] = getPos(id, vec2( 1., -1.));
+    p[7] = getPos(id, vec2( 1.,  0.));
+    p[8] = getPos(id, vec2( 1.,  1.));
 
-    for (int j = 0; j <=6 ; j++) {
-        m += getLine(gv, p[4], p[j]);
+    for (int j = 0; j <=8 ; j++) {
+      m += getLine(gv, p[4], p[j]);
         vec2 temp = (gv - p[j]) * 100.;
         m += 1./dot(temp, temp) * (sin(10. * time + fract(p[j].x) * 20.) * 0.5 + 0.5);
 
     }
-    
+
     m += getLine(gv, p[1], p[3]);
     m += getLine(gv, p[1], p[5]);
+    m += getLine(gv, p[3], p[7]);
+    m += getLine(gv, p[5], p[7]);
 
     // m += smoothstep(0.05, 0.04, length(st - vec2(0., 0.)));
     return m;
@@ -89,7 +94,8 @@ void main()
         float depth = fract(i + time * 0.02);
         //m += layer(uv * mix(10., 0.5, depth) + i * 20.) * smoothstep(0., 0.2, depth) * smoothstep(1., 0.8, depth);
         // number of star
-        m += layer(uv * mix(30., 0.05, depth) + i * 20.) * smoothstep(0., 0.5, depth) * smoothstep(1., 0.8, depth);
+        //m += layer(uv * mix(50., 0.05, depth) + i * 20.) * smoothstep(0., 0.5, depth) * smoothstep(1., 0.8, depth) * (smoothstep(0.5, 0.6, depth)+abs(sin(time/10.0))/0.01);
+        m += layer(uv * mix(30., 0.05, depth) + i * 20.) * smoothstep(0., 0.5, depth) * smoothstep(1., 0.8, depth) * abs(sin(time*depth/5.0));
     }
     
     //vec3 baseColor = sin(vec3(3.45, 6.56, 8.78) * time * 0.2) * 0.5 + 0.5;
@@ -102,15 +108,26 @@ void main()
 
     //vec4 color = mix(destColor, vec4(col, 1.0), 0.6);
     float mixRatio;
-    if(destColor.b < 0.1){
-        mixRatio = 1.0;
-    }else{
-        mixRatio = 0.0;
-    }
+//    if(destColor.b < 0.1){
+//        mixRatio = 1.0;
+//    }else{
+//        mixRatio = 0.0;
+//    }
+
+//    vec2 st = gl_FragCoord.xy / resolution.xy;
+//    float length = (st.x - 0.5) * (st.x - 0.5) + (st.y - 0.15) * (st.y - 0.15);
+//    if(length > 0.3){
+//        mixRatio = 1.0;
+//    }else{
+//        mixRatio = 0.0;
+//    }
+
+    vec2 st = gl_FragCoord.xy / resolution.xy;
+    mixRatio = (st.x - 0.5) * (st.x - 0.5) + (st.y - 0.15) * (st.y - 0.15);
+
     vec4 color = mix(destColor, vec4(col, 1.0), mixRatio);
 
-    //gl_FragColor = vec4(color);
-    gl_FragColor = vec4(destColor);
+    gl_FragColor = vec4(color);
 
 }
 
