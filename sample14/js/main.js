@@ -19,8 +19,8 @@
   let ambientLight;
   let axesHelper;
   // texture
-  let earthmapLand;
-  let earthOriginal;
+  let earthLand;
+  let earthBump;
   let textureImg;
 
   const clock = new THREE.Clock();
@@ -76,11 +76,11 @@
     }, false);
 
     // texture
-    let earthmapLandLoader = Loader = new THREE.TextureLoader();
-    let earthOriginalLoader = new THREE.TextureLoader();
+    let earthLandLoader = Loader = new THREE.TextureLoader();
+    let earthBumpLoader = new THREE.TextureLoader();
     let textureImgLoader = new THREE.TextureLoader();
-    earthmapLand = earthmapLandLoader.load('img/earthbump.jpg', () => {
-      earthOriginal = earthOriginalLoader.load('img/earthmap.jpg', () => {
+    earthLand = earthLandLoader.load('img/earthspec.png', () => {
+      earthBump = earthBumpLoader.load('img/earthbump.jpg', () => {
         textureImg = textureImgLoader.load('img/sample.png', loadShader);
       })
     });
@@ -123,26 +123,35 @@
     let vertices = geometry.attributes.position.array;
     let displacement = new THREE.Float32Attribute( vertices.length * 3, 3 );
 
-    for ( let i = 0; i < vertices.length / 3; i++ ) {
-
-      displacement.setXYZ( i ,
-          (0.5 - Math.random()) / 20,
-          (0.5 - Math.random()) / 20,
-          (0.5 - Math.random()) / 20
-      );
-    }
-
-    // let vPos = geometry.attributes.position;
     // for ( let i = 0; i < vertices.length / 3; i++ ) {
     //   displacement.setXYZ( i ,
-    //       vPos.getX(i) / R,
-    //       vPos.getY(i) / R,
-    //       vPos.getZ(i) / R);
+    //       (0.5 - Math.random()) / 20,
+    //       (0.5 - Math.random()) / 20,
+    //       (0.5 - Math.random()) / 20);
     // }
 
+    let vPos = geometry.attributes.position;
+    for ( let i = 0; i < vertices.length / 3; i++ ) {
+      displacement.setXYZ( i ,
+          vPos.getX(i) / R,
+          vPos.getY(i) / R,
+          vPos.getZ(i) / R);
+    }
+    geometry.addAttribute('displacement', displacement );
 
 
-    geometry.addAttribute( 'displacement', displacement );
+    // let num = 100;
+    // let texCoord = new THREE.Float32Attribute(num * 2, 2 );
+    // for(let i = 0; i < num; ++i){
+    //   s = i / num;
+    //   for(let j = 0; j < num; ++j){
+    //     t = 1.0 - j / num;
+    //     texCoord.setXY(i, s, t);
+    //   }
+    // }
+    // geometry.addAttribute('texCoord', texCoord );
+
+
 
     let time = 0.0;
     material = new THREE.RawShaderMaterial({
@@ -150,13 +159,14 @@
       fragmentShader: fsMain,
       uniforms: {
         // Map
-        map: {type: "t", value: earthOriginal},
-        land: {type: "t", value: earthmapLand},
+        bumpTex: {type: "t", value: earthBump},
+        landTex: {type: "t", value: earthLand},
         textureImg: {type: "t", value: textureImg},
         isText: {type: "bool", value: true},
         amplitude: { type: "f", value: 0.0 },
         size: {type: 'f', value: 32.0},
         time: {type: "f", value: time},
+        resolution: {type: "v2", value: [canvasWidth, canvasHeight]},
       },
       side: THREE.FrontSide, //DoubleSide,
       //depthWrite: false,
@@ -167,12 +177,12 @@
     //mesh = new THREE.Mesh(geometry, material);
     mesh = new THREE.Line(geometry, material);
     // mesh = new THREE.Points(geometry, material);
-    console.log(mesh);
     scene.add(mesh);
     mesh.position.y = -0.5;
     mesh.position.z = 7.0;
     mesh.rotation.x -= 0.5;
 
+    console.log(mesh);
     console.log(mesh.geometry.attributes.position.count);
     console.log(mesh.geometry.attributes.position);
     console.log(mesh.geometry.attributes.position.getX(0));
@@ -210,6 +220,7 @@
 
     material.uniforms.time.value = clock.getElapsedTime();
     mesh.material.uniforms.amplitude.value = Math.sin(clock.getElapsedTime());
+    mesh.material.uniforms.resolution.value = [canvasWidth, canvasHeight];
 
     if (run) {
       requestAnimationFrame(render);

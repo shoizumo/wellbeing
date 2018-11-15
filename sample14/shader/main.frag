@@ -1,10 +1,8 @@
 precision mediump float;
 
 // uniform
-uniform vec3 color;
-uniform sampler2D map;
-uniform sampler2D land;
-uniform sampler2D textureImg;
+uniform sampler2D bumpTex;
+uniform sampler2D landTex;
 uniform bool isText;
 uniform mat4 viewMatrix;
 
@@ -18,9 +16,8 @@ vec3 lightColor = vec3(1.0, 1.0, 1.0);
 
 
 void main() {
-    vec4 mColor = texture2D(map, vUv);
-    vec4 lColor = texture2D(land, vUv);
-    vec4 tcolor = texture2D(textureImg, vUv);
+    vec4 bumpColor = texture2D(bumpTex, vUv);
+    vec4 landColor = texture2D(landTex, vUv);
     //vec4 white = vec4(0.5, 0.5, 0.5, 0.0);
 
     vec4 viewLightPosition = viewMatrix * vec4( lightPosition, 0.0);
@@ -29,8 +26,7 @@ void main() {
     //法線ベクトルと光線ベクトルの内積
     float dotNL = dot(N, L);
     //拡散色の決定
-    vec3 color = vec4(tcolor * mColor).xyz;
-    color = lColor.xyz;
+    vec3 color = landColor.xyz;
     vec3 diffuse = color * lightColor * max(dotNL, 0.0);
 
     vec3 C = - normalize(mvPosition );
