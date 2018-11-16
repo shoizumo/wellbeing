@@ -26,9 +26,18 @@ vec2 N22(vec2 p) {
 
 vec2 getPos(vec2 id, vec2 offset) {
     vec2 n = N22(id + offset);
-    float x = cos(time * n.x + vecMouse.x * vecMouse.x * 1000.0);
-    float y = sin(time * n.y + vecMouse.y * vecMouse.y * 1000.0);
-    return vec2(x, y) * 0.4 + offset;
+//    float x = cos(time * n.x + mouse.x + abs(vecMouse.x) * 3.0);
+//    float y = sin(time * n.y + mouse.y + abs(vecMouse.x) * 3.0);
+//    float x = cos(time * n.x + abs(sin(min(abs(vecMouse.x), 0.3)) * 0.5));
+//    float y = sin(time * n.y + abs(sin(min(abs(vecMouse.x), 0.3)) * 0.5));
+
+    float x = cos(time * n.x + mouse.x * 0.5 + sin(min(sin(abs(vecMouse.x)), 0.1))* 0.5);
+    float y = sin(time * n.y + mouse.y * 0.5 + sin(min(sin(abs(vecMouse.y)), 0.1))* 0.5);
+
+
+    return vec2(x, y) * 0.4 + offset ;
+    //return vec2(x, y) * (0.4 + sin(min(sin(abs(vecMouse.x)), 0.1))* 0.5 * sign(vecMouse.y)) + offset;
+
 }
 
 float distanceToLine(vec2 p, vec2 a, vec2 b) {

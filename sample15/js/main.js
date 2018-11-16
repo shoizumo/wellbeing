@@ -229,17 +229,18 @@
   }
 
   // rendering
+  let step = 1.0;
   function render() {
     if (pX !== mouse.x){
       vecMouse.x = mouse.x - pX;
       vecMouse.y = mouse.y - pY;
     }else{
-      vecMouse.x = vecMouse.x * 0.5;
-      vecMouse.y = vecMouse.y * 0.5;
+      vecMouse.x = vecMouse.x * 0.999;
+      vecMouse.y = vecMouse.y * 0.999;
     }
     pX = mouse.x;
     pY = mouse.y;
-    console.log(vecMouse, isNaN(vecMouse.x));
+    console.log(Math.abs(vecMouse.x)*100.0);
 
 
     mesh.rotation.x += 3.141592 * 2 / 90 / 60 / 60 * 10; // 1round/90m
