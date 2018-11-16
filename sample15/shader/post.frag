@@ -31,9 +31,11 @@ vec2 getPos(vec2 id, vec2 offset) {
 //    float x = cos(time * n.x + abs(sin(min(abs(vecMouse.x), 0.3)) * 0.5));
 //    float y = sin(time * n.y + abs(sin(min(abs(vecMouse.x), 0.3)) * 0.5));
 
-    float x = cos(time * n.x + mouse.x * 0.5 + sin(min(sin(abs(vecMouse.x)), 0.1))* 0.5);
-    float y = sin(time * n.y + mouse.y * 0.5 + sin(min(sin(abs(vecMouse.y)), 0.1))* 0.5);
+//    float x = cos(time * n.x + mouse.x * 0.5 + sin(min(sin(abs(vecMouse.x)), 0.1))* 0.5);
+//    float y = sin(time * n.y + mouse.y * 0.5 + sin(min(sin(abs(vecMouse.y)), 0.1))* 0.5);
 
+    float x = cos(time * n.x + mouse.x * 0.5 + sin(vecMouse.x)* 0.75);
+    float y = sin(time * n.y + mouse.y * 0.5 + sin(vecMouse.y)* 0.75);
 
     return vec2(x, y) * 0.4 + offset ;
     //return vec2(x, y) * (0.4 + sin(min(sin(abs(vecMouse.x)), 0.1))* 0.5 * sign(vecMouse.y)) + offset;

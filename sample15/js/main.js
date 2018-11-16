@@ -235,18 +235,19 @@
       vecMouse.x = mouse.x - pX;
       vecMouse.y = mouse.y - pY;
     }else{
-      vecMouse.x = vecMouse.x * 0.999;
-      vecMouse.y = vecMouse.y * 0.999;
+      vecMouse.x = vecMouse.x * 0.99;
+      vecMouse.y = vecMouse.y * 0.99;
     }
     pX = mouse.x;
     pY = mouse.y;
-    console.log(Math.abs(vecMouse.x)*100.0);
+    //console.log(Math.abs(vecMouse.x)*100.0);
 
 
     mesh.rotation.x += 3.141592 * 2 / 90 / 60 / 60 * 10; // 1round/90m
 
-    material.uniforms.time.value = clock.getElapsedTime();
-    mesh.material.uniforms.amplitude.value = Math.sin(clock.getElapsedTime());
+    let nowTime = clock.getElapsedTime();
+    material.uniforms.time.value = nowTime;
+    mesh.material.uniforms.amplitude.value = Math.sin(nowTime);
     mesh.material.uniforms.resolution.value = [canvasWidth, canvasHeight];
 
     if (run) {
@@ -271,7 +272,7 @@
     renderer.render( scene, camera, postprocessing.renderTarget );
     //平面オブジェクト用テクスチャ画像を更新
     postprocessing.plane.material.uniforms.texture.value = postprocessing.renderTarget;
-    postprocessing.plane.material.uniforms.time.value = clock.getElapsedTime();
+    postprocessing.plane.material.uniforms.time.value = nowTime;
     postprocessing.plane.material.uniforms.resolution.value = [canvasWidth, canvasHeight];
     postprocessing.plane.material.uniforms.mouse.value = mouse;
     if(!isNaN(vecMouse.x)){
