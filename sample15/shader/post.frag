@@ -95,11 +95,11 @@ void main()
         //m += layer(uv * mix(10., 0.5, depth) + i * 20.) * smoothstep(0., 0.2, depth) * smoothstep(1., 0.8, depth);
         // number of star
         //m += layer(uv * mix(50., 0.05, depth) + i * 20.) * smoothstep(0., 0.5, depth) * smoothstep(1., 0.8, depth) * (smoothstep(0.5, 0.6, depth)+abs(sin(time/10.0))/0.01);
-        m += layer(uv * mix(30., 0.05, depth) + i * 20.) * smoothstep(0., 0.5, depth) * smoothstep(1., 0.8, depth) * abs(sin(time*depth/5.0));
+        m += layer(uv * mix(20., 0.05, depth) + i * 20.) * smoothstep(0., 0.5, depth) * smoothstep(1., 0.8, depth) * abs(sin(time*depth/.01));
     }
     
     //vec3 baseColor = sin(vec3(3.45, 6.56, 8.78) * time * 0.2) * 0.5 + 0.5;
-    vec3 baseColor = abs(sin(vec3(1.0) * time * 0.2)) * 0.5;
+    vec3 baseColor = abs(sin(vec3(1.0, 1.0, 0.0) * time * 0.2)) * 0.5 + vec3(0.1, 0.1, 0.1);
     //vec3 baseColor = vec3(0.5);
 
     // gradient

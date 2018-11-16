@@ -80,7 +80,7 @@
     let earthBumpLoader = new THREE.TextureLoader();
     let earthMapLoader = new THREE.TextureLoader();
     earthLand = earthLandLoader.load('img/earthspec.png', () => {
-      earthBump = earthBumpLoader.load('img/earthbump.jpg', () => {
+      earthBump = earthBumpLoader.load('img/earthbump.png', () => {
         earthMap = earthMapLoader.load('img/earthmap.jpg', loadShader);
       })
     });
@@ -119,7 +119,7 @@
 
 
     let R = 3;
-    geometry = new THREE.SphereBufferGeometry(R, 120, 120) ;
+    geometry = new THREE.SphereBufferGeometry(R, 60, 60) ;
     let vertices = geometry.attributes.position.array;
     let displacement = new THREE.Float32Attribute( vertices.length * 3, 3 );
 

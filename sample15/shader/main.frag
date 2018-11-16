@@ -12,8 +12,8 @@ varying vec3 mvPosition;
 varying vec3 vNormal;
 varying vec2 vUv;
 
-vec3 lightPosition = vec3(-50.0, 50.0, -0.0);
-vec3 lightColor = vec3(1.0, 1.0, .5);
+vec3 lightPosition = vec3(-50.0, 100.0, -0.0);
+vec3 lightColor = vec3(1.0, 1.0, 0.7);
 
 
 void main() {
@@ -28,7 +28,7 @@ void main() {
     //法線ベクトルと光線ベクトルの内積
     float dotNL = dot(N, L);
     //拡散色の決定
-    vec3 color = earthColor.xyz;
+    vec3 color = bumpColor.xyz;
     if(color.b > 0.7 && color.g < 0.5){
         color = vec3(0.0);
     }else{
@@ -45,7 +45,7 @@ void main() {
 
     vec4 destColor = vec4(diffuse + specular, 1.0);
     //destColor = vec4(diffuse, 1.0);
-    destColor.rgb += color.rgb * 0.3;
+    destColor.rgb += color.rgb * 0.1;
 
     if(landColor.r > 0.5){
         destColor.a = 0.3;
