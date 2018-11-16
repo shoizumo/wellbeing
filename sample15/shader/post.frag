@@ -7,6 +7,7 @@ precision mediump float;
 uniform float time;
 uniform vec2 resolution;
 uniform sampler2D texture;
+uniform vec2 mouse;
 
 varying vec2 vUv;
 
@@ -24,8 +25,8 @@ vec2 N22(vec2 p) {
 
 vec2 getPos(vec2 id, vec2 offset) {
     vec2 n = N22(id + offset);
-    float x = cos(time * n.x);
-    float y = sin(time * n.y);
+    float x = cos(time * n.x + mouse.x);
+    float y = sin(time * n.y + mouse.y);
     return vec2(x, y) * 0.4 + offset;
 }
 

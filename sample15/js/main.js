@@ -23,6 +23,8 @@
   let earthBump;
   let earthMap;
 
+  let mouse;
+
   const clock = new THREE.Clock();
   let time = 0.0;
 
@@ -73,6 +75,13 @@
     }, false);
     window.addEventListener('dblclick', () => {
         isdDblclick = true;
+    }, false);
+
+    mouse = new THREE.Vector2();
+    window.addEventListener('mousemove', () => {
+        event.preventDefault();
+        mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
+        mouse.y = -(event.clientY / window.innerHeight) * 2 + 1;
     }, false);
 
     // texture
@@ -247,6 +256,7 @@
     postprocessing.plane.material.uniforms.texture.value = postprocessing.renderTarget;
     postprocessing.plane.material.uniforms.time.value = clock.getElapsedTime();
     postprocessing.plane.material.uniforms.resolution.value = [canvasWidth, canvasHeight];
+    postprocessing.plane.material.uniforms.mouse.value = mouse;
 
     //平面オブジェクトをレンダリング
     renderer.render(postprocessing.scene, postprocessing.camera );
@@ -272,6 +282,7 @@
           texture: {type: "t", value: null},
           resolution: {type: "v2", value: [canvasWidth, canvasHeight]},
           time: {type: "f", value: time},
+          mouse: {type: "v2", value: mouse},
         },
         vertexShader: vsPost,
         fragmentShader: fsPost,

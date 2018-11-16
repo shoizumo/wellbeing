@@ -27,20 +27,16 @@ varying vec2 vUv;
 varying vec3 mvPosition;
 varying vec3 vNormal;
 
-float random(vec2 p){
-    return fract(sin(dot(p, vec2(12.9898,78.233))) * 43758.5453);
-}
 
 
 void main(){
     vec4 bumpColor = texture2D(bumpTex, uv);
     vec4 landColor = texture2D(landTex, uv);
     vec4 earthColor = texture2D(earthTex, vUv);
-    float bump = (earthColor.r + earthColor.g + earthColor.b) * 0.1;// + bumpColor.r * 0.5;
+    float bump = (earthColor.r + earthColor.g - earthColor.b) * 0.1;// + bumpColor.r * 0.5;
 //
 
-    float noise = random(uv) / 20.0;
-    vec3 newPosition = position +  normal * vec3(bump + noise);
+    vec3 newPosition = position +  normal * vec3(bump);
     gl_Position = projectionMatrix * modelViewMatrix * vec4( newPosition, 1.0 );
 
     vNormal = normalMatrix * normal ;
