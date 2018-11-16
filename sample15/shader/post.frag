@@ -31,11 +31,8 @@ vec2 getPos(vec2 id, vec2 offset) {
 //    float x = cos(time * n.x + abs(sin(min(abs(vecMouse.x), 0.3)) * 0.5));
 //    float y = sin(time * n.y + abs(sin(min(abs(vecMouse.x), 0.3)) * 0.5));
 
-//    float x = cos(time * n.x + mouse.x * 0.5 + sin(min(sin(abs(vecMouse.x)), 0.1))* 0.5);
-//    float y = sin(time * n.y + mouse.y * 0.5 + sin(min(sin(abs(vecMouse.y)), 0.1))* 0.5);
-
-    float x = cos(time * n.x + mouse.x * 0.5 + sin(vecMouse.x)* 0.75);
-    float y = sin(time * n.y + mouse.y * 0.5 + sin(vecMouse.y)* 0.75);
+    float x = cos(time * n.x + mouse.x  + sin(min(sin(abs(vecMouse.x)), 0.1))* 0.5);
+    float y = sin(time * n.y + mouse.y  + sin(min(sin(abs(vecMouse.y)), 0.1))* 0.5);
 
     return vec2(x, y) * 0.4 + offset ;
     //return vec2(x, y) * (0.4 + sin(min(sin(abs(vecMouse.x)), 0.1))* 0.5 * sign(vecMouse.y)) + offset;
@@ -105,14 +102,14 @@ void main()
     for (float i = 0.; i < 1.0 ; i += 0.25) {
         // speed
         float depth = fract(i + time * 0.02);
-        //m += layer(uv * mix(10., 0.5, depth) + i * 20.) * smoothstep(0., 0.2, depth) * smoothstep(1., 0.8, depth);
+        m += layer(uv * mix(10., 0.5, depth) + i * 20.) * smoothstep(0., 0.2, depth) * smoothstep(1., 0.8, depth);
         // number of star
         //m += layer(uv * mix(50., 0.05, depth) + i * 20.) * smoothstep(0., 0.5, depth) * smoothstep(1., 0.8, depth) * (smoothstep(0.5, 0.6, depth)+abs(sin(time/10.0))/0.01);
-        m += layer(uv * mix(20., 0.05, depth) + i * 20.) * smoothstep(0., 0.5, depth) * smoothstep(1., 0.8, depth);
+        //m += layer(uv * mix(20., 0.5, depth) + i * 20.) * smoothstep(0., 0.5, depth) * smoothstep(1., 0.8, depth);
     }
     
     //vec3 baseColor = sin(vec3(3.45, 6.56, 8.78) * time * 0.2) * 0.5 + 0.5;
-    vec3 baseColor = abs(sin(vec3(1.0, 1.0, 0.0) * time * 0.2)) * 0.5 + vec3(0.1, 0.1, 0.1);
+    vec3 baseColor = abs(sin(vec3(1.0, 1.0, 0.0) * time * 0.2)) + vec3(0.1, 0.1, 0.1);
     //vec3 baseColor = vec3(0.5);
 
     // gradient

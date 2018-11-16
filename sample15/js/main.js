@@ -177,7 +177,7 @@
         earthTex: {type: "t", value: earthMap},
         isText: {type: "bool", value: true},
         amplitude: { type: "f", value: 0.0 },
-        size: {type: 'f', value: 32.0},
+        //size: {type: 'f', value: 32.0},
         time: {type: "f", value: time},
         resolution: {type: "v2", value: [canvasWidth, canvasHeight]},
       },
@@ -190,7 +190,7 @@
 
     mesh = new THREE.Mesh(geometry, material);
     //mesh = new THREE.Line(geometry, material);
-    // mesh = new THREE.Points(geometry, material);
+    //mesh = new THREE.Points(geometry, material);
     scene.add(mesh);
     mesh.position.y = -1.5;
     mesh.position.z = 3.0;
@@ -253,19 +253,7 @@
     if (run) {
       requestAnimationFrame(render);
     }
-    //console.log(material.uniforms);
 
-    // if (isDown === true) {
-    //   material.uniforms.isText.value = false;
-    //   //console.log('down');
-    // }else{
-    //   material.uniforms.isText.value = true;
-    //   //console.log('up');
-    // }
-
-    material.uniforms.isText.value = !isDown;
-
-    //material.uniforms.isText.needsUpdate = true;
 
     //renderer.render(scene, camera);
     //オフスクリーンレンダリング

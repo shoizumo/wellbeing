@@ -33,8 +33,9 @@ void main(){
     vec4 bumpColor = texture2D(bumpTex, uv);
     vec4 landColor = texture2D(landTex, uv);
     vec4 earthColor = texture2D(earthTex, vUv);
-    float bump = (earthColor.r + earthColor.g - earthColor.b) * 0.1;// + bumpColor.r * 0.5;
-//
+    float bump = bumpColor.r * 0.1;// + bumpColor.r * 0.5;
+    bump = bump * abs(sin(time));
+
 
     vec3 newPosition = position +  normal * vec3(bump);
     gl_Position = projectionMatrix * modelViewMatrix * vec4( newPosition, 1.0 );
