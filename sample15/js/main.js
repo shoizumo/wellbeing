@@ -24,6 +24,8 @@
   let earthMap;
 
   let mouse;
+  let pX, pY;
+  let vecMouse = new THREE.Vector2();
 
   const clock = new THREE.Clock();
   let time = 0.0;
@@ -79,10 +81,12 @@
 
     mouse = new THREE.Vector2();
     window.addEventListener('mousemove', () => {
-        event.preventDefault();
-        mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
-        mouse.y = -(event.clientY / window.innerHeight) * 2 + 1;
+      event.preventDefault();
+      mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
+      mouse.y = -(event.clientY / window.innerHeight) * 2 + 1;
     }, false);
+
+
 
     // texture
     let earthLandLoader = Loader = new THREE.TextureLoader();
@@ -226,6 +230,18 @@
 
   // rendering
   function render() {
+    if (pX !== mouse.x){
+      vecMouse.x = mouse.x - pX;
+      vecMouse.y = mouse.y - pY;
+    }else{
+      vecMouse.x = vecMouse.x * 0.5;
+      vecMouse.y = vecMouse.y * 0.5;
+    }
+    pX = mouse.x;
+    pY = mouse.y;
+    console.log(vecMouse, isNaN(vecMouse.x));
+
+
     mesh.rotation.x += 3.141592 * 2 / 90 / 60 / 60 * 10; // 1round/90m
 
     material.uniforms.time.value = clock.getElapsedTime();
@@ -257,6 +273,9 @@
     postprocessing.plane.material.uniforms.time.value = clock.getElapsedTime();
     postprocessing.plane.material.uniforms.resolution.value = [canvasWidth, canvasHeight];
     postprocessing.plane.material.uniforms.mouse.value = mouse;
+    if(!isNaN(vecMouse.x)){
+      postprocessing.plane.material.uniforms.vecMouse.value = vecMouse;
+    }
 
     //平面オブジェクトをレンダリング
     renderer.render(postprocessing.scene, postprocessing.camera );
@@ -267,6 +286,7 @@
 
   function initPostprocessing(vsPost, fsPost) {
     time = 0.0;
+    vecMouse = new THREE.Vector2(0.01, 0.01);
     //ポストプロセッシング用シーンの生成
     postprocessing.scene = new THREE.Scene();
 
@@ -283,6 +303,7 @@
           resolution: {type: "v2", value: [canvasWidth, canvasHeight]},
           time: {type: "f", value: time},
           mouse: {type: "v2", value: mouse},
+          vecMouse: {type: "v2", value: vecMouse},
         },
         vertexShader: vsPost,
         fragmentShader: fsPost,

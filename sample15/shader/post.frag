@@ -8,6 +8,7 @@ uniform float time;
 uniform vec2 resolution;
 uniform sampler2D texture;
 uniform vec2 mouse;
+uniform vec2 vecMouse;
 
 varying vec2 vUv;
 
@@ -25,8 +26,8 @@ vec2 N22(vec2 p) {
 
 vec2 getPos(vec2 id, vec2 offset) {
     vec2 n = N22(id + offset);
-    float x = cos(time * n.x + mouse.x);
-    float y = sin(time * n.y + mouse.y);
+    float x = cos(time * n.x + vecMouse.x * vecMouse.x * 1000.0);
+    float y = sin(time * n.y + vecMouse.y * vecMouse.y * 1000.0);
     return vec2(x, y) * 0.4 + offset;
 }
 
@@ -96,7 +97,7 @@ void main()
         //m += layer(uv * mix(10., 0.5, depth) + i * 20.) * smoothstep(0., 0.2, depth) * smoothstep(1., 0.8, depth);
         // number of star
         //m += layer(uv * mix(50., 0.05, depth) + i * 20.) * smoothstep(0., 0.5, depth) * smoothstep(1., 0.8, depth) * (smoothstep(0.5, 0.6, depth)+abs(sin(time/10.0))/0.01);
-        m += layer(uv * mix(20., 0.05, depth) + i * 20.) * smoothstep(0., 0.5, depth) * smoothstep(1., 0.8, depth) * abs(sin(time*depth/.01));
+        m += layer(uv * mix(20., 0.05, depth) + i * 20.) * smoothstep(0., 0.5, depth) * smoothstep(1., 0.8, depth);
     }
     
     //vec3 baseColor = sin(vec3(3.45, 6.56, 8.78) * time * 0.2) * 0.5 + 0.5;
