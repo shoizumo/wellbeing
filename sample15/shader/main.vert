@@ -34,7 +34,7 @@ void main(){
     vec4 landColor = texture2D(landTex, uv);
     vec4 earthColor = texture2D(earthTex, vUv);
     float bump = bumpColor.r * 0.1;// + bumpColor.r * 0.5;
-    bump = bump * abs(sin(time));
+    //bump = bump * abs(sin(time));
 
 
     vec3 newPosition = position +  normal * vec3(bump);
