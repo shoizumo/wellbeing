@@ -41,7 +41,7 @@
   // constant variables
   const RENDERER_PARAM = {
     // clearColor: 0x333333
-    clearColor: 0xaaaaaa
+    clearColor: 0xffffff
   };
   const MATERIAL_PARAM = {
     color: 0xffffff,
@@ -74,10 +74,58 @@
       animationTime: 500,
       loop: false,
       direction: 'vertical', //'horizontal'
+
       afterMove: function(pageId) {
-        console.log(pageId);
-      }
+        //console.log(pageId);
+        typing(pageId);
+      },
+
     });
+
+
+    let str = [];
+    function typing(pageNo) {
+      let pageClass = '.page' + pageNo;
+      //console.log($(pageClass + ' > .fadein > span'));
+      $(pageClass + ' > .fadein > span').each(function(i){//セレクタで指定した要素すべて
+        //console.log(this);
+        $(this).css('opacity','1');//行を不透明にする
+        str[i] = $(this).text();//元のテキストをコピーし
+        //console.log(str);
+        $(this).text('');//テキストを消す
+        //console.log(this);
+        let no = i;
+        let self = this;
+        let interval = setInterval(function(){
+          if(no === 0 || Number($('.fadein > span').eq(no - 1).children('span:last').css('opacity')) === 1){//最初の要素または前の要素が全文字表示された時
+            console.log(no, $('.fadein > span').eq(no - 1).children('span:last').css('opacity'))
+            clearInterval(interval);
+            for (let j = 0; j < str[no].length; j++) {
+              $(self).append('<span>'+str[no].substr(j, 1)+'</span>');
+              $(self).children('span:last').delay(100 * j).animate({opacity:'1'}, 500);
+            }
+          }
+        }, 50);
+      });
+    }
+    typing(1);
+
+
+    // function typing(str = ""){
+    //   let text = '';
+    //   let write;
+    //   for(let i = 0, l=str.length; l>i; i++){
+    //
+    //     setTimeout(function(){
+    //       write = str.charAt(i+1); //1文字だけ取得する
+    //       text = text + write;
+    //       console.log(write, text)
+    //       //document.getElementById("typing").innerHTML = text; //1文字だけ追加していく
+    //
+    //       document.getElementById("typing").innerHTML = text; //1文字だけ追加していく
+    //     },1000);
+    //   }
+    // }
 
     // canvas
     canvasWidth = window.innerWidth;
@@ -135,19 +183,6 @@
     targetDOM.appendChild(renderer.domElement);
     controls = new THREE.OrbitControls(camera, renderer.domElement);
 
-    // material and geometory
-    // material = new THREE.MeshLambertMaterial(MATERIAL_PARAM);
-
-    // material = new THREE.MeshBasicMaterial(MATERIAL_PARAM);
-    // material.map = earthmapLand;
-    // material.bumpMap = earthBump;
-    // material.bumpScale = 0.5;
-    // //material.specularMap = THREE.ImageUtils.loadTexture('img/earthspec.jpg');
-    // //material.specular  = new THREE.Color('gray');
-    // material.transparent = true;
-    // material.side = THREE.DoubleSide;
-    // material.depthWrite = false;
-
 
     let geometry = new THREE.Geometry();
 
@@ -174,62 +209,6 @@
 
     let cube = new THREE.Mesh(geometry, material);
     scene.add(cube);
-
-
-    // // earthMesh
-    // earthSize = 1.5;
-    // geometry = new THREE.SphereGeometry(earthSize, 32, 32);
-    // earthMesh = new THREE.Mesh(geometry, material);
-    // earthMesh.position.x = 0.0;
-    // earthMesh.position.y = 0.0;
-    // earthMesh.position.z = 0.0;
-    //
-    //
-    // wireframeSphere = new THREE.Mesh(
-    //     new THREE.SphereGeometry(earthSize - 0.01 , 32, 32),
-    //     new THREE.MeshPhongMaterial({
-    //       color: 0x000000,
-    //       specular: 0xffffff,
-    //       wireframe: true,
-    //       transparent: true,
-    //       opacity: 0.2} )
-    // );
-    //
-    // wireframeSphere.position.x = 0.0;
-    // wireframeSphere.position.y = 0.0;
-    // wireframeSphere.position.z = 0.0;
-    //
-    //
-    // // add point on earth
-    //
-    // let latitude = 35.683333;
-    // let longitude = 139.683333;
-    // const point = createPoint(latitude, longitude);
-    // earthMesh.add(point);
-    //
-    // function createPoint(latitude = 0, longitude = 0, color=0xFF0000) {
-    //   const sphere = new THREE.Mesh(
-    //       new THREE.SphereGeometry(earthSize / 100, 8, 8),
-    //       new THREE.MeshBasicMaterial({color: color}));
-    //   sphere.position.copy(convertGeoCoords(latitude, longitude, earthSize));
-    //   return sphere;
-    // }
-    //
-    // function convertGeoCoords(latitude, longitude, radius) {
-    //   const latRad = latitude * (Math.PI / 180);
-    //   const lonRad = -longitude * (Math.PI / 180);
-    //
-    //   const x = Math.cos(latRad) * Math.cos(lonRad) * radius;
-    //   const y = Math.sin(latRad) * radius;
-    //   const z = Math.cos(latRad) * Math.sin(lonRad) * radius;
-    //
-    //   return new THREE.Vector3(x, y, z);
-    // }
-    //
-    // renderer.sortObjects = false;
-    //
-    // scene.add(wireframeSphere);
-    // scene.add(earthMesh);
 
 
 
