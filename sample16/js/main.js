@@ -85,8 +85,11 @@
 
     let str = [];
     function typing(pageNo) {
+      // reset opacity(0.0) for displaying twice
+      $('.fadein > span').css('opacity','0');
+
       let pageClass = '.page' + pageNo;
-      //console.log($(pageClass + ' > .fadein > span'));
+      console.log($(pageClass + ' > .fadein > span'));
       $(pageClass + ' > .fadein > span').each(function(i){//セレクタで指定した要素すべて
         //console.log(this);
         $(this).css('opacity','1');//行を不透明にする
@@ -97,8 +100,10 @@
         let no = i;
         let self = this;
         let interval = setInterval(function(){
-          if(no === 0 || Number($('.fadein > span').eq(no - 1).children('span:last').css('opacity')) === 1){//最初の要素または前の要素が全文字表示された時
-            console.log(no, $('.fadein > span').eq(no - 1).children('span:last').css('opacity'))
+          //console.log(no, $('.fadein > span').eq(no - 1).children('span:last').css('opacity'))
+          if(no === 0 || Number($(pageClass + ' > .fadein > span').eq(no - 1).children('span:last').css('opacity')) === 1){//最初の要素または前の要素が全文字表示された時
+            //console.log(no, $('.fadein > span').eq(no - 1).children('span:last').css('opacity'))
+            //console.log(no)
             clearInterval(interval);
             for (let j = 0; j < str[no].length; j++) {
               $(self).append('<span>'+str[no].substr(j, 1)+'</span>');
@@ -110,23 +115,7 @@
     }
     typing(1);
 
-
-    // function typing(str = ""){
-    //   let text = '';
-    //   let write;
-    //   for(let i = 0, l=str.length; l>i; i++){
-    //
-    //     setTimeout(function(){
-    //       write = str.charAt(i+1); //1文字だけ取得する
-    //       text = text + write;
-    //       console.log(write, text)
-    //       //document.getElementById("typing").innerHTML = text; //1文字だけ追加していく
-    //
-    //       document.getElementById("typing").innerHTML = text; //1文字だけ追加していく
-    //     },1000);
-    //   }
-    // }
-
+    
     // canvas
     canvasWidth = window.innerWidth;
     canvasHeight = window.innerHeight;
