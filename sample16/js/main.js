@@ -100,14 +100,11 @@
         let no = i;
         let self = this;
         let interval = setInterval(function(){
-          //console.log(no, $('.fadein > span').eq(no - 1).children('span:last').css('opacity'))
           if(no === 0 || Number($(pageClass + ' > .fadein > span').eq(no - 1).children('span:last').css('opacity')) === 1){//最初の要素または前の要素が全文字表示された時
-            //console.log(no, $('.fadein > span').eq(no - 1).children('span:last').css('opacity'))
-            //console.log(no)
             clearInterval(interval);
             for (let j = 0; j < str[no].length; j++) {
               $(self).append('<span>'+str[no].substr(j, 1)+'</span>');
-              $(self).children('span:last').delay(100 * j).animate({opacity:'1'}, 500);
+              $(self).children('span:last').delay(80 * j).animate({opacity:'1'}, 300);
             }
           }
         }, 50);
@@ -115,7 +112,7 @@
     }
     typing(1);
 
-    
+
     // canvas
     canvasWidth = window.innerWidth;
     canvasHeight = window.innerHeight;
