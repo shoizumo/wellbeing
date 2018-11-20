@@ -55,23 +55,23 @@
   // entry point
   window.addEventListener('load', () => {
 
-    $('.main').onepage_scroll({
-      sectionContainer: 'section',
-      responsiveFallback: false, //600,
-      easing: 'ease',
-      pagination: true,
-      //updateURL: true,
-      animationTime: 500,
-      loop: false,
-      direction: 'vertical', //'horizontal'
-
-      afterMove: function(pageId) {
-        //console.log(pageId);
-        typing(pageId);
-        pageIndex = pageId;
-      },
-
-    });
+    // $('.main').onepage_scroll({
+    //   sectionContainer: 'section',
+    //   responsiveFallback: false, //600,
+    //   easing: 'ease',
+    //   pagination: true,
+    //   //updateURL: true,
+    //   animationTime: 500,
+    //   loop: false,
+    //   direction: 'vertical', //'horizontal'
+    //
+    //   afterMove: function(pageId) {
+    //     //console.log(pageId);
+    //     typing(pageId);
+    //     pageIndex = pageId;
+    //   },
+    //
+    // });
 
 
     function typing(pageNo) {
@@ -183,8 +183,8 @@
     controls = new THREE.OrbitControls(camera, renderer.domElement);
 
 
-    let R = 3;
-    geometry = new THREE.SphereBufferGeometry(R, 60, 60) ;
+    let earthSize = 3;
+    geometry = new THREE.SphereBufferGeometry(earthSize, 60, 60) ;
     let vertices = geometry.attributes.position.array;
     let displacement = new THREE.Float32Attribute( vertices.length * 3, 3 );
 
@@ -198,9 +198,9 @@
     let vPos = geometry.attributes.position;
     for ( let i = 0; i < vertices.length / 3; i++ ) {
       displacement.setXYZ( i ,
-          vPos.getX(i) / R,
-          vPos.getY(i) / R,
-          vPos.getZ(i) / R);
+          vPos.getX(i) / earthSize,
+          vPos.getY(i) / earthSize,
+          vPos.getZ(i) / earthSize);
     }
     geometry.addAttribute('displacement', displacement );
 
@@ -235,7 +235,7 @@
       },
       side: THREE.FrontSide, //DoubleSide,
       //depthWrite: false,
-      transparent: true,
+      //transparent: true,
       //opacity: 0.5,
       //wireframe: true,
     });
@@ -247,6 +247,89 @@
     mesh.position.y = -1.5;
     mesh.position.z = 3.0;
     //mesh.rotation.x -= 0.2;
+
+    let latitude = 35.683333;
+    let longitude = 139.683333;
+    let point = createPoint(latitude, longitude);
+    mesh.add(point);
+
+    latitude = 0.0;
+    longitude = 0.0;
+    point = createPoint(latitude, longitude);
+    mesh.add(point);
+
+    // function createPoint(latitude = 0, longitude = 0, color=0xFF0000) {
+    //   const sphere = new THREE.Mesh(
+    //       new THREE.SphereGeometry(earthSize / 100, 8, 8),
+    //       new THREE.MeshBasicMaterial({color: color}));
+    //   sphere.position.copy(convertGeoCoords(latitude, longitude, earthSize));
+    //   return sphere;
+    // }
+
+    function convertGeoCoords(latitude, longitude, radius) {
+      const latRad = latitude * (Math.PI / 180);
+      const lonRad = -longitude * (Math.PI / 180);
+
+      const x = Math.cos(latRad) * Math.cos(lonRad) * radius;
+      const y = Math.sin(latRad) * radius;
+      const z = Math.cos(latRad) * Math.sin(lonRad) * radius;
+
+      let position = new THREE.Vector3(x, y, z);
+      let rotation = new THREE.Vector3(0.0, -lonRad, latRad - Math.PI * 0.5);
+      return {position:position, rotation:rotation}
+    }
+
+
+    function createPoint(latitude = 0, longitude = 0, color=0xFF0000) {
+      const radius = 0.01;
+      const sphereRadius = 0.04;
+      const height = 0.1;
+
+      const pin = new THREE.Group();
+
+      const material = new THREE.MeshBasicMaterial({ color: color });
+      const sphere = new THREE.Mesh(
+          new THREE.SphereGeometry(sphereRadius, 32, 16),
+          material);
+      sphere.position.y = height * 0.95 + sphereRadius;
+
+      const cone = new THREE.Mesh(
+          new THREE.ConeBufferGeometry(radius, height, 8, 1, true),
+          material);
+      cone.position.y = height * 0.5;
+      cone.rotation.x = Math.PI;
+
+      pin.add(sphere);
+      pin.add(cone);
+
+      let res = convertGeoCoords(latitude, longitude, earthSize);
+      pin.position.copy(res.position);
+      // pin.rotation.set(res.rotation);
+      pin.rotation.y = res.rotation.y;
+      pin.rotation.z = res.rotation.z;
+      console.log(res);
+
+      return pin;
+    }
+
+  //   function Marker() {
+  //     THREE.Object3D.call(this);
+  //
+  //     var radius = 0.005;
+  //     var sphereRadius = 0.02;
+  //     var height = 0.05;
+  //
+  //     var material = new THREE.MeshPhongMaterial({ color: 0xbab68f });
+  //
+  //     var cone = new THREE.Mesh(new THREE.ConeBufferGeometry(radius, height, 8, 1, true), material);
+  //     cone.position.y = height * 0.5;
+  //     cone.rotation.x = Math.PI;
+  //
+  //     var sphere = new THREE.Mesh(new THREE.SphereBufferGeometry(sphereRadius, 16, 8), material);
+  //     sphere.position.y = height * 0.95 + sphereRadius;
+  //
+  //     this.add(cone, sphere);
+  // }
 
     // console.log(mesh);
     // console.log(mesh.geometry.attributes.position.count);
