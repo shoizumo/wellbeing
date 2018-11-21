@@ -15,10 +15,11 @@ html, body {
 }
 
 .wrapper {
-  height: 100% !important;
   height: 100%;
   margin: 0 auto;
   overflow: hidden;
+  /*display: none;*/
+  /*visibility : hidden;*/
 }
 
 .main {
@@ -32,10 +33,6 @@ html, body {
 }
 
 
-.page2{
-
-  //opacity: 0.0;
-}
 
 .fadein span{
   color: #ffffff;

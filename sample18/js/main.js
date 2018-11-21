@@ -15,16 +15,9 @@
   let geometry;
   let material;
   let mesh;
-  let directionalLight;
-  let ambientLight;
   let axesHelper;
-  // texture
-  let earthLand;
-  let earthBump;
-  let earthMap;
 
   let mouse;
-  let pX, pY;
   let vecMouse = new THREE.Vector2();
 
   const clock = new THREE.Clock();
@@ -39,39 +32,32 @@
     clearColor: 0x000000
   };
 
-  const DIRECTIONAL_LIGHT_PARAM = {
-    // color: 0xffffff,
-    color: 0x42f4cb,
-    intensity: 0.5,
-    x: 1.0,
-    y: 1.0,
-    z: 1.0
-  };
-  const AMBIENT_LIGHT_PARAM = {
-    color: 0xffffff,
-    intensity: 0.2
-  };
-
   // entry point
   window.addEventListener('load', () => {
 
-    // $('.main').onepage_scroll({
-    //   sectionContainer: 'section',
-    //   responsiveFallback: false, //600,
-    //   easing: 'ease',
-    //   pagination: true,
-    //   //updateURL: true,
-    //   animationTime: 500,
-    //   loop: false,
-    //   direction: 'vertical', //'horizontal'
-    //
-    //   afterMove: function(pageId) {
-    //     //console.log(pageId);
-    //     typing(pageId);
-    //     pageIndex = pageId;
-    //   },
-    //
-    // });
+    $('.main').onepage_scroll({
+      sectionContainer: 'section',
+      responsiveFallback: false, //600,
+      easing: 'ease',
+      pagination: true,
+      //updateURL: true,
+      animationTime: 500,
+      loop: false,
+      direction: 'vertical', //'horizontal'
+
+      afterMove: function(pageId) {
+        //console.log(pageId);
+        typing(pageId);
+        pageIndex = pageId;
+      },
+
+      beforeMove: function(pageId) {
+        if (pageId === 4){
+           $('.main').addClass("disabled-onepage-scroll");
+        }
+      },
+
+    });
 
 
     function typing(pageNo) {
@@ -125,9 +111,13 @@
     }, false);
     window.addEventListener('click', () => {
         isClick = true;
+        $('.main').removeClass("disabled-onepage-scroll");
     }, false);
     window.addEventListener('dblclick', () => {
         isdDblclick = true;
+        // $('.main').addClass("disabled-onepage-scroll");
+        // $('.wrapper').attr('display', 'none');
+        // $('section').attr('display', 'none');
     }, false);
 
 
@@ -144,26 +134,21 @@
 
   function loadShader() {
     SHADER_LOADER.load((data) => {
-
-      const vsMain = data.myShaderMain.vertex;
-      const fsMain = data.myShaderMain.fragment;
       const vsPost = data.myShaderPost.vertex;
       const fsPost = data.myShaderPost.fragment;
-
-
-      init(vsMain, fsMain, vsPost, fsPost);
+      init(vsPost, fsPost);
     })
   }
 
 
-  function init(vsMain, fsMain, vsPost, fsPost){
+  function init(vsPost, fsPost){
     // scene and camera
     scene = new THREE.Scene();
     camera = new THREE.PerspectiveCamera(60, canvasWidth / canvasHeight, 0.1, 150.0);
     camera.position.x = 0.0;
     camera.position.y = 3.0;
-    camera.position.z = 10.0;
-    //camera.lookAt(new THREE.Vector3(0.0, 0.0, 0.0));
+    camera.position.z = 3.0;
+    camera.lookAt(new THREE.Vector3(0.0, 0.0, 0.0));
 
     // renderer
     renderer = new THREE.WebGLRenderer();
@@ -203,42 +188,8 @@
     }
 
     scene.add(mesh);
-
-
-    // let earthSize = 3;
-    // geometry = new THREE.SphereBufferGeometry(earthSize, 60, 60) ;
-    //
-    //
-    //
-    // let time = 0.0;
-    // material = new THREE.RawShaderMaterial({
-    //   vertexShader: vsMain,
-    //   fragmentShader: fsMain,
-    //   uniforms: {
-    //     // Map
-    //     bumpTex: {type: "t", value: earthBump},
-    //     landTex: {type: "t", value: earthLand},
-    //     earthTex: {type: "t", value: earthMap},
-    //     isText: {type: "bool", value: true},
-    //     amplitude: { type: "f", value: 0.0 },
-    //     //size: {type: 'f', value: 32.0},
-    //     time: {type: "f", value: time},
-    //     resolution: {type: "v2", value: [canvasWidth, canvasHeight]},
-    //   },
-    //   side: THREE.FrontSide, //DoubleSide,
-    //   //depthWrite: false,
-    //   //transparent: true,
-    //   //opacity: 0.5,
-    //   //wireframe: true,
-    // });
-    //
-    // mesh = new THREE.Mesh(geometry, material);
-    // //mesh = new THREE.Line(geometry, material);
-    // //mesh = new THREE.Points(geometry, material);
-    // scene.add(mesh);
-    // mesh.position.y = -1.5;
-    // mesh.position.z = 3.0;
-    // //mesh.rotation.x -= 0.2;
+    //mesh.position.y = -1.0;
+    mesh.position.z = 1.0;
 
 
     let intersected_object = 0;
@@ -264,19 +215,17 @@
             intersected_object = intersects[0].object;
 
             if (overlay_element === 0) {
-              overlay_element = document.getElementById("overlay");
+              // overlay_element = document.getElementById("overlay");
             }
-            overlay_element.innerHTML = intersects[0].object.userData.country;
-
-
+            // overlay_element.innerHTML = intersects[0].object.userData.country;
           } else {
-            overlay_element.innerHTML = "";
+            // overlay_element.innerHTML = "";
           }
         } else {
-          overlay_element.innerHTML = "";
+          // overlay_element.innerHTML = "";
         }
       } else {
-        overlay_element.innerHTML = "";
+        // overlay_element.innerHTML = "";
       }
     }
 
@@ -291,27 +240,9 @@
   }
 
   // rendering
-  let step = 1.0;
   function render() {
-    // if (pX !== mouse.x){
-    //   vecMouse.x = mouse.x - pX;
-    //   vecMouse.y = mouse.y - pY;
-    // }else{
-    //   vecMouse.x = vecMouse.x * 0.99;
-    //   vecMouse.y = vecMouse.y * 0.99;
-    // }
-    // pX = mouse.x;
-    // pY = mouse.y;
-    // //console.log(Math.abs(vecMouse.x)*100.0);
-    //
-    //
-    // mesh.rotation.x += 3.141592 * 2 / 90 / 60 / 60 * 10; // 1round/90m
-    //
+    mesh.rotation.x += 3.141592 * 2 / 90 / 60 / 60 * 10; // 1round/90m
     let nowTime = clock.getElapsedTime();
-    // material.uniforms.time.value = nowTime;
-    // mesh.material.uniforms.amplitude.value = Math.sin(nowTime);
-    // mesh.material.uniforms.resolution.value = [canvasWidth, canvasHeight];
-
     if (run) {
       requestAnimationFrame(render);
     }
