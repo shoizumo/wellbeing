@@ -28,12 +28,12 @@ void main() {
     //法線ベクトルと光線ベクトルの内積
     float dotNL = dot(N, L);
     //拡散色の決定
-    vec3 color = bumpColor.xyz;
-    if(color.b > 0.7 && color.g < 0.5){
-        color = vec3(0.0);
-    }else{
-        color = vec3((color.r + color.g + color.b) / 3.0);
-    }
+    vec3 color = landColor.xyz / 3.0;
+//    if(color.b > 0.7 && color.g < 0.5){
+//        color = vec3(0.0);
+//    }else{
+//        color = vec3((color.r + color.g + color.b) / 3.0);
+//    }
     vec3 diffuse = color * lightColor * max(dotNL, 0.0);
 
     vec3 C = - normalize(mvPosition);
@@ -47,9 +47,9 @@ void main() {
     //destColor = vec4(diffuse, 1.0);
     destColor.rgb += color.rgb * 0.1;
 
-    if(landColor.r > 0.5){
-        destColor.a = 0.3;
-    }
+//    if(landColor.r > 0.5){
+//        destColor.a = 0.1;
+//    }
 
     gl_FragColor = destColor;
 

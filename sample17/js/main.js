@@ -80,7 +80,6 @@
       $('.fadein > span').css('opacity','0');
 
       let pageClass = '.page' + pageNo;
-      console.log($(pageClass + ' > .fadein > span'));
       $(pageClass + ' > .fadein > span').each(function(i){//セレクタで指定した要素すべて
         //console.log(this);
         $(this).css('opacity','1');//行を不透明にする
@@ -248,15 +247,66 @@
     mesh.position.z = 3.0;
     //mesh.rotation.x -= 0.2;
 
+    const points = new THREE.Group();
+
     let latitude = 35.683333;
     let longitude = 139.683333;
-    let point = createPoint(latitude, longitude);
-    mesh.add(point);
+    let point1 = createPoint(latitude, longitude);
+    point1.name = 'point1';
+    //mesh.add(point1);
+    console.log(point1);
 
     latitude = 0.0;
     longitude = 0.0;
-    point = createPoint(latitude, longitude);
-    mesh.add(point);
+    let point2 = createPoint(latitude, longitude);
+    point2.name = 'point2';
+    //mesh.add(point2);
+    console.log(point2);
+
+    points.add(point1);
+    points.add(point2);
+    mesh.add(points);
+    console.log(points);
+
+
+    document.addEventListener( 'mousedown', clickPosition, false );
+    function clickPosition( event ) {
+        // 画面上のマウスクリック位置
+        var x = event.clientX;
+        var y = event.clientY;
+
+        // マウスクリック位置を正規化
+        var mouse = new THREE.Vector2();
+        mouse.x =  ( x / window.innerWidth ) * 2 - 1;
+        mouse.y = -( y / window.innerHeight ) * 2 + 1;
+
+        // Raycasterインスタンス作成
+        var raycaster = new THREE.Raycaster();
+        // 取得したX、Y座標でrayの位置を更新
+        raycaster.setFromCamera(mouse, camera );
+
+        //console.log(scene)
+
+
+        // オブジェクトの取得
+        var intersects = raycaster.intersectObjects(scene.children, true );
+
+        //console.log(intersects)
+        //console.log(sphereBase.name)
+
+        // WEBコンソールにオブジェクト上の座標を出力
+        //console.log( 'x座標=%f', intersects[0].point.x );
+        //console.log( 'y座標=%f', intersects[0].point.y );
+        //console.log( 'z座標=%f', intersects[0].point.z );
+
+        if (intersects.length > 0) {
+            // 交差していたらintersectsが1以上になるので、やりたいことをやる。
+            //intersects[0].object.position.x = 100;
+            //why "parent" is needed??????
+            var selectedName = intersects[0]//.object.parent.name;
+            console.log(selectedName);
+        }
+    }
 
     // function createPoint(latitude = 0, longitude = 0, color=0xFF0000) {
     //   const sphere = new THREE.Mesh(
@@ -307,7 +357,6 @@
       // pin.rotation.set(res.rotation);
       pin.rotation.y = res.rotation.y;
       pin.rotation.z = res.rotation.z;
-      console.log(res);
 
       return pin;
     }
