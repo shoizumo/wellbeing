@@ -12,23 +12,11 @@ var hover_scale = 1.01;
 
 
 window.addEventListener('load', () => {
-    
-    //init();
-    loadShader()
+    init();
     animate();
 })
 
-function loadShader() {
-    SHADER_LOADER.load((data) => {
-
-      const vsMain = data.myShaderMain.vertex;
-      const fsMain = data.myShaderMain.fragment;
-      //return {vsMain:vsMain, fsMain:fsMain}
-      init(vsMain, fsMain)
-    })
-  }
-
-function init(vsMain, fsMain) {
+function init() {
     if (!Detector.webgl) {
         Detector.addGetWebGLMessage();
     }
@@ -43,37 +31,29 @@ function init(vsMain, fsMain) {
     scene = new THREE.Scene();
 
     camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.01, 4500);
-    camera.position.z = 10;
+    camera.position.z = 100;
     controls = new THREE.OrbitControls(camera, renderer.domElement);
 
     scene.add(new THREE.AmbientLight(0x555555));
 
 
-    
+    var segments = 64;
 
-    geometry = new THREE.SphereBufferGeometry(radius, 60, 60) ;
-    // material = new THREE.RawShaderMaterial({
-    //   vertexShader: vsMain,
-    //   fragmentShader: fsMain,
-    // })
+    base_globe = new THREE.Object3D();
+    base_globe.scale.set(20, 20, 20);
+    scene.add(base_globe);
 
-    material = new THREE.MeshLambertMaterial({
+
+    base_globe.add(new THREE.Mesh(
+    new THREE.SphereGeometry(radius, segments, segments),
+    new THREE.MeshLambertMaterial({
         transparent: true,
         depthTest: true,
         depthWrite: false,
         opacity: 0.5,
         //map: sea_texture,
         color: 0x6699ff
-    });
-
-    M = new THREE.RawShaderMaterial({
-      vertexShader: vsMain,
-      fragmentShader: fsMain,
-    })
-
-    base_globe = new THREE.Mesh(geometry, material);
-    scene.add(base_globe);
-
+    })));
 
     for (var name in country_data) {
         geometry = new Tessalator3D(country_data[name], 0);
@@ -81,7 +61,9 @@ function init(vsMain, fsMain) {
         var continents = ["EU", "AN", "AS", "OC", "SA", "AF", "NA"];
         var color = new THREE.Color(0xff0000);
         color.setHSL(continents.indexOf(country_data[name].data.cont) * (1 / 7), Math.random() * 0.25 + 0.65, Math.random() / 2 + 0.25);
-        var mesh = country_data[name].mesh = new THREE.Mesh(geometry, M);
+        var mesh = country_data[name].mesh = new THREE.Mesh(geometry, new THREE.MeshLambertMaterial({
+            color: color
+        }));
         mesh.name = "land";
         mesh.userData.country = name;
         base_globe.add(mesh);

@@ -130,6 +130,7 @@
         isdDblclick = true;
     }, false);
 
+
     mouse = new THREE.Vector2();
     window.addEventListener('mousemove', () => {
       event.preventDefault();
@@ -137,21 +138,22 @@
       mouse.y = -(event.clientY / window.innerHeight) * 2 + 1;
     }, false);
 
-
-
-    // texture
-    let earthLandLoader = Loader = new THREE.TextureLoader();
-    let earthBumpLoader = new THREE.TextureLoader();
-    let earthMapLoader = new THREE.TextureLoader();
-    earthLand = earthLandLoader.load('img/earthspec.png', () => {
-      earthBump = earthBumpLoader.load('img/earthbump.png', () => {
-        earthMap = earthMapLoader.load('img/earthmap.jpg', loadShader);
-      })
-    });
+    loadShader()
 
   }, false);
 
+  function loadShader() {
+    SHADER_LOADER.load((data) => {
 
+      const vsMain = data.myShaderMain.vertex;
+      const fsMain = data.myShaderMain.fragment;
+      const vsPost = data.myShaderPost.vertex;
+      const fsPost = data.myShaderPost.fragment;
+
+
+      init(vsMain, fsMain, vsPost, fsPost);
+    })
+  }
 
 
   function init(vsMain, fsMain, vsPost, fsPost){
@@ -171,58 +173,112 @@
     controls = new THREE.OrbitControls(camera, renderer.domElement);
 
 
-    base_globe = new THREE.Object3D();
-    //base_globe.scale.set(20, 20, 20);
-    // scene.add(base_globe);
-
-
-    base_globe.add(new THREE.Mesh(
-    new THREE.SphereGeometry(4, 60, 60),
-    new THREE.MeshLambertMaterial({
+    let radius = 0.995;
+    geometry = new THREE.SphereGeometry(radius, 60, 60);
+    material = new THREE.MeshBasicMaterial({
         transparent: true,
         depthTest: true,
         depthWrite: false,
-        opacity: 0.5,
+        opacity: 0.9,
         //map: sea_texture,
-        color: 0x6699ff
-    })));
-
-    let earthSize = 3;
-    geometry = new THREE.SphereBufferGeometry(earthSize, 60, 60) ;
-
-
-
-    let time = 0.0;
-    material = new THREE.RawShaderMaterial({
-      vertexShader: vsMain,
-      fragmentShader: fsMain,
-      uniforms: {
-        // Map
-        bumpTex: {type: "t", value: earthBump},
-        landTex: {type: "t", value: earthLand},
-        earthTex: {type: "t", value: earthMap},
-        isText: {type: "bool", value: true},
-        amplitude: { type: "f", value: 0.0 },
-        //size: {type: 'f', value: 32.0},
-        time: {type: "f", value: time},
-        resolution: {type: "v2", value: [canvasWidth, canvasHeight]},
-      },
-      side: THREE.FrontSide, //DoubleSide,
-      //depthWrite: false,
-      //transparent: true,
-      //opacity: 0.5,
-      //wireframe: true,
+        color: 0xffffff
     });
-
     mesh = new THREE.Mesh(geometry, material);
-    //mesh = new THREE.Line(geometry, material);
-    //mesh = new THREE.Points(geometry, material);
+
+
+    for (let name in country_data) {
+      geometry = new Tessalator3D(country_data[name], 0);
+
+      let continents = ["EU", "AN", "AS", "OC", "SA", "AF", "NA"];
+      let color = new THREE.Color(0xff0000);
+      color.setHSL(continents.indexOf(country_data[name].data.cont) * (1 / 7), Math.random() * 0.25 + 0.65, Math.random() / 2 + 0.25);
+      let m = country_data[name].mesh = new THREE.Mesh(
+          geometry,
+          new THREE.MeshBasicMaterial({
+            color: color
+          }));
+      m.name = "land";
+      m.userData.country = name;
+      mesh.add(m);
+    }
+
     scene.add(mesh);
-    mesh.position.y = -1.5;
-    mesh.position.z = 3.0;
-    //mesh.rotation.x -= 0.2;
 
 
+    // let earthSize = 3;
+    // geometry = new THREE.SphereBufferGeometry(earthSize, 60, 60) ;
+    //
+    //
+    //
+    // let time = 0.0;
+    // material = new THREE.RawShaderMaterial({
+    //   vertexShader: vsMain,
+    //   fragmentShader: fsMain,
+    //   uniforms: {
+    //     // Map
+    //     bumpTex: {type: "t", value: earthBump},
+    //     landTex: {type: "t", value: earthLand},
+    //     earthTex: {type: "t", value: earthMap},
+    //     isText: {type: "bool", value: true},
+    //     amplitude: { type: "f", value: 0.0 },
+    //     //size: {type: 'f', value: 32.0},
+    //     time: {type: "f", value: time},
+    //     resolution: {type: "v2", value: [canvasWidth, canvasHeight]},
+    //   },
+    //   side: THREE.FrontSide, //DoubleSide,
+    //   //depthWrite: false,
+    //   //transparent: true,
+    //   //opacity: 0.5,
+    //   //wireframe: true,
+    // });
+    //
+    // mesh = new THREE.Mesh(geometry, material);
+    // //mesh = new THREE.Line(geometry, material);
+    // //mesh = new THREE.Points(geometry, material);
+    // scene.add(mesh);
+    // mesh.position.y = -1.5;
+    // mesh.position.z = 3.0;
+    // //mesh.rotation.x -= 0.2;
+
+
+    let intersected_object = 0;
+    let overlay_element = 0;
+    let hover_scale = 1.01;
+    window.addEventListener('mousemove', onDocumentMouseMove, false);
+    function onDocumentMouseMove(event) {
+      if (intersected_object !== 0) {
+        intersected_object.scale.set(1.0, 1.0, 1.0);
+      }
+      event.preventDefault();
+      let mouseX = (event.clientX / window.innerWidth) * 2 - 1;
+      let mouseY = -(event.clientY / window.innerHeight) * 2 + 1;
+      let vector = new THREE.Vector3(mouseX, mouseY, -1);
+      vector.unproject(camera);
+      let raycaster = new THREE.Raycaster(camera.position, vector.sub(camera.position).normalize());
+      let intersects = raycaster.intersectObject(mesh, true);
+      if (intersects.length > 0) {
+        if (intersects[0].point !== null) {
+          if (intersects[0].object.name === "land") {
+            console.log(intersects[0].object.userData.country);
+            intersects[0].object.scale.set(hover_scale, hover_scale, hover_scale);
+            intersected_object = intersects[0].object;
+
+            if (overlay_element === 0) {
+              overlay_element = document.getElementById("overlay");
+            }
+            overlay_element.innerHTML = intersects[0].object.userData.country;
+
+
+          } else {
+            overlay_element.innerHTML = "";
+          }
+        } else {
+          overlay_element.innerHTML = "";
+        }
+      } else {
+        overlay_element.innerHTML = "";
+      }
+    }
 
     // helper
     axesHelper = new THREE.AxesHelper(5.0);
@@ -237,24 +293,24 @@
   // rendering
   let step = 1.0;
   function render() {
-    if (pX !== mouse.x){
-      vecMouse.x = mouse.x - pX;
-      vecMouse.y = mouse.y - pY;
-    }else{
-      vecMouse.x = vecMouse.x * 0.99;
-      vecMouse.y = vecMouse.y * 0.99;
-    }
-    pX = mouse.x;
-    pY = mouse.y;
-    //console.log(Math.abs(vecMouse.x)*100.0);
-
-
-    mesh.rotation.x += 3.141592 * 2 / 90 / 60 / 60 * 10; // 1round/90m
-
+    // if (pX !== mouse.x){
+    //   vecMouse.x = mouse.x - pX;
+    //   vecMouse.y = mouse.y - pY;
+    // }else{
+    //   vecMouse.x = vecMouse.x * 0.99;
+    //   vecMouse.y = vecMouse.y * 0.99;
+    // }
+    // pX = mouse.x;
+    // pY = mouse.y;
+    // //console.log(Math.abs(vecMouse.x)*100.0);
+    //
+    //
+    // mesh.rotation.x += 3.141592 * 2 / 90 / 60 / 60 * 10; // 1round/90m
+    //
     let nowTime = clock.getElapsedTime();
-    material.uniforms.time.value = nowTime;
-    mesh.material.uniforms.amplitude.value = Math.sin(nowTime);
-    mesh.material.uniforms.resolution.value = [canvasWidth, canvasHeight];
+    // material.uniforms.time.value = nowTime;
+    // mesh.material.uniforms.amplitude.value = Math.sin(nowTime);
+    // mesh.material.uniforms.resolution.value = [canvasWidth, canvasHeight];
 
     if (run) {
       requestAnimationFrame(render);
