@@ -101,6 +101,7 @@ const interactivePageIndex = 4;
 
     // events
     window.addEventListener('resize', () => {
+      renderer.setPixelRatio(window.devicePixelRatio);
       renderer.setSize(window.innerWidth, window.innerHeight);
       camera.aspect = window.innerWidth / window.innerHeight;
       camera.updateProjectionMatrix();
@@ -293,7 +294,7 @@ const interactivePageIndex = 4;
     //平面オブジェクト用テクスチャ画像を更新
     postprocessing.plane.material.uniforms.texture.value = postprocessing.renderTarget;
     postprocessing.plane.material.uniforms.time.value = nowTime;
-    postprocessing.plane.material.uniforms.resolution.value = [canvasWidth, canvasHeight];
+    postprocessing.plane.material.uniforms.resolution.value = [canvasWidth * window.devicePixelRatio, canvasHeight * window.devicePixelRatio];
     postprocessing.plane.material.uniforms.mouse.value = mouse;
     if(!isNaN(vecMouse.x)){
       postprocessing.plane.material.uniforms.vecMouse.value = vecMouse;
@@ -323,7 +324,7 @@ const interactivePageIndex = 4;
         //uniform型変数
         uniforms: {
           texture: {type: "t", value: null},
-          resolution: {type: "v2", value: [canvasWidth, canvasHeight]},
+          resolution: {type: "v2", value: [canvasWidth * window.devicePixelRatio, canvasHeight * window.devicePixelRatio]},
           time: {type: "f", value: time},
           mouse: {type: "v2", value: mouse},
           vecMouse: {type: "v2", value: vecMouse},
