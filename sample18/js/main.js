@@ -24,7 +24,7 @@
   let time = 0.0;
 
   let pageIndex = 1.0;
-
+const interactivePageIndex = 4;
 
   // constant variables
   const RENDERER_PARAM = {
@@ -49,12 +49,17 @@
         //console.log(pageId);
         typing(pageId);
         pageIndex = pageId;
+
+        if (pageId === interactivePageIndex){
+           $('.main').addClass("disabled-onepage-scroll");
+           // $('.main').attr('height', '10%')
+        }
       },
 
       beforeMove: function(pageId) {
-        if (pageId === 4){
-           $('.main').addClass("disabled-onepage-scroll");
-        }
+        // if (pageId === 4){
+        //    $('.main').addClass("disabled-onepage-scroll");
+        // }
       },
 
     });
@@ -111,13 +116,10 @@
     }, false);
     window.addEventListener('click', () => {
         isClick = true;
-        $('.main').removeClass("disabled-onepage-scroll");
     }, false);
     window.addEventListener('dblclick', () => {
         isdDblclick = true;
-        // $('.main').addClass("disabled-onepage-scroll");
-        // $('.wrapper').attr('display', 'none');
-        // $('section').attr('display', 'none');
+        $('.main').removeClass("disabled-onepage-scroll");
     }, false);
 
 
@@ -148,10 +150,11 @@
     camera.position.x = 0.0;
     camera.position.y = 3.0;
     camera.position.z = 3.0;
-    camera.lookAt(new THREE.Vector3(0.0, 0.0, 0.0));
+    //camera.lookAt(new THREE.Vector3(0.0, 0.0, 0.0));
 
     // renderer
     renderer = new THREE.WebGLRenderer();
+    renderer.setPixelRatio(window.devicePixelRatio);
     renderer.setClearColor(new THREE.Color(RENDERER_PARAM.clearColor));
     renderer.setSize(canvasWidth, canvasHeight);
     targetDOM.appendChild(renderer.domElement);
@@ -166,17 +169,18 @@
         depthWrite: false,
         opacity: 0.9,
         //map: sea_texture,
-        color: 0xffffff
+        color: 0x222222
     });
     mesh = new THREE.Mesh(geometry, material);
 
 
+    let meshList = [];
     for (let name in country_data) {
       geometry = new Tessalator3D(country_data[name], 0);
-
       let continents = ["EU", "AN", "AS", "OC", "SA", "AF", "NA"];
-      let color = new THREE.Color(0xff0000);
-      color.setHSL(continents.indexOf(country_data[name].data.cont) * (1 / 7), Math.random() * 0.25 + 0.65, Math.random() / 2 + 0.25);
+      let color = new THREE.Color(0xaaaaaa);
+      //color.setHSL(continents.indexOf(country_data[name].data.cont) * (1 / 7), Math.random() * 0.25 + 0.65, Math.random() / 2 + 0.25);
+
       let m = country_data[name].mesh = new THREE.Mesh(
           geometry,
           new THREE.MeshBasicMaterial({
@@ -184,17 +188,45 @@
           }));
       m.name = "land";
       m.userData.country = name;
+
+      // ここにWell-being Dataを加える
+
       mesh.add(m);
+      meshList.push(m);
     }
 
     scene.add(mesh);
-    //mesh.position.y = -1.0;
-    mesh.position.z = 1.0;
+    mesh.position.y = 1.5;
+    mesh.position.z = 3.0;
 
+
+    console.log(meshList);
+    //meshList[0].material.color.setRGB(1.0, 1.0, 1.0);
+    console.log(meshList[0]);
+
+    // meshList.map(mesh => {
+    //   // 交差しているオブジェクトが1つ以上存在し、
+    //   // 交差しているオブジェクトの1番目(最前面)のものだったら
+    //   if (intersects.length > 0 && mesh === intersects[0].object) {
+    //     // 色を赤くする
+    //     mesh.material.color.setHex(0xFF0000);
+    //   } else {
+    //     // それ以外は元の色にする
+    //     mesh.material.color.setHex(0xFFFFFF);
+    //   }
+    // });
+
+    // meshList.map(mesh => {
+    //   if (mesh === intersects[0].object) {
+    //     mesh.material.color.setHex(0xFF0000);
+    //   } else {
+    //     mesh.material.color.setHex(0xFFFFFF);
+    //   }
+    // });
 
     let intersected_object = 0;
     let overlay_element = 0;
-    let hover_scale = 1.01;
+    let hover_scale = 1.015;
     window.addEventListener('mousemove', onDocumentMouseMove, false);
     function onDocumentMouseMove(event) {
       if (intersected_object !== 0) {
@@ -210,9 +242,16 @@
       if (intersects.length > 0) {
         if (intersects[0].point !== null) {
           if (intersects[0].object.name === "land") {
-            console.log(intersects[0].object.userData.country);
-            intersects[0].object.scale.set(hover_scale, hover_scale, hover_scale);
-            intersected_object = intersects[0].object;
+            //console.log(intersects[0]);
+
+            if (pageIndex === interactivePageIndex){
+              console.log(intersects[0].object.userData.country);
+              intersects[0].object.scale.set(hover_scale, hover_scale, hover_scale);
+              intersected_object = intersects[0].object;
+
+              // color
+              intersects[0].object.material.color.setHex(0xFF0000);
+            }
 
             if (overlay_element === 0) {
               // overlay_element = document.getElementById("overlay");
@@ -241,7 +280,7 @@
 
   // rendering
   function render() {
-    mesh.rotation.x += 3.141592 * 2 / 90 / 60 / 60 * 10; // 1round/90m
+    mesh.rotation.x += 3.141592 * 2 / 90 / 60 / 60; // 1round/90m
     let nowTime = clock.getElapsedTime();
     if (run) {
       requestAnimationFrame(render);
@@ -297,7 +336,6 @@
 
     //平面オブジェクトをシーンへ追加
     postprocessing.scene.add(postprocessing.plane);
-
 
     //レンダラターゲットの生成
     postprocessing.renderTarget = new THREE.WebGLRenderTarget(
