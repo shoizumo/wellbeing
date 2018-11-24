@@ -14,7 +14,7 @@
   let renderer;
   let geometry;
   let material;
-  let mesh;
+  let earth;
   let axesHelper;
 
   let mouse;
@@ -53,6 +53,8 @@ const interactivePageIndex = 4;
         if (pageId === interactivePageIndex){
            $('.main').addClass("disabled-onepage-scroll");
            // $('.main').attr('height', '10%')
+          earth.position.y = 0.0;
+          camera.position.z = 3.0;
         }
       },
 
@@ -149,8 +151,8 @@ const interactivePageIndex = 4;
     scene = new THREE.Scene();
     camera = new THREE.PerspectiveCamera(60, canvasWidth / canvasHeight, 0.1, 150.0);
     camera.position.x = 0.0;
-    camera.position.y = 3.0;
-    camera.position.z = 3.0;
+    camera.position.y = 0.0;
+    camera.position.z = 2.0;
     //camera.lookAt(new THREE.Vector3(0.0, 0.0, 0.0));
 
     // renderer
@@ -159,7 +161,14 @@ const interactivePageIndex = 4;
     renderer.setClearColor(new THREE.Color(RENDERER_PARAM.clearColor));
     renderer.setSize(canvasWidth, canvasHeight);
     targetDOM.appendChild(renderer.domElement);
+
     controls = new THREE.OrbitControls(camera, renderer.domElement);
+    controls.enablePan = false;
+    //controls.enableZoom = false;
+    controls.minDistance = 1.5;
+    controls.maxDistance = 3;
+    console.log(controls)
+
 
 
     let radius = 0.995;
@@ -172,7 +181,7 @@ const interactivePageIndex = 4;
         //map: sea_texture,
         color: 0x222222
     });
-    mesh = new THREE.Mesh(geometry, material);
+    earth = new THREE.Mesh(geometry, material);
 
 
     let meshList = [];
@@ -192,13 +201,13 @@ const interactivePageIndex = 4;
 
       // ここにWell-being Dataを加える
 
-      mesh.add(m);
+      earth.add(m);
       meshList.push(m);
     }
 
-    scene.add(mesh);
-    mesh.position.y = 1.5;
-    mesh.position.z = 3.0;
+    scene.add(earth);
+    earth.position.y = -1.0;
+    //earth.position.z = 3.0;
 
 
     console.log(meshList);
@@ -239,7 +248,7 @@ const interactivePageIndex = 4;
       let vector = new THREE.Vector3(mouseX, mouseY, -1);
       vector.unproject(camera);
       let raycaster = new THREE.Raycaster(camera.position, vector.sub(camera.position).normalize());
-      let intersects = raycaster.intersectObject(mesh, true);
+      let intersects = raycaster.intersectObject(earth, true);
       if (intersects.length > 0) {
         if (intersects[0].point !== null) {
           if (intersects[0].object.name === "land") {
@@ -281,11 +290,20 @@ const interactivePageIndex = 4;
 
   // rendering
   function render() {
-    mesh.rotation.x += 3.141592 * 2 / 90 / 60 / 60; // 1round/90m
+    earth.rotation.x += 3.141592 * 2 / 90 / 60 / 60 * 5; // 1round/90m
     let nowTime = clock.getElapsedTime();
     if (run) {
       requestAnimationFrame(render);
     }
+
+
+    let firstPos = -1.0;
+    let destPos = 0.0;
+    // if (pageIndex === interactivePageIndex){
+    //   earth.position.y += (destPos - earth.position.y) * 0.02;
+    // }else{
+    //   earth.position.y += (firstPos - earth.position.y) * 0.02;
+    // }
 
 
     //renderer.render(scene, camera);
