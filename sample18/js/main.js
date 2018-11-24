@@ -24,13 +24,16 @@
   let time = 0.0;
 
   let pageIndex = 1.0;
-const interactivePageIndex = 4;
+  const interactivePageIndex = 4;
 
   // constant variables
   const RENDERER_PARAM = {
     //clearColor: 0xffffff
     clearColor: 0x000000
   };
+
+  let initEarthPosition = new THREE.Vector3(0.0, -1.0, 0.0);
+  let initCameraPosition = new THREE.Vector3(0.0, 0.0, 2.0);
 
   // entry point
   window.addEventListener('load', () => {
@@ -53,8 +56,42 @@ const interactivePageIndex = 4;
         if (pageId === interactivePageIndex){
            $('.main').addClass("disabled-onepage-scroll");
            // $('.main').attr('height', '10%')
-          earth.position.y = 0.0;
-          camera.position.z = 3.0;
+          // earth.position.y = 0.0;
+          // camera.position.z = 3.0;
+
+          // TweenMax.to(earth.position, 1, {
+          //   // x: 100,
+          //   y: 0.0,
+          //   startAt: {
+          //     //x: 0,
+          //     y: initEarthPosition.y,
+          //   }
+          // });
+          // TweenMax.to(camera.position, 1, {
+          //   // x: 100,
+          //   z: 3.0,
+          //   startAt: {
+          //     //x: 0,
+          //     z: initCameraPosition.z,
+          //   }
+          // });
+
+          let duration = 2.0;
+          let ease = Back.easeOut.config(3);
+          TweenLite.to(earth.position, duration, {
+            y: 0.0,
+            ease: ease
+          });
+
+          TweenLite.to(camera.position, duration, {
+            z: 3.0,
+            ease: ease,
+            onComplete: function(){
+              controls.enableZoom = true;
+            }
+          });
+        }else{
+          controls.enableZoom = false;
         }
       },
 
@@ -150,9 +187,7 @@ const interactivePageIndex = 4;
     // scene and camera
     scene = new THREE.Scene();
     camera = new THREE.PerspectiveCamera(60, canvasWidth / canvasHeight, 0.1, 150.0);
-    camera.position.x = 0.0;
-    camera.position.y = 0.0;
-    camera.position.z = 2.0;
+    camera.position.z = initCameraPosition.z;
     //camera.lookAt(new THREE.Vector3(0.0, 0.0, 0.0));
 
     // renderer
@@ -164,10 +199,10 @@ const interactivePageIndex = 4;
 
     controls = new THREE.OrbitControls(camera, renderer.domElement);
     controls.enablePan = false;
-    //controls.enableZoom = false;
-    controls.minDistance = 1.5;
-    controls.maxDistance = 3;
-    console.log(controls)
+    controls.enableZoom = false;
+    controls.minDistance = 2.0;
+    controls.maxDistance = 3.0;
+    console.log(controls);
 
 
 
@@ -206,8 +241,7 @@ const interactivePageIndex = 4;
     }
 
     scene.add(earth);
-    earth.position.y = -1.0;
-    //earth.position.z = 3.0;
+    earth.position.y = initEarthPosition.y;
 
 
     console.log(meshList);
