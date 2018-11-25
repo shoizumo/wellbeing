@@ -18,7 +18,6 @@
   let axesHelper;
 
   let mouse;
-  let vecMouse = new THREE.Vector2();
 
   const clock = new THREE.Clock();
   let time = 0.0;
@@ -54,28 +53,7 @@
         pageIndex = pageId;
 
         if (pageId === interactivePageIndex){
-           $('.main').addClass("disabled-onepage-scroll");
-           // $('.main').attr('height', '10%')
-          // earth.position.y = 0.0;
-          // camera.position.z = 3.0;
-
-          // TweenMax.to(earth.position, 1, {
-          //   // x: 100,
-          //   y: 0.0,
-          //   startAt: {
-          //     //x: 0,
-          //     y: initEarthPosition.y,
-          //   }
-          // });
-          // TweenMax.to(camera.position, 1, {
-          //   // x: 100,
-          //   z: 3.0,
-          //   startAt: {
-          //     //x: 0,
-          //     z: initCameraPosition.z,
-          //   }
-          // });
-
+          $('.main').addClass("disabled-onepage-scroll");
           let duration = 2.0;
           let ease = Back.easeOut.config(3);
           TweenLite.to(earth.position, duration, {
@@ -95,11 +73,9 @@
         }
       },
 
-      beforeMove: function(pageId) {
-        // if (pageId === 4){
-        //    $('.main').addClass("disabled-onepage-scroll");
-        // }
-      },
+      // beforeMove: function(pageId) {
+      //
+      // },
 
     });
 
@@ -331,14 +307,6 @@
     }
 
 
-    let firstPos = -1.0;
-    let destPos = 0.0;
-    // if (pageIndex === interactivePageIndex){
-    //   earth.position.y += (destPos - earth.position.y) * 0.02;
-    // }else{
-    //   earth.position.y += (firstPos - earth.position.y) * 0.02;
-    // }
-
 
     //renderer.render(scene, camera);
     //オフスクリーンレンダリング
@@ -348,9 +316,6 @@
     postprocessing.plane.material.uniforms.time.value = nowTime;
     postprocessing.plane.material.uniforms.resolution.value = [canvasWidth * window.devicePixelRatio, canvasHeight * window.devicePixelRatio];
     postprocessing.plane.material.uniforms.mouse.value = mouse;
-    if(!isNaN(vecMouse.x)){
-      postprocessing.plane.material.uniforms.vecMouse.value = vecMouse;
-    }
     postprocessing.plane.material.uniforms.pageIndex.value = pageIndex;
 
     //平面オブジェクトをレンダリング
@@ -379,7 +344,6 @@
           resolution: {type: "v2", value: [canvasWidth * window.devicePixelRatio, canvasHeight * window.devicePixelRatio]},
           time: {type: "f", value: time},
           mouse: {type: "v2", value: mouse},
-          vecMouse: {type: "v2", value: vecMouse},
           pageIndex: {type: "f", value: pageIndex},
         },
         vertexShader: vsPost,

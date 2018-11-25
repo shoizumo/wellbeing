@@ -8,7 +8,6 @@ uniform float time;
 uniform vec2 resolution;
 uniform sampler2D texture;
 uniform vec2 mouse;
-uniform vec2 vecMouse;
 uniform float pageIndex;
 
 varying vec2 vUv;
@@ -27,17 +26,10 @@ vec2 N22(vec2 p) {
 
 vec2 getPos(vec2 id, vec2 offset) {
     vec2 n = N22(id + offset);
-//    float x = cos(time * n.x + mouse.x + abs(vecMouse.x) * 3.0);
-//    float y = sin(time * n.y + mouse.y + abs(vecMouse.x) * 3.0);
-//    float x = cos(time * n.x + abs(sin(min(abs(vecMouse.x), 0.3)) * 0.5));
-//    float y = sin(time * n.y + abs(sin(min(abs(vecMouse.x), 0.3)) * 0.5));
-
-    float x = cos(time * n.x + mouse.x  + sin(min(sin(abs(vecMouse.x)), 0.1))* 0.5);
-    float y = sin(time * n.y + mouse.y  + sin(min(sin(abs(vecMouse.y)), 0.1))* 0.5);
+    float x = cos(time * n.x + mouse.x);
+    float y = sin(time * n.y + mouse.y);
 
     return vec2(x, y) * 0.4 + offset ;
-    //return vec2(x, y) * (0.4 + sin(min(sin(abs(vecMouse.x)), 0.1))* 0.5 * sign(vecMouse.y)) + offset;
-
 }
 
 float distanceToLine(vec2 p, vec2 a, vec2 b) {
@@ -57,7 +49,6 @@ float layer(vec2 st) {
     float m = 0.;
     vec2 gv = fract(st) - 0.5;
     vec2 id = floor(st);
-    // m = gv.x > 0.48 || gv.y > 0.48 ? 1. : 0.;
     vec2 pointPos = getPos(id, vec2(0., 0.));
     m += smoothstep(0.05, 0.03, length(gv - pointPos));
     
@@ -86,7 +77,6 @@ float layer(vec2 st) {
     m += getLine(gv, p[3], p[7]);
     m += getLine(gv, p[5], p[7]);
 
-    // m += smoothstep(0.05, 0.04, length(st - vec2(0., 0.)));
     return m;
 }
 
