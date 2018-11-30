@@ -270,43 +270,38 @@
     console.log(negativeMax, negativeMin);
 
 
-    let ladderBtn = $('#ladder');
-    let positiveBtn = $('#positive');
-    let negativeBtn = $('#negative');
-    console.log(ladderBtn);
-
-    // $('body').click(function(){
-    //   console.log('clickBtn');
-      for(let j=0, lwb=Object.keys(wbData).length; lwb>j; j++ ) {
-        for(let i=0, lm=meshList.length; lm>i; i++ ) {
-          let meshName = meshList[i].userData.country ;
-          // console.log(meshName, wbData[j].country, meshName == wbData[j].country)
-          if (wbData[j].country === meshName){
-            let R = (wbData[j].ladder - ladderMin) / ladderMax; //0.0 - 1.0 scale
-            let B = 1.0 - R;
-
-            meshList[i].material.color.r = R;
-            meshList[i].material.color.g = 0.0;
-            meshList[i].material.color.b = B;
+    let wbButton = document.getElementsByClassName('wbButton');
+    for (let i = 0, wbLen = wbButton.length; i < wbLen; i++) {
+      wbButton[i].addEventListener('click', (e) => {
+        console.log('clickBtn');
+        let type = e.target.id;
+        for (let j = 0, lwb = Object.keys(wbData).length; lwb > j; j++) {
+          for (let i = 0, lm = meshList.length; lm > i; i++) {
+            let meshName = meshList[i].userData.country;
+            if (wbData[j].country === meshName) {
+              coloringLand(i, j, type)
+            }
           }
         }
-      }
-    // }, false);
+      }, false);
+    }
 
-    // for(let j=0, lwb=Object.keys(wbData).length; lwb>j; j++ ) {
-    //   for(let i=0, lm=meshList.length; lm>i; i++ ) {
-    //     let meshName = meshList[i].userData.country ;
-    //     // console.log(meshName, wbData[j].country, meshName == wbData[j].country)
-    //     if (wbData[j].country === meshName){
-    //       let R = (wbData[j].ladder - ladderMin) / ladderMax; //0.0 - 1.0 scale
-    //       let B = 1.0 - R;
-    //
-    //       meshList[i].material.color.r = R;
-    //       meshList[i].material.color.g = 0.0;
-    //       meshList[i].material.color.b = B;
-    //     }
-    //   }
-    // }
+    function coloringLand(i, j, type) {
+      let R, B;
+      if (type === 'ladderBtn'){
+        R = (wbData[j].ladder - ladderMin) / ladderMax; //0.0 - 1.0 scale
+      }else if (type === 'positiveBtn'){
+        R = (wbData[j].positive - positiveMin) / positiveMax; //0.0 - 1.0 scale
+      }else{
+        R = (wbData[j].negative - negativeMin) / negativeMax; //0.0 - 1.0 scale
+        R = 1.0 - R  // reverse scale
+      }
+        B = 1.0 - R;
+        meshList[i].material.color.r = R;
+        meshList[i].material.color.g = 0.0;
+        meshList[i].material.color.b = B;
+    }
+
 
 
     let intersected_object = 0;
@@ -366,7 +361,10 @@
 
   // rendering
   function render() {
-    earth.rotation.x += 3.141592 * 2 / 90 / 60 / 60 * 5; // 1round/90m
+    if (pageIndex !== interactivePageIndex) {
+      earth.rotation.x += 3.141592 * 2 / 90 / 60 / 60 * 5; // 1round/90m
+    }
+
     let nowTime = clock.getElapsedTime();
     if (run) {
       requestAnimationFrame(render);
@@ -393,7 +391,6 @@
 
   function initPostprocessing(vsPost, fsPost) {
     time = 0.0;
-    vecMouse = new THREE.Vector2(0.01, 0.01);
     //ポストプロセッシング用シーンの生成
     postprocessing.scene = new THREE.Scene();
 
