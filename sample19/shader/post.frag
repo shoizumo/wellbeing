@@ -134,7 +134,13 @@ void main()
 //    }
 
     vec2 st = gl_FragCoord.xy / resolution.xy;
-    mixRatio = (st.x - 0.5) * (st.x - 0.5) + (st.y - 0.15) * (st.y - 0.15);
+//    mixRatio = (st.x - 0.5) * (st.x - 0.5) + (st.y - 0.15) * (st.y - 0.15);
+    if(destColor.r == 0.0){
+        mixRatio = 0.5;
+    }else{
+        mixRatio = 0.05;
+    }
+
 
     vec4 color = mix(destColor, vec4(col, 1.0), mixRatio);
 

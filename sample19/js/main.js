@@ -115,8 +115,10 @@
     targetDOM = document.getElementById('webgl');
 
     // events
+    let devicePixelRatio = window.devicePixelRatio;
+    // let devicePixelRatio = 1;
     window.addEventListener('resize', () => {
-      renderer.setPixelRatio(window.devicePixelRatio);
+      renderer.setPixelRatio(devicePixelRatio);
       renderer.setSize(window.innerWidth, window.innerHeight);
       camera.aspect = window.innerWidth / window.innerHeight;
       camera.updateProjectionMatrix();
@@ -168,7 +170,7 @@
 
     // renderer
     renderer = new THREE.WebGLRenderer();
-    renderer.setPixelRatio(window.devicePixelRatio);
+    renderer.setPixelRatio(devicePixelRatio);
     renderer.setClearColor(new THREE.Color(RENDERER_PARAM.clearColor));
     renderer.setSize(canvasWidth, canvasHeight);
     targetDOM.appendChild(renderer.domElement);
@@ -222,9 +224,6 @@
 
     console.log(wbData);
     console.log(meshList);
-    //meshList[0].material.color.setRGB(1.0, 1.0, 1.0);
-    console.log(meshList[0]);
-    console.log(wbData[62].country);
 
 
     // for(let i=0, lm=meshList.length; lm>i; i++ ) {
@@ -246,16 +245,17 @@
 
 
     // set wellbeing score
+    let GDPArray = [];
     let LadderArray = [];
     let PositiveArray = [];
     let NegativeArray = [];
     for(let i=0, lwb=Object.keys(wbData).length; lwb>i; i++ ) {
       let wb = wbData[i];
       LadderArray.push(wb.ladder);
-      if (wb.country !== 'Vietnam') {
-        PositiveArray.push(wb.positive);
-        NegativeArray.push(wb.negative);
-      }
+      PositiveArray.push(wb.positive);
+      NegativeArray.push(wb.negative);
+      GDPArray.push(wb.gdp);
+
     }
 
     let ladderMax = Math.max(...LadderArray);
@@ -264,10 +264,13 @@
     let positiveMin = Math.min(...PositiveArray);
     let negativeMax = Math.max(...NegativeArray);
     let negativeMin = Math.min(...NegativeArray);
+    let gdpMax = Math.max(...GDPArray);
+    let gdpMin = Math.min(...GDPArray);
 
     console.log(ladderMax, ladderMin);
     console.log(positiveMax, positiveMin);
     console.log(negativeMax, negativeMin);
+    console.log(gdpMax, gdpMin);
 
 
     let wbButton = document.getElementsByClassName('wbButton');
@@ -289,12 +292,14 @@
     function coloringLand(i, j, type) {
       let R, B;
       if (type === 'ladderBtn'){
-        R = (wbData[j].ladder - ladderMin) / ladderMax; //0.0 - 1.0 scale
+        R = (wbData[j].ladder - ladderMin) / (ladderMax - ladderMin); //0.0 - 1.0 scale
       }else if (type === 'positiveBtn'){
-        R = (wbData[j].positive - positiveMin) / positiveMax; //0.0 - 1.0 scale
-      }else{
-        R = (wbData[j].negative - negativeMin) / negativeMax; //0.0 - 1.0 scale
+        R = (wbData[j].positive - positiveMin) / (positiveMax - positiveMin); //0.0 - 1.0 scale
+      }else if (type === 'negativeBtn'){
+        R = (wbData[j].negative - negativeMin) / (negativeMax - negativeMin); //0.0 - 1.0 scale
         R = 1.0 - R  // reverse scale
+      }else{
+        R = (wbData[j].gdp - gdpMin) / (gdpMax - gdpMin); //0.0 - 1.0 scale
       }
         B = 1.0 - R;
         meshList[i].material.color.r = R;
@@ -378,7 +383,7 @@
     //平面オブジェクト用テクスチャ画像を更新
     postprocessing.plane.material.uniforms.texture.value = postprocessing.renderTarget;
     postprocessing.plane.material.uniforms.time.value = nowTime;
-    postprocessing.plane.material.uniforms.resolution.value = [canvasWidth * window.devicePixelRatio, canvasHeight * window.devicePixelRatio];
+    postprocessing.plane.material.uniforms.resolution.value = [canvasWidth * devicePixelRatio, canvasHeight * devicePixelRatio];
     postprocessing.plane.material.uniforms.mouse.value = mouse;
     postprocessing.plane.material.uniforms.pageIndex.value = pageIndex;
 
@@ -404,7 +409,7 @@
         //uniform型変数
         uniforms: {
           texture: {type: "t", value: null},
-          resolution: {type: "v2", value: [canvasWidth * window.devicePixelRatio, canvasHeight * window.devicePixelRatio]},
+          resolution: {type: "v2", value: [canvasWidth * devicePixelRatio, canvasHeight * devicePixelRatio]},
           time: {type: "f", value: time},
           mouse: {type: "v2", value: mouse},
           pageIndex: {type: "f", value: pageIndex},

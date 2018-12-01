@@ -1,848 +1,1575 @@
 let wbData = {
-    "0": {
-        "country": "Afghanistan",
-        "ladder": 2.66171813,
-        "negative": 0.37132617799999995,
-        "positive": 0.49634856
-    },
-    "1": {
-        "country": "Albania",
-        "ladder": 4.639548302,
-        "negative": 0.33388412,
-        "positive": 0.669240892
-    },
-    "10": {
-        "country": "Belarus",
-        "ladder": 5.552915096,
-        "negative": 0.232768074,
-        "positive": 0.540905774
-    },
-    "100": {
-        "country": "Panama",
-        "ladder": 6.567658901000001,
-        "negative": 0.24231933100000003,
-        "positive": 0.832688808
-    },
-    "101": {
-        "country": "Peru",
-        "ladder": 5.710936546,
-        "negative": 0.393873721,
-        "positive": 0.7893908620000001
-    },
-    "102": {
-        "country": "Philippines",
-        "ladder": 5.594270229,
-        "negative": 0.340621501,
-        "positive": 0.768981457
-    },
-    "103": {
-        "country": "Poland",
-        "ladder": 6.201268196,
-        "negative": 0.20338779699999998,
-        "positive": 0.677435517
-    },
-    "104": {
-        "country": "Portugal",
-        "ladder": 5.711499214,
-        "negative": 0.294272572,
-        "positive": 0.649151087
-    },
-    "105": {
-        "country": "Romania",
-        "ladder": 6.089904785,
-        "negative": 0.23083619800000002,
-        "positive": 0.7337303759999999
-    },
-    "106": {
-        "country": "Russia",
-        "ladder": 5.578742981,
-        "negative": 0.194560528,
-        "positive": 0.7102302309999999
-    },
-    "107": {
-        "country": "Saudi Arabia",
-        "ladder": 6.2942824360000005,
-        "negative": 0.30584189300000003,
-        "positive": 0.7748757
-    },
-    "108": {
-        "country": "Senegal",
-        "ladder": 4.683024883,
-        "negative": 0.290836066,
-        "positive": 0.7457320690000001
-    },
-    "109": {
-        "country": "Serbia",
-        "ladder": 5.122031212,
-        "negative": 0.326407075,
-        "positive": 0.50972122
-    },
-    "11": {
-        "country": "Belgium",
-        "ladder": 6.928347587999999,
-        "negative": 0.23359769600000002,
-        "positive": 0.786367595
-    },
-    "110": {
-        "country": "Sierra Leone",
-        "ladder": 4.089562416000001,
-        "negative": 0.495040029,
-        "positive": 0.6003682020000001
-    },
-    "111": {
-        "country": "Singapore",
-        "ladder": 6.378437996000001,
-        "negative": 0.179324552,
-        "positive": 0.800114393
-    },
-    "112": {
-        "country": "Slovakia",
-        "ladder": 6.3655090329999995,
-        "negative": 0.21272248,
-        "positive": 0.788020432
-    },
-    "113": {
-        "country": "Slovenia",
-        "ladder": 6.1668376920000005,
-        "negative": 0.285601437,
-        "positive": 0.615109682
-    },
-    "114": {
-        "country": "South Africa",
-        "ladder": 4.513655186,
-        "negative": 0.268175244,
-        "positive": 0.784800708
-    },
-    "115": {
-        "country": "South Korea",
-        "ladder": 5.8738870620000005,
-        "negative": 0.234825626,
-        "positive": 0.623377562
-    },
-    "116": {
-        "country": "South Sudan",
-        "ladder": 2.8166224960000004,
-        "negative": 0.5173637870000001,
-        "positive": 0.585602164
-    },
-    "117": {
-        "country": "Spain",
-        "ladder": 6.230173111,
-        "negative": 0.302387655,
-        "positive": 0.6250556110000001
-    },
-    "118": {
-        "country": "Sri Lanka",
-        "ladder": 4.330945492,
-        "negative": 0.269727528,
-        "positive": 0.7949516179999999
-    },
-    "119": {
-        "country": "Sweden",
-        "ladder": 7.286804676,
-        "negative": 0.17506682899999998,
-        "positive": 0.81354779
-    },
-    "12": {
-        "country": "Benin",
-        "ladder": 4.853180885,
-        "negative": 0.45792034299999995,
-        "positive": 0.614722311
-    },
-    "120": {
-        "country": "Switzerland",
-        "ladder": 7.473593235,
-        "negative": 0.19587148699999998,
-        "positive": 0.773997068
-    },
-    "121": {
-        "country": "Taiwan Province of China",
-        "ladder": 6.359450817000001,
-        "negative": 0.114123158,
-        "positive": 0.837277293
-    },
-    "122": {
-        "country": "Tajikistan",
-        "ladder": 5.829234122999999,
-        "negative": 0.27772533899999996,
-        "positive": 0.602667689
-    },
-    "123": {
-        "country": "Tanzania",
-        "ladder": 3.347121239,
-        "negative": 0.255335689,
-        "positive": 0.714645505
-    },
-    "124": {
-        "country": "Thailand",
-        "ladder": 5.9388952260000005,
-        "negative": 0.231597617,
-        "positive": 0.81632179
-    },
-    "125": {
-        "country": "Togo",
-        "ladder": 4.360805035,
-        "negative": 0.425824255,
-        "positive": 0.614188969
-    },
-    "126": {
-        "country": "Trinidad and Tobago",
-        "ladder": 6.191859722,
-        "negative": 0.248098806,
-        "positive": 0.846467078
-    },
-    "127": {
-        "country": "Tunisia",
-        "ladder": 4.124342918,
-        "negative": 0.377196848,
-        "positive": 0.42096188700000003
-    },
-    "128": {
-        "country": "Turkey",
-        "ladder": 5.607262135,
-        "negative": 0.312846124,
-        "positive": 0.44980090899999997
-    },
-    "129": {
-        "country": "Turkmenistan",
-        "ladder": 5.229148865,
-        "negative": 0.349627674,
-        "positive": 0.52088511
-    },
-    "13": {
-        "country": "Bolivia",
-        "ladder": 5.65055275,
-        "negative": 0.43394354,
-        "positive": 0.698195398
-    },
-    "130": {
-        "country": "Uganda",
-        "ladder": 4.000516891,
-        "negative": 0.400025725,
-        "positive": 0.703375638
-    },
-    "131": {
-        "country": "Ukraine",
-        "ladder": 4.311067104,
-        "negative": 0.234763831,
-        "positive": 0.597112179
-    },
-    "132": {
-        "country": "United Arab Emirates",
-        "ladder": 7.039419651,
-        "negative": 0.20759844800000002,
-        "positive": 0.795034885
-    },
-    "133": {
-        "country": "United Kingdom",
-        "ladder": 7.103273392,
-        "negative": 0.20957242,
-        "positive": 0.758571804
-    },
-    "134": {
-        "country": "United States",
-        "ladder": 6.991759299999999,
-        "negative": 0.268269062,
-        "positive": 0.826555312
-    },
-    "135": {
-        "country": "Uruguay",
-        "ladder": 6.336009979,
-        "negative": 0.280323356,
-        "positive": 0.835861266
-    },
-    "136": {
-        "country": "Uzbekistan",
-        "ladder": 6.421447754,
-        "negative": 0.202737495,
-        "positive": 0.8389890790000001
-    },
-    "137": {
-        "country": "Vietnam",
-        "ladder": 5.1752786639999995,
-        "negative": "NA",
-        "positive": "NA"
-    },
-    "138": {
-        "country": "Yemen",
-        "ladder": 3.2535600660000004,
-        "negative": 0.295063585,
-        "positive": 0.45518189700000006
-    },
-    "139": {
-        "country": "Zambia",
-        "ladder": 3.932777405,
-        "negative": 0.387188882,
-        "positive": 0.6846233009999999
-    },
-    "14": {
-        "country": "Bosnia and Herzegovina",
-        "ladder": 5.089902401,
-        "negative": 0.270745516,
-        "positive": 0.5973416570000001
-    },
-    "140": {
-        "country": "Zimbabwe",
-        "ladder": 3.63830018,
-        "negative": 0.22405134100000001,
-        "positive": 0.8064283729999999
-    },
-    "15": {
-        "country": "Botswana",
-        "ladder": 3.5048811439999996,
-        "negative": 0.276252508,
-        "positive": 0.6563964489999999
-    },
-    "16": {
-        "country": "Brazil",
-        "ladder": 6.332929134,
-        "negative": 0.307716906,
-        "positive": 0.715945125
-    },
-    "17": {
-        "country": "Bulgaria",
-        "ladder": 5.096901894,
-        "negative": 0.188637346,
-        "positive": 0.614216745
-    },
-    "18": {
-        "country": "Burkina Faso",
-        "ladder": 4.646891117,
-        "negative": 0.353821069,
-        "positive": 0.5851724739999999
-    },
-    "19": {
-        "country": "Cambodia",
-        "ladder": 4.585842133,
-        "negative": 0.40828383,
-        "positive": 0.798616648
-    },
-    "2": {
-        "country": "Algeria",
-        "ladder": 5.248912334,
-        "negative": 0.288710028,
-        "positive": 0.641979635
-    },
-    "20": {
-        "country": "Cameroon",
-        "ladder": 5.07405138,
-        "negative": 0.377498746,
-        "positive": 0.632338762
-    },
-    "21": {
-        "country": "Central African Republic",
-        "ladder": 3.475862026,
-        "negative": 0.599335492,
-        "positive": 0.6138651970000001
-    },
-    "22": {
-        "country": "Chad",
-        "ladder": 4.558937073,
-        "negative": 0.53824544,
-        "positive": 0.627503157
-    },
-    "23": {
-        "country": "Chile",
-        "ladder": 6.3201193810000005,
-        "negative": 0.291042089,
-        "positive": 0.83847481
-    },
-    "24": {
-        "country": "China",
-        "ladder": 5.0990614889999994,
-        "negative": 0.214004755,
-        "positive": 0.821097255
-    },
-    "25": {
-        "country": "Colombia",
-        "ladder": 6.157341957000001,
-        "negative": 0.299308956,
-        "positive": 0.8369269970000001
-    },
-    "26": {
-        "country": "Congo (Brazzaville)",
-        "ladder": 4.883991241,
-        "negative": 0.381640553,
-        "positive": 0.598951638
-    },
-    "27": {
-        "country": "Congo (Kinshasa)",
-        "ladder": 4.311033248999999,
-        "negative": 0.40426206600000003,
-        "positive": 0.550525904
-    },
-    "28": {
-        "country": "Costa Rica",
-        "ladder": 7.22518158,
-        "negative": 0.275440067,
-        "positive": 0.8743958470000001
-    },
-    "29": {
-        "country": "Croatia",
-        "ladder": 5.343165873999999,
-        "negative": 0.31648823600000003,
-        "positive": 0.655305028
-    },
-    "3": {
-        "country": "Argentina",
-        "ladder": 6.039330006,
-        "negative": 0.291717261,
-        "positive": 0.809422612
-    },
-    "30": {
-        "country": "Cyprus",
-        "ladder": 6.062051296,
-        "negative": 0.300516605,
-        "positive": 0.7841884490000001
-    },
-    "31": {
-        "country": "Czech Republic",
-        "ladder": 6.789567947,
-        "negative": 0.22664979100000002,
-        "positive": 0.738743961
-    },
-    "32": {
-        "country": "Denmark",
-        "ladder": 7.593702316,
-        "negative": 0.20577530600000002,
-        "positive": 0.8236674070000001
-    },
-    "33": {
-        "country": "Dominican Republic",
-        "ladder": 5.605202675,
-        "negative": 0.27474552399999996,
-        "positive": 0.7389436359999999
-    },
-    "34": {
-        "country": "Ecuador",
-        "ladder": 5.839518547000001,
-        "negative": 0.314343482,
-        "positive": 0.8291419740000001
-    },
-    "35": {
-        "country": "Egypt",
-        "ladder": 3.929344177,
-        "negative": 0.414493799,
-        "positive": 0.539322555
-    },
-    "36": {
-        "country": "El Salvador",
-        "ladder": 6.339318275,
-        "negative": 0.26844835300000003,
-        "positive": 0.848850608
-    },
-    "37": {
-        "country": "Estonia",
-        "ladder": 5.938395977000001,
-        "negative": 0.160164103,
-        "positive": 0.805217981
-    },
-    "38": {
-        "country": "Ethiopia",
-        "ladder": 4.180315495,
-        "negative": 0.304436177,
-        "positive": 0.608514786
-    },
-    "39": {
-        "country": "Finland",
-        "ladder": 7.788251877,
-        "negative": 0.176065788,
-        "positive": 0.787137091
-    },
-    "4": {
-        "country": "Armenia",
-        "ladder": 4.287736416,
-        "negative": 0.43714875,
-        "positive": 0.6250138279999999
-    },
-    "40": {
-        "country": "France",
-        "ladder": 6.635222435,
-        "negative": 0.241983935,
-        "positive": 0.762097776
-    },
-    "41": {
-        "country": "Gabon",
-        "ladder": 4.782382965,
-        "negative": 0.446124285,
-        "positive": 0.634047151
-    },
-    "42": {
-        "country": "Georgia",
-        "ladder": 4.45077467,
-        "negative": 0.20963960899999998,
-        "positive": 0.5811277029999999
-    },
-    "43": {
-        "country": "Germany",
-        "ladder": 7.0743246079999995,
-        "negative": 0.19643481100000001,
-        "positive": 0.7365657090000001
-    },
-    "44": {
-        "country": "Ghana",
-        "ladder": 5.481310843999999,
-        "negative": 0.247518942,
-        "positive": 0.702511728
-    },
-    "45": {
-        "country": "Greece",
-        "ladder": 5.14824152,
-        "negative": 0.332830757,
-        "positive": 0.60293901
-    },
-    "46": {
-        "country": "Guatemala",
-        "ladder": 6.325118542,
-        "negative": 0.30808615699999997,
-        "positive": 0.845865786
-    },
-    "47": {
-        "country": "Guinea",
-        "ladder": 4.873722553,
-        "negative": 0.422460884,
-        "positive": 0.704477131
-    },
-    "48": {
-        "country": "Haiti",
-        "ladder": 3.823865652,
-        "negative": 0.321692765,
-        "positive": 0.5733667020000001
-    },
-    "49": {
-        "country": "Honduras",
-        "ladder": 6.019985676,
-        "negative": 0.248383343,
-        "positive": 0.842200935
-    },
-    "5": {
-        "country": "Australia",
-        "ladder": 7.25703764,
-        "negative": 0.225360975,
-        "positive": 0.7800788879999999
-    },
-    "50": {
-        "country": "Hong Kong S.A.R. of China",
-        "ladder": 5.362474918,
-        "negative": 0.200593412,
-        "positive": 0.63953346
-    },
-    "51": {
-        "country": "Hungary",
-        "ladder": 6.065038681,
-        "negative": 0.18092127100000002,
-        "positive": 0.735184252
-    },
-    "52": {
-        "country": "Iceland",
-        "ladder": 7.476213932,
-        "negative": 0.148160011,
-        "positive": 0.895254552
-    },
-    "53": {
-        "country": "India",
-        "ladder": 4.046111107,
-        "negative": 0.31793677800000003,
-        "positive": 0.682090998
-    },
-    "54": {
-        "country": "Indonesia",
-        "ladder": 5.098401546,
-        "negative": 0.319171578,
-        "positive": 0.8625841740000001
-    },
-    "55": {
-        "country": "Iran",
-        "ladder": 4.716783047,
-        "negative": 0.43853390200000003,
-        "positive": 0.693666041
-    },
-    "56": {
-        "country": "Iraq",
-        "ladder": 4.462399006,
-        "negative": 0.59053874,
-        "positive": 0.505288541
-    },
-    "57": {
-        "country": "Ireland",
-        "ladder": 7.060155392,
-        "negative": 0.21278412600000002,
-        "positive": 0.833388925
-    },
-    "58": {
-        "country": "Israel",
-        "ladder": 7.3310360910000005,
-        "negative": 0.27644315399999997,
-        "positive": 0.673591316
-    },
-    "59": {
-        "country": "Italy",
-        "ladder": 6.198870182,
-        "negative": 0.322846144,
-        "positive": 0.661180735
-    },
-    "6": {
-        "country": "Austria",
-        "ladder": 7.293727875,
-        "negative": 0.18026872,
-        "positive": 0.747568727
-    },
-    "60": {
-        "country": "Ivory Coast",
-        "ladder": 5.037734985,
-        "negative": 0.35745579,
-        "positive": 0.697735488
-    },
-    "61": {
-        "country": "Jamaica",
-        "ladder": 5.889759064,
-        "negative": 0.243399635,
-        "positive": 0.769282162
-    },
-    "62": {
-        "country": "Japan",
-        "ladder": 5.910676479,
-        "negative": 0.17551218,
-        "positive": 0.740387619
-    },
-    "63": {
-        "country": "Jordan",
-        "ladder": 4.808082581,
-        "negative": 0.391505182,
-        "positive": 0.6277983779999999
-    },
-    "64": {
-        "country": "Kazakhstan",
-        "ladder": 5.882351398,
-        "negative": 0.171486408,
-        "positive": 0.7567622070000001
-    },
-    "65": {
-        "country": "Kenya",
-        "ladder": 4.475654125,
-        "negative": 0.23021030399999998,
-        "positive": 0.7884522079999999
-    },
-    "66": {
-        "country": "Kosovo",
-        "ladder": 6.149199962999999,
-        "negative": 0.18587909600000002,
-        "positive": 0.7384355659999999
-    },
-    "67": {
-        "country": "Kuwait",
-        "ladder": 6.093905449,
-        "negative": 0.30732080300000003,
-        "positive": 0.692071915
-    },
-    "68": {
-        "country": "Kyrgyzstan",
-        "ladder": 5.6295366289999995,
-        "negative": 0.160438314,
-        "positive": 0.755125225
-    },
-    "69": {
-        "country": "Laos",
-        "ladder": 4.623140812,
-        "negative": 0.34422588299999995,
-        "positive": 0.872791767
-    },
-    "7": {
-        "country": "Azerbaijan",
-        "ladder": 5.152279377,
-        "negative": 0.19831866,
-        "positive": 0.592359245
-    },
-    "70": {
-        "country": "Latvia",
-        "ladder": 5.977817535,
-        "negative": 0.231753111,
-        "positive": 0.623312771
-    },
-    "71": {
-        "country": "Lebanon",
-        "ladder": 5.153989792,
-        "negative": 0.24354921300000001,
-        "positive": 0.515443921
-    },
-    "72": {
-        "country": "Liberia",
-        "ladder": 4.424490929,
-        "negative": 0.39133054,
-        "positive": 0.667946458
-    },
-    "73": {
-        "country": "Libya",
-        "ladder": 5.646852493,
-        "negative": 0.379374176,
-        "positive": 0.69704932
-    },
-    "74": {
-        "country": "Lithuania",
-        "ladder": 6.272940636,
-        "negative": 0.19511883,
-        "positive": 0.607613146
-    },
-    "75": {
-        "country": "Luxembourg",
-        "ladder": 7.061380862999999,
-        "negative": 0.18446700300000002,
-        "positive": 0.7658168670000001
-    },
-    "76": {
-        "country": "Macedonia",
-        "ladder": 5.233866692,
-        "negative": 0.29939058399999996,
-        "positive": 0.502459884
-    },
-    "77": {
-        "country": "Madagascar",
-        "ladder": 4.078620433999999,
-        "negative": 0.374838024,
-        "positive": 0.751698077
-    },
-    "78": {
-        "country": "Malawi",
-        "ladder": 3.416862965,
-        "negative": 0.312088341,
-        "positive": 0.608666539
-    },
-    "79": {
-        "country": "Mali",
-        "ladder": 4.741850376,
-        "negative": 0.39278414799999994,
-        "positive": 0.7418357729999999
-    },
-    "8": {
-        "country": "Bahrain",
-        "ladder": 6.227320671,
-        "negative": 0.28975951699999997,
-        "positive": 0.8135705590000001
-    },
-    "80": {
-        "country": "Malta",
-        "ladder": 6.675665855,
-        "negative": 0.302443117,
-        "positive": 0.720753372
-    },
-    "81": {
-        "country": "Mauritania",
-        "ladder": 4.6781597139999995,
-        "negative": 0.272321939,
-        "positive": 0.637107074
-    },
-    "82": {
-        "country": "Mauritius",
-        "ladder": 6.174117565,
-        "negative": 0.168721184,
-        "positive": 0.7477601770000001
-    },
-    "83": {
-        "country": "Mexico",
-        "ladder": 6.410299301,
-        "negative": 0.230990887,
-        "positive": 0.842642307
-    },
-    "84": {
-        "country": "Moldova",
-        "ladder": 5.325530529,
-        "negative": 0.259477794,
-        "positive": 0.5814887879999999
-    },
-    "85": {
-        "country": "Mongolia",
-        "ladder": 5.333850384,
-        "negative": 0.21359951800000002,
-        "positive": 0.675165296
-    },
-    "86": {
-        "country": "Montenegro",
-        "ladder": 5.614798546,
-        "negative": 0.349785089,
-        "positive": 0.519128144
-    },
-    "87": {
-        "country": "Morocco",
-        "ladder": 5.312482834,
-        "negative": 0.322715908,
-        "positive": 0.559288204
-    },
-    "88": {
-        "country": "Mozambique",
-        "ladder": 4.279863358,
-        "negative": 0.353176504,
-        "positive": 0.648381412
-    },
-    "89": {
-        "country": "Myanmar",
-        "ladder": 4.1543416980000005,
-        "negative": 0.28228554100000003,
-        "positive": 0.74564749
-    },
-    "9": {
-        "country": "Bangladesh",
-        "ladder": 4.309771061,
-        "negative": 0.21350576,
-        "positive": 0.568827093
-    },
-    "90": {
-        "country": "Namibia",
-        "ladder": 4.441306114,
-        "negative": 0.277252167,
-        "positive": 0.72067821
-    },
-    "91": {
-        "country": "Nepal",
-        "ladder": 4.736692429,
-        "negative": 0.375977933,
-        "positive": 0.570577025
-    },
-    "92": {
-        "country": "Netherlands",
-        "ladder": 7.458965302,
-        "negative": 0.184519842,
-        "positive": 0.852184892
-    },
-    "93": {
-        "country": "New Zealand",
-        "ladder": 7.32718277,
-        "negative": 0.171716571,
-        "positive": 0.8174312709999999
-    },
-    "94": {
-        "country": "Nicaragua",
-        "ladder": 6.476356506,
-        "negative": 0.30844789699999997,
-        "positive": 0.849764168
-    },
-    "95": {
-        "country": "Niger",
-        "ladder": 4.615673542,
-        "negative": 0.426522374,
-        "positive": 0.731161416
-    },
-    "96": {
-        "country": "Nigeria",
-        "ladder": 5.321928024,
-        "negative": 0.235968769,
-        "positive": 0.724990547
-    },
-    "97": {
-        "country": "Norway",
-        "ladder": 7.578744887999999,
-        "negative": 0.202913806,
-        "positive": 0.849099994
-    },
-    "98": {
-        "country": "Pakistan",
-        "ladder": 5.8308706279999996,
-        "negative": 0.30834108600000004,
-        "positive": 0.586166978
-    },
-    "99": {
-        "country": "Palestinian Territories",
-        "ladder": 4.62813282,
-        "negative": 0.416072041,
-        "positive": 0.596765578
-    }
+         "0": {
+                  "country": "Afghanistan",
+                  "gRnak": 132,
+                  "gdp": 6.373063893015755,
+                  "lRnak": 142,
+                  "ladder": 2.66171813,
+                  "nRnak": 113,
+                  "negative": 0.37132617799999995,
+                  "pRnak": 139,
+                  "positive": 0.49634856
+         },
+         "1": {
+                  "country": "Albania",
+                  "gRnak": 78,
+                  "gdp": 8.420211363426304,
+                  "lRnak": 106,
+                  "ladder": 4.639548302,
+                  "nRnak": 105,
+                  "negative": 0.33388412,
+                  "pRnak": 86,
+                  "positive": 0.669240892
+         },
+         "10": {
+                  "country": "Belarus",
+                  "gRnak": 71,
+                  "gdp": 8.652777667796222,
+                  "lRnak": 72,
+                  "ladder": 5.552915096,
+                  "nRnak": 45,
+                  "negative": 0.232768074,
+                  "pRnak": 130,
+                  "positive": 0.540905774
+         },
+         "100": {
+                  "country": "Panama",
+                  "gRnak": 43,
+                  "gdp": 9.621633903775745,
+                  "lRnak": 23,
+                  "ladder": 6.567658901000001,
+                  "nRnak": 52,
+                  "negative": 0.24231933100000003,
+                  "pRnak": 19,
+                  "positive": 0.832688808
+         },
+         "101": {
+                  "country": "Peru",
+                  "gRnak": 66,
+                  "gdp": 8.790562621672775,
+                  "lRnak": 63,
+                  "ladder": 5.710936546,
+                  "nRnak": 124,
+                  "negative": 0.393873721,
+                  "pRnak": 36,
+                  "positive": 0.7893908620000001
+         },
+         "102": {
+                  "country": "Philippines",
+                  "gRnak": 94,
+                  "gdp": 8.00267833847189,
+                  "lRnak": 70,
+                  "ladder": 5.594270229,
+                  "nRnak": 106,
+                  "negative": 0.340621501,
+                  "pRnak": 47,
+                  "positive": 0.768981457
+         },
+         "103": {
+                  "country": "Poland",
+                  "gRnak": 46,
+                  "gdp": 9.533268748918143,
+                  "lRnak": 39,
+                  "ladder": 6.201268196,
+                  "nRnak": 26,
+                  "negative": 0.20338779699999998,
+                  "pRnak": 83,
+                  "positive": 0.677435517
+         },
+         "104": {
+                  "country": "Portugal",
+                  "gRnak": 32,
+                  "gdp": 9.958747088453551,
+                  "lRnak": 62,
+                  "ladder": 5.711499214,
+                  "nRnak": 80,
+                  "negative": 0.294272572,
+                  "pRnak": 91,
+                  "positive": 0.649151087
+         },
+         "105": {
+                  "country": "Romania",
+                  "gRnak": 49,
+                  "gdp": 9.288570662829544,
+                  "lRnak": 47,
+                  "ladder": 6.089904785,
+                  "nRnak": 41,
+                  "negative": 0.23083619800000002,
+                  "pRnak": 65,
+                  "positive": 0.7337303759999999
+         },
+         "106": {
+                  "country": "Russia",
+                  "gRnak": 50,
+                  "gdp": 9.282018649596989,
+                  "lRnak": 71,
+                  "ladder": 5.578742981,
+                  "nRnak": 18,
+                  "negative": 0.194560528,
+                  "pRnak": 72,
+                  "positive": 0.7102302309999999
+         },
+         "107": {
+                  "country": "Saudi Arabia",
+                  "gRnak": 33,
+                  "gdp": 9.94082697842773,
+                  "lRnak": 35,
+                  "ladder": 6.2942824360000005,
+                  "nRnak": 88,
+                  "negative": 0.30584189300000003,
+                  "pRnak": 44,
+                  "positive": 0.7748757
+         },
+         "108": {
+                  "country": "Senegal",
+                  "gRnak": 118,
+                  "gdp": 6.940290139627614,
+                  "lRnak": 102,
+                  "ladder": 4.683024883,
+                  "nRnak": 77,
+                  "negative": 0.290836066,
+                  "pRnak": 56,
+                  "positive": 0.7457320690000001
+         },
+         "109": {
+                  "country": "Serbia",
+                  "gRnak": 70,
+                  "gdp": 8.682714088856002,
+                  "lRnak": 86,
+                  "ladder": 5.122031212,
+                  "nRnak": 103,
+                  "negative": 0.326407075,
+                  "pRnak": 136,
+                  "positive": 0.50972122
+         },
+         "11": {
+                  "country": "Belgium",
+                  "gRnak": 16,
+                  "gdp": 10.676457585987933,
+                  "lRnak": 19,
+                  "ladder": 6.928347587999999,
+                  "nRnak": 46,
+                  "negative": 0.23359769600000002,
+                  "pRnak": 40,
+                  "positive": 0.786367595
+         },
+         "110": {
+                  "country": "Sierra Leone",
+                  "gRnak": 134,
+                  "gdp": 6.213460030444282,
+                  "lRnak": 128,
+                  "ladder": 4.089562416000001,
+                  "nRnak": 138,
+                  "negative": 0.495040029,
+                  "pRnak": 114,
+                  "positive": 0.6003682020000001
+         },
+         "111": {
+                  "country": "Singapore",
+                  "gRnak": 6,
+                  "gdp": 10.963260197021619,
+                  "lRnak": 27,
+                  "ladder": 6.378437996000001,
+                  "nRnak": 10,
+                  "negative": 0.179324552,
+                  "pRnak": 32,
+                  "positive": 0.800114393
+         },
+         "112": {
+                  "country": "Slovakia",
+                  "gRnak": 37,
+                  "gdp": 9.775935447149037,
+                  "lRnak": 28,
+                  "ladder": 6.3655090329999995,
+                  "nRnak": 31,
+                  "negative": 0.21272248,
+                  "pRnak": 38,
+                  "positive": 0.788020432
+         },
+         "113": {
+                  "country": "Slovenia",
+                  "gRnak": 31,
+                  "gdp": 10.0688872272252,
+                  "lRnak": 43,
+                  "ladder": 6.1668376920000005,
+                  "nRnak": 74,
+                  "negative": 0.285601437,
+                  "pRnak": 104,
+                  "positive": 0.615109682
+         },
+         "114": {
+                  "country": "South Africa",
+                  "gRnak": 69,
+                  "gdp": 8.725951297632347,
+                  "lRnak": 112,
+                  "ladder": 4.513655186,
+                  "nRnak": 60,
+                  "negative": 0.268175244,
+                  "pRnak": 41,
+                  "positive": 0.784800708
+         },
+         "115": {
+                  "country": "South Korea",
+                  "gRnak": 24,
+                  "gdp": 10.300343671410097,
+                  "lRnak": 58,
+                  "ladder": 5.8738870620000005,
+                  "nRnak": 48,
+                  "negative": 0.234825626,
+                  "pRnak": 102,
+                  "positive": 0.623377562
+         },
+         "116": {
+                  "country": "South Sudan",
+                  "gRnak": 142,
+                  "gdp": 5.469932305263222,
+                  "lRnak": 141,
+                  "ladder": 2.8166224960000004,
+                  "nRnak": 139,
+                  "negative": 0.5173637870000001,
+                  "pRnak": 121,
+                  "positive": 0.585602164
+         },
+         "117": {
+                  "country": "Spain",
+                  "gRnak": 26,
+                  "gdp": 10.24554473001501,
+                  "lRnak": 37,
+                  "ladder": 6.230173111,
+                  "nRnak": 85,
+                  "negative": 0.302387655,
+                  "pRnak": 100,
+                  "positive": 0.6250556110000001
+         },
+         "118": {
+                  "country": "Sri Lanka",
+                  "gRnak": 84,
+                  "gdp": 8.310224340009036,
+                  "lRnak": 119,
+                  "ladder": 4.330945492,
+                  "nRnak": 63,
+                  "negative": 0.269727528,
+                  "pRnak": 35,
+                  "positive": 0.7949516179999999
+         },
+         "119": {
+                  "country": "Sweden",
+                  "gRnak": 9,
+                  "gdp": 10.886352387594235,
+                  "lRnak": 9,
+                  "ladder": 7.286804676,
+                  "nRnak": 7,
+                  "negative": 0.17506682899999998,
+                  "pRnak": 28,
+                  "positive": 0.81354779
+         },
+         "12": {
+                  "country": "Benin",
+                  "gRnak": 121,
+                  "gdp": 6.721181370462492,
+                  "lRnak": 96,
+                  "ladder": 4.853180885,
+                  "nRnak": 137,
+                  "negative": 0.45792034299999995,
+                  "pRnak": 105,
+                  "positive": 0.614722311
+         },
+         "120": {
+                  "country": "Switzerland",
+                  "gRnak": 1,
+                  "gdp": 11.292150317522074,
+                  "lRnak": 4,
+                  "ladder": 7.473593235,
+                  "nRnak": 20,
+                  "negative": 0.19587148699999998,
+                  "pRnak": 45,
+                  "positive": 0.773997068
+         },
+         "121": {
+                  "country": "Taiwan Province of China",
+                  "gRnak": 28,
+                  "gdp": 10.14760951023553,
+                  "lRnak": 29,
+                  "ladder": 6.359450817000001,
+                  "nRnak": 0,
+                  "negative": 0.114123158,
+                  "pRnak": 15,
+                  "positive": 0.837277293
+         },
+         "122": {
+                  "country": "Tajikistan",
+                  "gRnak": 124,
+                  "gdp": 6.685819702896981,
+                  "lRnak": 61,
+                  "ladder": 5.829234122999999,
+                  "nRnak": 71,
+                  "negative": 0.27772533899999996,
+                  "pRnak": 113,
+                  "positive": 0.602667689
+         },
+         "123": {
+                  "country": "Tanzania",
+                  "gRnak": 119,
+                  "gdp": 6.84196879866734,
+                  "lRnak": 139,
+                  "ladder": 3.347121239,
+                  "nRnak": 58,
+                  "negative": 0.255335689,
+                  "pRnak": 71,
+                  "positive": 0.714645505
+         },
+         "124": {
+                  "country": "Thailand",
+                  "gRnak": 65,
+                  "gdp": 8.793888096294381,
+                  "lRnak": 53,
+                  "ladder": 5.9388952260000005,
+                  "nRnak": 43,
+                  "negative": 0.231597617,
+                  "pRnak": 26,
+                  "positive": 0.81632179
+         },
+         "125": {
+                  "country": "Togo",
+                  "gRnak": 130,
+                  "gdp": 6.425155222330828,
+                  "lRnak": 118,
+                  "ladder": 4.360805035,
+                  "nRnak": 131,
+                  "negative": 0.425824255,
+                  "pRnak": 107,
+                  "positive": 0.614188969
+         },
+         "126": {
+                  "country": "Trinidad and Tobago",
+                  "gRnak": 40,
+                  "gdp": 9.689377115149329,
+                  "lRnak": 41,
+                  "ladder": 6.191859722,
+                  "nRnak": 56,
+                  "negative": 0.248098806,
+                  "pRnak": 9,
+                  "positive": 0.846467078
+         },
+         "127": {
+                  "country": "Tunisia",
+                  "gRnak": 90,
+                  "gdp": 8.157894320275217,
+                  "lRnak": 127,
+                  "ladder": 4.124342918,
+                  "nRnak": 116,
+                  "negative": 0.377196848,
+                  "pRnak": 142,
+                  "positive": 0.42096188700000003
+         },
+         "128": {
+                  "country": "Turkey",
+                  "gRnak": 52,
+                  "gdp": 9.262991454152552,
+                  "lRnak": 68,
+                  "ladder": 5.607262135,
+                  "nRnak": 95,
+                  "negative": 0.312846124,
+                  "pRnak": 141,
+                  "positive": 0.44980090899999997
+         },
+         "129": {
+                  "country": "Turkmenistan",
+                  "gRnak": 62,
+                  "gdp": 8.90324865791923,
+                  "lRnak": 82,
+                  "ladder": 5.229148865,
+                  "nRnak": 108,
+                  "negative": 0.349627674,
+                  "pRnak": 133,
+                  "positive": 0.52088511
+         },
+         "13": {
+                  "country": "Bolivia",
+                  "gRnak": 91,
+                  "gdp": 8.129751428031184,
+                  "lRnak": 64,
+                  "ladder": 5.65055275,
+                  "nRnak": 133,
+                  "negative": 0.43394354,
+                  "pRnak": 76,
+                  "positive": 0.698195398
+         },
+         "130": {
+                  "country": "Uganda",
+                  "gRnak": 131,
+                  "gdp": 6.403644970595934,
+                  "lRnak": 131,
+                  "ladder": 4.000516891,
+                  "nRnak": 125,
+                  "negative": 0.400025725,
+                  "pRnak": 74,
+                  "positive": 0.703375638
+         },
+         "131": {
+                  "country": "Ukraine",
+                  "gRnak": 95,
+                  "gdp": 7.878467650744448,
+                  "lRnak": 120,
+                  "ladder": 4.311067104,
+                  "nRnak": 47,
+                  "negative": 0.234763831,
+                  "pRnak": 117,
+                  "positive": 0.597112179
+         },
+         "132": {
+                  "country": "United Arab Emirates",
+                  "gRnak": 18,
+                  "gdp": 10.613955099286562,
+                  "lRnak": 17,
+                  "ladder": 7.039419651,
+                  "nRnak": 28,
+                  "negative": 0.20759844800000002,
+                  "pRnak": 34,
+                  "positive": 0.795034885
+         },
+         "133": {
+                  "country": "United Kingdom",
+                  "gRnak": 20,
+                  "gdp": 10.589621281994074,
+                  "lRnak": 13,
+                  "ladder": 7.103273392,
+                  "nRnak": 29,
+                  "negative": 0.20957242,
+                  "pRnak": 50,
+                  "positive": 0.758571804
+         },
+         "134": {
+                  "country": "United States",
+                  "gRnak": 5,
+                  "gdp": 10.99426358378226,
+                  "lRnak": 18,
+                  "ladder": 6.991759299999999,
+                  "nRnak": 61,
+                  "negative": 0.268269062,
+                  "pRnak": 21,
+                  "positive": 0.826555312
+         },
+         "135": {
+                  "country": "Uruguay",
+                  "gRnak": 39,
+                  "gdp": 9.695577281527642,
+                  "lRnak": 31,
+                  "ladder": 6.336009979,
+                  "nRnak": 72,
+                  "negative": 0.280323356,
+                  "pRnak": 17,
+                  "positive": 0.835861266
+         },
+         "136": {
+                  "country": "Uzbekistan",
+                  "gRnak": 111,
+                  "gdp": 7.31603412215574,
+                  "lRnak": 25,
+                  "ladder": 6.421447754,
+                  "nRnak": 24,
+                  "negative": 0.202737495,
+                  "pRnak": 13,
+                  "positive": 0.8389890790000001
+         },
+         "137": {
+                  "country": "Yemen",
+                  "gRnak": 129,
+                  "gdp": 6.492665327818903,
+                  "lRnak": 140,
+                  "ladder": 3.2535600660000004,
+                  "nRnak": 81,
+                  "negative": 0.295063585,
+                  "pRnak": 140,
+                  "positive": 0.45518189700000006
+         },
+         "138": {
+                  "country": "Zambia",
+                  "gRnak": 109,
+                  "gdp": 7.3197304922958315,
+                  "lRnak": 132,
+                  "ladder": 3.932777405,
+                  "nRnak": 120,
+                  "negative": 0.387188882,
+                  "pRnak": 81,
+                  "positive": 0.6846233009999999
+         },
+         "139": {
+                  "country": "Zimbabwe",
+                  "gRnak": 117,
+                  "gdp": 6.984353560810544,
+                  "lRnak": 135,
+                  "ladder": 3.63830018,
+                  "nRnak": 37,
+                  "negative": 0.22405134100000001,
+                  "pRnak": 30,
+                  "positive": 0.8064283729999999
+         },
+         "14": {
+                  "country": "Bosnia and Herzegovina",
+                  "gRnak": 75,
+                  "gdp": 8.552683165740444,
+                  "lRnak": 90,
+                  "ladder": 5.089902401,
+                  "nRnak": 64,
+                  "negative": 0.270745516,
+                  "pRnak": 116,
+                  "positive": 0.5973416570000001
+         },
+         "140": {
+                  "country": "Canada",
+                  "gRnak": 14,
+                  "gdp": 10.715131289913456,
+                  "lRnak": 11,
+                  "ladder": 7.244845867,
+                  "nRnak": 50,
+                  "negative": 0.23742286899999998,
+                  "pRnak": 22,
+                  "positive": 0.824586391
+         },
+         "141": {
+                  "country": "Somalia",
+                  "gRnak": 133,
+                  "gdp": 6.2142416346825575,
+                  "lRnak": 104,
+                  "ladder": 4.6679410930000005,
+                  "nRnak": 17,
+                  "negative": 0.193282232,
+                  "pRnak": 1,
+                  "positive": 0.8914231659999999
+         },
+         "142": {
+                  "country": "Vietnam",
+                  "gRnak": 99,
+                  "gdp": 7.759240606108458,
+                  "lRnak": 92,
+                  "ladder": 5.0622673030000005,
+                  "nRnak": 36,
+                  "negative": 0.222550198,
+                  "pRnak": 132,
+                  "positive": 0.536225736
+         },
+         "15": {
+                  "country": "Botswana",
+                  "gRnak": 61,
+                  "gdp": 8.935323864882163,
+                  "lRnak": 136,
+                  "ladder": 3.5048811439999996,
+                  "nRnak": 68,
+                  "negative": 0.276252508,
+                  "pRnak": 89,
+                  "positive": 0.6563964489999999
+         },
+         "16": {
+                  "country": "Brazil",
+                  "gRnak": 53,
+                  "gdp": 9.192319739954879,
+                  "lRnak": 32,
+                  "ladder": 6.332929134,
+                  "nRnak": 90,
+                  "negative": 0.307716906,
+                  "pRnak": 70,
+                  "positive": 0.715945125
+         },
+         "17": {
+                  "country": "Bulgaria",
+                  "gRnak": 58,
+                  "gdp": 8.991138845910815,
+                  "lRnak": 89,
+                  "ladder": 5.096901894,
+                  "nRnak": 16,
+                  "negative": 0.188637346,
+                  "pRnak": 106,
+                  "positive": 0.614216745
+         },
+         "18": {
+                  "country": "Burkina Faso",
+                  "gRnak": 127,
+                  "gdp": 6.508330759378144,
+                  "lRnak": 105,
+                  "ladder": 4.646891117,
+                  "nRnak": 111,
+                  "negative": 0.353821069,
+                  "pRnak": 122,
+                  "positive": 0.5851724739999999
+         },
+         "19": {
+                  "country": "Cambodia",
+                  "gRnak": 113,
+                  "gdp": 7.233038860392961,
+                  "lRnak": 110,
+                  "ladder": 4.585842133,
+                  "nRnak": 127,
+                  "negative": 0.40828383,
+                  "pRnak": 33,
+                  "positive": 0.798616648
+         },
+         "2": {
+                  "country": "Algeria",
+                  "gRnak": 82,
+                  "gdp": 8.324430904271734,
+                  "lRnak": 80,
+                  "ladder": 5.248912334,
+                  "nRnak": 75,
+                  "negative": 0.288710028,
+                  "pRnak": 93,
+                  "positive": 0.641979635
+         },
+         "20": {
+                  "country": "Cameroon",
+                  "gRnak": 112,
+                  "gdp": 7.277042380739507,
+                  "lRnak": 91,
+                  "ladder": 5.07405138,
+                  "nRnak": 117,
+                  "negative": 0.377498746,
+                  "pRnak": 97,
+                  "positive": 0.632338762
+         },
+         "21": {
+                  "country": "Central African Republic",
+                  "gRnak": 138,
+                  "gdp": 6.036464888964289,
+                  "lRnak": 137,
+                  "ladder": 3.475862026,
+                  "nRnak": 142,
+                  "negative": 0.599335492,
+                  "pRnak": 108,
+                  "positive": 0.6138651970000001
+         },
+         "22": {
+                  "country": "Chad",
+                  "gRnak": 128,
+                  "gdp": 6.507108184433871,
+                  "lRnak": 111,
+                  "ladder": 4.558937073,
+                  "nRnak": 140,
+                  "negative": 0.53824544,
+                  "pRnak": 99,
+                  "positive": 0.627503157
+         },
+         "23": {
+                  "country": "Chile",
+                  "gRnak": 42,
+                  "gdp": 9.638639436361428,
+                  "lRnak": 34,
+                  "ladder": 6.3201193810000005,
+                  "nRnak": 78,
+                  "negative": 0.291042089,
+                  "pRnak": 14,
+                  "positive": 0.83847481
+         },
+         "24": {
+                  "country": "China",
+                  "gRnak": 56,
+                  "gdp": 9.085569816163092,
+                  "lRnak": 87,
+                  "ladder": 5.0990614889999994,
+                  "nRnak": 35,
+                  "negative": 0.214004755,
+                  "pRnak": 24,
+                  "positive": 0.821097255
+         },
+         "25": {
+                  "country": "Colombia",
+                  "gRnak": 67,
+                  "gdp": 8.748557242129097,
+                  "lRnak": 44,
+                  "ladder": 6.157341957000001,
+                  "nRnak": 82,
+                  "negative": 0.299308956,
+                  "pRnak": 16,
+                  "positive": 0.8369269970000001
+         },
+         "26": {
+                  "country": "Congo (Brazzaville)",
+                  "gRnak": 105,
+                  "gdp": 7.413393647170562,
+                  "lRnak": 94,
+                  "ladder": 4.883991241,
+                  "nRnak": 119,
+                  "negative": 0.381640553,
+                  "pRnak": 115,
+                  "positive": 0.598951638
+         },
+         "27": {
+                  "country": "Congo (Kinshasa)",
+                  "gRnak": 135,
+                  "gdp": 6.126535911991313,
+                  "lRnak": 121,
+                  "ladder": 4.311033248999999,
+                  "nRnak": 126,
+                  "negative": 0.40426206600000003,
+                  "pRnak": 129,
+                  "positive": 0.550525904
+         },
+         "28": {
+                  "country": "Costa Rica",
+                  "gRnak": 48,
+                  "gdp": 9.361400715916284,
+                  "lRnak": 12,
+                  "ladder": 7.22518158,
+                  "nRnak": 67,
+                  "negative": 0.275440067,
+                  "pRnak": 2,
+                  "positive": 0.8743958470000001
+         },
+         "29": {
+                  "country": "Croatia",
+                  "gRnak": 47,
+                  "gdp": 9.49510681786673,
+                  "lRnak": 75,
+                  "ladder": 5.343165873999999,
+                  "nRnak": 97,
+                  "negative": 0.31648823600000003,
+                  "pRnak": 90,
+                  "positive": 0.655305028
+         },
+         "3": {
+                  "country": "Argentina",
+                  "gRnak": 44,
+                  "gdp": 9.57512061852205,
+                  "lRnak": 50,
+                  "ladder": 6.039330006,
+                  "nRnak": 79,
+                  "negative": 0.291717261,
+                  "pRnak": 29,
+                  "positive": 0.809422612
+         },
+         "30": {
+                  "country": "Cyprus",
+                  "gRnak": 29,
+                  "gdp": 10.135930568678736,
+                  "lRnak": 49,
+                  "ladder": 6.062051296,
+                  "nRnak": 84,
+                  "negative": 0.300516605,
+                  "pRnak": 42,
+                  "positive": 0.7841884490000001
+         },
+         "31": {
+                  "country": "Czech Republic",
+                  "gRnak": 34,
+                  "gdp": 9.921727123602015,
+                  "lRnak": 20,
+                  "ladder": 6.789567947,
+                  "nRnak": 39,
+                  "negative": 0.22664979100000002,
+                  "pRnak": 61,
+                  "positive": 0.738743961
+         },
+         "32": {
+                  "country": "Denmark",
+                  "gRnak": 7,
+                  "gdp": 10.938583167580397,
+                  "lRnak": 1,
+                  "ladder": 7.593702316,
+                  "nRnak": 27,
+                  "negative": 0.20577530600000002,
+                  "pRnak": 23,
+                  "positive": 0.8236674070000001
+         },
+         "33": {
+                  "country": "Dominican Republic",
+                  "gRnak": 64,
+                  "gdp": 8.861103247183367,
+                  "lRnak": 69,
+                  "ladder": 5.605202675,
+                  "nRnak": 66,
+                  "negative": 0.27474552399999996,
+                  "pRnak": 60,
+                  "positive": 0.7389436359999999
+         },
+         "34": {
+                  "country": "Ecuador",
+                  "gRnak": 68,
+                  "gdp": 8.732134770004901,
+                  "lRnak": 59,
+                  "ladder": 5.839518547000001,
+                  "nRnak": 96,
+                  "negative": 0.314343482,
+                  "pRnak": 20,
+                  "positive": 0.8291419740000001
+         },
+         "35": {
+                  "country": "Egypt",
+                  "gRnak": 98,
+                  "gdp": 7.788512956037335,
+                  "lRnak": 133,
+                  "ladder": 3.929344177,
+                  "nRnak": 128,
+                  "negative": 0.414493799,
+                  "pRnak": 131,
+                  "positive": 0.539322555
+         },
+         "36": {
+                  "country": "El Salvador",
+                  "gRnak": 87,
+                  "gdp": 8.26598672647851,
+                  "lRnak": 30,
+                  "ladder": 6.339318275,
+                  "nRnak": 62,
+                  "negative": 0.26844835300000003,
+                  "pRnak": 8,
+                  "positive": 0.848850608
+         },
+         "37": {
+                  "country": "Estonia",
+                  "gRnak": 35,
+                  "gdp": 9.888610183259173,
+                  "lRnak": 54,
+                  "ladder": 5.938395977000001,
+                  "nRnak": 2,
+                  "negative": 0.160164103,
+                  "pRnak": 31,
+                  "positive": 0.805217981
+         },
+         "38": {
+                  "country": "Ethiopia",
+                  "gRnak": 125,
+                  "gdp": 6.643221183272568,
+                  "lRnak": 125,
+                  "ladder": 4.180315495,
+                  "nRnak": 87,
+                  "negative": 0.304436177,
+                  "pRnak": 110,
+                  "positive": 0.608514786
+         },
+         "39": {
+                  "country": "Finland",
+                  "gRnak": 13,
+                  "gdp": 10.729926394143527,
+                  "lRnak": 0,
+                  "ladder": 7.788251877,
+                  "nRnak": 9,
+                  "negative": 0.176065788,
+                  "pRnak": 39,
+                  "positive": 0.787137091
+         },
+         "4": {
+                  "country": "Armenia",
+                  "gRnak": 85,
+                  "gdp": 8.278123062809145,
+                  "lRnak": 123,
+                  "ladder": 4.287736416,
+                  "nRnak": 134,
+                  "negative": 0.43714875,
+                  "pRnak": 101,
+                  "positive": 0.6250138279999999
+         },
+         "40": {
+                  "country": "France",
+                  "gRnak": 21,
+                  "gdp": 10.557807067329547,
+                  "lRnak": 22,
+                  "ladder": 6.635222435,
+                  "nRnak": 51,
+                  "negative": 0.241983935,
+                  "pRnak": 49,
+                  "positive": 0.762097776
+         },
+         "41": {
+                  "country": "Gabon",
+                  "gRnak": 63,
+                  "gdp": 8.884705412260123,
+                  "lRnak": 98,
+                  "ladder": 4.782382965,
+                  "nRnak": 136,
+                  "negative": 0.446124285,
+                  "pRnak": 96,
+                  "positive": 0.634047151
+         },
+         "42": {
+                  "country": "Georgia",
+                  "gRnak": 83,
+                  "gdp": 8.313424450162168,
+                  "lRnak": 115,
+                  "ladder": 4.45077467,
+                  "nRnak": 30,
+                  "negative": 0.20963960899999998,
+                  "pRnak": 124,
+                  "positive": 0.5811277029999999
+         },
+         "43": {
+                  "country": "Germany",
+                  "gRnak": 15,
+                  "gdp": 10.702568038528511,
+                  "lRnak": 14,
+                  "ladder": 7.0743246079999995,
+                  "nRnak": 21,
+                  "negative": 0.19643481100000001,
+                  "pRnak": 63,
+                  "positive": 0.7365657090000001
+         },
+         "44": {
+                  "country": "Ghana",
+                  "gRnak": 106,
+                  "gdp": 7.403357588873118,
+                  "lRnak": 73,
+                  "ladder": 5.481310843999999,
+                  "nRnak": 55,
+                  "negative": 0.247518942,
+                  "pRnak": 75,
+                  "positive": 0.702511728
+         },
+         "45": {
+                  "country": "Greece",
+                  "gRnak": 36,
+                  "gdp": 9.831638312832245,
+                  "lRnak": 85,
+                  "ladder": 5.14824152,
+                  "nRnak": 104,
+                  "negative": 0.332830757,
+                  "pRnak": 112,
+                  "positive": 0.60293901
+         },
+         "46": {
+                  "country": "Guatemala",
+                  "gRnak": 79,
+                  "gdp": 8.405365043867135,
+                  "lRnak": 33,
+                  "ladder": 6.325118542,
+                  "nRnak": 91,
+                  "negative": 0.30808615699999997,
+                  "pRnak": 10,
+                  "positive": 0.845865786
+         },
+         "47": {
+                  "country": "Guinea",
+                  "gRnak": 122,
+                  "gdp": 6.715801395683871,
+                  "lRnak": 95,
+                  "ladder": 4.873722553,
+                  "nRnak": 130,
+                  "negative": 0.422460884,
+                  "pRnak": 73,
+                  "positive": 0.704477131
+         },
+         "48": {
+                  "country": "Haiti",
+                  "gRnak": 126,
+                  "gdp": 6.640769453514469,
+                  "lRnak": 134,
+                  "ladder": 3.823865652,
+                  "nRnak": 100,
+                  "negative": 0.321692765,
+                  "pRnak": 125,
+                  "positive": 0.5733667020000001
+         },
+         "49": {
+                  "country": "Honduras",
+                  "gRnak": 96,
+                  "gdp": 7.816064615692459,
+                  "lRnak": 51,
+                  "ladder": 6.019985676,
+                  "nRnak": 57,
+                  "negative": 0.248383343,
+                  "pRnak": 12,
+                  "positive": 0.842200935
+         },
+         "5": {
+                  "country": "Australia",
+                  "gRnak": 8,
+                  "gdp": 10.89302759540572,
+                  "lRnak": 10,
+                  "ladder": 7.25703764,
+                  "nRnak": 38,
+                  "negative": 0.225360975,
+                  "pRnak": 43,
+                  "positive": 0.7800788879999999
+         },
+         "50": {
+                  "country": "Hong Kong S.A.R. of China",
+                  "gRnak": 12,
+                  "gdp": 10.740596853664602,
+                  "lRnak": 74,
+                  "ladder": 5.362474918,
+                  "nRnak": 23,
+                  "negative": 0.200593412,
+                  "pRnak": 94,
+                  "positive": 0.63953346
+         },
+         "51": {
+                  "country": "Hungary",
+                  "gRnak": 45,
+                  "gdp": 9.562745465263168,
+                  "lRnak": 48,
+                  "ladder": 6.065038681,
+                  "nRnak": 12,
+                  "negative": 0.18092127100000002,
+                  "pRnak": 64,
+                  "positive": 0.735184252
+         },
+         "52": {
+                  "country": "Iceland",
+                  "gRnak": 3,
+                  "gdp": 11.157062668150726,
+                  "lRnak": 3,
+                  "ladder": 7.476213932,
+                  "nRnak": 1,
+                  "negative": 0.148160011,
+                  "pRnak": 0,
+                  "positive": 0.895254552
+         },
+         "53": {
+                  "country": "India",
+                  "gRnak": 103,
+                  "gdp": 7.570243739372536,
+                  "lRnak": 130,
+                  "ladder": 4.046111107,
+                  "nRnak": 98,
+                  "negative": 0.31793677800000003,
+                  "pRnak": 82,
+                  "positive": 0.682090998
+         },
+         "54": {
+                  "country": "Indonesia",
+                  "gRnak": 88,
+                  "gdp": 8.255013633869373,
+                  "lRnak": 88,
+                  "ladder": 5.098401546,
+                  "nRnak": 99,
+                  "negative": 0.319171578,
+                  "pRnak": 4,
+                  "positive": 0.8625841740000001
+         },
+         "55": {
+                  "country": "Iran",
+                  "gRnak": 73,
+                  "gdp": 8.596966872443812,
+                  "lRnak": 101,
+                  "ladder": 4.716783047,
+                  "nRnak": 135,
+                  "negative": 0.43853390200000003,
+                  "pRnak": 79,
+                  "positive": 0.693666041
+         },
+         "56": {
+                  "country": "Iraq",
+                  "gRnak": 76,
+                  "gdp": 8.549798640533764,
+                  "lRnak": 114,
+                  "ladder": 4.462399006,
+                  "nRnak": 141,
+                  "negative": 0.59053874,
+                  "pRnak": 137,
+                  "positive": 0.505288541
+         },
+         "57": {
+                  "country": "Ireland",
+                  "gRnak": 4,
+                  "gdp": 11.146642946452113,
+                  "lRnak": 16,
+                  "ladder": 7.060155392,
+                  "nRnak": 32,
+                  "negative": 0.21278412600000002,
+                  "pRnak": 18,
+                  "positive": 0.833388925
+         },
+         "58": {
+                  "country": "Israel",
+                  "gRnak": 19,
+                  "gdp": 10.603368295445092,
+                  "lRnak": 6,
+                  "ladder": 7.3310360910000005,
+                  "nRnak": 69,
+                  "negative": 0.27644315399999997,
+                  "pRnak": 85,
+                  "positive": 0.673591316
+         },
+         "59": {
+                  "country": "Italy",
+                  "gRnak": 23,
+                  "gdp": 10.37202059850413,
+                  "lRnak": 40,
+                  "ladder": 6.198870182,
+                  "nRnak": 102,
+                  "negative": 0.322846144,
+                  "pRnak": 88,
+                  "positive": 0.661180735
+         },
+         "6": {
+                  "country": "Austria",
+                  "gRnak": 11,
+                  "gdp": 10.764073413312119,
+                  "lRnak": 8,
+                  "ladder": 7.293727875,
+                  "nRnak": 11,
+                  "negative": 0.18026872,
+                  "pRnak": 55,
+                  "positive": 0.747568727
+         },
+         "60": {
+                  "country": "Ivory Coast",
+                  "gRnak": 104,
+                  "gdp": 7.416043165615408,
+                  "lRnak": 93,
+                  "ladder": 5.037734985,
+                  "nRnak": 112,
+                  "negative": 0.35745579,
+                  "pRnak": 77,
+                  "positive": 0.697735488
+         },
+         "61": {
+                  "country": "Jamaica",
+                  "gRnak": 77,
+                  "gdp": 8.538867135138524,
+                  "lRnak": 56,
+                  "ladder": 5.889759064,
+                  "nRnak": 53,
+                  "negative": 0.243399635,
+                  "pRnak": 46,
+                  "positive": 0.769282162
+         },
+         "62": {
+                  "country": "Japan",
+                  "gRnak": 22,
+                  "gdp": 10.556544172054787,
+                  "lRnak": 55,
+                  "ladder": 5.910676479,
+                  "nRnak": 8,
+                  "negative": 0.17551218,
+                  "pRnak": 59,
+                  "positive": 0.740387619
+         },
+         "63": {
+                  "country": "Jordan",
+                  "gRnak": 81,
+                  "gdp": 8.325972556060146,
+                  "lRnak": 97,
+                  "ladder": 4.808082581,
+                  "nRnak": 122,
+                  "negative": 0.391505182,
+                  "pRnak": 98,
+                  "positive": 0.6277983779999999
+         },
+         "64": {
+                  "country": "Kazakhstan",
+                  "gRnak": 55,
+                  "gdp": 9.086754478736296,
+                  "lRnak": 57,
+                  "ladder": 5.882351398,
+                  "nRnak": 5,
+                  "negative": 0.171486408,
+                  "pRnak": 51,
+                  "positive": 0.7567622070000001
+         },
+         "65": {
+                  "country": "Kenya",
+                  "gRnak": 110,
+                  "gdp": 7.318416771800373,
+                  "lRnak": 113,
+                  "ladder": 4.475654125,
+                  "nRnak": 40,
+                  "negative": 0.23021030399999998,
+                  "pRnak": 37,
+                  "positive": 0.7884522079999999
+         },
+         "66": {
+                  "country": "Kosovo",
+                  "gRnak": 86,
+                  "gdp": 8.267184436544133,
+                  "lRnak": 45,
+                  "ladder": 6.149199962999999,
+                  "nRnak": 15,
+                  "negative": 0.18587909600000002,
+                  "pRnak": 62,
+                  "positive": 0.7384355659999999
+         },
+         "67": {
+                  "country": "Kuwait",
+                  "gRnak": 25,
+                  "gdp": 10.276441993309337,
+                  "lRnak": 46,
+                  "ladder": 6.093905449,
+                  "nRnak": 89,
+                  "negative": 0.30732080300000003,
+                  "pRnak": 80,
+                  "positive": 0.692071915
+         },
+         "68": {
+                  "country": "Kyrgyzstan",
+                  "gRnak": 115,
+                  "gdp": 7.106461904375353,
+                  "lRnak": 66,
+                  "ladder": 5.6295366289999995,
+                  "nRnak": 3,
+                  "negative": 0.160438314,
+                  "pRnak": 52,
+                  "positive": 0.755125225
+         },
+         "69": {
+                  "country": "Laos",
+                  "gRnak": 97,
+                  "gdp": 7.8068495012115235,
+                  "lRnak": 108,
+                  "ladder": 4.623140812,
+                  "nRnak": 107,
+                  "negative": 0.34422588299999995,
+                  "pRnak": 3,
+                  "positive": 0.872791767
+         },
+         "7": {
+                  "country": "Azerbaijan",
+                  "gRnak": 80,
+                  "gdp": 8.326424451819822,
+                  "lRnak": 84,
+                  "ladder": 5.152279377,
+                  "nRnak": 22,
+                  "negative": 0.19831866,
+                  "pRnak": 119,
+                  "positive": 0.592359245
+         },
+         "70": {
+                  "country": "Latvia",
+                  "gRnak": 41,
+                  "gdp": 9.654659845371212,
+                  "lRnak": 52,
+                  "ladder": 5.977817535,
+                  "nRnak": 44,
+                  "negative": 0.231753111,
+                  "pRnak": 103,
+                  "positive": 0.623312771
+         },
+         "71": {
+                  "country": "Lebanon",
+                  "gRnak": 57,
+                  "gdp": 9.050611611041196,
+                  "lRnak": 83,
+                  "ladder": 5.153989792,
+                  "nRnak": 54,
+                  "negative": 0.24354921300000001,
+                  "pRnak": 135,
+                  "positive": 0.515443921
+         },
+         "72": {
+                  "country": "Liberia",
+                  "gRnak": 136,
+                  "gdp": 6.122609064598607,
+                  "lRnak": 117,
+                  "ladder": 4.424490929,
+                  "nRnak": 121,
+                  "negative": 0.39133054,
+                  "pRnak": 87,
+                  "positive": 0.667946458
+         },
+         "73": {
+                  "country": "Libya",
+                  "gRnak": 59,
+                  "gdp": 8.986950392676091,
+                  "lRnak": 65,
+                  "ladder": 5.646852493,
+                  "nRnak": 118,
+                  "negative": 0.379374176,
+                  "pRnak": 78,
+                  "positive": 0.69704932
+         },
+         "74": {
+                  "country": "Lithuania",
+                  "gRnak": 38,
+                  "gdp": 9.722006328563626,
+                  "lRnak": 36,
+                  "ladder": 6.272940636,
+                  "nRnak": 19,
+                  "negative": 0.19511883,
+                  "pRnak": 111,
+                  "positive": 0.607613146
+         },
+         "75": {
+                  "country": "Luxembourg",
+                  "gRnak": 0,
+                  "gdp": 11.553136425167029,
+                  "lRnak": 15,
+                  "ladder": 7.061380862999999,
+                  "nRnak": 13,
+                  "negative": 0.18446700300000002,
+                  "pRnak": 48,
+                  "positive": 0.7658168670000001
+         },
+         "76": {
+                  "country": "Macedonia",
+                  "gRnak": 72,
+                  "gdp": 8.60201399391523,
+                  "lRnak": 81,
+                  "ladder": 5.233866692,
+                  "nRnak": 83,
+                  "negative": 0.29939058399999996,
+                  "pRnak": 138,
+                  "positive": 0.502459884
+         },
+         "77": {
+                  "country": "Madagascar",
+                  "gRnak": 137,
+                  "gdp": 6.108630463274186,
+                  "lRnak": 129,
+                  "ladder": 4.078620433999999,
+                  "nRnak": 114,
+                  "negative": 0.374838024,
+                  "pRnak": 53,
+                  "positive": 0.751698077
+         },
+         "78": {
+                  "country": "Malawi",
+                  "gRnak": 141,
+                  "gdp": 5.824475767403309,
+                  "lRnak": 138,
+                  "ladder": 3.416862965,
+                  "nRnak": 94,
+                  "negative": 0.312088341,
+                  "pRnak": 109,
+                  "positive": 0.608666539
+         },
+         "79": {
+                  "country": "Mali",
+                  "gRnak": 123,
+                  "gdp": 6.714796821248102,
+                  "lRnak": 99,
+                  "ladder": 4.741850376,
+                  "nRnak": 123,
+                  "negative": 0.39278414799999994,
+                  "pRnak": 58,
+                  "positive": 0.7418357729999999
+         },
+         "8": {
+                  "country": "Bahrain",
+                  "gRnak": 30,
+                  "gdp": 10.071331293031353,
+                  "lRnak": 38,
+                  "ladder": 6.227320671,
+                  "nRnak": 76,
+                  "negative": 0.28975951699999997,
+                  "pRnak": 27,
+                  "positive": 0.8135705590000001
+         },
+         "80": {
+                  "country": "Malta",
+                  "gRnak": 27,
+                  "gdp": 10.20158954408211,
+                  "lRnak": 21,
+                  "ladder": 6.675665855,
+                  "nRnak": 86,
+                  "negative": 0.302443117,
+                  "pRnak": 68,
+                  "positive": 0.720753372
+         },
+         "81": {
+                  "country": "Mauritania",
+                  "gRnak": 116,
+                  "gdp": 7.035940886449652,
+                  "lRnak": 103,
+                  "ladder": 4.6781597139999995,
+                  "nRnak": 65,
+                  "negative": 0.272321939,
+                  "pRnak": 95,
+                  "positive": 0.637107074
+         },
+         "82": {
+                  "country": "Mauritius",
+                  "gRnak": 51,
+                  "gdp": 9.263617296517932,
+                  "lRnak": 42,
+                  "ladder": 6.174117565,
+                  "nRnak": 4,
+                  "negative": 0.168721184,
+                  "pRnak": 54,
+                  "positive": 0.7477601770000001
+         },
+         "83": {
+                  "country": "Mexico",
+                  "gRnak": 54,
+                  "gdp": 9.094124575146692,
+                  "lRnak": 26,
+                  "ladder": 6.410299301,
+                  "nRnak": 42,
+                  "negative": 0.230990887,
+                  "pRnak": 11,
+                  "positive": 0.842642307
+         },
+         "84": {
+                  "country": "Moldova",
+                  "gRnak": 100,
+                  "gdp": 7.736253697305977,
+                  "lRnak": 77,
+                  "ladder": 5.325530529,
+                  "nRnak": 59,
+                  "negative": 0.259477794,
+                  "pRnak": 123,
+                  "positive": 0.5814887879999999
+         },
+         "85": {
+                  "country": "Mongolia",
+                  "gRnak": 89,
+                  "gdp": 8.225547086425363,
+                  "lRnak": 76,
+                  "ladder": 5.333850384,
+                  "nRnak": 34,
+                  "negative": 0.21359951800000002,
+                  "pRnak": 84,
+                  "positive": 0.675165296
+         },
+         "86": {
+                  "country": "Montenegro",
+                  "gRnak": 60,
+                  "gdp": 8.945016078722803,
+                  "lRnak": 67,
+                  "ladder": 5.614798546,
+                  "nRnak": 109,
+                  "negative": 0.349785089,
+                  "pRnak": 134,
+                  "positive": 0.519128144
+         },
+         "87": {
+                  "country": "Morocco",
+                  "gRnak": 93,
+                  "gdp": 8.008778950262183,
+                  "lRnak": 79,
+                  "ladder": 5.312482834,
+                  "nRnak": 101,
+                  "negative": 0.322715908,
+                  "pRnak": 128,
+                  "positive": 0.559288204
+         },
+         "88": {
+                  "country": "Mozambique",
+                  "gRnak": 139,
+                  "gdp": 6.030006464306408,
+                  "lRnak": 124,
+                  "ladder": 4.279863358,
+                  "nRnak": 110,
+                  "negative": 0.353176504,
+                  "pRnak": 92,
+                  "positive": 0.648381412
+         },
+         "89": {
+                  "country": "Myanmar",
+                  "gRnak": 114,
+                  "gdp": 7.169259164968651,
+                  "lRnak": 126,
+                  "ladder": 4.1543416980000005,
+                  "nRnak": 73,
+                  "negative": 0.28228554100000003,
+                  "pRnak": 57,
+                  "positive": 0.74564749
+         },
+         "9": {
+                  "country": "Bangladesh",
+                  "gRnak": 108,
+                  "gdp": 7.324169178391804,
+                  "lRnak": 122,
+                  "ladder": 4.309771061,
+                  "nRnak": 33,
+                  "negative": 0.21350576,
+                  "pRnak": 127,
+                  "positive": 0.568827093
+         },
+         "90": {
+                  "country": "Namibia",
+                  "gRnak": 74,
+                  "gdp": 8.561627216612374,
+                  "lRnak": 116,
+                  "ladder": 4.441306114,
+                  "nRnak": 70,
+                  "negative": 0.277252167,
+                  "pRnak": 69,
+                  "positive": 0.72067821
+         },
+         "91": {
+                  "country": "Nepal",
+                  "gRnak": 120,
+                  "gdp": 6.727527344949767,
+                  "lRnak": 100,
+                  "ladder": 4.736692429,
+                  "nRnak": 115,
+                  "negative": 0.375977933,
+                  "pRnak": 126,
+                  "positive": 0.570577025
+         },
+         "92": {
+                  "country": "Netherlands",
+                  "gRnak": 10,
+                  "gdp": 10.783594589038309,
+                  "lRnak": 5,
+                  "ladder": 7.458965302,
+                  "nRnak": 14,
+                  "negative": 0.184519842,
+                  "pRnak": 5,
+                  "positive": 0.852184892
+         },
+         "93": {
+                  "country": "New Zealand",
+                  "gRnak": 17,
+                  "gdp": 10.667572538738455,
+                  "lRnak": 7,
+                  "ladder": 7.32718277,
+                  "nRnak": 6,
+                  "negative": 0.171716571,
+                  "pRnak": 25,
+                  "positive": 0.8174312709999999
+         },
+         "94": {
+                  "country": "Nicaragua",
+                  "gRnak": 101,
+                  "gdp": 7.706075857944567,
+                  "lRnak": 24,
+                  "ladder": 6.476356506,
+                  "nRnak": 93,
+                  "negative": 0.30844789699999997,
+                  "pRnak": 6,
+                  "positive": 0.849764168
+         },
+         "95": {
+                  "country": "Niger",
+                  "gRnak": 140,
+                  "gdp": 5.9350537270736625,
+                  "lRnak": 109,
+                  "ladder": 4.615673542,
+                  "nRnak": 132,
+                  "negative": 0.426522374,
+                  "pRnak": 66,
+                  "positive": 0.731161416
+         },
+         "96": {
+                  "country": "Nigeria",
+                  "gRnak": 102,
+                  "gdp": 7.585056411961101,
+                  "lRnak": 78,
+                  "ladder": 5.321928024,
+                  "nRnak": 49,
+                  "negative": 0.235968769,
+                  "pRnak": 67,
+                  "positive": 0.724990547
+         },
+         "97": {
+                  "country": "Norway",
+                  "gRnak": 2,
+                  "gdp": 11.231948413673159,
+                  "lRnak": 2,
+                  "ladder": 7.578744887999999,
+                  "nRnak": 25,
+                  "negative": 0.202913806,
+                  "pRnak": 7,
+                  "positive": 0.849099994
+         },
+         "98": {
+                  "country": "Pakistan",
+                  "gRnak": 107,
+                  "gdp": 7.344624355867482,
+                  "lRnak": 60,
+                  "ladder": 5.8308706279999996,
+                  "nRnak": 92,
+                  "negative": 0.30834108600000004,
+                  "pRnak": 120,
+                  "positive": 0.586166978
+         },
+         "99": {
+                  "country": "Palestinian Territories",
+                  "gRnak": 92,
+                  "gdp": 8.03745456956079,
+                  "lRnak": 107,
+                  "ladder": 4.62813282,
+                  "nRnak": 129,
+                  "negative": 0.416072041,
+                  "pRnak": 118,
+                  "positive": 0.596765578
+         }
 }
