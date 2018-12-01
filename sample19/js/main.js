@@ -25,6 +25,8 @@
   let pageIndex = 1.0;
   const interactivePageIndex = 4;
 
+  let stats;
+
   // constant variables
   const RENDERER_PARAM = {
     //clearColor: 0xffffff
@@ -115,8 +117,8 @@
     targetDOM = document.getElementById('webgl');
 
     // events
-    let devicePixelRatio = window.devicePixelRatio;
-    // let devicePixelRatio = 1;
+    // let devicePixelRatio = window.devicePixelRatio;
+    let devicePixelRatio = 1;
     window.addEventListener('resize', () => {
       renderer.setPixelRatio(devicePixelRatio);
       renderer.setSize(window.innerWidth, window.innerHeight);
@@ -162,9 +164,21 @@
 
 
   function init(vsPost, fsPost){
+    stats = initStats();
+    function initStats() {
+        let stats = new Stats();
+        stats.setMode(0); // 0: fps, 1: ms
+        // Align top-left
+        stats.domElement.style.position = 'absolute';
+        stats.domElement.style.left = '0px';
+        stats.domElement.style.top = '0px';
+        document.getElementById("Stats-output").appendChild(stats.domElement);
+        return stats;
+    }
+
     // scene and camera
     scene = new THREE.Scene();
-    camera = new THREE.PerspectiveCamera(60, canvasWidth / canvasHeight, 0.1, 150.0);
+    camera = new THREE.PerspectiveCamera(60, canvasWidth / canvasHeight, 0.1, 5.0);
     camera.position.z = initCameraPosition.z;
     //camera.lookAt(new THREE.Vector3(0.0, 0.0, 0.0));
 
@@ -365,7 +379,10 @@
   }
 
   // rendering
+  let frame = 0;
   function render() {
+    stats.update();
+    frame++;
     if (pageIndex !== interactivePageIndex) {
       earth.rotation.x += 3.141592 * 2 / 90 / 60 / 60 * 5; // 1round/90m
     }
@@ -375,7 +392,8 @@
       requestAnimationFrame(render);
     }
 
-
+    // set 30ftp
+    if(frame % 2 === 0) { return; }
 
     //renderer.render(scene, camera);
     //オフスクリーンレンダリング
