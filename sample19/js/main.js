@@ -3,7 +3,6 @@
   let canvasWidth = null;
   let canvasHeight = null;
   let targetDOM = null;
-  let run = true;
   let isDown = false;
   let isClick = false;
   let isdDblclick = false;
@@ -26,6 +25,8 @@
   const interactivePageIndex = 4;
 
   let stats;
+
+  const wbLength = Object.keys(wbData).length;
 
   // constant variables
   const RENDERER_PARAM = {
@@ -57,7 +58,8 @@
         if (pageId === interactivePageIndex){
           $('.main').addClass("disabled-onepage-scroll");
           let duration = 2.0;
-          let ease = Back.easeOut.config(3);
+          let ease = Back.easeOut.config(1);
+
           TweenLite.to(earth.position, duration, {
             y: 0.0,
             ease: ease
@@ -193,7 +195,7 @@
     controls.enablePan = false;
     controls.enableZoom = false;
     controls.minDistance = 2.0;
-    controls.maxDistance = 3.0;
+    controls.maxDistance = 4.0;
     // console.log(controls);
 
 
@@ -206,7 +208,8 @@
         depthWrite: false,
         opacity: 0.9,
         //map: sea_texture,
-        color: 0x222222
+        color: 0x222222,
+        alphaTest: 0.5
     });
     earth = new THREE.Mesh(geometry, material);
 
@@ -240,35 +243,18 @@
     console.log(meshList);
 
 
-    // for(let i=0, lm=meshList.length; lm>i; i++ ) {
-    //   let meshName = meshList[i].userData.country;
-    //   for(let j=0, lwb=Object.keys(wbData).length; lwb>j; j++ ) {
-    //     console.log(wbData[j].country, meshName);
-    //     if (wbData[j].country === meshName){
-    //       meshList[i].object.material.color.r = wbData[j].ladder;
-    //       console.log(meshList[i].object.material.color.r);
-    //       return;
-    //     }
-    //   }
-    // }
-
-    // for(let i=0, lm=meshList.length; lm>i; i++ ) {
-    //   let meshName = meshList[i].userData.country;
-    //   console.log(meshName)
-    // }
-
 
     // set wellbeing score
     let GDPArray = [];
     let LadderArray = [];
     let PositiveArray = [];
     let NegativeArray = [];
-    for(let i=0, lwb=Object.keys(wbData).length; lwb>i; i++ ) {
+    for(let i=0; wbLength>i; i++ ) {
       let wb = wbData[i];
       LadderArray.push(wb.ladder);
       PositiveArray.push(wb.positive);
       NegativeArray.push(wb.negative);
-      GDPArray.push(wb.gdp);
+      GDPArray.push(wb.logGdp);
 
     }
 
@@ -292,10 +278,10 @@
       wbButton[i].addEventListener('click', (e) => {
         console.log('clickBtn');
         let type = e.target.id;
-        for (let j = 0, lwb = Object.keys(wbData).length; lwb > j; j++) {
+        for (let j = 0; wbLength > j; j++) {
           for (let i = 0, lm = meshList.length; lm > i; i++) {
-            let meshName = meshList[i].userData.country;
-            if (wbData[j].country === meshName) {
+            let countryName = meshList[i].userData.country;
+            if (wbData[j].country === countryName) {
               coloringLand(i, j, type)
             }
           }
@@ -313,7 +299,7 @@
         R = (wbData[j].negative - negativeMin) / (negativeMax - negativeMin); //0.0 - 1.0 scale
         R = 1.0 - R  // reverse scale
       }else{
-        R = (wbData[j].gdp - gdpMin) / (gdpMax - gdpMin); //0.0 - 1.0 scale
+        R = (wbData[j].logGdp - gdpMin) / (gdpMax - gdpMin); //0.0 - 1.0 scale
       }
         B = 1.0 - R;
         meshList[i].material.color.r = R;
@@ -326,46 +312,71 @@
     let intersected_object = 0;
     let overlay_element = 0;
     let hover_scale = 1.015;
+    let infoArea = $('#info');
+    console.log(infoArea);
     window.addEventListener('mousemove', onDocumentMouseMove, false);
     function onDocumentMouseMove(event) {
-      if (intersected_object !== 0) {
-        intersected_object.scale.set(1.0, 1.0, 1.0);
-      }
-      event.preventDefault();
-      let mouseX = (event.clientX / window.innerWidth) * 2 - 1;
-      let mouseY = -(event.clientY / window.innerHeight) * 2 + 1;
-      let vector = new THREE.Vector3(mouseX, mouseY, -1);
-      vector.unproject(camera);
-      let raycaster = new THREE.Raycaster(camera.position, vector.sub(camera.position).normalize());
-      let intersects = raycaster.intersectObject(earth, true);
-      if (intersects.length > 0) {
-        if (intersects[0].point !== null) {
-          if (intersects[0].object.name === "land") {
-            //console.log(intersects[0]);
+      if (pageIndex === interactivePageIndex){
+        if (intersected_object !== 0) {
+          intersected_object.scale.set(1.0, 1.0, 1.0);  // 前回のオブジェクトをもとに戻す
+        }
+        event.preventDefault();
+        let mouseX = (event.clientX / window.innerWidth) * 2 - 1;
+        let mouseY = -(event.clientY / window.innerHeight) * 2 + 1;
+        let vector = new THREE.Vector3(mouseX, mouseY, -1);
+        vector.unproject(camera);
+        let raycaster = new THREE.Raycaster(camera.position, vector.sub(camera.position).normalize());
+        let intersects = raycaster.intersectObject(earth, true);
+        if (intersects.length > 0) {
+          if (intersects[0].point !== null) {
+            if (intersects[0].object.name === "land") {
+              //console.log(intersects[0]);
 
-            if (pageIndex === interactivePageIndex){
-              console.log(intersects[0].object.userData.country);
+              let res = calcWbInfo(intersects[0].object.userData.country);  //input : countryName
+              console.log(res);  // wbDataにないものはエラーになってしまう
+              infoArea.empty()
+                  .append('<p>' + res.country + '</p>')
+                  // .append('<p>' + res.country + '<span>' + res.country + '</span>' + '</p>')
+                  .append(infoText(res, 'ladder'))
+                  .append(infoText(res, 'positive'))
+                  .append(infoText(res, 'negative'))
+                  .append(infoText(res, 'gdp'));
+
               // console.log(intersects[0].object);
               intersects[0].object.scale.set(hover_scale, hover_scale, hover_scale);
               intersected_object = intersects[0].object;
-
-              // color
-              // intersects[0].object.material.color.setHex(0xFF0000);
             }
-
-            if (overlay_element === 0) {
-              // overlay_element = document.getElementById("overlay");
-            }
-            // overlay_element.innerHTML = intersects[0].object.userData.country;
-          } else {
-            // overlay_element.innerHTML = "";
           }
-        } else {
-          // overlay_element.innerHTML = "";
         }
-      } else {
-        // overlay_element.innerHTML = "";
       }
+    }
+
+
+    function calcWbInfo(countryName) {
+      for (let i = 0; wbLength > i; i++) {
+        if (wbData[i].country === countryName) {
+          return wbData[i];
+        }
+      }
+    }
+
+    function infoText(weData, type) {
+      let title;
+      let rank;
+      if (type === 'ladder'){
+        title = 'Ladder';
+        rank = 'lRank';
+      }else if (type === 'positive'){
+        title = 'Positive';
+        rank = 'pRank';
+      }else if (type === 'negative'){
+        title = 'Negative';
+        rank = 'nRank';
+      }else{
+        title = 'GDP';
+        rank = 'gRank';
+      }
+      return '<p>' + title + ' : ' + weData[type].toFixed(1) + ' (' + (weData[rank] + 1) + '/' + String(wbLength+1) + ') ' + '</p>';
     }
 
     // helper
@@ -388,9 +399,8 @@
     }
 
     let nowTime = clock.getElapsedTime();
-    if (run) {
-      requestAnimationFrame(render);
-    }
+    requestAnimationFrame(render);
+
 
     // set 30ftp
     if(frame % 2 === 0) { return; }
@@ -399,7 +409,7 @@
     //オフスクリーンレンダリング
     renderer.render( scene, camera, postprocessing.renderTarget );
     //平面オブジェクト用テクスチャ画像を更新
-    postprocessing.plane.material.uniforms.texture.value = postprocessing.renderTarget;
+    postprocessing.plane.material.uniforms.texture.value = postprocessing.renderTarget.texture;
     postprocessing.plane.material.uniforms.time.value = nowTime;
     postprocessing.plane.material.uniforms.resolution.value = [canvasWidth * devicePixelRatio, canvasHeight * devicePixelRatio];
     postprocessing.plane.material.uniforms.mouse.value = mouse;
@@ -416,8 +426,6 @@
     time = 0.0;
     //ポストプロセッシング用シーンの生成
     postprocessing.scene = new THREE.Scene();
-
-    //正投影カメラの生成
     postprocessing.camera = new THREE.OrthographicCamera(-1, 1, 1, -1, 0, 1);
 
     //平面オブジェクトの生成
