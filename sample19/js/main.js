@@ -76,11 +76,6 @@
           controls.enableZoom = false;
         }
       },
-
-      // beforeMove: function(pageId) {
-      //
-      // },
-
     });
 
 
@@ -224,12 +219,12 @@
       let m = country_data[name].mesh = new THREE.Mesh(
           geometry,
           new THREE.MeshBasicMaterial({
-            color: color
+            color: color,
+            // transparent: true,
+            // opacity: 0.9
           }));
       m.name = "land";
       m.userData.country = name;
-
-      // ここにWell-being Dataを加える
 
       earth.add(m);
       meshList.push(m);
@@ -276,7 +271,6 @@
     let wbButton = document.getElementsByClassName('wbButton');
     for (let i = 0, wbLen = wbButton.length; i < wbLen; i++) {
       wbButton[i].addEventListener('click', (e) => {
-        console.log('clickBtn');
         let type = e.target.id;
         for (let j = 0; wbLength > j; j++) {
           for (let i = 0, lm = meshList.length; lm > i; i++) {
@@ -310,11 +304,10 @@
 
 
     let intersected_object = 0;
-    let overlay_element = 0;
     let hover_scale = 1.015;
     let infoArea = $('#info');
-    console.log(infoArea);
     window.addEventListener('mousemove', onDocumentMouseMove, false);
+
     function onDocumentMouseMove(event) {
       if (pageIndex === interactivePageIndex){
         if (intersected_object !== 0) {
@@ -332,15 +325,21 @@
             if (intersects[0].object.name === "land") {
               //console.log(intersects[0]);
 
-              let res = calcWbInfo(intersects[0].object.userData.country);  //input : countryName
-              console.log(res);  // wbDataにないものはエラーになってしまう
-              infoArea.empty()
-                  .append('<p>' + res.country + '</p>')
-                  // .append('<p>' + res.country + '<span>' + res.country + '</span>' + '</p>')
-                  .append(infoText(res, 'ladder'))
-                  .append(infoText(res, 'positive'))
-                  .append(infoText(res, 'negative'))
-                  .append(infoText(res, 'gdp'));
+              let countryName = intersects[0].object.userData.country;
+              let res = calcWbInfo(countryName);
+
+              if( typeof res !== 'undefined') {
+                infoArea.empty()
+                    .append('<p>' + countryName + '</p>')
+                    .append(infoText(res, 'ladder'))
+                    .append(infoText(res, 'positive'))
+                    .append(infoText(res, 'negative'))
+                    .append(infoText(res, 'gdp'));
+              }else{
+                infoArea.empty()
+                    .append('<p>' + countryName + '</p>')
+                    .append('<p>' + 'No data' + '</p>');
+              }
 
               // console.log(intersects[0].object);
               intersects[0].object.scale.set(hover_scale, hover_scale, hover_scale);
@@ -350,7 +349,6 @@
         }
       }
     }
-
 
     function calcWbInfo(countryName) {
       for (let i = 0; wbLength > i; i++) {
@@ -395,12 +393,11 @@
     stats.update();
     frame++;
     if (pageIndex !== interactivePageIndex) {
-      earth.rotation.x += 3.141592 * 2 / 90 / 60 / 60 * 5; // 1round/90m
+      earth.rotation.y += 3.141592 * 2 / 90 / 60 / 60 * 5; // 1round/90m * 5
     }
 
     let nowTime = clock.getElapsedTime();
     requestAnimationFrame(render);
-
 
     // set 30ftp
     if(frame % 2 === 0) { return; }
