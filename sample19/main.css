@@ -53,13 +53,44 @@ html, body {
 
 #btn{
   position:fixed;
-  /*top:85%;*/
-  bottom: 0%;
-  width:50%;
-  /*height:100%;*/
-  background-color: rgba(255, 255, 255, 0.5);
-  color: #ff0000;
+  bottom: 1%;
+  left: 50%;
+  margin-left:-300px;
+  background-color: rgba(255, 255, 255, 0.0);
+  /*opacity: 0.1;*/
+
+  list-style: none;
+  overflow: hidden;
+  border-radius: 5px;
 }
+
+
+#btn li {
+  width: 150px;
+  text-align: center;
+  /*background-color: rgba(100, 100, 100, 0.5);*/
+  color: #ffffff;
+  font-size: 1.2em;
+  /*border:1px solid rgba(255, 255, 255, 0.5);*/
+
+  float: left;
+}
+
+#btn li:hover {
+  background: #ffa443;
+}
+
+.hiddenBtn{
+  opacity: 0.0;
+}
+.normalBtn{
+  background: #646464;
+  opacity: 1.0;
+}
+.selectedBtn{
+  background: #ffa443;
+}
+
 
 #info{
   position:fixed;
@@ -69,8 +100,4 @@ html, body {
   height:30%;
   background-color: rgba(0, 0, 255, 0.5);
   color: #ff0000;
-}
-
-span{
-  color: #00ff00;
 }

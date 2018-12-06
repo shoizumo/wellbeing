@@ -34,7 +34,7 @@
     clearColor: 0x000000
   };
 
-  let initEarthPosition = new THREE.Vector3(0.0, -1.0, 0.0);
+  let initEarthPosition = new THREE.Vector3(0.0, -1.1, 1.0);
   let initCameraPosition = new THREE.Vector3(0.0, 0.0, 2.0);
 
   // entry point
@@ -62,6 +62,7 @@
 
           TweenLite.to(earth.position, duration, {
             y: 0.0,
+            z: 0.0,
             ease: ease
           });
 
@@ -70,8 +71,12 @@
             ease: ease,
             onComplete: function(){
               controls.enableZoom = true;
+              // display button
+              $(".wbButton").removeClass("hiddenBtn").addClass("normalBtn")
             }
           });
+
+
         }else{
           controls.enableZoom = false;
         }
@@ -232,7 +237,11 @@
 
     scene.add(earth);
     earth.position.y = initEarthPosition.y;
+    earth.position.z = initEarthPosition.z;
+    earth.rotation.x -= 0.5;
+    earth.rotation.y -= 2.0;
 
+    console.log(earth.position)
 
     console.log(wbData);
     console.log(meshList);
@@ -272,6 +281,9 @@
     for (let i = 0, wbLen = wbButton.length; i < wbLen; i++) {
       wbButton[i].addEventListener('click', (e) => {
         let type = e.target.id;
+        $(".wbButton").removeClass("selectedBtn");
+        wbButton[i].classList.add("selectedBtn");
+
         for (let j = 0; wbLength > j; j++) {
           for (let i = 0, lm = meshList.length; lm > i; i++) {
             let countryName = meshList[i].userData.country;
@@ -393,7 +405,7 @@
     stats.update();
     frame++;
     if (pageIndex !== interactivePageIndex) {
-      earth.rotation.y += 3.141592 * 2 / 90 / 60 / 60 * 5; // 1round/90m * 5
+      earth.rotation.x += 3.141592 * 2 / 90 / 60 / 60 * 2; // 1round/90m * 2
     }
 
     let nowTime = clock.getElapsedTime();
