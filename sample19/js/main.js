@@ -196,6 +196,8 @@
     controls.enableZoom = false;
     controls.minDistance = 2.0;
     controls.maxDistance = 4.0;
+    // controls.enableDamping = true;
+    // controls.dampingFactor = 0.2;
     // console.log(controls);
 
 
@@ -235,16 +237,16 @@
       meshList.push(m);
     }
 
+    console.log(scene)
     scene.add(earth);
     earth.position.y = initEarthPosition.y;
     earth.position.z = initEarthPosition.z;
     earth.rotation.x -= 0.5;
     earth.rotation.y -= 2.0;
 
-    console.log(earth.position)
 
-    console.log(wbData);
-    console.log(meshList);
+    // console.log(wbData);
+    // console.log(meshList);
 
 
 
@@ -317,7 +319,7 @@
 
     let intersected_object = 0;
     let hover_scale = 1.015;
-    let infoArea = $('#info');
+    let infoArea = $('.infoContents');
     window.addEventListener('mousemove', onDocumentMouseMove, false);
 
     function onDocumentMouseMove(event) {
@@ -340,18 +342,18 @@
               let countryName = intersects[0].object.userData.country;
               let res = calcWbInfo(countryName);
 
-              if( typeof res !== 'undefined') {
-                infoArea.empty()
-                    .append('<p>' + countryName + '</p>')
-                    .append(infoText(res, 'ladder'))
-                    .append(infoText(res, 'positive'))
-                    .append(infoText(res, 'negative'))
-                    .append(infoText(res, 'gdp'));
-              }else{
-                infoArea.empty()
-                    .append('<p>' + countryName + '</p>')
-                    .append('<p>' + 'No data' + '</p>');
-              }
+              // if( typeof res !== 'undefined') {
+              //   infoArea.empty()
+              //       .append('<p>' + countryName + '</p>')
+              //       .append(infoText(res, 'ladder'))
+              //       .append(infoText(res, 'positive'))
+              //       .append(infoText(res, 'negative'))
+              //       .append(infoText(res, 'gdp'));
+              // }else{
+              //   infoArea.empty()
+              //       .append('<p>' + countryName + '</p>')
+              //       .append('<p>' + 'No data' + '</p>');
+              // }
 
               // console.log(intersects[0].object);
               intersects[0].object.scale.set(hover_scale, hover_scale, hover_scale);
