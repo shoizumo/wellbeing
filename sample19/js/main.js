@@ -342,6 +342,32 @@
               let countryName = intersects[0].object.userData.country;
               let res = calcWbInfo(countryName);
 
+               if( typeof res !== 'undefined') {
+                 infoArea.empty();
+                 $('#country').append(countryName);
+
+                 $('#Ladder').append('Ladder');
+                 $('#Positive').append('Positive');
+                 $('#Negative').append('Negative');
+                 $('#GDP').append('GDP per capita');
+
+                 $('#LadderRankking').append(res['lRank'].toFixed(1));
+                 $('#PositiveRankking').append(res['pRank'].toFixed(1));
+                 $('#NegativeRankking').append(res['nRank'].toFixed(1));
+                 $('#GDPRankking').append(res['gRank'].toFixed(1));
+
+                 $('#LadderScore').append(res['ladder'].toFixed(1));
+                 $('#PositiveScore').append(res['positive'].toFixed(1));
+                 $('#NegativeScore').append(res['negative'].toFixed(1));
+                 $('#GDPScore').append(res['gdp'].toFixed(1));
+
+
+              }else{
+                 infoArea.empty();
+                 $('#country').append(countryName);
+                 $('#Ladder').append('No data');
+               }
+
               // if( typeof res !== 'undefined') {
               //   infoArea.empty()
               //       .append('<p>' + countryName + '</p>')
@@ -372,7 +398,7 @@
       }
     }
 
-    function infoText(weData, type) {
+    function infoText(wbData, type) {
       let title;
       let rank;
       if (type === 'ladder'){
@@ -388,7 +414,7 @@
         title = 'GDP';
         rank = 'gRank';
       }
-      return '<p>' + title + ' : ' + weData[type].toFixed(1) + ' (' + (weData[rank] + 1) + '/' + String(wbLength+1) + ') ' + '</p>';
+      return '<p>' + title + ' : ' + wbData[type].toFixed(1) + ' (' + (wbData[rank] + 1) + '/' + String(wbLength+1) + ') ' + '</p>';
     }
 
     // helper
