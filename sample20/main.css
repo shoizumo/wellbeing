@@ -1,0 +1,181 @@
+@charset "UTF-8";
+
+* {margin: 0; padding: 0;}
+
+html, body {
+  overflow: hidden;
+}
+
+#webgl{
+  position:fixed;
+  top:0;
+  left:0;
+  width:100%;
+  height:100%;
+}
+
+.wrapper {
+  height: 100%;
+  margin: 0 auto;
+  overflow: hidden;
+  /*display: none;*/
+  /*visibility : hidden;*/
+}
+
+.main {
+  position:absolute;
+  top:0;
+  left:0;
+  float: left;
+  width: 100%;
+  margin: 0 auto;
+  background-color: rgba(255, 255, 255, 0.0);
+}
+
+.fadein span{
+  color: #ffffff;
+  opacity:0;
+  font-size: 1.5em;
+  font-family: "Helvetica Neue","Arial",sans-serif;
+}
+
+.fadein{
+  position: absolute;
+  top: 30%;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  margin: auto;
+  width: 50%;
+  /*height: 4.0rem;*/
+  text-align: center;
+}
+
+#btn{
+  position:fixed;
+  bottom: 1%;
+  left: 50%;
+  margin-left:-300px;
+  background-color: rgba(255, 255, 255, 0.0);
+  /*opacity: 0.1;*/
+
+  list-style: none;
+  overflow: hidden;
+  border-radius: 5px;
+}
+
+
+#btn li {
+  width: 150px;
+  text-align: center;
+  /*background-color: rgba(100, 100, 100, 0.5);*/
+  color: #ffffff;
+  font-size: 1.2em;
+  /*border:1px solid rgba(255, 255, 255, 0.5);*/
+
+  float: left;
+}
+
+#btn li:hover {
+  background: #ffa443;
+}
+
+.hiddenBtn{
+  opacity: 0.0;
+}
+.normalBtn{
+  background: #646464;
+  opacity: 1.0;
+}
+.selectedBtn{
+  background: #ffa443;
+}
+
+
+#info{
+  display: grid;
+  grid-template-columns: 150px 150px 150px 150px;
+  grid-template-rows: 25px 15px 130px;
+
+  position:fixed;
+  top:0%;
+  right:15%;
+  left: 50%;
+  margin-left:-300px;
+
+  width:600px;
+  height:170px;
+
+  background-color: rgba(0, 0, 255, 0.5);
+  color: #ffffff;
+  text-align: center;
+}
+
+
+#title{
+  grid-column: 1 / 5;
+  background-color: #111111;
+}
+#country{
+  grid-column: 1 / 5;
+  grid-raw: 2 / 3;
+  background-color: #333333;
+}
+
+#Ladder{
+  grid-column: 1 / 2;
+  grid-raw: 3 / 4;
+  background-color: #555555;
+}
+#Positive{
+  grid-column: 2 / 3;
+  grid-raw: 3 / 4;
+  background-color: #555555;
+}
+#Negative{
+  grid-column: 3 / 4;
+  grid-raw: 3 / 4;
+  background-color: #555555;
+}
+#GDP{
+  grid-column: 4 / 5;
+  grid-raw: 3 / 4;
+  background-color: #555555;
+}
+
+#LadderRanking{
+  grid-column: 1 / 2;
+  grid-raw: 4 / 5;
+  background-color: #777777;
+}
+#PositiveRanking{
+  grid-column: 2 / 3;
+  grid-raw: 4 / 5;
+  background-color: #777777;
+}
+#NegativeRanking{
+  grid-column: 3 / 4;
+  grid-raw: 4 / 5;
+  background-color: #777777;
+}
+#GDPRanking{
+  grid-column: 4 / 5;
+  grid-raw: 4 / 5;
+  background-color: #777777;
+}
+
+
+
+/*#info{*/
+  /*position:fixed;*/
+  /*top:0%;*/
+  /*right:0%;*/
+  /*width:25%;*/
+  /*height:30%;*/
+  /*background-color: rgba(0, 0, 255, 0.5);*/
+  /*color: #ffffff;*/
+/*}*/
+
+/*#info p{*/
+  /*margin-left: 0.5em;*/
+/*}*/
