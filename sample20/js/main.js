@@ -303,7 +303,7 @@
       text.setAttributeNS(null, "x", '50%');
       text.setAttributeNS(null, "y", '50%');
       text.setAttributeNS(null, 'text-anchor', 'middle');
-      text.setAttributeNS(null, 'dominant-baseline', 'central')
+      text.setAttributeNS(null, 'dominant-baseline', 'central');
       text.setAttributeNS(null, "fill", "blue");
       text.setAttributeNS(null, "font-size", "20px");
       // text.textContent = 'sample';
@@ -318,7 +318,7 @@
 
     function displayRanking(type, rank, num, duration, text) {
       let id = '#' + type + 'Ranking';
-      let svg = $(id).children().children()[2]
+      let svg = $(id).children().children()[2];
       let radius = (num - rank + 1) / num * 40;
       TweenMax.to(svg, duration , {
         attr:{r: radius},
