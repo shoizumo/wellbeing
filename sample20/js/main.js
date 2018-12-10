@@ -308,8 +308,6 @@
       text.setAttributeNS(null, 'dominant-baseline', 'central');
       text.setAttributeNS(null, "fill", "blue");
       text.setAttributeNS(null, "font-size", "20px");
-      // text.textContent = 'sample';
-      // text.textContent = 'samplesample';
       return text;
     }
     let t1 = createRankText();
@@ -318,37 +316,60 @@
     let t4 = createRankText();
 
 
-    function displayRanking(type, rank, num, duration, text) {
+    function createScoreText() {
+      let text = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+      text.setAttributeNS(null, "x", '50%');
+      text.setAttributeNS(null, "y", '65%');
+      text.setAttributeNS(null, 'text-anchor', 'middle');
+      text.setAttributeNS(null, 'dominant-baseline', 'central');
+      text.setAttributeNS(null, "fill", "blue");
+      text.setAttributeNS(null, "font-size", "10px");
+      return text;
+    }
+    let s1 = createScoreText();
+    let s2 = createScoreText();
+    let s3 = createScoreText();
+    let s4 = createScoreText();
+
+    
+    function displayRanking(type, rank, num, duration, rankText, score, scoreText) {
       let id = '#' + type + 'Ranking';
       let svg = $(id).children().children()[2];
       let radius = (num - rank + 1) / num * 40;
-      TweenMax.to(svg, duration , {
-        attr:{r: radius},
-        ease: Power1.easeInOut,
-        onComplete: function(){
-          text.textContent = String(rank);
-          $(id).children()[0].appendChild(text);
-        }
-      });
+      let unit = type === 'GDP' ? 'US$' : 'pt';
+
+      TweenMax.fromTo(svg, duration ,
+          {attr:{r: 0}},
+          {
+            attr:{r: radius},
+            ease: Power1.easeInOut,
+            onComplete: function(){
+              rankText.textContent = String(rank);
+              $(id).children()[0].appendChild(rankText);
+              scoreText.textContent = '(' + String(score) + unit + ')';
+              $(id).children()[0].appendChild(scoreText);
+            }
+          }
+      );
     }
 
-    function createPromise(type, rank, num, svgDuration, text, nextStartDuration) {
+    function createPromise(type, rank, num, svgDuration, text, nextStartDuration, score, scoreText) {
       return new Promise((resolve) => {
         setTimeout(() => {
-          resolve(displayRanking(type, rank, num, svgDuration, text));
+          resolve(displayRanking(type, rank, num, svgDuration, text, score, scoreText));
         }, nextStartDuration)
       })
     }
 
     function doRankingPromise(wbData, wbLength) {
       new Promise((resolve) => {
-          resolve(displayRanking('Ladder', wbData['lRank'], wbLength, 1.0, t1));
+          resolve(displayRanking('Ladder', wbData['lRank'], wbLength, 1.0, t1, wbData['ladder'], s1));
         }).then(() => {
-          return createPromise('Positive', wbData['pRank'], wbLength, 1.0, t2, 500);
+          return createPromise('Positive', wbData['pRank'], wbLength, 1.0, t2, 500, wbData['positive'], s2);
         }).then(() => {
-          return createPromise('Negative', wbData['nRank'], wbLength, 1.0, t3, 500);
+          return createPromise('Negative', wbData['nRank'], wbLength, 1.0, t3, 500, wbData['negative'], s3);
         }).then(() => {
-          return createPromise('GDP', wbData['gRank'], wbLength, 1.0, t4, 500);
+          return createPromise('GDP', wbData['gRank'], wbLength, 1.0, t4, 500, wbData['gdp'], s4);
         }).catch(() => {
           console.error('Something wrong!')
       });
@@ -375,11 +396,14 @@
 
     let tooltip = $('#tooltip');
     let infoBoard = $('#infoBoard');
+    let countryName;
+    let isLand = false;
 
 
     let intersected_object = 0;
     let hover_scale = 1.01;
     window.addEventListener('mousemove', onDocumentMouseMove, false);
+    window.addEventListener('click', onDocumentMouseClick, false);
 
     function onDocumentMouseMove(event) {
       if (pageIndex === interactivePageIndex){
@@ -395,30 +419,25 @@
         let intersects = raycaster.intersectObject(earth, true);
         // set tooltip not display
         tooltip.css({opacity: 0.0});
-        infoBoard.css({opacity: 0.0});
+        // infoBoard.css({opacity: 0.0});
+        isLand = false;
 
         if (intersects.length > 0) {
           if (intersects[0].point !== null) {
             if (intersects[0].object.name === "land") {
               //console.log(intersects[0]);
 
-              let countryName = intersects[0].object.userData.country;
+              countryName = intersects[0].object.userData.country;
               tooltip[0].innerText = countryName;
               tooltip.css({opacity: 1.0});
-              infoBoard.css({opacity: 1.0});
+              // infoBoard.css({opacity: 1.0});
+              isLand = true;
 
               let res = calcWbInfo(countryName);
-              console.log(event.clientX, event.clientY);
-
-              if( typeof res !== 'undefined') {
-                $('#country').empty().append(countryName);
-                doRankingPromise(res, wbLength);
-                    tooltip.css({top: event.clientY * 0.97});
-                    tooltip.css({left: event.clientX * 1.03});
-
+              if(typeof res !== 'undefined') {
+                tooltip.css({top: event.clientY * 0.97});
+                tooltip.css({left: event.clientX * 1.03});
               }else{
-                $('#country').empty().append(countryName);
-                // $('#Ladder').append('No data');
                }
 
               intersects[0].object.scale.set(hover_scale, hover_scale, hover_scale);
@@ -428,6 +447,23 @@
         }
       }
     }
+
+    function onDocumentMouseClick(event) {
+      if (isLand){
+
+        let res = calcWbInfo(countryName);
+        infoBoard.css({opacity: 1.0});
+        if( typeof res !== 'undefined') {
+          $('#country').empty().append(countryName);
+          doRankingPromise(res, wbLength);
+        }else{
+          $('#country').empty().append(countryName);
+          // $('#Ladder').append('No data');
+        }
+
+      }
+    }
+
 
 
     // helper

@@ -107,6 +107,7 @@ html, body {
   height:140px;
 
   background-color: rgba(0, 0, 255, 0.5);
+  opacity: 0.0;
   color: #ffffff;
   text-align: center;
 }
