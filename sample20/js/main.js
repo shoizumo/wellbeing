@@ -300,7 +300,7 @@
     }
 
 
-    function createRankText() {
+    function createRankText(type) {
       let text = document.createElementNS('http://www.w3.org/2000/svg', 'text');
       text.setAttributeNS(null, "x", '50%');
       text.setAttributeNS(null, "y", '50%');
@@ -308,15 +308,17 @@
       text.setAttributeNS(null, 'dominant-baseline', 'central');
       text.setAttributeNS(null, "fill", "blue");
       text.setAttributeNS(null, "font-size", "20px");
+      text.setAttributeNS(null, "class", "info" + type);
+      text.setAttributeNS(null, "id", "info" + type);
       return text;
     }
-    let t1 = createRankText();
-    let t2 = createRankText();
-    let t3 = createRankText();
-    let t4 = createRankText();
+    let t1 = createRankText('Ladder');
+    let t2 = createRankText('Positive');
+    let t3 = createRankText('Negative');
+    let t4 = createRankText('GDP');
 
 
-    function createScoreText() {
+    function createScoreText(type) {
       let text = document.createElementNS('http://www.w3.org/2000/svg', 'text');
       text.setAttributeNS(null, "x", '50%');
       text.setAttributeNS(null, "y", '65%');
@@ -324,12 +326,13 @@
       text.setAttributeNS(null, 'dominant-baseline', 'central');
       text.setAttributeNS(null, "fill", "blue");
       text.setAttributeNS(null, "font-size", "10px");
+      text.setAttributeNS(null, "class", "info" + type);
       return text;
     }
-    let s1 = createScoreText();
-    let s2 = createScoreText();
-    let s3 = createScoreText();
-    let s4 = createScoreText();
+    let s1 = createScoreText('Ladder');
+    let s2 = createScoreText('Positive');
+    let s3 = createScoreText('Negative');
+    let s4 = createScoreText('GDP');
 
     
     function displayRanking(type, rank, num, duration, rankText, score, scoreText) {
@@ -348,6 +351,8 @@
               $(id).children()[0].appendChild(rankText);
               scoreText.textContent = '(' + String(score) + unit + ')';
               $(id).children()[0].appendChild(scoreText);
+
+              $('.info' + type).attr('opacity', 1.0);
             }
           }
       );
@@ -385,20 +390,12 @@
         }
       }
     }
-    
-    // window.addEventListener('mousedown', () => {
-    //   displayRanking('Ladder', 20, wbLength, 1.0, t1);
-    //   displayRanking('Positive', 20, wbLength, 1.5, t2);
-    //   displayRanking('Negative', 20, wbLength, 2.0, t3);
-    //   displayRanking('GDP', 20, wbLength, 2.5, t4);
-    // }, false);
 
 
     let tooltip = $('#tooltip');
     let infoBoard = $('#infoBoard');
     let countryName;
     let isLand = false;
-
 
     let intersected_object = 0;
     let hover_scale = 1.01;
@@ -448,9 +445,11 @@
       }
     }
 
+    let textNone = document.createElementNS('http://www.w3.org/2000/svg', 'text');
     function onDocumentMouseClick(event) {
       if (isLand){
 
+        clearInfo();
         let res = calcWbInfo(countryName);
         infoBoard.css({opacity: 1.0});
         if( typeof res !== 'undefined') {
@@ -459,11 +458,31 @@
         }else{
           $('#country').empty().append(countryName);
           // $('#Ladder').append('No data');
-        }
 
+          $('#infoLadder').attr('opacity', 1.0).text('No data');
+          $('#infoPositive').attr('opacity', 1.0).text('No data');
+          $('#infoNegative').attr('opacity', 1.0).text('No data');
+          $('#infoGDP').attr('opacity', 1.0).text('No data');
+        }
       }
     }
 
+    function clearInfo() {
+      let l = $('#LadderRanking').children().children()[2];
+      let p = $('#PositiveRanking').children().children()[2];
+      let n = $('#NegativeRanking').children().children()[2];
+      let g = $('#GDPRanking').children().children()[2];
+
+      $(l).attr('r', 0.0);
+      $(p).attr('r', 0.0);
+      $(n).attr('r', 0.0);
+      $(g).attr('r', 0.0);
+
+      $('.infoLadder').attr('opacity', 0.0);
+      $('.infoPositive').attr('opacity', 0.0);
+      $('.infoNegative').attr('opacity', 0.0);
+      $('.infoGDP').attr('opacity', 0.0);
+    }
 
 
     // helper

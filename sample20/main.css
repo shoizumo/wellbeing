@@ -95,7 +95,7 @@ html, body {
 #infoBoard{
   display: grid;
   grid-template-columns: 150px 150px 150px 150px;
-  grid-template-rows: 25px 15px 100px;
+  grid-template-rows: 25px 15px 80px;
 
   position:fixed;
   top:0%;
@@ -104,7 +104,7 @@ html, body {
   margin-left:-300px;
 
   width:600px;
-  height:140px;
+  height:120px;
 
   background-color: rgba(0, 0, 255, 0.5);
   opacity: 0.0;
@@ -113,10 +113,10 @@ html, body {
 }
 
 
-#title{
-  grid-column: 1 / 5;
-  background-color: #111111;
-}
+/*#title{*/
+  /*grid-column: 1 / 5;*/
+  /*background-color: #111111;*/
+/*}*/
 #country{
   grid-column: 1 / 5;
   grid-raw: 2 / 3;
@@ -124,45 +124,49 @@ html, body {
 }
 
 #Ladder{
+  font-size: 0.69em;
   grid-column: 1 / 2;
   grid-raw: 3 / 4;
-  background-color: #555555;
+  background-color: #646464;
 }
 #Positive{
+  font-size: 0.69em;
   grid-column: 2 / 3;
   grid-raw: 3 / 4;
-  background-color: #555555;
+  background-color: #646464;
 }
 #Negative{
+  font-size: 0.69em;
   grid-column: 3 / 4;
   grid-raw: 3 / 4;
-  background-color: #555555;
+  background-color: #646464;
 }
 #GDP{
+  font-size: 0.69em;
   grid-column: 4 / 5;
   grid-raw: 3 / 4;
-  background-color: #555555;
+  background-color: #646464;
 }
 
 #LadderRanking{
   grid-column: 1 / 2;
   grid-raw: 4 / 5;
-  background-color: #777777;
+  background-color: #646464;
 }
 #PositiveRanking{
   grid-column: 2 / 3;
   grid-raw: 4 / 5;
-  background-color: #777777;
+  background-color: #646464;
 }
 #NegativeRanking{
   grid-column: 3 / 4;
   grid-raw: 4 / 5;
-  background-color: #777777;
+  background-color: #646464;
 }
 #GDPRanking{
   grid-column: 4 / 5;
   grid-raw: 4 / 5;
-  background-color: #777777;
+  background-color: #646464;
 }
 
 
