@@ -171,7 +171,6 @@
     scene = new THREE.Scene();
     camera = new THREE.PerspectiveCamera(60, canvasWidth / canvasHeight, 0.1, 5.0);
     camera.position.z = initCameraPosition.z;
-    //camera.lookAt(new THREE.Vector3(0.0, 0.0, 0.0));
 
     // renderer
     renderer = new THREE.WebGLRenderer();
@@ -185,6 +184,9 @@
     controls.enableZoom = false;
     controls.minDistance = 2.0;
     controls.maxDistance = 4.0;
+    controls.rotateSpeed = 2.0;
+    controls.enableDamping = true;
+    controls.dampingFactor = 0.2;
 
 
     let radius = 0.995;
@@ -326,7 +328,6 @@
         onComplete: function(){
           text.textContent = String(rank);
           $(id).children()[0].appendChild(text);
-          console.log(type)
         }
       });
     }
@@ -372,8 +373,12 @@
     // }, false);
 
 
+    let tooltip = $('#tooltip');
+    let infoBoard = $('#infoBoard');
+
+
     let intersected_object = 0;
-    let hover_scale = 1.015;
+    let hover_scale = 1.01;
     window.addEventListener('mousemove', onDocumentMouseMove, false);
 
     function onDocumentMouseMove(event) {
@@ -388,22 +393,32 @@
         vector.unproject(camera);
         let raycaster = new THREE.Raycaster(camera.position, vector.sub(camera.position).normalize());
         let intersects = raycaster.intersectObject(earth, true);
+        // set tooltip not display
+        tooltip.css({opacity: 0.0});
+        infoBoard.css({opacity: 0.0});
+
         if (intersects.length > 0) {
           if (intersects[0].point !== null) {
             if (intersects[0].object.name === "land") {
               //console.log(intersects[0]);
 
               let countryName = intersects[0].object.userData.country;
+              tooltip[0].innerText = countryName;
+              tooltip.css({opacity: 1.0});
+              infoBoard.css({opacity: 1.0});
+
               let res = calcWbInfo(countryName);
+              console.log(event.clientX, event.clientY);
 
-               if( typeof res !== 'undefined') {
-                 $('#country').empty().append(countryName);
-                 doRankingPromise(res, wbLength);
-
+              if( typeof res !== 'undefined') {
+                $('#country').empty().append(countryName);
+                doRankingPromise(res, wbLength);
+                    tooltip.css({top: event.clientY * 0.97});
+                    tooltip.css({left: event.clientX * 1.03});
 
               }else{
-                 $('#country').empty().append(countryName);
-                 // $('#Ladder').append('No data');
+                $('#country').empty().append(countryName);
+                // $('#Ladder').append('No data');
                }
 
               intersects[0].object.scale.set(hover_scale, hover_scale, hover_scale);
@@ -414,25 +429,6 @@
       }
     }
 
-
-    // function infoText(wbData, type) {
-    //   let title;
-    //   let rank;
-    //   if (type === 'ladder'){
-    //     title = 'Ladder';
-    //     rank = 'lRank';
-    //   }else if (type === 'positive'){
-    //     title = 'Positive';
-    //     rank = 'pRank';
-    //   }else if (type === 'negative'){
-    //     title = 'Negative';
-    //     rank = 'nRank';
-    //   }else{
-    //     title = 'GDP';
-    //     rank = 'gRank';
-    //   }
-    //   return '<p>' + title + ' : ' + wbData[type].toFixed(1) + ' (' + (wbData[rank] + 1) + '/' + String(wbLength+1) + ') ' + '</p>';
-    // }
 
     // helper
     axesHelper = new THREE.AxesHelper(5.0);
@@ -447,6 +443,7 @@
   // rendering
   let frame = 0;
   function render() {
+    controls.update();
     stats.update();
     frame++;
     if (pageIndex !== interactivePageIndex) {
