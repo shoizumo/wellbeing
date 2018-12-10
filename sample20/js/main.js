@@ -334,14 +334,14 @@
     let s3 = createScoreText('Negative');
     let s4 = createScoreText('GDP');
 
-    
+    let tween;
     function displayRanking(type, rank, num, duration, rankText, score, scoreText) {
       let id = '#' + type + 'Ranking';
       let svg = $(id).children().children()[2];
       let radius = (num - rank + 1) / num * 40;
       let unit = type === 'GDP' ? 'US$' : 'pt';
 
-      TweenMax.fromTo(svg, duration ,
+      tween = TweenMax.fromTo(svg, duration ,
           {attr:{r: 0}},
           {
             attr:{r: radius},
@@ -358,23 +358,41 @@
       );
     }
 
+    let isClicked = false;
     function createPromise(type, rank, num, svgDuration, text, nextStartDuration, score, scoreText) {
-      return new Promise((resolve) => {
-        setTimeout(() => {
+      let promise;
+      let timeout;
+      promise = new Promise((resolve) => {
+        timeout = setTimeout(() => {
           resolve(displayRanking(type, rank, num, svgDuration, text, score, scoreText));
         }, nextStartDuration)
-      })
+      });
+      return {
+         promise: promise,
+         cancel: function(){
+           clearTimeout(timeout);
+           isClicked = false;
+           console.log('cancel')
+         } //return a canceller as well
+       };
     }
 
+    let positive, negative, gdp;
     function doRankingPromise(wbData, wbLength) {
       new Promise((resolve) => {
           resolve(displayRanking('Ladder', wbData['lRank'], wbLength, 1.0, t1, wbData['ladder'], s1));
         }).then(() => {
-          return createPromise('Positive', wbData['pRank'], wbLength, 1.0, t2, 500, wbData['positive'], s2);
+          positive = createPromise('Positive', wbData['pRank'], wbLength, 1.0, t2, 500, wbData['positive'], s2);
+          // if (!isClicked){positive.cancel()}
+          return positive.promise;
         }).then(() => {
-          return createPromise('Negative', wbData['nRank'], wbLength, 1.0, t3, 500, wbData['negative'], s3);
+          negative = createPromise('Negative', wbData['nRank'], wbLength, 1.0, t3, 500, wbData['negative'], s3);
+          // if (!isClicked){negative.cancel()}
+          return negative.promise;
         }).then(() => {
-          return createPromise('GDP', wbData['gRank'], wbLength, 1.0, t4, 500, wbData['gdp'], s4);
+          gdp = createPromise('GDP', wbData['gRank'], wbLength, 1.0, t4, 500, wbData['gdp'], s4);
+          // if (!isClicked){gdp.cancel()}
+          return gdp.promise;
         }).catch(() => {
           console.error('Something wrong!')
       });
@@ -448,9 +466,26 @@
       }
     }
 
-    let textNone = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+    let isFirstClick = true;
     function onDocumentMouseClick(event) {
       if (isLand){
+
+
+        if (!isFirstClick){
+          console.log(positive);
+          TweenMax.killAll();
+          positive.cancel();
+          negative.cancel();
+          gdp.cancel();
+          // console.log(tween)
+        }
+        isFirstClick = false;
+        // console.log(positive)
+        // negative.cancel();
+        // isClicked = !isClicked;
+
+
+        // isClicked = !isClicked;
         clearInfo();
         let res = calcWbInfo(countryName);
         infoBoard.css({opacity: 1.0});
