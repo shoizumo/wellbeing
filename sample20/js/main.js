@@ -396,6 +396,7 @@
     let infoBoard = $('#infoBoard');
     let countryName;
     let isLand = false;
+    let body = $('body');
 
     let intersected_object = 0;
     let hover_scale = 1.01;
@@ -418,6 +419,7 @@
         tooltip.css({opacity: 0.0});
         // infoBoard.css({opacity: 0.0});
         isLand = false;
+        body.css('cursor', 'default');
 
         if (intersects.length > 0) {
           if (intersects[0].point !== null) {
@@ -429,6 +431,7 @@
               tooltip.css({opacity: 1.0});
               // infoBoard.css({opacity: 1.0});
               isLand = true;
+              body.css('cursor', 'pointer');
 
               let res = calcWbInfo(countryName);
               if(typeof res !== 'undefined') {
@@ -448,21 +451,22 @@
     let textNone = document.createElementNS('http://www.w3.org/2000/svg', 'text');
     function onDocumentMouseClick(event) {
       if (isLand){
-
         clearInfo();
         let res = calcWbInfo(countryName);
         infoBoard.css({opacity: 1.0});
+
         if( typeof res !== 'undefined') {
           $('#country').empty().append(countryName);
           doRankingPromise(res, wbLength);
         }else{
           $('#country').empty().append(countryName);
-          // $('#Ladder').append('No data');
 
-          $('#infoLadder').attr('opacity', 1.0).text('No data');
-          $('#infoPositive').attr('opacity', 1.0).text('No data');
-          $('#infoNegative').attr('opacity', 1.0).text('No data');
-          $('#infoGDP').attr('opacity', 1.0).text('No data');
+          setTimeout(() => {
+            $('#infoLadder').attr('opacity', 1.0).text('No data');
+            $('#infoPositive').attr('opacity', 1.0).text('No data');
+            $('#infoNegative').attr('opacity', 1.0).text('No data');
+            $('#infoGDP').attr('opacity', 1.0).text('No data');
+          }, 500)
         }
       }
     }
