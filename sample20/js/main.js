@@ -25,6 +25,8 @@
   let stats;
 
   const wbLength = Object.keys(wbData).length;
+  let meshList;
+  let clickBtn;
 
   // constant variables
   const RENDERER_PARAM = {
@@ -34,6 +36,8 @@
 
   let initEarthPosition = new THREE.Vector3(0.0, -1.1, 1.0);
   let initCameraPosition = new THREE.Vector3(0.0, 0.0, 2.0);
+
+
 
   // entry point
   window.addEventListener('load', () => {
@@ -70,7 +74,14 @@
             onComplete: function(){
               controls.enableZoom = true;
               // display button
-              $(".wbButton").removeClass("hiddenBtn").addClass("normalBtn")
+              $(".wbButton").removeClass("hiddenBtn").addClass("normalBtn");
+              let wbButton = document.getElementsByClassName('wbButton');
+              setTimeout(() => {
+                wbButton[0].classList.add("selectedBtn");
+              }, 400);
+              setTimeout(() => {
+                clickBtn('ladderBtn');
+              }, 500);
             }
           });
 
@@ -203,7 +214,7 @@
     earth = new THREE.Mesh(geometry, material);
 
 
-    let meshList = [];
+    meshList = [];
     for (let name in country_data) {
       geometry = new Tessalator3D(country_data[name], 0);
       let continents = ["EU", "AN", "AS", "OC", "SA", "AF", "NA"];
@@ -268,18 +279,22 @@
       wbButton[i].addEventListener('click', (e) => {
         let type = e.target.id;
         $(".wbButton").removeClass("selectedBtn");
-        wbButton[i].classList.add("selectedBtn");
 
-        for (let j = 0; wbLength > j; j++) {
-          for (let i = 0, lm = meshList.length; lm > i; i++) {
-            let countryName = meshList[i].userData.country;
-            if (wbData[j].country === countryName) {
-              coloringLand(i, j, type)
-            }
-          }
-        }
+        wbButton[i].classList.add("selectedBtn");
+        clickBtn(type);
       }, false);
     }
+
+    clickBtn = function (type) {
+      for (let j = 0; wbLength > j; j++) {
+        for (let i = 0, lm = meshList.length; lm > i; i++) {
+          let countryName = meshList[i].userData.country;
+          if (wbData[j].country === countryName) {
+            coloringLand(i, j, type)
+          }
+        }
+      }
+    };
 
     function coloringLand(i, j, type) {
       let R, B;
@@ -397,9 +412,6 @@
           console.error('Something wrong!')
       });
     }
-
-    // doRankingPromise(calcWbInfo('Japan'), wbLength);
-
 
     function calcWbInfo(countryName) {
       for (let i = 0; wbLength > i; i++) {
@@ -540,6 +552,7 @@
     controls.update();
     stats.update();
     frame++;
+
     if (pageIndex !== interactivePageIndex) {
       earth.rotation.x += 3.141592 * 2 / 90 / 60 / 60 * 2; // 1round/90m * 2
     }
