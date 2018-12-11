@@ -332,6 +332,14 @@
     let t3 = createRankText('Negative');
     let t4 = createRankText('GDP');
 
+    // t1.textContent = 'No data';
+    // $('#LadderRanking').children()[0].appendChild(t1);
+    // t2.textContent = 'No data';
+    // $('#LadderRanking').children()[0].appendChild(t2);
+    // t3.textContent = 'No data';
+    // $('#LadderRanking').children()[0].appendChild(t3);
+    // t4.textContent = 'No data';
+    // $('#LadderRanking').children()[0].appendChild(t4);
 
     function createScoreText(type) {
       let text = document.createElementNS('http://www.w3.org/2000/svg', 'text');
@@ -348,6 +356,16 @@
     let s2 = createScoreText('Positive');
     let s3 = createScoreText('Negative');
     let s4 = createScoreText('GDP');
+
+    // s1.textContent = 'No data';
+    // $('#LadderRanking').children()[0].appendChild(s1);
+    // s2.textContent = 'No data';
+    // $('#LadderRanking').children()[0].appendChild(s2);
+    // s3.textContent = 'No data';
+    // $('#LadderRanking').children()[0].appendChild(s3);
+    // s4.textContent = 'No data';
+    // $('#LadderRanking').children()[0].appendChild(s4);
+
 
     let tween;
     function displayRanking(type, rank, num, duration, rankText, score, scoreText) {
@@ -373,6 +391,7 @@
       );
     }
 
+
     let isClicked = false;
     function createPromise(type, rank, num, svgDuration, text, nextStartDuration, score, scoreText) {
       let promise;
@@ -397,15 +416,13 @@
           resolve(displayRanking('Ladder', wbData['lRank'], wbLength, 1.0, t1, wbData['ladder'], s1));
         }).then(() => {
           positive = createPromise('Positive', wbData['pRank'], wbLength, 1.0, t2, 500, wbData['positive'], s2);
-          // if (!isClicked){positive.cancel()}
           return positive.promise;
         }).then(() => {
           negative = createPromise('Negative', wbData['nRank'], wbLength, 1.0, t3, 500, wbData['negative'], s3);
-          // if (!isClicked){negative.cancel()}
           return negative.promise;
         }).then(() => {
           gdp = createPromise('GDP', wbData['gRank'], wbLength, 1.0, t4, 500, wbData['gdp'], s4);
-          // if (!isClicked){gdp.cancel()}
+          isFirstClick = false;
           return gdp.promise;
         }).catch(() => {
           console.error('Something wrong!')
@@ -490,14 +507,14 @@
     function onDocumentMouseClick(event) {
       if(dragFlag === 0) {
         if (isLand) {
+          TweenMax.killAll();
           if (!isFirstClick) {
-            TweenMax.killAll();
+            // TweenMax.killAll();
             positive.cancel();
             negative.cancel();
             gdp.cancel();
             // console.log(tween)
           }
-          isFirstClick = false;
 
           // isClicked = !isClicked;
           clearInfo();
@@ -511,10 +528,19 @@
             $('#country').empty().append(countryName);
 
             setTimeout(() => {
-              $('#infoLadder').attr('opacity', 1.0).text('No data');
-              $('#infoPositive').attr('opacity', 1.0).text('No data');
-              $('#infoNegative').attr('opacity', 1.0).text('No data');
-              $('#infoGDP').attr('opacity', 1.0).text('No data');
+                  t1.textContent = 'No data';
+                  $('#LadderRanking').children()[0].appendChild(t1);
+                  t2.textContent = 'No data';
+                  $('#PositiveRanking').children()[0].appendChild(t2);
+                  t3.textContent = 'No data';
+                  $('#NegativeRanking').children()[0].appendChild(t3);
+                  t4.textContent = 'No data';
+                  $('#GDPRanking').children()[0].appendChild(t4);
+
+              $('#infoLadder').attr('opacity', 1.0);
+              $('#infoPositive').attr('opacity', 1.0);
+              $('#infoNegative').attr('opacity', 1.0);
+              $('#infoGDP').attr('opacity', 1.0);
             }, 500)
           }
         }
