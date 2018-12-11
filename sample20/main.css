@@ -127,46 +127,46 @@ html, body {
   font-size: 0.69em;
   grid-column: 1 / 2;
   grid-raw: 3 / 4;
-  background-color: #646464;
+  background-color: #444444;
 }
 #Positive{
   font-size: 0.69em;
   grid-column: 2 / 3;
   grid-raw: 3 / 4;
-  background-color: #646464;
+  background-color: #444444;
 }
 #Negative{
   font-size: 0.69em;
   grid-column: 3 / 4;
   grid-raw: 3 / 4;
-  background-color: #646464;
+  background-color: #444444;
 }
 #GDP{
   font-size: 0.69em;
   grid-column: 4 / 5;
   grid-raw: 3 / 4;
-  background-color: #646464;
+  background-color: #444444;
 }
 
 #LadderRanking{
   grid-column: 1 / 2;
   grid-raw: 4 / 5;
-  background-color: #646464;
+  background-color: #444444;
 }
 #PositiveRanking{
   grid-column: 2 / 3;
   grid-raw: 4 / 5;
-  background-color: #646464;
+  background-color: #444444;
 }
 #NegativeRanking{
   grid-column: 3 / 4;
   grid-raw: 4 / 5;
-  background-color: #646464;
+  background-color: #444444;
 }
 #GDPRanking{
   grid-column: 4 / 5;
   grid-raw: 4 / 5;
-  background-color: #646464;
+  background-color: #444444;
 }
 
 

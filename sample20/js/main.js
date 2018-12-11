@@ -321,7 +321,7 @@
       text.setAttributeNS(null, "y", '50%');
       text.setAttributeNS(null, 'text-anchor', 'middle');
       text.setAttributeNS(null, 'dominant-baseline', 'central');
-      text.setAttributeNS(null, "fill", "blue");
+      text.setAttributeNS(null, "fill", "#ffffff");
       text.setAttributeNS(null, "font-size", "20px");
       text.setAttributeNS(null, "class", "info" + type);
       text.setAttributeNS(null, "id", "info" + type);
@@ -336,11 +336,11 @@
     function createScoreText(type) {
       let text = document.createElementNS('http://www.w3.org/2000/svg', 'text');
       text.setAttributeNS(null, "x", '50%');
-      text.setAttributeNS(null, "y", '65%');
+      text.setAttributeNS(null, "y", '70%');
       text.setAttributeNS(null, 'text-anchor', 'middle');
       text.setAttributeNS(null, 'dominant-baseline', 'central');
-      text.setAttributeNS(null, "fill", "blue");
-      text.setAttributeNS(null, "font-size", "10px");
+      text.setAttributeNS(null, "fill", "#eeeeee");
+      text.setAttributeNS(null, "font-size", "12px");
       text.setAttributeNS(null, "class", "info" + type);
       return text;
     }
@@ -387,8 +387,7 @@
          cancel: function(){
            clearTimeout(timeout);
            isClicked = false;
-           console.log('cancel')
-         } //return a canceller as well
+         }
        };
     }
 
@@ -420,6 +419,15 @@
         }
       }
     }
+
+
+    let dragFlag = 0;
+    window.addEventListener("mousedown", function(){
+        dragFlag = 0;
+    }, false);
+    window.addEventListener("mousemove", function(){
+        dragFlag = 1;
+    }, false);
 
 
     let tooltip = $('#tooltip');
@@ -480,40 +488,35 @@
 
     let isFirstClick = true;
     function onDocumentMouseClick(event) {
-      if (isLand){
+      if(dragFlag === 0) {
+        if (isLand) {
+          if (!isFirstClick) {
+            TweenMax.killAll();
+            positive.cancel();
+            negative.cancel();
+            gdp.cancel();
+            // console.log(tween)
+          }
+          isFirstClick = false;
 
+          // isClicked = !isClicked;
+          clearInfo();
+          let res = calcWbInfo(countryName);
+          infoBoard.css({opacity: 1.0});
 
-        if (!isFirstClick){
-          console.log(positive);
-          TweenMax.killAll();
-          positive.cancel();
-          negative.cancel();
-          gdp.cancel();
-          // console.log(tween)
-        }
-        isFirstClick = false;
-        // console.log(positive)
-        // negative.cancel();
-        // isClicked = !isClicked;
+          if (typeof res !== 'undefined') {
+            $('#country').empty().append(countryName);
+            doRankingPromise(res, wbLength);
+          } else {
+            $('#country').empty().append(countryName);
 
-
-        // isClicked = !isClicked;
-        clearInfo();
-        let res = calcWbInfo(countryName);
-        infoBoard.css({opacity: 1.0});
-
-        if( typeof res !== 'undefined') {
-          $('#country').empty().append(countryName);
-          doRankingPromise(res, wbLength);
-        }else{
-          $('#country').empty().append(countryName);
-
-          setTimeout(() => {
-            $('#infoLadder').attr('opacity', 1.0).text('No data');
-            $('#infoPositive').attr('opacity', 1.0).text('No data');
-            $('#infoNegative').attr('opacity', 1.0).text('No data');
-            $('#infoGDP').attr('opacity', 1.0).text('No data');
-          }, 500)
+            setTimeout(() => {
+              $('#infoLadder').attr('opacity', 1.0).text('No data');
+              $('#infoPositive').attr('opacity', 1.0).text('No data');
+              $('#infoNegative').attr('opacity', 1.0).text('No data');
+              $('#infoGDP').attr('opacity', 1.0).text('No data');
+            }, 500)
+          }
         }
       }
     }
