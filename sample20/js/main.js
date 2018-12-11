@@ -507,9 +507,9 @@
     function onDocumentMouseClick(event) {
       if(dragFlag === 0) {
         if (isLand) {
-          TweenMax.killAll();
+          // TweenMax.killAll();
           if (!isFirstClick) {
-            // TweenMax.killAll();
+            TweenMax.killAll();
             positive.cancel();
             negative.cancel();
             gdp.cancel();
