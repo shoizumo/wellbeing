@@ -57,6 +57,7 @@
         typing(pageId);
         pageIndex = pageId;
 
+        $(".wbButton").removeClass("selectedBtn").removeClass("normalBtn").addClass("hiddenBtn");
         if (pageId === interactivePageIndex){
           $('.main').addClass("disabled-onepage-scroll");
           let duration = 2.0;
@@ -373,7 +374,7 @@
             attr:{r: radius},
             ease: Power1.easeInOut,
             onComplete: function(){
-              rankText.innerHTML = String(rank) + "<tspan font-size='10px'>" + rUnit + "</tspan>";
+              rankText.innerHTML = String(rank) + "<tspan font-size='12px'>" + rUnit + "</tspan>";
               $(id).children()[0].appendChild(rankText);
               scoreText.textContent = '(' + String(score) + sUnit + ')';
               $(id).children()[0].appendChild(scoreText);
