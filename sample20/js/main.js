@@ -237,8 +237,8 @@
     scene.add(earth);
     earth.position.y = initEarthPosition.y;
     earth.position.z = initEarthPosition.z;
-    earth.rotation.x -= 0.5;
-    earth.rotation.y -= 2.0;
+    // earth.rotation.x -= 0.5;
+    earth.rotation.y += 1.5;
 
 
     // console.log(wbData);
@@ -332,15 +332,6 @@
     let t3 = createRankText('Negative');
     let t4 = createRankText('GDP');
 
-    // t1.textContent = 'No data';
-    // $('#LadderRanking').children()[0].appendChild(t1);
-    // t2.textContent = 'No data';
-    // $('#LadderRanking').children()[0].appendChild(t2);
-    // t3.textContent = 'No data';
-    // $('#LadderRanking').children()[0].appendChild(t3);
-    // t4.textContent = 'No data';
-    // $('#LadderRanking').children()[0].appendChild(t4);
-
     function createScoreText(type) {
       let text = document.createElementNS('http://www.w3.org/2000/svg', 'text');
       text.setAttributeNS(null, "x", '50%');
@@ -356,16 +347,6 @@
     let s2 = createScoreText('Positive');
     let s3 = createScoreText('Negative');
     let s4 = createScoreText('GDP');
-
-    // s1.textContent = 'No data';
-    // $('#LadderRanking').children()[0].appendChild(s1);
-    // s2.textContent = 'No data';
-    // $('#LadderRanking').children()[0].appendChild(s2);
-    // s3.textContent = 'No data';
-    // $('#LadderRanking').children()[0].appendChild(s3);
-    // s4.textContent = 'No data';
-    // $('#LadderRanking').children()[0].appendChild(s4);
-
 
     let tween;
     function displayRanking(type, rank, num, duration, rankText, score, scoreText) {
@@ -513,7 +494,6 @@
             positive.cancel();
             negative.cancel();
             gdp.cancel();
-            // console.log(tween)
           }
 
           // isClicked = !isClicked;
@@ -528,14 +508,14 @@
             $('#country').empty().append(countryName);
 
             setTimeout(() => {
-                  t1.textContent = 'No data';
-                  $('#LadderRanking').children()[0].appendChild(t1);
-                  t2.textContent = 'No data';
-                  $('#PositiveRanking').children()[0].appendChild(t2);
-                  t3.textContent = 'No data';
-                  $('#NegativeRanking').children()[0].appendChild(t3);
-                  t4.textContent = 'No data';
-                  $('#GDPRanking').children()[0].appendChild(t4);
+              t1.textContent = 'No data';
+              $('#LadderRanking').children()[0].appendChild(t1);
+              t2.textContent = 'No data';
+              $('#PositiveRanking').children()[0].appendChild(t2);
+              t3.textContent = 'No data';
+              $('#NegativeRanking').children()[0].appendChild(t3);
+              t4.textContent = 'No data';
+              $('#GDPRanking').children()[0].appendChild(t4);
 
               $('#infoLadder').attr('opacity', 1.0);
               $('#infoPositive').attr('opacity', 1.0);
