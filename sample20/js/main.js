@@ -353,7 +353,19 @@
       let id = '#' + type + 'Ranking';
       let svg = $(id).children().children()[2];
       let radius = (num - rank + 1) / num * 40;
-      let unit = type === 'GDP' ? 'US$' : 'pt';
+      let rUnit;
+      let sUnit = type === 'GDP' ? 'US$' : 'pt';
+      let rankStr = rank.toString();
+      rankStr = rankStr.substring(rankStr.length - 1, rankStr.length);
+      if (rankStr === '1'){
+        rUnit = 'st'
+      }else if (rankStr === '2'){
+        rUnit = 'nd'
+      }else if (rankStr === '3'){
+        rUnit = 'rd'
+      }else{
+        rUnit = 'th'
+      }
 
       tween = TweenMax.fromTo(svg, duration ,
           {attr:{r: 0}},
@@ -361,9 +373,9 @@
             attr:{r: radius},
             ease: Power1.easeInOut,
             onComplete: function(){
-              rankText.textContent = String(rank);
+              rankText.innerHTML = String(rank) + "<tspan font-size='10px'>" + rUnit + "</tspan>";
               $(id).children()[0].appendChild(rankText);
-              scoreText.textContent = '(' + String(score) + unit + ')';
+              scoreText.textContent = '(' + String(score) + sUnit + ')';
               $(id).children()[0].appendChild(scoreText);
 
               $('.info' + type).attr('opacity', 1.0);
