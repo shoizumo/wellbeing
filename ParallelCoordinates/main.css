@@ -90,16 +90,23 @@ svg {
   stroke-width: 2px;
 }
 
-.setosa {
-  stroke: #800;
+.Africa {
+  stroke: #ff7f7f;
 }
-
-.versicolor {
-  stroke: #080;
+.Asia {
+  stroke: #ff7fff;
 }
-
-.virginica {
-  stroke: #008;
+.Europe {
+  stroke: #7f7fff;
+}
+.NorthAmerica {
+  stroke: #7fffff;
+}
+.Oceania {
+  stroke: #7fff7f;
+}
+.SouthAmerica {
+  stroke: #ffff7f;
 }
 
 .brush .extent {

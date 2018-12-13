@@ -1,12 +1,13 @@
 (() => {
-  let species = ["setosa", "versicolor", "virginica"],
-      traits = ["sepal length", "petal length", "sepal width", "petal width"];
+  let Continent = ['Africa', 'Asia', 'Europe', 'NorthAmerica', 'Oceania', 'SouthAmerica'];
+  let columns = ['corruption', 'freedom', 'generosity', 'ladder', 'life_expectancy',
+    'logGdp', 'negative', 'positive', 'social_support'];
 
   let m = [80, 160, 200, 160],
-      w = 1280 - m[1] - m[3],
+      w = 1000 - m[1] - m[3],
       h = 800 - m[0] - m[2];
 
-  let x = d3.scale.ordinal().domain(traits).rangePoints([0, w]),
+  let x = d3.scale.ordinal().domain(columns).rangePoints([0, w]),
       y = {};
 
   let line = d3.svg.line(),
@@ -19,12 +20,12 @@
       .append("svg:g")
       .attr("transform", "translate(" + m[3] + "," + m[0] + ")");
 
-  d3.csv("iris.csv", function (data) {
-    console.log(data)
+  d3.csv("PCdata.csv", function (data) {
+    console.log(data);
 
 
     // Create a scale and brush for each trait.
-    traits.forEach(function (d) {
+    columns.forEach(function (d) {
       // Coerce values to numbers.
       data.forEach(function (p) {
         p[d] = +p[d];
@@ -43,7 +44,7 @@
 
     // Add a legend.
     let legend = svg.selectAll("g.legend")
-        .data(species)
+        .data(Continent)
         .enter().append("svg:g")
         .attr("class", "legend")
         .attr("transform", function (d, i) {
@@ -58,7 +59,7 @@
         .attr("x", 12)
         .attr("dy", ".31em")
         .text(function (d) {
-          return "Iris " + d;
+          return d;
         });
 
     // Add foreground lines.
@@ -69,12 +70,12 @@
         .enter().append("svg:path")
         .attr("d", path)
         .attr("class", function (d) {
-          return d.species;
+          return d.Continent;
         });
 
     // Add a group element for each trait.
     let g = svg.selectAll(".trait")
-        .data(traits)
+        .data(columns)
         .enter().append("svg:g")
         .attr("class", "trait")
         .attr("transform", function (d) {
@@ -110,12 +111,12 @@
         .attr("width", 16);
 
     function dragstart(d) {
-      i = traits.indexOf(d);
+      i = columns.indexOf(d);
     }
 
     function drag(d) {
       x.range()[i] = d3.event.x;
-      traits.sort(function (a, b) {
+      columns.sort(function (a, b) {
         return x(a) - x(b);
       });
       g.attr("transform", function (d) {
@@ -125,7 +126,7 @@
     }
 
     function dragend(d) {
-      x.domain(traits).rangePoints([0, w]);
+      x.domain(columns).rangePoints([0, w]);
       let t = d3.transition().duration(500);
       t.selectAll(".trait").attr("transform", function (d) {
         return "translate(" + x(d) + ")";
@@ -136,14 +137,14 @@
 
 // Returns the path for a given data point.
   function path(d) {
-    return line(traits.map(function (p) {
+    return line(columns.map(function (p) {
       return [x(p), y[p](d[p])];
     }));
   }
 
 // Handles a brush event, toggling the display of foreground lines.
   function brush() {
-    let actives = traits.filter(function (p) {
+    let actives = columns.filter(function (p) {
           return !y[p].brush.empty();
         }),
         extents = actives.map(function (p) {
