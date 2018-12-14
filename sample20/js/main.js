@@ -217,8 +217,8 @@
 
     meshList = [];
     for (let name in country_data) {
-      geometry = new Tessalator3D(country_data[name], 0);
-      let continents = ["EU", "AN", "AS", "OC", "SA", "AF", "NA"];
+      geometry = new Tessalator3D(country_data[name]);
+      // let continents = ["EU", "AN", "AS", "OC", "SA", "AF", "NA"];
       let color = new THREE.Color(0xaaaaaa);
       //color.setHSL(continents.indexOf(country_data[name].data.cont) * (1 / 7), Math.random() * 0.25 + 0.65, Math.random() / 2 + 0.25);
 
