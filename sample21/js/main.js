@@ -13,6 +13,10 @@
   let material;
   let earth;
   let axesHelper;
+  // texture
+  let earthLand;
+  let earthBump;
+  let earthMap;
 
   let mouse;
 
@@ -153,20 +157,34 @@
       mouse.y = -(event.clientY / window.innerHeight) * 2 + 1;
     }, false);
 
-    loadShader()
+    // loadShader()
+
+
+    // texture
+    let earthLandLoader = Loader = new THREE.TextureLoader();
+    let earthBumpLoader = new THREE.TextureLoader();
+    let earthMapLoader = new THREE.TextureLoader();
+    earthLand = earthLandLoader.load('img/earthspec.png', () => {
+      earthBump = earthBumpLoader.load('img/earthbump.png', () => {
+        earthMap = earthMapLoader.load('img/earthmap.jpg', loadShader);
+      })
+    });
+
 
   }, false);
 
   function loadShader() {
     SHADER_LOADER.load((data) => {
+      const vsMain = data.myShaderMain.vertex;
+      const fsMain = data.myShaderMain.fragment;
       const vsPost = data.myShaderPost.vertex;
       const fsPost = data.myShaderPost.fragment;
-      init(vsPost, fsPost);
+      init(vsMain, fsMain, vsPost, fsPost);
     })
   }
 
 
-  function init(vsPost, fsPost){
+  function init(vsMain, fsMain, vsPost, fsPost){
     stats = initStats();
     function initStats() {
         let stats = new Stats();
@@ -202,16 +220,41 @@
 
 
     let radius = 0.995;
-    geometry = new THREE.SphereGeometry(radius, 60, 60);
-    material = new THREE.MeshBasicMaterial({
-        transparent: true,
-        depthTest: true,
-        depthWrite: false,
-        opacity: 0.9,
-        //map: sea_texture,
-        color: 0x222222,
-        alphaTest: 0.5
+    // geometry = new THREE.SphereGeometry(radius, 60, 60);
+    //
+    // material = new THREE.MeshBasicMaterial({
+    //     transparent: true,
+    //     depthTest: true,
+    //     depthWrite: false,
+    //     opacity: 0.9,
+    //     //map: sea_texture,
+    //     color: 0x222222,
+    //     alphaTest: 0.5
+    // });
+
+    geometry = new THREE.SphereBufferGeometry(radius, 60, 60);
+    material = new THREE.RawShaderMaterial({
+      vertexShader: vsMain,
+      fragmentShader: fsMain,
+      uniforms: {
+        // Map
+        bumpTex: {type: "t", value: earthBump},
+        landTex: {type: "t", value: earthLand},
+        earthTex: {type: "t", value: earthMap},
+        isText: {type: "bool", value: true},
+        amplitude: { type: "f", value: 0.0 },
+        //size: {type: 'f', value: 32.0},
+        time: {type: "f", value: time},
+        resolution: {type: "v2", value: [canvasWidth, canvasHeight]},
+      },
+      side: THREE.FrontSide, //DoubleSide,
+      //depthWrite: false,
+      transparent: true,
+      //opacity: 0.5,
+      //wireframe: true,
     });
+
+
     earth = new THREE.Mesh(geometry, material);
 
 
@@ -238,7 +281,7 @@
     earth.position.y = initEarthPosition.y;
     earth.position.z = initEarthPosition.z;
     // earth.rotation.x -= 0.5;
-    earth.rotation.y += 1.5;
+    earth.rotation.y -= 1.5;
 
 
     // console.log(wbData);
