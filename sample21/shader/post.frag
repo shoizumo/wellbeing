@@ -1,7 +1,3 @@
-/*
- * Original shader from: https://www.shadertoy.com/view/XtcfDM
- */
-
 precision mediump float;
 
 uniform float time;
@@ -11,17 +7,49 @@ uniform vec2 mouse;
 uniform float pageIndex;
 
 varying vec2 vUv;
-
 const float PI = 3.14159265358979323;
-#define r1(x) fract(1e4*sin((x)*541.17))
-#define r2(x) fract(1e4*sin((x)*541.17)  + time * 0.0005)
-//#define r2(x) fract(1e4*sin((x)*541.17)  + time * 0.002 * pageIndex)
 
 
-#define sr1(x) (r1(vec2(x,x+.1)) *2.-1.)
-#define sr2(x) (r2(vec2(x,x+.1)) *2.-1.)
+// bright star function
+float r1(float x){
+    return fract(1e4*sin((x)*541.17));
+}
+
+vec2 rv1(vec2 x){
+    return fract(1e4*sin((x)*541.17));
+}
+
+vec2 rv2(vec2 x){
+    return fract(1e4*sin((x)*541.17)  + time * 0.0005);
+}
 
 
+vec2 sr1(float x){
+    return (rv1(vec2(x,x+.1)) *2.-1.);
+}
+
+vec2 sr2(float x){
+    return (rv2(vec2(x,x+.1)) *2.-1.);
+}
+
+float flare(vec2 U) {
+    vec2 A = sin(vec2(0, 1.57) + time);
+    U = abs( U * mat2(A, -A.y, A.x) ) * mat2(2,0,1,1.7);
+    return .1/max(U.x,U.y);
+}
+
+vec4 stars(vec2 U) {
+    vec2 R = resolution.xy;
+    U =  (U+U - R) / R.y;
+    vec4 O = vec4(-.3);
+    for (float i=0.; i<149.; i++)
+        O += flare (vec2((U - sr1(i)*R/R.y).x, (U - sr2(i)*R/R.y).y))
+            * r1(i+.2)
+            * (1.+sin(time+r1(i+.3)*6.))*.1;
+    return O;    // location, scale, time
+}
+
+// cloud function
 // Tweaked from http://glsl.heroku.com/e#4982.0
 float hash( float n ) {
     return fract(sin(n)*43758.5453);
@@ -50,22 +78,6 @@ float rand(vec2 co) {
     return fract(sin(dot(co.xy ,vec2(12.9898,78.233))) * 43758.5453);
 }
 
-float flare(vec2 U) {
-    vec2 A = sin(vec2(0, 1.57) + time);
-    U = abs( U * mat2(A, -A.y, A.x) ) * mat2(2,0,1,1.7);
-    return .1/max(U.x,U.y);
-}
-
-vec4 stars(vec2 U) {
-    vec2 R = resolution.xy;
-    U =  (U+U - R) / R.y;
-    vec4 O = vec4(-.3);
-    for (float i=0.; i<149.; i++)
-        O += flare (vec2((U - sr1(i)*R/R.y).x, (U - sr2(i)*R/R.y).y))
-            * r1(i+.2)
-            * (1.+sin(time+r1(i+.3)*6.))*.1;
-    return O;    // location, scale, time
-}
 
 void main( void ) {
 
