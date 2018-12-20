@@ -16,5 +16,8 @@ sample15: fix prototype
 sample16: UI(one-page-scroll, display-1-letter)
 sample17: position pin
 sample18: country selecter
+sample19: score board
+sample20: fix design
+sample21: change background
 
 

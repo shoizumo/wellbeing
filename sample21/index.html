@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html>
+    <head>
+      <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+      <link rel="stylesheet" href="../lib/onepage-scroll.css">
+      <link href="https://fonts.googleapis.com/css?family=Roboto:700i" rel="stylesheet">
+      <link href="https://fonts.googleapis.com/css?family=Nunito:200,300,400" rel="stylesheet">
+      <link rel="stylesheet" href="main.css">
+
+        <script data-src="shader/main.vert" charset="utf-8" data-name="myShaderMain" type="x-shader/x-vertex"></script>
+        <script data-src="shader/main.frag" charset="utf-8"  data-name="myShaderMain" type="x-shader/x-fragment"></script>
+        <script data-src="shader/post.vert" charset="utf-8" data-name="myShaderPost" type="x-shader/x-vertex"></script>
+        <script data-src="shader/post.frag" charset="utf-8"  data-name="myShaderPost" type="x-shader/x-fragment"></script>
+
+
+    </head>
+    <body>
+      <div id="Stats-output">
+      </div>
+      <div id="webgl">
+      </div>
+
+      <div class="wrapper">
+        <div class="main">
+
+          <section class="page1">
+            <p class='fadein'>
+                <span>page1page1page1</span><br>
+                <span>PAGE1PAGE1PAGE1</span><br>
+                <span>page1page1page1</span><br>
+            </p>
+          </section>
+
+          <section class="page2">
+            <p class='fadein'>
+                <span>page2</span><br>
+                <span>PAGE2</span><br>
+                <span>page2</span><br>
+            </p>
+          </section>
+
+          <section class="page3">
+            <p class='fadein'>
+                <span>page3page3page3</span><br>
+                <span>PAGE3PAGE3PAGE3</span><br>
+                <span>page3page3page3</span><br>
+            </p>
+          </section>
+
+          <section class="page4">
+            <p class='fadein'>
+                <span>You can manipulate earth</span><br>
+            </p>
+          </section>
+        </div>
+      </div>
+
+      <ul id="btn">
+        <li id="ladderBtn" class="wbButton hiddenBtn">Ladder</li>
+        <li id="positiveBtn" class="wbButton hiddenBtn">Positive</li>
+        <li id="negativeBtn" class="wbButton hiddenBtn">Negative</li>
+        <li id="gdpBtn" class="wbButton hiddenBtn">GDP</li>
+      </ul>
+
+
+      <div id="infoBoard">
+        <div id="country">Country</div>
+
+        <div id="Ladder">Ladder score Ranking</div>
+        <div id="Positive">Positive score Ranking</div>
+        <div id="Negative">Negative score Ranking</div>
+        <div id="GDP">GDP per capita Ranking</div>
+
+        <div class="infoContents" id="LadderRanking">
+          <svg width="150" height="80">
+            <circle cx="75" cy="40" r="40" stroke="#222222" stroke-width="0.3" fill="none" opacity='1'></circle>
+            <circle cx="75" cy="40" r="20" stroke="#333333" stroke-width="0.3" fill="none"></circle>
+            <circle cx="75" cy="40" r="0" stroke="#222222" stroke-width="0.3" fill="#ffa443"></circle>
+          </svg>
+        </div>
+        <div class="infoContents" id="PositiveRanking">
+          <svg width="150" height="80">
+            <circle cx="75" cy="40" r="40" stroke="#222222" stroke-width="0.3" fill="none" opacity='1'></circle>
+            <circle cx="75" cy="40" r="20" stroke="#333333" stroke-width="0.3" fill="none"></circle>
+            <circle cx="75" cy="40" r="0" stroke="#222222" stroke-width="0.3" fill="#ffa443"></circle>
+          </svg>
+        </div>
+        <div class="infoContents" id="NegativeRanking">
+          <svg width="150" height="80">
+            <circle cx="75" cy="40" r="40" stroke="#222222" stroke-width="0.3" fill="none" opacity='1'></circle>
+            <circle cx="75" cy="40" r="20" stroke="#333333" stroke-width="0.3" fill="none"></circle>
+            <circle cx="75" cy="40" r="0" stroke="#222222" stroke-width="0.3" fill="#ffa443"></circle>
+          </svg>
+        </div>
+        <div class="infoContents" id="GDPRanking">
+          <svg width="150" height="80">
+            <circle cx="75" cy="40" r="40" stroke="#222222" stroke-width="0.3" fill="none" opacity='1'></circle>
+            <circle cx="75" cy="40" r="20" stroke="#333333" stroke-width="0.3" fill="none"></circle>
+            <circle cx="75" cy="40" r="0" stroke="#222222" stroke-width="0.3" fill="#ffa443"></circle>
+
+          </svg>
+        </div>
+
+      </div>
+
+      <div id="tooltip">aaaaa</div>
+
+    <script src="../lib/jquery-3.3.1.min.js"></script>
+    <script src="../lib/ShaderLoader.min.js"></script>
+    <script src="../lib/jquery.onepage-scroll.min.js"></script>
+
+    <script type="text/javascript" src="../lib/stats.min.js"></script>
+    <script type="text/javascript" src="../lib/three97.min.js"></script>
+    <script type="text/javascript" src="../lib/OrbitControls.js"></script>
+    <script type="text/javascript" src="../lib/tessalator3d.js"></script>
+    <script type="text/javascript" src="../lib/country_data.js"></script>
+    <script type="text/javascript" src="../lib/wellbeing_data.json"></script>
+    <script type="text/javascript" src="../lib/TweenMax.min.js"></script>
+    <script src="js/main.js"></script>
+
+    </body>
+</html>
