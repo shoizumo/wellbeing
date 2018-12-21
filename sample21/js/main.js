@@ -166,7 +166,7 @@
     let earthMapLoader = new THREE.TextureLoader();
     earthLand = earthLandLoader.load('img/earthspec.png', () => {
       earthBump = earthBumpLoader.load('img/earthbump.png', () => {
-        earthMap = earthMapLoader.load('img/earthmap.jpg', loadShader);
+        earthMap = earthMapLoader.load('img/earthmapMono.jpg', loadShader);
       })
     });
 
@@ -219,7 +219,8 @@
     controls.dampingFactor = 0.2;
 
 
-    let radius = 0.995;
+    let radius = 0.9595;
+    // let radius = 1.0;
     // geometry = new THREE.SphereGeometry(radius, 60, 60);
     //
     // material = new THREE.MeshBasicMaterial({
@@ -241,9 +242,6 @@
         bumpTex: {type: "t", value: earthBump},
         landTex: {type: "t", value: earthLand},
         earthTex: {type: "t", value: earthMap},
-        isText: {type: "bool", value: true},
-        amplitude: { type: "f", value: 0.0 },
-        //size: {type: 'f', value: 32.0},
         time: {type: "f", value: time},
         resolution: {type: "v2", value: [canvasWidth, canvasHeight]},
       },
@@ -268,8 +266,8 @@
           geometry,
           new THREE.MeshBasicMaterial({
             color: color,
-            // transparent: true,
-            // opacity: 0.9
+            transparent: true,
+            opacity: 0.0
           }));
       m.name = "land";
       m.userData.country = name;
@@ -283,10 +281,8 @@
     // earth.rotation.x -= 0.5;
     earth.rotation.y -= 1.5;
 
-
     // console.log(wbData);
     // console.log(meshList);
-
 
 
     // set wellbeing score
@@ -352,16 +348,17 @@
         L = (wbData[j].logGdp - gdpMin) / (gdpMax - gdpMin); //0.0 - 1.0 scale
       }
       let RGB = hslToRgb(0.5, 1, L);
-      console.log(RGB, RGB[0])
+      //console.log(RGB, RGB[0]);
       meshList[i].material.color.r = RGB[0];
       meshList[i].material.color.g = RGB[1];
       meshList[i].material.color.b = RGB[2];
+      meshList[i].material.opacity = 1.0;
     }
 
     function hslToRgb(h, s, l) {
       let r, g, b;
 
-      if (s == 0) {
+      if (s === 0) {
         r = g = b = l; // achromatic
       } else {
         let hue2rgb = function hue2rgb(p, q, t) {
@@ -383,25 +380,7 @@
       return [r, g, b];
     }
 
-    // function coloringLand(i, j, type) {
-    //   let R, B;
-    //   if (type === 'ladderBtn'){
-    //     R = (wbData[j].ladder - ladderMin) / (ladderMax - ladderMin); //0.0 - 1.0 scale
-    //   }else if (type === 'positiveBtn'){
-    //     R = (wbData[j].positive - positiveMin) / (positiveMax - positiveMin); //0.0 - 1.0 scale
-    //   }else if (type === 'negativeBtn'){
-    //     R = (wbData[j].negative - negativeMin) / (negativeMax - negativeMin); //0.0 - 1.0 scale
-    //     R = 1.0 - R  // reverse scale
-    //   }else{
-    //     R = (wbData[j].logGdp - gdpMin) / (gdpMax - gdpMin); //0.0 - 1.0 scale
-    //   }
-    //     B = 1.0 - R;
-    //     meshList[i].material.color.r = R;
-    //     meshList[i].material.color.g = 0.0;
-    //     meshList[i].material.color.b = B;
-    // }
-
-    console.log(meshList[0].material)
+    // console.log(meshList[0].material);
 
     function createRankText(type) {
       let text = document.createElementNS('http://www.w3.org/2000/svg', 'text');
@@ -535,7 +514,7 @@
     let body = $('body');
 
     let intersected_object = 0;
-    let hover_scale = 1.01;
+    let hover_scale = 1.0;
     window.addEventListener('mousemove', onDocumentMouseMove, false);
     window.addEventListener('click', onDocumentMouseClick, false);
 
