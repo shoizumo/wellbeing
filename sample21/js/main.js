@@ -144,11 +144,14 @@
       canvasHeight = window.innerHeight;
 
     }, false);
-    window.addEventListener('dblclick', () => {
-        isdDblclick = true;
-        $('.main').removeClass("disabled-onepage-scroll");
-    }, false);
+    // window.addEventListener('dblclick', () => {
+    //     isdDblclick = true;
+    //     $('.main').removeClass("disabled-onepage-scroll");
+    // }, false);
 
+    window.addEventListener('dblclick', () => {
+
+    }, false);
 
     mouse = new THREE.Vector2();
     window.addEventListener('mousemove', () => {
@@ -219,7 +222,7 @@
     controls.dampingFactor = 0.2;
 
 
-    let radius = 0.9595;
+    let radius = 0.995;
     // let radius = 1.0;
     // geometry = new THREE.SphereGeometry(radius, 60, 60);
     //
