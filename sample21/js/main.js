@@ -61,7 +61,11 @@
         typing(pageId);
         pageIndex = pageId;
 
-        $(".wbButton").removeClass("selectedBtn").removeClass("normalBtn").addClass("hiddenBtn");
+
+        $(".wbButton").removeClass("selectedBtn")
+            .removeClass("normalBtn")
+            .addClass("hiddenBtn");
+
         if (pageId === interactivePageIndex){
           $('.main').addClass("disabled-onepage-scroll");
           let duration = 2.0;
@@ -74,7 +78,7 @@
           });
 
           TweenMax.to(camera.position, duration, {
-            z: 3.0,
+            z: 2.5,
             ease: ease,
             onComplete: function(){
               controls.enableZoom = true;
@@ -149,9 +153,48 @@
     //     $('.main').removeClass("disabled-onepage-scroll");
     // }, false);
 
+
+    let center = new THREE.Vector3(0, 0, 0);
+    // let latitude = 35.683333;
+    // let longitude = 139.683333;
+    let latitude = 28.614387;
+    let longitude = 77.19934;
+
     window.addEventListener('dblclick', () => {
+      // earth.rotation.x = 0;
+      console.log(camera);
+
+      let targetPos = convertGeoCoords(latitude, longitude);
+      //let targetPos = new THREE.Vector3(1.5, 1.8, -1.8);
+      let cameraPos = targetPos.sub(center);
+      cameraPos = cameraPos.normalize();
+
+
+
+      camera = new THREE.PerspectiveCamera(60, canvasWidth / canvasHeight, 0.1, 5.0);
+      camera.position.z = initCameraPosition.z;
+
+      camera.position.x = cameraPos.x * 2.5;
+      camera.position.y = cameraPos.y * 2.5;
+      camera.position.z = cameraPos.z * 2.5;
+      controls = new THREE.OrbitControls(camera, renderer.domElement);
+
+      console.log(camera);
 
     }, false);
+
+
+    function convertGeoCoords(latitude, longitude, radius=1.0) {
+      const latRad = latitude * (Math.PI / 180);
+      const lonRad = -longitude * (Math.PI / 180);
+
+      const x = Math.cos(latRad) * Math.cos(lonRad) * radius;
+      const y = Math.sin(latRad) * radius;
+      const z = Math.cos(latRad) * Math.sin(lonRad) * radius;
+
+      return new THREE.Vector3(x, y, z);
+    }
+
 
     mouse = new THREE.Vector2();
     window.addEventListener('mousemove', () => {
@@ -159,6 +202,7 @@
       mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
       mouse.y = -(event.clientY / window.innerHeight) * 2 + 1;
     }, false);
+
 
     // loadShader()
 
@@ -247,6 +291,7 @@
         earthTex: {type: "t", value: earthMap},
         time: {type: "f", value: time},
         resolution: {type: "v2", value: [canvasWidth, canvasHeight]},
+        pageIndex: {type: "f", value: pageIndex},
       },
       side: THREE.FrontSide, //DoubleSide,
       //depthWrite: false,
@@ -282,7 +327,7 @@
     earth.position.y = initEarthPosition.y;
     earth.position.z = initEarthPosition.z;
     // earth.rotation.x -= 0.5;
-    earth.rotation.y -= 1.5;
+    // earth.rotation.y -= 1.5;
 
     // console.log(wbData);
     // console.log(meshList);
@@ -640,7 +685,7 @@
   // rendering
   let frame = 0;
   function render() {
-    controls.update();
+    // controls.update();
     stats.update();
     frame++;
 

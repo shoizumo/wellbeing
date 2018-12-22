@@ -5,6 +5,8 @@ uniform sampler2D bumpTex;
 uniform sampler2D landTex;
 uniform sampler2D earthTex;
 uniform mat4 viewMatrix;
+uniform float pageIndex;
+
 
 // from vs
 varying vec3 mvPosition;
@@ -36,6 +38,9 @@ void main() {
 ////        destColor.a = 0.1;
 ////    }
 
+    if(pageIndex > 3.0){
+        gl_FragColor = vec4(0.0, 0.0, 0.0, 0.0);
+    }
     gl_FragColor = earthColor;
 
 
