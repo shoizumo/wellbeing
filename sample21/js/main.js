@@ -308,7 +308,7 @@
     for (let name in country_data) {
       geometry = new Tessellator3D(country_data[name]);
       // let continents = ["EU", "AN", "AS", "OC", "SA", "AF", "NA"];
-      let color = new THREE.Color().setHSL(0, 0, 0.5);
+      let color = new THREE.Color().setHSL(0, 0, 0.3);
 
       let m = country_data[name].mesh = new THREE.Mesh(
           geometry,
@@ -378,6 +378,8 @@
           let countryName = meshList[i].userData.country;
           if (wbData[j].country === countryName) {
             coloringLand(i, j, type)
+          }else{
+            meshList[i].material.opacity = 1.0;
           }
         }
       }
@@ -684,13 +686,16 @@
 
   // rendering
   let frame = 0;
+  let speed = 3.141592 * 2 / 90 / 60 / 60 * 2;
   function render() {
     // controls.update();
     stats.update();
     frame++;
 
     if (pageIndex !== interactivePageIndex) {
-      earth.rotation.x += 3.141592 * 2 / 90 / 60 / 60 * 2; // 1round/90m * 2
+      earth.rotation.x += speed; // 1round/90m * 2
+    }else{
+      earth.rotation.y += speed * 5; // 1round/90m * 2
     }
 
     let nowTime = clock.getElapsedTime();
