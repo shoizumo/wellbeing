@@ -157,8 +157,10 @@
     let center = new THREE.Vector3(0, 0, 0);
     // let latitude = 35.683333;
     // let longitude = 139.683333;
-    let latitude = 28.614387;
-    let longitude = 77.19934;
+    // let latitude = 28.614387;
+    // let longitude = 77.19934;
+    let latitude = -30.559482;
+    let longitude = 22.937506;
 
     window.addEventListener('dblclick', () => {
       // earth.rotation.x = 0;
@@ -172,7 +174,7 @@
 
 
       camera = new THREE.PerspectiveCamera(60, canvasWidth / canvasHeight, 0.1, 5.0);
-      camera.position.z = initCameraPosition.z;
+      earth.rotation.y = 0;
 
       camera.position.x = cameraPos.x * 2.5;
       camera.position.y = cameraPos.y * 2.5;
