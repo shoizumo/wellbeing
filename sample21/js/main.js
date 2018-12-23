@@ -155,31 +155,59 @@
 
 
     let center = new THREE.Vector3(0, 0, 0);
-    // let latitude = 35.683333;
-    // let longitude = 139.683333;
-    let latitude = 28.614387;
-    let longitude = 77.19934;
+    let latitude = 35.683333;
+    let longitude = 139.683333;
+    // let latitude = 28.614387;
+    // let longitude = 77.19934;
+
 
     window.addEventListener('dblclick', () => {
-      // earth.rotation.x = 0;
-      console.log(camera);
+      // console.log(camera);
+      // let targetPos = convertGeoCoords(latitude, longitude);
+      // let cameraPos = targetPos.sub(center);
+      // cameraPos = cameraPos.normalize();
+      //
+      // camera = new THREE.PerspectiveCamera(60, canvasWidth / canvasHeight, 0.1, 5.0);
+      // camera.position.z = initCameraPosition.z;
+      //
+      // camera.position.x = cameraPos.x * 2.5;
+      // camera.position.y = cameraPos.y * 2.5;
+      // camera.position.z = cameraPos.z * 2.5;
+      // controls = new THREE.OrbitControls(camera, renderer.domElement);
+      //
 
-      let targetPos = convertGeoCoords(latitude, longitude);
-      //let targetPos = new THREE.Vector3(1.5, 1.8, -1.8);
-      let cameraPos = targetPos.sub(center);
-      cameraPos = cameraPos.normalize();
+      let vector = new THREE.Vector3(0.0, 0.0, -1);
+      vector.unproject(camera);
+      let raycaster = new THREE.Raycaster(camera.position, vector.sub(camera.position).normalize());
+      let intersects = raycaster.intersectObject(earth, true);
 
+      if (intersects.length > 0) {
+        if (intersects[0].point !== null) {
+          for (let i = 0; i < intersects.length; i++) {
+            if (intersects[0].object.name !== "land"){
+              // console.log(intersects);
+              // console.log(intersects[0].point);
 
+              let targetPos = convertGeoCoords(latitude, longitude);
+              let targetVec = targetPos.sub(center).normalize();
+              let centerVec = intersects[0].point.sub(center).normalize();
 
-      camera = new THREE.PerspectiveCamera(60, canvasWidth / canvasHeight, 0.1, 5.0);
-      camera.position.z = initCameraPosition.z;
+              let crossVec = centerVec.clone().cross(targetVec).normalize();
+              let angle = centerVec.dot(targetVec);
+              console.log(targetVec, centerVec, crossVec, angle);
 
-      camera.position.x = cameraPos.x * 2.5;
-      camera.position.y = cameraPos.y * 2.5;
-      camera.position.z = cameraPos.z * 2.5;
-      controls = new THREE.OrbitControls(camera, renderer.domElement);
+              let quaternion = earth.quaternion;
 
-      console.log(camera);
+              let q = new THREE.Quaternion();
+              q.setFromAxisAngle(crossVec, angle * 4);
+
+              quaternion.multiply(q);
+
+            }
+          }
+        }
+      }
+
 
     }, false);
 
@@ -695,7 +723,7 @@
     if (pageIndex !== interactivePageIndex) {
       earth.rotation.x += speed; // 1round/90m * 2
     }else{
-      earth.rotation.y += speed * 5; // 1round/90m * 2
+      // earth.rotation.y += speed * 5; // 1round/90m * 2
     }
 
     let nowTime = clock.getElapsedTime();
