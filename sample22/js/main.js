@@ -164,7 +164,6 @@
 
     window.addEventListener('dblclick', () => {
       // earth.rotation.x = 0;
-      console.log(camera);
 
       let targetPos = convertGeoCoords(latitude, longitude);
       //let targetPos = new THREE.Vector3(1.5, 1.8, -1.8);
@@ -172,16 +171,17 @@
       cameraPos = cameraPos.normalize();
 
 
-
-      camera = new THREE.PerspectiveCamera(60, canvasWidth / canvasHeight, 0.1, 5.0);
+      console.log(camera.position);
+      
+      // camera = new THREE.PerspectiveCamera(60, canvasWidth / canvasHeight, 0.1, 5.0);
       earth.rotation.y = 0;
-
       camera.position.x = cameraPos.x * 2.5;
       camera.position.y = cameraPos.y * 2.5;
       camera.position.z = cameraPos.z * 2.5;
-      controls = new THREE.OrbitControls(camera, renderer.domElement);
+      camera.lookAt(0.0, 0.0, 0.0);
+      // controls = new THREE.OrbitControls(camera, renderer.domElement);
 
-      console.log(camera);
+      console.log(camera.position);
 
     }, false);
 
