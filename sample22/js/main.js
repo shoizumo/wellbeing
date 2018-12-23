@@ -155,31 +155,44 @@
 
 
     let center = new THREE.Vector3(0, 0, 0);
-    // let latitude = 35.683333;
-    // let longitude = 139.683333;
+    let latitude = 35.683333;
+    let longitude = 139.683333;
     // let latitude = 28.614387;
     // let longitude = 77.19934;
-    let latitude = -30.559482;
-    let longitude = 22.937506;
+    // let latitude = -30.559482;
+    // let longitude = 22.937506;
 
     window.addEventListener('dblclick', () => {
-      // earth.rotation.x = 0;
-
       let targetPos = convertGeoCoords(latitude, longitude);
-      //let targetPos = new THREE.Vector3(1.5, 1.8, -1.8);
       let cameraPos = targetPos.sub(center);
       cameraPos = cameraPos.normalize();
 
 
       console.log(camera.position);
-      
+
       // camera = new THREE.PerspectiveCamera(60, canvasWidth / canvasHeight, 0.1, 5.0);
-      earth.rotation.y = 0;
-      camera.position.x = cameraPos.x * 2.5;
-      camera.position.y = cameraPos.y * 2.5;
-      camera.position.z = cameraPos.z * 2.5;
-      camera.lookAt(0.0, 0.0, 0.0);
+
+      // earth.rotation.y = 0;
+      // camera.position.x = cameraPos.x * 2.5;
+      // camera.position.y = cameraPos.y * 2.5;
+      // camera.position.z = cameraPos.z * 2.5;
+      // camera.lookAt(0.0, 0.0, 0.0);
+
       // controls = new THREE.OrbitControls(camera, renderer.domElement);
+
+
+      tween = TweenMax.fromTo(camera.position, 1.0,
+          {x:camera.position.x, y:camera.position.y, z:camera.position.z},
+          {x:cameraPos.x * 2.5, y:cameraPos.y * 2.5, z:cameraPos.z * 2.5,
+            ease : Power0.easeNone,
+            onStart  : function() {
+              earth.rotation.y = 0;
+            },
+            onComplete: function(){
+              camera.lookAt(0.0, 0.0, 0.0)
+            }
+          },
+      );
 
       console.log(camera.position);
 
