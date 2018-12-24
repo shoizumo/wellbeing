@@ -200,15 +200,43 @@
 
       let crossVec = prevVec.clone().cross(targetVec).normalize();
       let angle = prevVec.angleTo(targetVec);
+
+
+      // for (let i = 0; i < 10; i++) {
+      //   let q = new THREE.Quaternion();
+      //   q.setFromAxisAngle(crossVec, angle/10);
+      //   prevVec.applyQuaternion(q);
+      // }
+
       let q = new THREE.Quaternion();
-      q.setFromAxisAngle(crossVec, angle);
-      prevVec.applyQuaternion(q);
+      let step = 10;
+      let stepAngle = angle / step;
+      //
+      // for (let i = 0; i < 10; i++) {
+      //   setTimeout(() => {
+      //     moveCamera();
+      //   }, 500)
+      // }
+
+      let count = 0;
+      let moveCamera = function(){
+        q.setFromAxisAngle(crossVec, angle/10);
+        prevVec.applyQuaternion(q);
+        camera.lookAt(0.0, 0.0, 0.0);
+        console.log(count++);
+      };
+
+      let id = setInterval(function(){
+        moveCamera();
+      if(count > 10){
+        clearInterval(id); //idをclearIntervalで指定している
+      }}, 100);
 
       // prevVec.x = prevVec.x * 2.5;
       // prevVec.y = prevVec.y * 2.5;
       // prevVec.z = prevVec.z * 2.5;
 
-      camera.lookAt(0.0, 0.0, 0.0);
+      // camera.lookAt(0.0, 0.0, 0.0);
 
       console.log(prevVec);
 
