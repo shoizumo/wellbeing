@@ -42,7 +42,7 @@ vec4 stars(vec2 U) {
     vec2 R = resolution.xy;
     U =  (U+U - R) / R.y;
     vec4 O = vec4(-.3);
-    for (float i=0.; i<149.; i++)
+    for (float i=0.; i<119.; i++)
         O += flare (vec2((U - sr1(i)*R/R.y).x, (U - sr2(i)*R/R.y).y))
             * r1(i+.2)
             * (1.+sin(time+r1(i+.3)*6.))*.1;
