@@ -1,9 +1,16 @@
 (() => {
-  // variables
+
+  ///////////////////////
+  /* Declare variables */
+  ///////////////////////
+
+  // global val
   let canvasWidth = null;
   let canvasHeight = null;
   let targetDOM = null;
-  let isdDblclick = false;
+  let devicePixelRatio = 1;
+  // let devicePixelRatio = window.devicePixelRatio;
+
   // three objects
   let scene;
   let camera;
@@ -13,40 +20,73 @@
   let material;
   let earth;
   let landBase;
+  let radius = 0.994;
   let axesHelper;
+
   // texture
   let earthLand;
   let earthBump;
   let earthMap;
+  let earthLandLoader;
+  let earthBumpLoader;
+  let earthMapLoader;
 
-  let mouse;
+  // constant variables
+  const RENDERER_PARAM = {
+    clearColor: 0x000000
+  };
 
+  // val for shader
   const clock = new THREE.Clock();
   let time = 0.0;
+  let mouse;
 
-  let pageIndex = 1.0;
-  const interactivePageIndex = 4;
-
-  let stats;
+  // val for well-being data
+  let GDPArray = [];
+  let LadderArray = [];
+  let PositiveArray = [];
+  let NegativeArray = [];
 
   const wbLength = Object.keys(wbData).length;
   let meshList;
   let clickBtn;
+  let ladderMax, ladderMin;
+  let positiveMax, positiveMin;
+  let negativeMax, negativeMin;
+  let gdpMax, gdpMin;
+  let wbButton;
 
-  // constant variables
-  const RENDERER_PARAM = {
-    //clearColor: 0xffffff
-    clearColor: 0x000000
-  };
+  // val for interactive land function
+  let isClicked = false;
+  let countryName;
+  let dragFlag = false;
+  let isLand = false;
+  let isFirstClick = true;
 
+  // val for scroll
+  let pageIndex = 1.0;
+  const interactivePageIndex = 4;
   let initEarthPosition = new THREE.Vector3(0.0, -1.1, 1.0);
   let initCameraPosition = new THREE.Vector3(0.0, 0.0, 2.0);
+  let center = new THREE.Vector3(0, 0, 0);
+
+  // val for rendering
+  let frame = 0;
+  let speed = 3.141592 * 2 / 90 / 60 / 60 * 2;
+  let postprocessing = {};
+
+  // temp val
+  let stats;
 
 
-
-  // entry point
+  /////////////////
+  /* Entry point */
+  /////////////////
   window.addEventListener('load', () => {
 
+    /*
+    // scroll function
+    */
     $('.main').onepage_scroll({
       sectionContainer: 'section',
       responsiveFallback: false, //600,
@@ -58,15 +98,15 @@
       direction: 'vertical', //'horizontal'
 
       afterMove: function(pageId) {
-        //console.log(pageId);
         typing(pageId);
         pageIndex = pageId;
 
-
+        /* show well-being button */
         $(".wbButton").removeClass("selectedBtn")
             .removeClass("normalBtn")
             .addClass("hiddenBtn");
 
+        /* disable scroll function */
         if (pageId === interactivePageIndex){
           $('.main').addClass("disabled-onepage-scroll");
           let duration = 2.0;
@@ -78,12 +118,12 @@
             ease: ease
           });
 
+          /* show button & land*/
           TweenMax.to(camera.position, duration, {
             z: 2.5,
             ease: ease,
             onComplete: function(){
               controls.enableZoom = true;
-              // display button
               $(".wbButton").removeClass("hiddenBtn").addClass("normalBtn");
               let wbButton = document.getElementsByClassName('wbButton');
               setTimeout(() => {
@@ -103,19 +143,15 @@
     });
 
 
+    /* typing effect function */
     function typing(pageNo) {
+      $('.fadein > span').css('opacity','0');  // reset opacity(0.0) for displaying again
       let str = [];
-      // reset opacity(0.0) for displaying twice
-      $('.fadein > span').css('opacity','0');
-
       let pageClass = '.page' + pageNo;
       $(pageClass + ' > .fadein > span').each(function(i){//セレクタで指定した要素すべて
-        //console.log(this);
-        $(this).css('opacity','1');//行を不透明にする
-        str[i] = $(this).text();//元のテキストをコピーし
-        //console.log(str);
-        $(this).text('');//テキストを消す
-        //console.log(this);
+        $(this).css('opacity','1');
+        str[i] = $(this).text();  // copy original text
+        $(this).text('');  // delete text
         let no = i;
         let self = this;
         let interval = setInterval(function(){
@@ -132,30 +168,10 @@
     typing(1);
 
 
-    // canvas
-    canvasWidth = window.innerWidth;
-    canvasHeight = window.innerHeight;
-    targetDOM = document.getElementById('webgl');
 
-    // events
-    // let devicePixelRatio = window.devicePixelRatio;
-    let devicePixelRatio = 1;
-    window.addEventListener('resize', () => {
-      renderer.setPixelRatio(devicePixelRatio);
-      renderer.setSize(window.innerWidth, window.innerHeight);
-      camera.aspect = window.innerWidth / window.innerHeight;
-      camera.updateProjectionMatrix();
-      canvasWidth = window.innerWidth;
-      canvasHeight = window.innerHeight;
-
-    }, false);
-    // window.addEventListener('dblclick', () => {
-    //     isdDblclick = true;
-    //     $('.main').removeClass("disabled-onepage-scroll");
-    // }, false);
-
-
-    let center = new THREE.Vector3(0, 0, 0);
+    /*
+    // move camera position function
+    */
     let latitude = 35.683333;
     let longitude = 139.683333;
     // let latitude = 28.614387;
@@ -163,6 +179,7 @@
     // let latitude = -30.559482;
     // let longitude = 22.937506;
 
+    /* move position in some separate times using quaternion */
     window.addEventListener('dblclick', () => {
       let targetPos = convertGeoCoords(latitude, longitude);
       let targetVec = targetPos.sub(center);
@@ -196,17 +213,36 @@
 
 
     function convertGeoCoords(latitude, longitude, radius=1.0) {
-      const latRad = latitude * (Math.PI / 180);
-      const lonRad = -longitude * (Math.PI / 180);
+      let latRad = latitude * (Math.PI / 180);
+      let lonRad = -longitude * (Math.PI / 180);
 
-      const x = Math.cos(latRad) * Math.cos(lonRad) * radius;
-      const y = Math.sin(latRad) * radius;
-      const z = Math.cos(latRad) * Math.sin(lonRad) * radius;
+      let x = Math.cos(latRad) * Math.cos(lonRad) * radius;
+      let y = Math.sin(latRad) * radius;
+      let z = Math.cos(latRad) * Math.sin(lonRad) * radius;
 
       return new THREE.Vector3(x, y, z);
     }
 
 
+    /*
+    // initial setting
+    */
+    canvasWidth = window.innerWidth;
+    canvasHeight = window.innerHeight;
+    targetDOM = document.getElementById('webgl');
+
+    /* window size setting */
+    window.addEventListener('resize', () => {
+      renderer.setPixelRatio(devicePixelRatio);
+      renderer.setSize(window.innerWidth, window.innerHeight);
+      camera.aspect = window.innerWidth / window.innerHeight;
+      camera.updateProjectionMatrix();
+      canvasWidth = window.innerWidth;
+      canvasHeight = window.innerHeight;
+
+    }, false);
+
+    /* set mouse position function */
     mouse = new THREE.Vector2();
     window.addEventListener('mousemove', () => {
       event.preventDefault();
@@ -214,22 +250,31 @@
       mouse.y = -(event.clientY / window.innerHeight) * 2 + 1;
     }, false);
 
+    window.addEventListener("mousedown", function(){
+        dragFlag = false;
+    }, false);
+    window.addEventListener("mousemove", function(){
+        dragFlag = true;
+    }, false);
 
-    // loadShader()
+    // window.addEventListener('dblclick', () => {
+    //     isdDblclick = true;
+    //     $('.main').removeClass("disabled-onepage-scroll");
+    // }, false);
 
-
-    // texture
-    let earthLandLoader = Loader = new THREE.TextureLoader();
-    let earthBumpLoader = new THREE.TextureLoader();
-    let earthMapLoader = new THREE.TextureLoader();
+    /* load texture */
+    earthLandLoader = Loader = new THREE.TextureLoader();
+    earthBumpLoader = new THREE.TextureLoader();
+    earthMapLoader = new THREE.TextureLoader();
     earthLand = earthLandLoader.load('img/earthspec.png', () => {
       earthBump = earthBumpLoader.load('img/earthbump.png', () => {
         earthMap = earthMapLoader.load('img/earthmapMono.jpg', loadShader);
       })
     });
 
-
   }, false);
+  /* END Entry point */
+
 
   function loadShader() {
     SHADER_LOADER.load((data) => {
@@ -242,6 +287,9 @@
   }
 
 
+  /////////////////////////
+  /* Initialize function */
+  /////////////////////////
   function init(vsMain, fsMain, vsPost, fsPost){
     stats = initStats();
     function initStats() {
@@ -255,18 +303,22 @@
         return stats;
     }
 
-    // scene and camera
-    scene = new THREE.Scene();
-    camera = new THREE.PerspectiveCamera(60, canvasWidth / canvasHeight, 0.1, 5.0);
-    camera.position.z = initCameraPosition.z;
 
-    // renderer
+    /*
+    // setting three object
+    */
+    scene = new THREE.Scene();
+
+    /* renderer */
     renderer = new THREE.WebGLRenderer();
     renderer.setPixelRatio(devicePixelRatio);
     renderer.setClearColor(new THREE.Color(RENDERER_PARAM.clearColor));
     renderer.setSize(canvasWidth, canvasHeight);
     targetDOM.appendChild(renderer.domElement);
 
+    /* camera */
+    camera = new THREE.PerspectiveCamera(60, canvasWidth / canvasHeight, 0.1, 5.0);
+    camera.position.z = initCameraPosition.z;
     controls = new THREE.OrbitControls(camera, renderer.domElement);
     controls.enablePan = false;
     controls.enableZoom = false;
@@ -276,8 +328,7 @@
     controls.enableDamping = true;
     controls.dampingFactor = 0.2;
 
-
-    let radius = 0.994;
+    /* earth map ver. */
     geometry = new THREE.SphereBufferGeometry(radius, 60, 60);
     material = new THREE.RawShaderMaterial({
       vertexShader: vsMain,
@@ -299,8 +350,7 @@
     });
     earth = new THREE.Mesh(geometry, material);
 
-
-    // earth in order to hide map earth
+    /* earth for land in order to hide earth map ver. */
     geometry = new THREE.SphereGeometry(radius + 0.002, 60, 60);
     material = new THREE.MeshBasicMaterial({
         transparent: true,
@@ -332,22 +382,17 @@
       earth.add(m);
       meshList.push(m);
     }
+
+    /* add to scene */
     earth.add(landBase);
     scene.add(earth);
     earth.position.y = initEarthPosition.y;
     earth.position.z = initEarthPosition.z;
-    // earth.rotation.x -= 0.5;
-    // earth.rotation.y -= 1.5;
-
-    // console.log(wbData);
-    // console.log(meshList);
 
 
-    // set wellbeing score
-    let GDPArray = [];
-    let LadderArray = [];
-    let PositiveArray = [];
-    let NegativeArray = [];
+    /*
+    // setting well-being data
+    */
     for(let i=0; wbLength>i; i++ ) {
       let wb = wbData[i];
       LadderArray.push(wb.ladder);
@@ -356,22 +401,22 @@
       GDPArray.push(wb.logGdp);
     }
 
-    let ladderMax = Math.max(...LadderArray);
-    let ladderMin = Math.min(...LadderArray);
-    let positiveMax = Math.max(...PositiveArray);
-    let positiveMin = Math.min(...PositiveArray);
-    let negativeMax = Math.max(...NegativeArray);
-    let negativeMin = Math.min(...NegativeArray);
-    let gdpMax = Math.max(...GDPArray);
-    let gdpMin = Math.min(...GDPArray);
+    ladderMax = Math.max(...LadderArray);
+    ladderMin = Math.min(...LadderArray);
+    positiveMax = Math.max(...PositiveArray);
+    positiveMin = Math.min(...PositiveArray);
+    negativeMax = Math.max(...NegativeArray);
+    negativeMin = Math.min(...NegativeArray);
+    gdpMax = Math.max(...GDPArray);
+    gdpMin = Math.min(...GDPArray);
 
-    console.log(ladderMax, ladderMin);
-    console.log(positiveMax, positiveMin);
-    console.log(negativeMax, negativeMin);
-    console.log(gdpMax, gdpMin);
+    // console.log(ladderMax, ladderMin);
+    // console.log(positiveMax, positiveMin);
+    // console.log(negativeMax, negativeMin);
+    // console.log(gdpMax, gdpMin);
 
-
-    let wbButton = document.getElementsByClassName('wbButton');
+    /* make well-being button in order to show score */
+    wbButton = document.getElementsByClassName('wbButton');
     for (let i = 0, wbLen = wbButton.length; i < wbLen; i++) {
       wbButton[i].addEventListener('click', (e) => {
         let type = e.target.id;
@@ -395,6 +440,9 @@
       }
     };
 
+    /*
+    // coloring land object using well-being score
+    */
     function coloringLand(i, j, type) {
       let L;
       if (type === 'ladderBtn'){
@@ -417,7 +465,6 @@
 
     function hslToRgb(h, s, l) {
       let r, g, b;
-
       if (s === 0) {
         r = g = b = l; // achromatic
       } else {
@@ -429,19 +476,18 @@
           if (t < 2 / 3) return p + (q - p) * (2 / 3 - t) * 6;
           return p;
         };
-
         let q = l < 0.5 ? l * (1 + s) : l + s - l * s;
         let p = 2 * l - q;
         r = hue2rgb(p, q, h + 1 / 3);
         g = hue2rgb(p, q, h);
         b = hue2rgb(p, q, h - 1 / 3);
       }
-
       return [r, g, b];
     }
 
-    // console.log(meshList[0].material);
-
+    /*
+    // score ranking board
+    */
     function createRankText(type) {
       let text = document.createElementNS('http://www.w3.org/2000/svg', 'text');
       text.setAttributeNS(null, "x", '50%');
@@ -475,6 +521,7 @@
     let s3 = createScoreText('Negative');
     let s4 = createScoreText('GDP');
 
+    /* display score result */
     let tween;
     function displayRanking(type, rank, num, duration, rankText, score, scoreText) {
       let id = '#' + type + 'Ranking';
@@ -511,8 +558,7 @@
       );
     }
 
-
-    let isClicked = false;
+    /* display in turn function */
     function createPromise(type, rank, num, svgDuration, text, nextStartDuration, score, scoreText) {
       let promise;
       let timeout;
@@ -549,28 +595,13 @@
       });
     }
 
-    function calcWbInfo(countryName) {
-      for (let i = 0; wbLength > i; i++) {
-        if (wbData[i].country === countryName) {
-          return wbData[i];
-        }
-      }
-    }
 
 
-    let dragFlag = 0;
-    window.addEventListener("mousedown", function(){
-        dragFlag = 0;
-    }, false);
-    window.addEventListener("mousemove", function(){
-        dragFlag = 1;
-    }, false);
-
-
+    /*
+    // interactive land object function
+    */
     let tooltip = $('#tooltip');
     let infoBoard = $('#infoBoard');
-    let countryName;
-    let isLand = false;
     let body = $('body');
 
     let intersected_object = 0;
@@ -578,6 +609,7 @@
     window.addEventListener('mousemove', onDocumentMouseMove, false);
     window.addEventListener('click', onDocumentMouseClick, false);
 
+    /* mouse over land */
     function onDocumentMouseMove(event) {
       if (pageIndex === interactivePageIndex){
         if (intersected_object !== 0) {
@@ -623,9 +655,9 @@
       }
     }
 
-    let isFirstClick = true;
-    function onDocumentMouseClick(event) {
-      if(dragFlag === 0) {
+    /* click land */
+    function onDocumentMouseClick() {
+      if(!dragFlag) {
         if (isLand) {
           // TweenMax.killAll();
           if (!isFirstClick) {
@@ -666,6 +698,14 @@
       }
     }
 
+    function calcWbInfo(countryName) {
+      for (let i = 0; wbLength > i; i++) {
+        if (wbData[i].country === countryName) {
+          return wbData[i];
+        }
+      }
+    }
+
     function clearInfo() {
       let l = $('#LadderRanking').children().children()[2];
       let p = $('#PositiveRanking').children().children()[2];
@@ -689,14 +729,17 @@
     scene.add(axesHelper);
 
 
-    // rendering
+    /* conduct rendering */
     initPostprocessing(vsPost, fsPost, time);
     render();
   }
+  /* END Initialize function */
 
-  // rendering
-  let frame = 0;
-  let speed = 3.141592 * 2 / 90 / 60 / 60 * 2;
+
+
+  ////////////////////////
+  /* Rendering function */
+  ////////////////////////
   function render() {
     // controls.update();
     stats.update();
@@ -711,10 +754,10 @@
     let nowTime = clock.getElapsedTime();
     requestAnimationFrame(render);
 
-    // set 30ftp
+    /* set 30ftp */
     if(frame % 2 === 0) { return; }
-
     //renderer.render(scene, camera);
+
     //オフスクリーンレンダリング
     renderer.render( scene, camera, postprocessing.renderTarget );
     //平面オブジェクト用テクスチャ画像を更新
@@ -728,20 +771,19 @@
     renderer.render(postprocessing.scene, postprocessing.camera );
   }
 
-  //ポストプロセッシング関連情報保持用オブジェクト
-  let postprocessing = {};
 
+
+  /////////////////////////////
+  /* Postprocessing function */
+  /////////////////////////////
   function initPostprocessing(vsPost, fsPost) {
     time = 0.0;
-    //ポストプロセッシング用シーンの生成
     postprocessing.scene = new THREE.Scene();
     postprocessing.camera = new THREE.OrthographicCamera(-1, 1, 1, -1, 0, 1);
 
-    //平面オブジェクトの生成
     postprocessing.plane = new THREE.Mesh(
       new THREE.PlaneBufferGeometry(2, 2),
       new THREE.RawShaderMaterial({
-        //uniform型変数
         uniforms: {
           texture: {type: "t", value: null},
           resolution: {type: "v2", value: [canvasWidth * devicePixelRatio, canvasHeight * devicePixelRatio]},
@@ -754,10 +796,7 @@
       })
     );
 
-    //平面オブジェクトをシーンへ追加
     postprocessing.scene.add(postprocessing.plane);
-
-    //レンダラターゲットの生成
     postprocessing.renderTarget = new THREE.WebGLRenderTarget(
         targetDOM.clientWidth,
         targetDOM.clientHeight,
@@ -768,7 +807,6 @@
           stencilBuffer: false
         }
     );
-
   }
 
 })();
