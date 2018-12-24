@@ -12,6 +12,7 @@
   let geometry;
   let material;
   let earth;
+  let landBase;
   let axesHelper;
   // texture
   let earthLand;
@@ -89,11 +90,11 @@
                 wbButton[0].classList.add("selectedBtn");
               }, 400);
               setTimeout(() => {
+                landBase.material.opacity = 1.0;
                 clickBtn('ladderBtn');
               }, 500);
             }
           });
-
 
         }else{
           controls.enableZoom = false;
@@ -276,20 +277,7 @@
     controls.dampingFactor = 0.2;
 
 
-    let radius = 0.995;
-    // let radius = 1.0;
-    // geometry = new THREE.SphereGeometry(radius, 60, 60);
-    //
-    // material = new THREE.MeshBasicMaterial({
-    //     transparent: true,
-    //     depthTest: true,
-    //     depthWrite: false,
-    //     opacity: 0.9,
-    //     //map: sea_texture,
-    //     color: 0x222222,
-    //     alphaTest: 0.5
-    // });
-
+    let radius = 0.994;
     geometry = new THREE.SphereBufferGeometry(radius, 60, 60);
     material = new THREE.RawShaderMaterial({
       vertexShader: vsMain,
@@ -309,10 +297,21 @@
       //opacity: 0.5,
       //wireframe: true,
     });
-
-
     earth = new THREE.Mesh(geometry, material);
 
+
+    // earth in order to hide map earth
+    geometry = new THREE.SphereGeometry(radius + 0.002, 60, 60);
+    material = new THREE.MeshBasicMaterial({
+        transparent: true,
+        // depthTest: true,
+        depthWrite: true,
+        opacity: 0.0,
+        //map: sea_texture,
+        color: 0x222222,
+        // alphaTest: 0.5
+    });
+    landBase = new THREE.Mesh(geometry, material);
 
     meshList = [];
     for (let name in country_data) {
@@ -333,6 +332,7 @@
       earth.add(m);
       meshList.push(m);
     }
+    earth.add(landBase);
     scene.add(earth);
     earth.position.y = initEarthPosition.y;
     earth.position.z = initEarthPosition.z;
