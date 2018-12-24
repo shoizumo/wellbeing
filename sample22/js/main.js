@@ -155,88 +155,39 @@
 
 
     let center = new THREE.Vector3(0, 0, 0);
-    // let latitude = 35.683333;
-    // let longitude = 139.683333;
-    let latitude = 28.614387;
-    let longitude = 77.19934;
+    let latitude = 35.683333;
+    let longitude = 139.683333;
+    // let latitude = 28.614387;
+    // let longitude = 77.19934;
     // let latitude = -30.559482;
     // let longitude = 22.937506;
 
     window.addEventListener('dblclick', () => {
       let targetPos = convertGeoCoords(latitude, longitude);
-      let cameraPos = targetPos.sub(center);
-      cameraPos = cameraPos.normalize();
-
-
-      console.log(camera.position);
-
-
-      // earth.rotation.y = 0;
-      // camera.position.x = cameraPos.x * 2.5;
-      // camera.position.y = cameraPos.y * 2.5;
-      // camera.position.z = cameraPos.z * 2.5;
-      // camera.lookAt(0.0, 0.0, 0.0);
-
-
-
-      // tween = TweenMax.fromTo(camera.position, 1.0,
-      //     {x:camera.position.x, y:camera.position.y, z:camera.position.z},
-      //     {x:cameraPos.x * 2.5, y:cameraPos.y * 2.5, z:cameraPos.z * 2.5,
-      //       ease : Power0.easeNone,
-      //       onStart  : function() {
-      //         earth.rotation.y = 0;
-      //       },
-      //       onComplete: function(){
-      //         camera.lookAt(0.0, 0.0, 0.0)
-      //       }
-      //     },
-      // );
-
-
-      earth.rotation.y = 0;
-
-      let prevVec = camera.position.sub(center);
       let targetVec = targetPos.sub(center);
+      let prevVec = camera.position.sub(center);
 
       let crossVec = prevVec.clone().cross(targetVec).normalize();
       let angle = prevVec.angleTo(targetVec);
 
-
-      // for (let i = 0; i < 10; i++) {
-      //   let q = new THREE.Quaternion();
-      //   q.setFromAxisAngle(crossVec, angle/10);
-      //   prevVec.applyQuaternion(q);
-      // }
-
       let q = new THREE.Quaternion();
-      let step = 10;
+      let step = 25;
       let stepAngle = angle / step;
-      //
-      // for (let i = 0; i < 10; i++) {
-      //   setTimeout(() => {
-      //     moveCamera();
-      //   }, 500)
-      // }
-
       let count = 0;
-      let moveCamera = function(){
-        q.setFromAxisAngle(crossVec, angle/10);
+      let moveCamera = function(stepAngle){
+        q.setFromAxisAngle(crossVec, stepAngle);
         prevVec.applyQuaternion(q);
         camera.lookAt(0.0, 0.0, 0.0);
-        console.log(count++);
+        count++
       };
 
       let id = setInterval(function(){
-        moveCamera();
-      if(count > 10){
-        clearInterval(id); //idをclearIntervalで指定している
-      }}, 100);
-
-      // prevVec.x = prevVec.x * 2.5;
-      // prevVec.y = prevVec.y * 2.5;
-      // prevVec.z = prevVec.z * 2.5;
-
-      // camera.lookAt(0.0, 0.0, 0.0);
+        earth.rotation.y = 0;
+        moveCamera(stepAngle);
+        if(count > step){
+          clearInterval(id);
+        }
+      }, 1000/step);
 
       console.log(prevVec);
 
