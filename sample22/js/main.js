@@ -194,7 +194,7 @@
       let count = 0;
       let moveCamera = function(stepAngle){
         q.setFromAxisAngle(crossVec, stepAngle);
-        prevVec.applyQuaternion(q);
+        camera.position.applyQuaternion(q);
         camera.lookAt(0.0, 0.0, 0.0);
         count++
       };
