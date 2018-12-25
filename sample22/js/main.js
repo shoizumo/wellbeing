@@ -250,11 +250,28 @@
       mouse.y = -(event.clientY / window.innerHeight) * 2 + 1;
     }, false);
 
+    /* detect mouse drag */
     window.addEventListener("mousedown", function(){
         dragFlag = false;
     }, false);
     window.addEventListener("mousemove", function(){
         dragFlag = true;
+    }, false);
+
+    /* switch earth type */
+    window.addEventListener("keydown", function(event){
+        if (event.keyCode === 37){
+          landBase.material.opacity = 0.0;
+          for (let i = 0, lm = meshList.length; lm > i; i++) {
+            meshList[i].material.opacity = 0.0;
+          }
+        }
+        if (event.keyCode === 39){
+          landBase.material.opacity = 1.0;
+          for (let i = 0, lm = meshList.length; lm > i; i++) {
+            meshList[i].material.opacity = 1.0;
+          }
+        }
     }, false);
 
     // window.addEventListener('dblclick', () => {
