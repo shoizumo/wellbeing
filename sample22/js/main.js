@@ -95,6 +95,7 @@
       //updateURL: true,
       animationTime: 500,
       loop: false,
+      keyboard: false,
       direction: 'vertical', //'horizontal'
 
       afterMove: function(pageId) {
@@ -260,17 +261,33 @@
 
     /* switch earth type */
     window.addEventListener("keydown", function(event){
-        if (event.keyCode === 37){
+        if (event.keyCode === 37){  // left
           landBase.material.opacity = 0.0;
           for (let i = 0, lm = meshList.length; lm > i; i++) {
             meshList[i].material.opacity = 0.0;
           }
         }
-        if (event.keyCode === 39){
+        if (event.keyCode === 39){  // right
           landBase.material.opacity = 1.0;
           for (let i = 0, lm = meshList.length; lm > i; i++) {
             meshList[i].material.opacity = 1.0;
           }
+        }
+        if (event.keyCode === 73){  // i
+          latitude = 28.614387;
+          longitude = 77.19934;
+        }
+        if (event.keyCode === 83){  // s
+          latitude = -30.559482;
+          longitude = 22.937506;
+        }
+        if (event.keyCode === 67){  // c
+          latitude = 56.130366;
+          longitude = -106.34677099999999;
+        }
+        if (event.keyCode === 66){  // b
+          latitude = -14.235004;
+          longitude = -51.92528;
         }
     }, false);
 
