@@ -431,10 +431,10 @@
     for(let i=0; wbLength>i; i++ ) {
       let wb = wbData[i];
 
-      let ladder = {country: wb.country, lRank: wb.lRank, ladder: wb.ladder};
-      let positive = {country: wb.country, pRank: wb.pRank, positive: wb.positive};
-      let negative = {country: wb.country, nRank: wb.nRank, negative: wb.negative};
-      let logGdp = {country: wb.country, gRank: wb.gRank, logGdp: wb.logGdp};
+      let ladder = {country: wb.country, rank: wb.lRank, score: wb.ladder};
+      let positive = {country: wb.country, rank: wb.pRank, score: wb.positive};
+      let negative = {country: wb.country, rank: wb.nRank, score: wb.negative};
+      let logGdp = {country: wb.country, rank: wb.gRank, score: wb.logGdp};
 
       LadderArray.push(ladder);
       PositiveArray.push(positive);
@@ -445,54 +445,54 @@
 
     /* sort rank array */
     LadderArray.sort(function sortRank(a, b){
-      if(a.lRank < b.lRank){
+      if(a.rank < b.rank){
         return -1;
       }
-      else if(a.lRank > b.lRank){
+      else if(a.rank > b.rank){
         return  1;
       }
       return 0;
     });
 
     PositiveArray.sort(function sortRank(a, b){
-      if(a.pRank < b.pRank){
+      if(a.rank < b.rank){
         return -1;
       }
-      else if(a.pRank > b.pRank){
+      else if(a.rank > b.rank){
         return  1;
       }
       return 0;
     });
 
     NegativeArray.sort(function sortRank(a, b){
-      if(a.nRank < b.nRank){
+      if(a.rank < b.rank){
         return -1;
       }
-      else if(a.nRank > b.nRank){
+      else if(a.rank > b.rank){
         return  1;
       }
       return 0;
     });
 
     GDPArray.sort(function sortRank(a, b){
-      if(a.gRank < b.gRank){
+      if(a.rank < b.rank){
         return -1;
       }
-      else if(a.gRank > b.gRank){
+      else if(a.rank > b.rank){
         return  1;
       }
       return 0;
     });
 
     /* calc MaxMin */
-    ladderMax = Math.max(LadderArray[0].ladder);
-    ladderMin = Math.min(LadderArray[wbLength-1].ladder);
-    positiveMax = Math.max(PositiveArray[0].positive);
-    positiveMin = Math.min(PositiveArray[wbLength-1].positive);
-    negativeMax = Math.max(NegativeArray[0].negative);
-    negativeMin = Math.min(NegativeArray[wbLength-1].negative);
-    gdpMax = Math.max(GDPArray[0].logGdp);
-    gdpMin = Math.min(GDPArray[wbLength-1].logGdp);
+    ladderMax = Math.max(LadderArray[0].score);
+    ladderMin = Math.min(LadderArray[wbLength-1].score);
+    positiveMax = Math.max(PositiveArray[0].score);
+    positiveMin = Math.min(PositiveArray[wbLength-1].score);
+    negativeMax = Math.max(NegativeArray[0].score);
+    negativeMin = Math.min(NegativeArray[wbLength-1].score);
+    gdpMax = Math.max(GDPArray[0].score);
+    gdpMin = Math.min(GDPArray[wbLength-1].score);
 
     // console.log(ladderMax, ladderMin);
     // console.log(positiveMax, positiveMin);
@@ -813,7 +813,7 @@
     let canvas = document.querySelector("#histgram");
     let c = canvas.getContext("2d");
 
-    function drawHist(data){
+    function drawHist(data, scoreMax){
       c.fillStyle = "rgb(0, 0, 0)";
       c.fillRect(0, 0, canvas.width, canvas.height);
 
@@ -825,13 +825,24 @@
 
       // draw histgram with loop rect
       for (let i = 0; i < numData; i++) {
-        let h = (data[i]) / 255.0 * canvas.height; // 0 ~ 255までの数字が入っている
+        let h = (data[i].score) / scoreMax * canvas.height; // 0 ~ 255までの数字が入っている
         c.fillRect(rectX, canvas.height - h, width, h);
         rectX = rectX + width;
       }
 
       return width;
     }
+
+    // drawHist(LadderArray, ladderMax);
+    // drawHist(PositiveArray, positiveMax);
+    drawHist(NegativeArray, negativeMin);
+    // drawHist(GDPArray, gdpMax);
+
+    console.log(LadderArray);
+    // console.log(PositiveArray);
+    // console.log(NegativeArray);
+    // console.log(GDPArray);
+
 
 
     // helper
