@@ -66,10 +66,10 @@ float noise( in vec2 x ) {
 
 float noise2(vec2 p) {
     float f = 0.0;
-    f += 0.50000*noise(p*1.0*10.0);
-    f += 0.25000*noise(p*2.0*10.0);
-    f += 0.12500*noise(p*4.0*10.0);
-    f += 0.06250*noise(p*8.0*10.0);
+    f += 0.50000*noise(p*10.0);
+    f += 0.25000*noise(p*20.0);
+    f += 0.12500*noise(p*40.0);
+    f += 0.06250*noise(p*80.0);
     f *= f;
     return f;
 }
@@ -92,7 +92,7 @@ void main( void ) {
     pos.y -= resolution.y * time * 0.01;
 
     float f  = noise2(pos/resolution);
-    vec3 color = vec3(f*.15, f*.45, f)*.5;
+    vec3 color = vec3(f*.15, f*.45, f)*.7;
     color += starCol.rgb;
 
     // small star

@@ -72,7 +72,7 @@
 
   // val for rendering
   let frame = 0;
-  let speed = 3.141592 * 2 / 90 / 60 / 60 * 2;
+  let speed = 3.141592 * 2 / 90 / 60 / 60 * 2;  // 1round/90m * 2
   let postprocessing = {};
 
   // temp val
@@ -302,7 +302,7 @@
     earthMapLoader = new THREE.TextureLoader();
     earthLand = earthLandLoader.load('img/earthspec.png', () => {
       earthBump = earthBumpLoader.load('img/earthbump.png', () => {
-        earthMap = earthMapLoader.load('img/earthmapMono.jpg', loadShader);
+        earthMap = earthMapLoader.load('img/mapNight.jpg', loadShader);
       })
     });
 
@@ -392,7 +392,7 @@
         depthWrite: true,
         opacity: 0.0,
         //map: sea_texture,
-        color: 0x222222,
+        color: 0x040410,
         // alphaTest: 0.5
     });
     landBase = new THREE.Mesh(geometry, material);
@@ -416,6 +416,7 @@
       earth.add(m);
       meshList.push(m);
     }
+
 
     /* add to scene */
     earth.add(landBase);
@@ -780,9 +781,9 @@
     frame++;
 
     if (pageIndex !== interactivePageIndex) {
-      earth.rotation.x += speed; // 1round/90m * 2
+      earth.rotation.x += speed;
     }else{
-      earth.rotation.y += speed * 5; // 1round/90m * 2
+      earth.rotation.y += speed * 5;
     }
 
     let nowTime = clock.getElapsedTime();
