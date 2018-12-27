@@ -118,6 +118,7 @@ void main( void ) {
     }
 
     gl_FragColor = vec4(mix(destColor, vec4(color, 1.0), mixRatio));
+//    gl_FragColor = vec4(0.0, 0.0, 0.0, 0.0);
 
 }
 

@@ -430,20 +430,69 @@
     */
     for(let i=0; wbLength>i; i++ ) {
       let wb = wbData[i];
-      LadderArray.push(wb.ladder);
-      PositiveArray.push(wb.positive);
-      NegativeArray.push(wb.negative);
-      GDPArray.push(wb.logGdp);
+
+      let ladder = {country: wb.country, lRank: wb.lRank, ladder: wb.ladder};
+      let positive = {country: wb.country, pRank: wb.pRank, positive: wb.positive};
+      let negative = {country: wb.country, nRank: wb.nRank, negative: wb.negative};
+      let logGdp = {country: wb.country, gRank: wb.gRank, logGdp: wb.logGdp};
+
+      LadderArray.push(ladder);
+      PositiveArray.push(positive);
+      NegativeArray.push(negative);
+      GDPArray.push(logGdp);
     }
 
-    ladderMax = Math.max(...LadderArray);
-    ladderMin = Math.min(...LadderArray);
-    positiveMax = Math.max(...PositiveArray);
-    positiveMin = Math.min(...PositiveArray);
-    negativeMax = Math.max(...NegativeArray);
-    negativeMin = Math.min(...NegativeArray);
-    gdpMax = Math.max(...GDPArray);
-    gdpMin = Math.min(...GDPArray);
+
+    /* sort rank array */
+    LadderArray.sort(function sortRank(a, b){
+      if(a.lRank < b.lRank){
+        return -1;
+      }
+      else if(a.lRank > b.lRank){
+        return  1;
+      }
+      return 0;
+    });
+
+    PositiveArray.sort(function sortRank(a, b){
+      if(a.pRank < b.pRank){
+        return -1;
+      }
+      else if(a.pRank > b.pRank){
+        return  1;
+      }
+      return 0;
+    });
+
+    NegativeArray.sort(function sortRank(a, b){
+      if(a.nRank < b.nRank){
+        return -1;
+      }
+      else if(a.nRank > b.nRank){
+        return  1;
+      }
+      return 0;
+    });
+
+    GDPArray.sort(function sortRank(a, b){
+      if(a.gRank < b.gRank){
+        return -1;
+      }
+      else if(a.gRank > b.gRank){
+        return  1;
+      }
+      return 0;
+    });
+
+    /* calc MaxMin */
+    ladderMax = Math.max(LadderArray[0].ladder);
+    ladderMin = Math.min(LadderArray[wbLength-1].ladder);
+    positiveMax = Math.max(PositiveArray[0].positive);
+    positiveMin = Math.min(PositiveArray[wbLength-1].positive);
+    negativeMax = Math.max(NegativeArray[0].negative);
+    negativeMin = Math.min(NegativeArray[wbLength-1].negative);
+    gdpMax = Math.max(GDPArray[0].logGdp);
+    gdpMin = Math.min(GDPArray[wbLength-1].logGdp);
 
     // console.log(ladderMax, ladderMin);
     // console.log(positiveMax, positiveMin);
@@ -593,7 +642,7 @@
       );
     }
 
-    /* display in turn function */
+    /* display in turn rank type */
     function createPromise(type, rank, num, svgDuration, text, nextStartDuration, score, scoreText) {
       let promise;
       let timeout;
@@ -756,6 +805,32 @@
       $('.infoPositive').attr('opacity', 0.0);
       $('.infoNegative').attr('opacity', 0.0);
       $('.infoGDP').attr('opacity', 0.0);
+    }
+
+    /*
+    // ranking
+    */
+    let canvas = document.querySelector("#histgram");
+    let c = canvas.getContext("2d");
+
+    function drawHist(data){
+      c.fillStyle = "rgb(0, 0, 0)";
+      c.fillRect(0, 0, canvas.width, canvas.height);
+
+      let rectX = 0;
+      let numData = data.length;
+      let width  = canvas.width / numData;
+      console.log();
+      c.fillStyle = "rgb(255, 255, 255)";
+
+      // draw histgram with loop rect
+      for (let i = 0; i < numData; i++) {
+        let h = (data[i]) / 255.0 * canvas.height; // 0 ~ 255までの数字が入っている
+        c.fillRect(rectX, canvas.height - h, width, h);
+        rectX = rectX + width;
+      }
+
+      return width;
     }
 
 
