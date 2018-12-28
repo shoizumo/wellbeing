@@ -56,6 +56,11 @@
   let gdpMax, gdpMin;
   let wbButton;
 
+  // val for ranking histgram
+  let histData;
+  let varWidth;
+  let isHistDisplay = false;
+
   // val for interactive land function
   let isClicked = false;
   let countryName;
@@ -522,6 +527,10 @@
           }
         }
       }
+      let res = drawHist(type);
+      console.log(res)
+      varWidth = res.width;
+      histData = res.histData;
     };
 
     /*
@@ -811,39 +820,69 @@
     // ranking
     */
     let canvas = document.querySelector("#histgram");
-    let c = canvas.getContext("2d");
+    canvas.width = 600;
+    canvas.height = 120;
+    let canvasContext = canvas.getContext("2d");
 
-    function drawHist(data, scoreMax){
-      c.fillStyle = "rgb(0, 0, 0)";
-      c.fillRect(0, 0, canvas.width, canvas.height);
+    // function drawHist(data, scoreMax){
+    function drawHist(type){
+      let data;
+      let scoreMax;
+      if (type === 'ladderBtn'){
+        data = LadderArray;
+        scoreMax = ladderMax;
+      }else if (type === 'positiveBtn'){
+        data = PositiveArray;
+        scoreMax = positiveMax;
+      }else if (type === 'negativeBtn'){
+        data = NegativeArray;
+        scoreMax = negativeMin;
+      }else{
+        data = GDPArray;
+        scoreMax = gdpMax;
+      }
 
-      let rectX = 0;
+      canvasContext.fillStyle = "rgb(0, 0, 0)";
+      canvasContext.fillRect(0, 0, canvas.width, canvas.height);
+
+      let rectX = 0.0;
       let numData = data.length;
       let width  = canvas.width / numData;
-      console.log();
-      c.fillStyle = "rgb(255, 255, 255)";
+      // c.fillStyle = "rgb(255, 255, 255)";
 
       // draw histgram with loop rect
       for (let i = 0; i < numData; i++) {
+
+        //
+        let numX = Math.random() * 255;
+        let numY = Math.random() * 255;
+        let numZ = Math.random() * 255;
+        canvasContext.fillStyle = "rgb(" + String(numX) + "," + String(numY) + "," + String(numZ) + ")";
+        //
+
         let h = (data[i].score) / scoreMax * canvas.height; // 0 ~ 255までの数字が入っている
-        c.fillRect(rectX, canvas.height - h, width, h);
+        canvasContext.fillRect(rectX, canvas.height - h, width, h);
         rectX = rectX + width;
       }
-
-      return width;
+      isHistDisplay = true;
+      return {width:width, histData:data};
     }
 
-    // drawHist(LadderArray, ladderMax);
-    // drawHist(PositiveArray, positiveMax);
-    drawHist(NegativeArray, negativeMin);
-    // drawHist(GDPArray, gdpMax);
+    /* mouse over histgram */
+    canvas.addEventListener('mousemove', onDrawHist, false);
+    function onDrawHist(event) {
 
-    console.log(LadderArray);
-    // console.log(PositiveArray);
-    // console.log(NegativeArray);
-    // console.log(GDPArray);
+      if (isHistDisplay){
+        let rect = event.target.getBoundingClientRect();
+        let mouseX = Math.abs(event.clientX - rect.x);
+        let index = Math.floor(mouseX / varWidth);
+        console.log(mouseX, index);
 
+        let data = histData;
+        console.log(index, data[index].country, data[index].rank);
+      }
 
+    }
 
     // helper
     axesHelper = new THREE.AxesHelper(5.0);
@@ -876,7 +915,7 @@
     requestAnimationFrame(render);
 
     /* set 30ftp */
-    if(frame % 2 === 0) { return; }
+    if(frame % 2 === 0) {return;}
     //renderer.render(scene, camera);
 
     //オフスクリーンレンダリング
