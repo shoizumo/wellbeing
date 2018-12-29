@@ -737,8 +737,7 @@
               if(typeof res !== 'undefined') {
                 tooltip.css({top: event.clientY * 0.97});
                 tooltip.css({left: event.clientX * 1.03});
-              }else{
-               }
+              }
 
               intersects[0].object.scale.set(hover_scale, hover_scale, hover_scale);
               intersected_object = intersects[0].object;
@@ -842,13 +841,13 @@
         scoreMax = gdpMax;
       }
 
-      canvasContext.fillStyle = "rgb(0, 0, 0)";
+      canvasContext.fillStyle = "rgb(0, 0, 0, 0)";  // not fill
       canvasContext.fillRect(0, 0, canvas.width, canvas.height);
 
       let rectX = 0.0;
       let numData = data.length;
       let width  = canvas.width / numData;
-      canvasContext.fillStyle = "rgb(100, 100, 100)";
+      canvasContext.fillStyle = "rgb(200, 230, 255)";
 
       // draw histgram with loop rect
       let i = 0;
@@ -858,10 +857,8 @@
         canvasContext.fillRect(rectX, canvas.height - h, width, h);
         rectX = rectX + width;
         i++;
-        console.log(i, numData, i > numData);
 
         if(i > numData - 1){
-          console.log('finish');
           clearInterval(id);
         }
       }, 1000/numData * 3);
@@ -871,20 +868,41 @@
     }
 
     /* mouse over histgram */
+    let tooltipHist = $('#tooltipHist');
     canvas.addEventListener('mousemove', onHistRanking, false);
+    canvas.addEventListener('mouseout', outHistRanking, false);
+
     function onHistRanking(event) {
 
       if (isHistDisplay){
         let rect = event.target.getBoundingClientRect();
         let mouseX = Math.abs(event.clientX - rect.x);
         let index = Math.floor(mouseX / varWidth);
-        console.log(mouseX, index);
-
         let data = histData;
         console.log(index, data[index].country, data[index].rank);
-      }
 
+        document.getElementById("canvasWrapper").classList.add("canvasWrapperPointer");
+        countryName = data[index].country;
+        tooltipHist[0].innerText = countryName;
+        tooltipHist.css({opacity: 1.0});
+
+        console.log(tooltipHist);
+        console.log(tooltipHist.width());
+
+
+        tooltipHist.css({top: event.clientY * 0.95});
+        tooltipHist.css({left: event.clientX * 1.0 - tooltipHist.width() / 2 - 5});
+
+      }
     }
+
+    /* mouse off histgram */
+    function outHistRanking() {
+      console.log('off');
+      tooltipHist.css({opacity: 0.0});
+    }
+
+
 
     // helper
     axesHelper = new THREE.AxesHelper(5.0);

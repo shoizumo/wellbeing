@@ -54,24 +54,6 @@ html, body {
 }
 
 
-/* moueseover land */
-#tooltip {
-  position: fixed;
-  /*width: 150px;*/
-  /*bottom: 200px;*/
-  /*left: 200px;*/
-  /*width: 150%;*/
-  text-align: center;
-  padding : 0.1em 0.5em 0.1em 0.5em;
-  color: #ffffff;
-  opacity: 0.0;
-  background-color: #646464;
-  border-radius: 10px;
-  font-family: 'Nunito', sans-serif;
-  font-weight: 300;
-}
-
-
 /* score board */
 #infoBoard{
   display: grid;
@@ -210,11 +192,60 @@ html, body {
   width:600px;
   height:120px;
 
-  background-color: rgba(0, 0, 255, 0.5);
+  background-color: rgba(0, 0, 255, 0.0);
   /*opacity: 0.0;*/
   color: #ffffff;
   text-align: center;
 
+  font-family: 'Nunito', sans-serif;
+  font-weight: 300;
+}
+
+#tooltipHist {
+  position: absolute;
+  text-align: center;
+  font-size: 12px;
+  padding : 1px 5px 1px 5px;
+  color: #ffffff;
+  opacity: 0.0;
+  background-color: #646464;
+  border-radius: 5px;
+  font-family: 'Nunito', sans-serif;
+  font-weight: 300;
+}
+
+#tooltipHist:before{
+	content: "";
+	position: absolute;
+	top: 100%;
+	left: 50%;
+ 	margin-left: -5px;
+	border: 5px solid transparent;
+	border-top: 5px solid #646464;
+}
+
+/*#tooltipHist p {*/
+	/*margin: 0;*/
+	/*padding: 0;*/
+/*}*/
+
+.canvasWrapperPointer{
+  cursor: pointer;
+}
+
+/* moueseover land */
+#tooltip {
+  position: fixed;
+  /*width: 150px;*/
+  /*bottom: 200px;*/
+  /*left: 200px;*/
+  /*width: 150%;*/
+  text-align: center;
+  padding : 0.1em 0.5em 0.1em 0.5em;
+  color: #ffffff;
+  opacity: 0.0;
+  background-color: #646464;
+  border-radius: 10px;
   font-family: 'Nunito', sans-serif;
   font-weight: 300;
 }
