@@ -528,7 +528,7 @@
         }
       }
       let res = drawHist(type);
-      console.log(res)
+      // console.log(res);
       varWidth = res.width;
       histData = res.histData;
     };
@@ -848,29 +848,31 @@
       let rectX = 0.0;
       let numData = data.length;
       let width  = canvas.width / numData;
-      // c.fillStyle = "rgb(255, 255, 255)";
+      canvasContext.fillStyle = "rgb(100, 100, 100)";
 
       // draw histgram with loop rect
-      for (let i = 0; i < numData; i++) {
-
-        //
-        let numX = Math.random() * 255;
-        let numY = Math.random() * 255;
-        let numZ = Math.random() * 255;
-        canvasContext.fillStyle = "rgb(" + String(numX) + "," + String(numY) + "," + String(numZ) + ")";
-        //
-
+      let i = 0;
+      console.log(numData, data);
+      let id = setInterval(function(){
         let h = (data[i].score) / scoreMax * canvas.height; // 0 ~ 255までの数字が入っている
         canvasContext.fillRect(rectX, canvas.height - h, width, h);
         rectX = rectX + width;
-      }
+        i++;
+        console.log(i, numData, i > numData);
+
+        if(i > numData - 1){
+          console.log('finish');
+          clearInterval(id);
+        }
+      }, 1000/numData * 3);
+
       isHistDisplay = true;
       return {width:width, histData:data};
     }
 
     /* mouse over histgram */
-    canvas.addEventListener('mousemove', onDrawHist, false);
-    function onDrawHist(event) {
+    canvas.addEventListener('mousemove', onHistRanking, false);
+    function onHistRanking(event) {
 
       if (isHistDisplay){
         let rect = event.target.getBoundingClientRect();
