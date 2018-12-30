@@ -60,13 +60,15 @@
   let histData;
   let varWidth;
   let isHistDisplay = false;
+  let mouseonCountry;
 
   // val for interactive land function
   let isClicked = false;
-  let countryName;
   let dragFlag = false;
   let isLand = false;
   let isFirstClick = true;
+  let latitude;
+  let longitude;
 
   // val for scroll
   let pageIndex = 1.0;
@@ -178,12 +180,9 @@
     /*
     // move camera position function
     */
-    let latitude = 35.683333;
-    let longitude = 139.683333;
-    // let latitude = 28.614387;
-    // let longitude = 77.19934;
-    // let latitude = -30.559482;
-    // let longitude = 22.937506;
+    // let resLatlon = countryToLatlon('Japan');
+    // latitude = resLatlon.latitude;
+    // longitude = resLatlon.longitude;
 
     /* move position in some separate times using quaternion */
     window.addEventListener('dblclick', () => {
@@ -279,22 +278,29 @@
           }
         }
         if (event.keyCode === 73){  // i
-          latitude = 28.614387;
-          longitude = 77.19934;
+          let res = countryToLatlon('India');
+          latitude = res.latitude;
+          longitude = res.longitude;
         }
         if (event.keyCode === 83){  // s
-          latitude = -30.559482;
-          longitude = 22.937506;
+          let res = countryToLatlon('South Africa');
+          latitude = res.latitude;
+          longitude = res.longitude;
         }
         if (event.keyCode === 67){  // c
-          latitude = 56.130366;
-          longitude = -106.34677099999999;
+          let res = countryToLatlon('Canada');
+          latitude = res.latitude;
+          longitude = res.longitude;
         }
         if (event.keyCode === 66){  // b
-          latitude = -14.235004;
-          longitude = -51.92528;
+          let res = countryToLatlon('Brazil');
+          latitude = res.latitude;
+          longitude = res.longitude;
         }
     }, false);
+
+    console.log(latlon);
+
 
     // window.addEventListener('dblclick', () => {
     //     isdDblclick = true;
@@ -851,7 +857,7 @@
 
       // draw histgram with loop rect
       let i = 0;
-      console.log(numData, data);
+      // console.log(numData, data);
       let id = setInterval(function(){
         let h = (data[i].score) / scoreMax * canvas.height; // 0 ~ 255までの数字が入っている
         canvasContext.fillRect(rectX, canvas.height - h, width, h);
@@ -871,6 +877,9 @@
     let tooltipHist = $('#tooltipHist');
     canvas.addEventListener('mousemove', onHistRanking, false);
     canvas.addEventListener('mouseout', outHistRanking, false);
+    canvas.addEventListener('click', clickHistRanking, false);
+
+    console.log(countryToLatlon);
 
     function onHistRanking(event) {
 
@@ -879,16 +888,12 @@
         let mouseX = Math.abs(event.clientX - rect.x);
         let index = Math.floor(mouseX / varWidth);
         let data = histData;
-        console.log(index, data[index].country, data[index].rank);
+        console.log(data[index].country, data[index].rank);
 
         document.getElementById("canvasWrapper").classList.add("canvasWrapperPointer");
-        countryName = data[index].country;
-        tooltipHist[0].innerText = countryName;
+        mouseonCountry = data[index].country;
+        tooltipHist[0].innerText = mouseonCountry;
         tooltipHist.css({opacity: 1.0});
-
-        console.log(tooltipHist);
-        console.log(tooltipHist.width());
-
 
         tooltipHist.css({top: event.clientY * 0.95});
         tooltipHist.css({left: event.clientX * 1.0 - tooltipHist.width() / 2 - 5});
@@ -898,10 +903,31 @@
 
     /* mouse off histgram */
     function outHistRanking() {
-      console.log('off');
       tooltipHist.css({opacity: 0.0});
     }
 
+    /* mouse click histgram */
+    function clickHistRanking() {
+      console.log('click', mouseonCountry);
+      let res = countryToLatlon(mouseonCountry);
+      latitude = res.latitude;
+      longitude = res.longitude;
+
+      //tooltipHist.css({opacity: 0.0});
+    }
+
+    function countryToLatlon(countryName) {
+      let latitude;
+      let longitude;
+
+      for (let i = 0; wbLength > i; i++) {
+        if (latlon[i].country === countryName){
+          latitude = latlon[i].latitude;
+          longitude = latlon[i].longitude;
+        }
+      }
+      return {latitude:latitude, longitude:longitude};
+    }
 
 
     // helper
