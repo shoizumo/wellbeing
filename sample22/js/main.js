@@ -178,58 +178,6 @@
 
 
     /*
-    // move camera position function
-    */
-    // let resLatlon = countryToLatlon('Japan');
-    // latitude = resLatlon.latitude;
-    // longitude = resLatlon.longitude;
-
-    /* move position in some separate times using quaternion */
-    window.addEventListener('dblclick', () => {
-      let targetPos = convertGeoCoords(latitude, longitude);
-      let targetVec = targetPos.sub(center);
-      let prevVec = camera.position.sub(center);
-
-      let crossVec = prevVec.clone().cross(targetVec).normalize();
-      let angle = prevVec.angleTo(targetVec);
-
-      let q = new THREE.Quaternion();
-      let step = 25;
-      let stepAngle = angle / step;
-      let count = 0;
-      let moveCamera = function(stepAngle){
-        q.setFromAxisAngle(crossVec, stepAngle);
-        camera.position.applyQuaternion(q);
-        camera.lookAt(0.0, 0.0, 0.0);
-        count++
-      };
-
-      let id = setInterval(function(){
-        earth.rotation.y = 0;
-        moveCamera(stepAngle);
-        if(count > step){
-          clearInterval(id);
-        }
-      }, 1000/step);
-
-      console.log(prevVec);
-
-    }, false);
-
-
-    function convertGeoCoords(latitude, longitude, radius=1.0) {
-      let latRad = latitude * (Math.PI / 180);
-      let lonRad = -longitude * (Math.PI / 180);
-
-      let x = Math.cos(latRad) * Math.cos(lonRad) * radius;
-      let y = Math.sin(latRad) * radius;
-      let z = Math.cos(latRad) * Math.sin(lonRad) * radius;
-
-      return new THREE.Vector3(x, y, z);
-    }
-
-
-    /*
     // initial setting
     */
     canvasWidth = window.innerWidth;
@@ -277,26 +225,26 @@
             meshList[i].material.opacity = 1.0;
           }
         }
-        if (event.keyCode === 73){  // i
-          let res = countryToLatlon('India');
-          latitude = res.latitude;
-          longitude = res.longitude;
-        }
-        if (event.keyCode === 83){  // s
-          let res = countryToLatlon('South Africa');
-          latitude = res.latitude;
-          longitude = res.longitude;
-        }
-        if (event.keyCode === 67){  // c
-          let res = countryToLatlon('Canada');
-          latitude = res.latitude;
-          longitude = res.longitude;
-        }
-        if (event.keyCode === 66){  // b
-          let res = countryToLatlon('Brazil');
-          latitude = res.latitude;
-          longitude = res.longitude;
-        }
+        // if (event.keyCode === 73){  // i
+        //   let res = countryToLatlon('India');
+        //   latitude = res.latitude;
+        //   longitude = res.longitude;
+        // }
+        // if (event.keyCode === 83){  // s
+        //   let res = countryToLatlon('South Africa');
+        //   latitude = res.latitude;
+        //   longitude = res.longitude;
+        // }
+        // if (event.keyCode === 67){  // c
+        //   let res = countryToLatlon('Canada');
+        //   latitude = res.latitude;
+        //   longitude = res.longitude;
+        // }
+        // if (event.keyCode === 66){  // b
+        //   let res = countryToLatlon('Brazil');
+        //   latitude = res.latitude;
+        //   longitude = res.longitude;
+        // }
     }, false);
 
     console.log(latlon);
@@ -913,6 +861,8 @@
       latitude = res.latitude;
       longitude = res.longitude;
 
+      moveCamera(latitude, longitude);
+
       //tooltipHist.css({opacity: 0.0});
     }
 
@@ -927,6 +877,53 @@
         }
       }
       return {latitude:latitude, longitude:longitude};
+    }
+
+        /*
+    // move camera position function
+    */
+    /* move position in some separate times using quaternion */
+    function moveCamera(latitude, longitude){
+      let targetPos = convertGeoCoords(latitude, longitude);
+      let targetVec = targetPos.sub(center);
+      let prevVec = camera.position.sub(center);
+
+      let crossVec = prevVec.clone().cross(targetVec).normalize();
+      let angle = prevVec.angleTo(targetVec);
+
+      let q = new THREE.Quaternion();
+      let step = 25;
+      let stepAngle = angle / step;
+      let count = 0;
+      let moveCamera = function(stepAngle){
+        q.setFromAxisAngle(crossVec, stepAngle);
+        camera.position.applyQuaternion(q);
+        camera.lookAt(0.0, 0.0, 0.0);
+        count++
+      };
+
+      let id = setInterval(function(){
+        earth.rotation.y = 0;
+        moveCamera(stepAngle);
+        if(count > step){
+          clearInterval(id);
+        }
+      }, 1000/step);
+
+      console.log(prevVec);
+
+    }
+
+
+    function convertGeoCoords(latitude, longitude, radius=1.0) {
+      let latRad = latitude * (Math.PI / 180);
+      let lonRad = -longitude * (Math.PI / 180);
+
+      let x = Math.cos(latRad) * Math.cos(lonRad) * radius;
+      let y = Math.sin(latRad) * radius;
+      let z = Math.cos(latRad) * Math.sin(lonRad) * radius;
+
+      return new THREE.Vector3(x, y, z);
     }
 
 
