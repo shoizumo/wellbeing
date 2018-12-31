@@ -216,12 +216,14 @@
     window.addEventListener("keydown", function(event){
         if (event.keyCode === 37){  // left
           landBase.material.opacity = 0.0;
+          earthOutline.scale.set(1.0, 1.0, 1.0);
           for (let i = 0, lm = meshList.length; lm > i; i++) {
             meshList[i].material.opacity = 0.0;
           }
         }
         if (event.keyCode === 39){  // right
           landBase.material.opacity = 1.0;
+          earthOutline.scale.set(1.002, 1.002, 1.002);
           for (let i = 0, lm = meshList.length; lm > i; i++) {
             meshList[i].material.opacity = 1.0;
           }
@@ -337,6 +339,15 @@
     });
     landBase = new THREE.Mesh(geometry, material);
 
+    /* earth outline object */
+    geometry = new THREE.SphereGeometry(radius + 0.003, 120, 120);
+    material = new THREE.MeshBasicMaterial({
+        color: 0x555555,
+        side: THREE.BackSide
+        // alphaTest: 0.5
+    });
+    earthOutline = new THREE.Mesh(geometry, material);
+
     meshList = [];
     for (let name in country_data) {
       geometry = new Tessellator3D(country_data[name]);
@@ -359,6 +370,7 @@
 
 
     /* add to scene */
+    earth.add(earthOutline);
     earth.add(landBase);
     scene.add(earth);
     earth.position.y = initEarthPosition.y;
@@ -464,6 +476,8 @@
             }
           }
         }
+      }else{
+        earthOutline.scale.set(1.0, 1.0, 1.0);
       }
 
       let res = drawHist(type);
@@ -495,6 +509,7 @@
       meshList[i].material.color.g = RGB[1];
       meshList[i].material.color.b = RGB[2];
       meshList[i].material.opacity = 1.0;
+      earthOutline.scale.set(1.002, 1.002, 1.002);
     }
 
     function hslToRgb(h, s, l) {
