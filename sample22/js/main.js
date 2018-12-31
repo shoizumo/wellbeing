@@ -19,6 +19,7 @@
   let geometry;
   let material;
   let earth;
+  let earthOutline;
   let landBase;
   let radius = 0.994;
   let axesHelper;
@@ -138,8 +139,8 @@
                 wbButton[0].classList.add("selectedBtn");
               }, 400);
               setTimeout(() => {
-                landBase.material.opacity = 1.0;
-                clickBtn('ladderBtn');
+                // landBase.material.opacity = 1.0;
+                clickBtn('ladderBtn', 0.0);
               }, 500);
             }
           });
@@ -225,26 +226,6 @@
             meshList[i].material.opacity = 1.0;
           }
         }
-        // if (event.keyCode === 73){  // i
-        //   let res = countrynameToLatlon('India');
-        //   latitude = res.latitude;
-        //   longitude = res.longitude;
-        // }
-        // if (event.keyCode === 83){  // s
-        //   let res = countrynameToLatlon('South Africa');
-        //   latitude = res.latitude;
-        //   longitude = res.longitude;
-        // }
-        // if (event.keyCode === 67){  // c
-        //   let res = countrynameToLatlon('Canada');
-        //   latitude = res.latitude;
-        //   longitude = res.longitude;
-        // }
-        // if (event.keyCode === 66){  // b
-        //   let res = countrynameToLatlon('Brazil');
-        //   latitude = res.latitude;
-        //   longitude = res.longitude;
-        // }
     }, false);
 
     console.log(latlon);
@@ -470,22 +451,28 @@
       }, false);
     }
 
-    clickBtn = function (type) {
-      for (let j = 0; wbLength > j; j++) {
-        for (let i = 0, lm = meshList.length; lm > i; i++) {
-          let countryName = meshList[i].userData.country;
-          if (wbData[j].country === countryName) {
-            coloringLand(i, j, type)
-          }else{
-            meshList[i].material.opacity = 1.0;
+    clickBtn = function (type, opacity = 1.0) {
+      for (let i = 0, lm = meshList.length; lm > i; i++) {
+        meshList[i].material.opacity = opacity;
+      }
+      if (opacity > 0.0){
+        for (let j = 0; wbLength > j; j++) {
+          for (let i = 0, lm = meshList.length; lm > i; i++) {
+            let countryName = meshList[i].userData.country;
+            if (wbData[j].country === countryName) {
+              coloringLand(i, j, type)
+            }
           }
         }
       }
+
       let res = drawHist(type);
       // console.log(res);
       varWidth = res.width;
       histData = res.histData;
     };
+
+    console.log(wbData);
 
     /*
     // coloring land object using well-being score
@@ -824,8 +811,6 @@
     canvas.addEventListener('mousemove', onHistRanking, false);
     canvas.addEventListener('mouseout', outHistRanking, false);
     canvas.addEventListener('click', clickHistRanking, false);
-
-    console.log(countrynameToLatlon);
 
     function onHistRanking(event) {
       if (isHistDisplay){

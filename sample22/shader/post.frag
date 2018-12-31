@@ -86,6 +86,7 @@ void main( void ) {
     // bright star
     vec2 pos = gl_FragCoord.xy;
     vec4 starCol = stars(pos) / 2.0;
+//    vec4 starCol = stars(pos) / abs(sin(time));
 
     // cloud
     pos.x -= resolution.x * sin(time * .1) * 0.05;
