@@ -62,6 +62,7 @@
   let varWidth;
   let isHistDisplay = false;
   let mouseonCountry;
+  let drawSetInterval;
 
   // val for interactive land function
   let isClicked = false;
@@ -779,6 +780,7 @@
 
     // function drawHist(data, scoreMax){
     function drawHist(type){
+      clearInterval(drawSetInterval);
       let data;
       let scoreMax;
       if (type === 'ladderBtn'){
@@ -795,6 +797,7 @@
         scoreMax = gdpMax;
       }
 
+      canvasContext.clearRect(0, 0, canvas.width, canvas.height);
       canvasContext.fillStyle = "rgb(0, 0, 0, 0)";  // not fill
       canvasContext.fillRect(0, 0, canvas.width, canvas.height);
 
@@ -806,14 +809,14 @@
       // draw histgram with loop rect
       let i = 0;
       // console.log(numData, data);
-      let id = setInterval(function(){
+      drawSetInterval = setInterval(function(){
         let h = (data[i].score) / scoreMax * canvas.height; // 0 ~ 255までの数字が入っている
         canvasContext.fillRect(rectX, canvas.height - h, width, h);
         rectX = rectX + width;
         i++;
 
         if(i > numData - 1){
-          clearInterval(id);
+          clearInterval(drawSetInterval);
         }
       }, 1000/numData * 3);
 
