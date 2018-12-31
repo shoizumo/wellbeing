@@ -226,22 +226,22 @@
           }
         }
         // if (event.keyCode === 73){  // i
-        //   let res = countryToLatlon('India');
+        //   let res = countrynameToLatlon('India');
         //   latitude = res.latitude;
         //   longitude = res.longitude;
         // }
         // if (event.keyCode === 83){  // s
-        //   let res = countryToLatlon('South Africa');
+        //   let res = countrynameToLatlon('South Africa');
         //   latitude = res.latitude;
         //   longitude = res.longitude;
         // }
         // if (event.keyCode === 67){  // c
-        //   let res = countryToLatlon('Canada');
+        //   let res = countrynameToLatlon('Canada');
         //   latitude = res.latitude;
         //   longitude = res.longitude;
         // }
         // if (event.keyCode === 66){  // b
-        //   let res = countryToLatlon('Brazil');
+        //   let res = countrynameToLatlon('Brazil');
         //   latitude = res.latitude;
         //   longitude = res.longitude;
         // }
@@ -705,7 +705,6 @@
     function onDocumentMouseClick() {
       if(!dragFlag) {
         if (isLand) {
-          // TweenMax.killAll();
           if (!isFirstClick) {
             TweenMax.killAll();
             positive.cancel();
@@ -713,7 +712,6 @@
             gdp.cancel();
           }
 
-          // isClicked = !isClicked;
           clearInfo();
           let res = calcWbInfo(countryName);
           infoBoard.css({opacity: 1.0});
@@ -827,10 +825,9 @@
     canvas.addEventListener('mouseout', outHistRanking, false);
     canvas.addEventListener('click', clickHistRanking, false);
 
-    console.log(countryToLatlon);
+    console.log(countrynameToLatlon);
 
     function onHistRanking(event) {
-
       if (isHistDisplay){
         let rect = event.target.getBoundingClientRect();
         let mouseX = Math.abs(event.clientX - rect.x);
@@ -845,7 +842,6 @@
 
         tooltipHist.css({top: event.clientY * 0.95});
         tooltipHist.css({left: event.clientX * 1.0 - tooltipHist.width() / 2 - 5});
-
       }
     }
 
@@ -857,16 +853,32 @@
     /* mouse click histgram */
     function clickHistRanking() {
       console.log('click', mouseonCountry);
-      let res = countryToLatlon(mouseonCountry);
+      let res = countrynameToLatlon(mouseonCountry);
       latitude = res.latitude;
       longitude = res.longitude;
 
       moveCamera(latitude, longitude);
+      clickHistRankingDisplayScore(mouseonCountry);
 
       //tooltipHist.css({opacity: 0.0});
     }
 
-    function countryToLatlon(countryName) {
+    function clickHistRankingDisplayScore(countryName) {
+      if (!isFirstClick) {
+        TweenMax.killAll();
+        positive.cancel();
+        negative.cancel();
+        gdp.cancel();
+      }
+      clearInfo();
+      let res = calcWbInfo(countryName);
+      infoBoard.css({opacity: 1.0});
+
+      $('#country').empty().append(countryName);
+      doRankingPromise(res, wbLength);
+    }
+
+    function countrynameToLatlon(countryName) {
       let latitude;
       let longitude;
 
@@ -879,7 +891,7 @@
       return {latitude:latitude, longitude:longitude};
     }
 
-        /*
+    /*
     // move camera position function
     */
     /* move position in some separate times using quaternion */
