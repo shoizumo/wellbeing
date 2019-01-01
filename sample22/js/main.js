@@ -71,6 +71,7 @@
   let isFirstClick = true;
   let latitude;
   let longitude;
+  let landBaseOpacity = 0.0;
 
   // val for scroll
   let pageIndex = 1.0;
@@ -216,14 +217,16 @@
     /* switch earth type */
     window.addEventListener("keydown", function(event){
         if (event.keyCode === 37){  // left
-          landBase.material.opacity = 0.0;
+          landBaseOpacity = 0.0;
+          landBase.material.opacity = landBaseOpacity;
           earthOutline.scale.set(1.0, 1.0, 1.0);
           for (let i = 0, lm = meshList.length; lm > i; i++) {
             meshList[i].material.opacity = 0.0;
           }
         }
         if (event.keyCode === 39){  // right
-          landBase.material.opacity = 1.0;
+          landBaseOpacity = 1.0;
+          landBase.material.opacity = landBaseOpacity;
           earthOutline.scale.set(1.002, 1.002, 1.002);
           for (let i = 0, lm = meshList.length; lm > i; i++) {
             meshList[i].material.opacity = 1.0;
@@ -460,7 +463,7 @@
         $(".wbButton").removeClass("selectedBtn");
 
         wbButton[i].classList.add("selectedBtn");
-        clickBtn(type);
+        clickBtn(type, landBaseOpacity);
       }, false);
     }
 
