@@ -54,14 +54,127 @@ html, body {
 }
 
 
-/* score board */
+/* score board(responsive) */
+/* For SP */
+#infoBoard{
+  display: grid;
+  grid-template-columns: 150px 150px;
+  grid-template-rows: 25px 95px 95px;
+
+  position:fixed;
+  top:0;
+  right:15%;
+  left: 50%;
+  margin-left:-150px;
+
+  width:300px;
+  height:215px;
+
+  background-color: rgba(0, 0, 255, 0.5);
+  opacity: 0.0;
+  color: #ffffff;
+  text-align: center;
+
+  font-family: 'Nunito', sans-serif;
+  font-weight: 300;
+}
+
+#country{
+  grid-column: 1 / 5;
+  grid-raw: 1 / 2;
+  background-color: #333333;
+  font-size: 1.3em;
+  font-weight: 400;
+}
+
+#Ladder{
+  grid-column: 1 / 2;
+  grid-raw: 2 / 3;
+  background-color: #444444;
+
+  display: grid;
+  grid-template-columns: 150px;
+  grid-template-rows: 15px 80px;
+}
+#LadderTitle{
+  font-size: 0.69em;
+  grid-column: 1 / 2;
+  grid-raw: 1 / 2;
+  font-weight: 200;
+}
+#LadderRanking{
+  grid-column: 1 / 2;
+  grid-raw: 2 / 3;
+}
+
+#Positive{
+  grid-column: 2 / 3;
+  grid-raw: 2 / 3;
+  background-color: #444444;
+
+  display: grid;
+  grid-template-columns: 150px;
+  grid-template-rows: 15px 80px;
+}
+#PositiveTitle{
+  font-size: 0.69em;
+  grid-column: 1 / 2;
+  grid-raw: 1 / 2;
+  font-weight: 200;
+}
+#PositiveRanking{
+  grid-column: 1 / 2;
+  grid-raw: 2 / 3;
+}
+
+#Negative{
+  grid-column: 1 / 2;
+  grid-raw: 4 / 5;
+  background-color: #444444;
+  display: grid;
+  grid-template-columns: 150px;
+  grid-template-rows: 15px 80px;
+}
+#NegativeTitle{
+  font-size: 0.69em;
+  grid-column: 1 / 2;
+  grid-raw: 1 / 2;
+  font-weight: 200;
+}
+#NegativeRanking{
+  grid-column: 1 / 2;
+  grid-raw: 2 / 3;
+}
+
+#GDP{
+  grid-column: 2 / 3;
+  grid-raw: 4 / 5;
+  background-color: #444444;
+  display: grid;
+  grid-template-columns: 150px;
+  grid-template-rows: 15px 80px;
+}
+#GDPTitle{
+  font-size: 0.69em;
+  grid-column: 1 / 2;
+  grid-raw: 1 / 2;
+  font-weight: 200;
+}
+#GDPRanking{
+  grid-column: 1 / 2;
+  grid-raw: 2 / 3;
+}
+
+
+/* for PC */
+@media screen and (min-width: 600px) {
 #infoBoard{
   display: grid;
   grid-template-columns: 150px 150px 150px 150px;
-  grid-template-rows: 25px 15px 80px;
+  grid-template-rows: 25px 95px;
 
   position:fixed;
-  top:0%;
+  top:0;
   right:15%;
   left: 50%;
   margin-left:-300px;
@@ -80,60 +193,89 @@ html, body {
 
 #country{
   grid-column: 1 / 5;
-  grid-raw: 2 / 3;
+  grid-raw: 1 / 2;
   background-color: #333333;
   font-size: 1.3em;
   font-weight: 400;
 }
 
 #Ladder{
+  grid-column: 1 / 2;
+  grid-raw: 2 / 3;
+  background-color: #444444;
+
+  display: grid;
+  grid-template-columns: 150px;
+  grid-template-rows: 15px 80px;
+}
+#LadderTitle{
   font-size: 0.69em;
   grid-column: 1 / 2;
-  grid-raw: 3 / 4;
-  background-color: #444444;
+  grid-raw: 1 / 2;
   font-weight: 200;
 }
-#Positive{
-  font-size: 0.69em;
-  grid-column: 2 / 3;
-  grid-raw: 3 / 4;
-  background-color: #444444;
-  font-weight: 200;
-}
-#Negative{
-  font-size: 0.69em;
-  grid-column: 3 / 4;
-  grid-raw: 3 / 4;
-  background-color: #444444;
-  font-weight: 200;
-}
-#GDP{
-  font-size: 0.69em;
-  grid-column: 4 / 5;
-  grid-raw: 3 / 4;
-  background-color: #444444;
-  font-weight: 200;
-}
-
 #LadderRanking{
   grid-column: 1 / 2;
-  grid-raw: 4 / 5;
+  grid-raw: 2 / 3;
+}
+
+#Positive{
+  grid-column: 2 / 3;
+  grid-raw: 2 / 3;
   background-color: #444444;
+
+  display: grid;
+  grid-template-columns: 150px;
+  grid-template-rows: 15px 80px;
+}
+#PositiveTitle{
+  font-size: 0.69em;
+  grid-column: 1 / 2;
+  grid-raw: 1 / 2;
+  font-weight: 200;
 }
 #PositiveRanking{
-  grid-column: 2 / 3;
-  grid-raw: 4 / 5;
+  grid-column: 1 / 2;
+  grid-raw: 2 / 3;
+}
+
+#Negative{
+  grid-column: 3 / 4;
+  grid-raw: 2 / 3;
   background-color: #444444;
+  display: grid;
+  grid-template-columns: 150px;
+  grid-template-rows: 15px 80px;
+}
+#NegativeTitle{
+  font-size: 0.69em;
+  grid-column: 1 / 2;
+  grid-raw: 1 / 2;
+  font-weight: 200;
 }
 #NegativeRanking{
-  grid-column: 3 / 4;
-  grid-raw: 4 / 5;
+  grid-column: 1 / 2;
+  grid-raw: 2 / 3;
+}
+
+#GDP{
+  grid-column: 4 / 5;
+  grid-raw: 2 / 3;
   background-color: #444444;
+  display: grid;
+  grid-template-columns: 150px;
+  grid-template-rows: 15px 80px;
+}
+#GDPTitle{
+  font-size: 0.69em;
+  grid-column: 1 / 2;
+  grid-raw: 1 / 2;
+  font-weight: 200;
 }
 #GDPRanking{
-  grid-column: 4 / 5;
-  grid-raw: 4 / 5;
-  background-color: #444444;
+  grid-column: 1 / 2;
+  grid-raw: 2 / 3;
+}
 }
 
 
@@ -215,18 +357,18 @@ html, body {
 }
 
 #tooltipHist:before{
-	content: "";
-	position: absolute;
-	top: 100%;
-	left: 50%;
- 	margin-left: -5px;
-	border: 5px solid transparent;
-	border-top: 5px solid #646464;
+  content: "";
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  margin-left: -5px;
+  border: 5px solid transparent;
+  border-top: 5px solid #646464;
 }
 
 /*#tooltipHist p {*/
-	/*margin: 0;*/
-	/*padding: 0;*/
+  /*margin: 0;*/
+  /*padding: 0;*/
 /*}*/
 
 .canvasWrapperPointer{

@@ -234,9 +234,6 @@
         }
     }, false);
 
-    console.log(latlon);
-
-
     // window.addEventListener('dblclick', () => {
     //     isdDblclick = true;
     //     $('.main').removeClass("disabled-onepage-scroll");
@@ -489,8 +486,6 @@
       varWidth = res.width;
       histData = res.histData;
     };
-
-    console.log(wbData);
 
     /*
     // coloring land object using well-being score
@@ -839,7 +834,7 @@
         let mouseX = Math.abs(event.clientX - rect.x);
         let index = Math.floor(mouseX / varWidth);
         let data = histData;
-        console.log(data[index].country, data[index].rank);
+        // console.log(data[index].country, data[index].rank);
 
         document.getElementById("canvasWrapper").classList.add("canvasWrapperPointer");
         mouseonCountry = data[index].country;
@@ -928,7 +923,7 @@
         }
       }, 1000/step);
 
-      console.log(prevVec);
+      // console.log(prevVec);
 
     }
 
