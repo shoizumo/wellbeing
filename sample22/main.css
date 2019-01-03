@@ -175,7 +175,7 @@ html, body {
 
   position:fixed;
   top:0;
-  right:15%;
+  /*right:15%;*/
   left: 50%;
   margin-left:-300px;
 
@@ -280,11 +280,23 @@ html, body {
 
 
 /*switch type button */
-#btn{
+#rankingWrapper{
+  display: grid;
+  grid-template-columns: 700px;
+  grid-template-rows: 120px 30px;
+
   position:fixed;
-  bottom: 1%;
+  bottom:0;
   left: 50%;
-  margin-left:-300px;
+  margin-left:-350px;
+
+  width:700px;
+  height:150px;
+
+}
+
+#btn{
+  grid-raw: 2 / 3;
   background-color: rgba(255, 255, 255, 0.0);
   /*opacity: 0.1;*/
   font-family: 'Nunito', sans-serif;
@@ -293,17 +305,27 @@ html, body {
 
   list-style: none;
   overflow: hidden;
-  border-radius: 7px;
+}
+
+#histgram{
+  grid-raw: 1 / 2;
+
+  width:700px;
+  height:120px;
+
+  background-color: rgba(0, 0, 255, 0.0);
+  color: #ffffff;
+  text-align: center;
+
+  font-family: 'Nunito', sans-serif;
+  font-weight: 300;
 }
 
 #btn li {
-  width: 150px;
+  width: 175px;
   text-align: center;
-  /*background-color: rgba(100, 100, 100, 0.5);*/
   color: #ffffff;
   font-size: 1.2em;
-  /*border:1px solid rgba(255, 255, 255, 0.5);*/
-
   float: left;
 }
 
@@ -324,25 +346,6 @@ html, body {
 
 
 /* rank histgram */
-#histgram{
-  position:fixed;
-  top:80%;
-  right:15%;
-  left: 50%;
-  margin-left:-300px;
-
-  width:600px;
-  height:120px;
-
-  background-color: rgba(0, 0, 255, 0.0);
-  /*opacity: 0.0;*/
-  color: #ffffff;
-  text-align: center;
-
-  font-family: 'Nunito', sans-serif;
-  font-weight: 300;
-}
-
 #tooltipHist {
   position: absolute;
   text-align: center;

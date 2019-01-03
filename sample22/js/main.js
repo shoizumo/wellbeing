@@ -772,7 +772,7 @@
     // ranking
     */
     let canvas = document.querySelector("#histgram");
-    canvas.width = 600;
+    canvas.width = 700;  // responsive
     canvas.height = 120;
     let canvasContext = canvas.getContext("2d");
 
