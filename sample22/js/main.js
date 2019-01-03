@@ -58,6 +58,7 @@
   let wbButton;
 
   // val for ranking histgram
+  let drawHist;
   let histCanvas;
   let histData;
   let varWidth;
@@ -197,19 +198,24 @@
       canvasWidth = window.innerWidth;
       canvasHeight = window.innerHeight;
 
-      // if (canvasWidth < 500){
-      //   histCanvas.width = 320;
-      // }else if (canvasWidth >= 500 && canvasWidth < 700){
-      //   histCanvas.width = 500;
-      // }else if (canvasWidth >= 700 && canvasWidth < 900){
-      //   histCanvas.width = 700;
-      // }else{
-      //   histCanvas.width = 900;
-      // }
+      let histCanvasWidth;
+      if (canvasWidth < 500){
+        histCanvasWidth = 320;
+      }else if (canvasWidth >= 500 && canvasWidth < 700){
+        histCanvasWidth = 500;
+      }else if (canvasWidth >= 700 && canvasWidth < 900){
+        histCanvasWidth = 700;
+      }else{
+        histCanvasWidth = 900;
+      }
 
-      // drawHist(type);
-      let selectedType = $('.selectedBtn');
-      console.log(selectedType)
+      if (histCanvas.width !== histCanvasWidth){
+        histCanvas.width = histCanvasWidth;
+        let selectedType = $('.selectedBtn');
+        console.log(selectedType[0].innerHTML);
+        drawHist(selectedType, 0);
+      }
+
 
     }, false);
 
@@ -801,7 +807,7 @@
     let canvasContext = histCanvas.getContext("2d");
 
     // function drawHist(data, scoreMax){
-    function drawHist(type){
+    drawHist = function(type, duration = 3000){
       clearInterval(drawSetInterval);
       let data;
       let scoreMax;
@@ -840,11 +846,11 @@
         if(i > numData - 1){
           clearInterval(drawSetInterval);
         }
-      }, 1000/numData * 3);
+      }, duration/numData);
 
       isHistDisplay = true;
       return {width:width, histData:data};
-    }
+    };
 
     /* mouse over histgram */
     let tooltipHist = $('#tooltipHist');
