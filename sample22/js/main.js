@@ -58,6 +58,7 @@
   let wbButton;
 
   // val for ranking histgram
+  let histCanvas;
   let histData;
   let varWidth;
   let isHistDisplay = false;
@@ -195,6 +196,20 @@
       camera.updateProjectionMatrix();
       canvasWidth = window.innerWidth;
       canvasHeight = window.innerHeight;
+
+      // if (canvasWidth < 500){
+      //   histCanvas.width = 320;
+      // }else if (canvasWidth >= 500 && canvasWidth < 700){
+      //   histCanvas.width = 500;
+      // }else if (canvasWidth >= 700 && canvasWidth < 900){
+      //   histCanvas.width = 700;
+      // }else{
+      //   histCanvas.width = 900;
+      // }
+
+      // drawHist(type);
+      let selectedType = $('.selectedBtn');
+      console.log(selectedType)
 
     }, false);
 
@@ -771,10 +786,19 @@
     /*
     // ranking
     */
-    let canvas = document.querySelector("#histgram");
-    canvas.width = 700;  // responsive
-    canvas.height = 120;
-    let canvasContext = canvas.getContext("2d");
+    histCanvas = document.querySelector("#histgram");
+    // histCanvas.width = 700;  // responsive
+    if (canvasWidth < 500){
+      histCanvas.width = 320;
+    }else if (canvasWidth >= 500 && canvasWidth < 700){
+      histCanvas.width = 500;
+    }else if (canvasWidth >= 700 && canvasWidth < 900){
+      histCanvas.width = 700;
+    }else{
+      histCanvas.width = 900;
+    }
+    histCanvas.height = 120;
+    let canvasContext = histCanvas.getContext("2d");
 
     // function drawHist(data, scoreMax){
     function drawHist(type){
@@ -795,21 +819,21 @@
         scoreMax = gdpMax;
       }
 
-      canvasContext.clearRect(0, 0, canvas.width, canvas.height);
+      canvasContext.clearRect(0, 0, histCanvas.width, histCanvas.height);
       canvasContext.fillStyle = "rgb(0, 0, 0, 0)";  // not fill
-      canvasContext.fillRect(0, 0, canvas.width, canvas.height);
+      canvasContext.fillRect(0, 0, histCanvas.width, histCanvas.height);
 
       let rectX = 0.0;
       let numData = data.length;
-      let width  = canvas.width / numData;
+      let width  = histCanvas.width / numData;
       canvasContext.fillStyle = "rgb(200, 230, 255)";
 
       // draw histgram with loop rect
       let i = 0;
       // console.log(numData, data);
       drawSetInterval = setInterval(function(){
-        let h = (data[i].score) / scoreMax * canvas.height; // 0 ~ 255までの数字が入っている
-        canvasContext.fillRect(rectX, canvas.height - h, width, h);
+        let h = (data[i].score) / scoreMax * histCanvas.height; // 0 ~ 255までの数字が入っている
+        canvasContext.fillRect(rectX, histCanvas.height - h, width, h);
         rectX = rectX + width;
         i++;
 
@@ -824,9 +848,9 @@
 
     /* mouse over histgram */
     let tooltipHist = $('#tooltipHist');
-    canvas.addEventListener('mousemove', onHistRanking, false);
-    canvas.addEventListener('mouseout', outHistRanking, false);
-    canvas.addEventListener('click', clickHistRanking, false);
+    histCanvas.addEventListener('mousemove', onHistRanking, false);
+    histCanvas.addEventListener('mouseout', outHistRanking, false);
+    histCanvas.addEventListener('click', clickHistRanking, false);
 
     function onHistRanking(event) {
       if (isHistDisplay){

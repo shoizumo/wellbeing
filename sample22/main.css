@@ -168,129 +168,129 @@ html, body {
 
 /* for PC */
 @media screen and (min-width: 600px) {
-#infoBoard{
-  display: grid;
-  grid-template-columns: 150px 150px 150px 150px;
-  grid-template-rows: 25px 95px;
+  #infoBoard{
+    display: grid;
+    grid-template-columns: 150px 150px 150px 150px;
+    grid-template-rows: 25px 95px;
 
-  position:fixed;
-  top:0;
-  /*right:15%;*/
-  left: 50%;
-  margin-left:-300px;
+    position:fixed;
+    top:0;
+    /*right:15%;*/
+    left: 50%;
+    margin-left:-300px;
 
-  width:600px;
-  height:120px;
+    width:600px;
+    height:120px;
 
-  background-color: rgba(0, 0, 255, 0.5);
-  opacity: 0.0;
-  color: #ffffff;
-  text-align: center;
+    background-color: rgba(0, 0, 255, 0.5);
+    opacity: 0.0;
+    color: #ffffff;
+    text-align: center;
 
-  font-family: 'Nunito', sans-serif;
-  font-weight: 300;
+    font-family: 'Nunito', sans-serif;
+    font-weight: 300;
+  }
+
+  #country{
+    grid-column: 1 / 5;
+    grid-raw: 1 / 2;
+    background-color: #333333;
+    font-size: 1.3em;
+    font-weight: 400;
+  }
+
+  #Ladder{
+    grid-column: 1 / 2;
+    grid-raw: 2 / 3;
+    background-color: #444444;
+
+    display: grid;
+    grid-template-columns: 150px;
+    grid-template-rows: 15px 80px;
+  }
+  #LadderTitle{
+    font-size: 0.69em;
+    grid-column: 1 / 2;
+    grid-raw: 1 / 2;
+    font-weight: 200;
+  }
+  #LadderRanking{
+    grid-column: 1 / 2;
+    grid-raw: 2 / 3;
+  }
+
+  #Positive{
+    grid-column: 2 / 3;
+    grid-raw: 2 / 3;
+    background-color: #444444;
+
+    display: grid;
+    grid-template-columns: 150px;
+    grid-template-rows: 15px 80px;
+  }
+  #PositiveTitle{
+    font-size: 0.69em;
+    grid-column: 1 / 2;
+    grid-raw: 1 / 2;
+    font-weight: 200;
+  }
+  #PositiveRanking{
+    grid-column: 1 / 2;
+    grid-raw: 2 / 3;
+  }
+
+  #Negative{
+    grid-column: 3 / 4;
+    grid-raw: 2 / 3;
+    background-color: #444444;
+    display: grid;
+    grid-template-columns: 150px;
+    grid-template-rows: 15px 80px;
+  }
+  #NegativeTitle{
+    font-size: 0.69em;
+    grid-column: 1 / 2;
+    grid-raw: 1 / 2;
+    font-weight: 200;
+  }
+  #NegativeRanking{
+    grid-column: 1 / 2;
+    grid-raw: 2 / 3;
+  }
+
+  #GDP{
+    grid-column: 4 / 5;
+    grid-raw: 2 / 3;
+    background-color: #444444;
+    display: grid;
+    grid-template-columns: 150px;
+    grid-template-rows: 15px 80px;
+  }
+  #GDPTitle{
+    font-size: 0.69em;
+    grid-column: 1 / 2;
+    grid-raw: 1 / 2;
+    font-weight: 200;
+  }
+  #GDPRanking{
+    grid-column: 1 / 2;
+    grid-raw: 2 / 3;
+  }
 }
 
-#country{
-  grid-column: 1 / 5;
-  grid-raw: 1 / 2;
-  background-color: #333333;
-  font-size: 1.3em;
-  font-weight: 400;
-}
 
-#Ladder{
-  grid-column: 1 / 2;
-  grid-raw: 2 / 3;
-  background-color: #444444;
-
-  display: grid;
-  grid-template-columns: 150px;
-  grid-template-rows: 15px 80px;
-}
-#LadderTitle{
-  font-size: 0.69em;
-  grid-column: 1 / 2;
-  grid-raw: 1 / 2;
-  font-weight: 200;
-}
-#LadderRanking{
-  grid-column: 1 / 2;
-  grid-raw: 2 / 3;
-}
-
-#Positive{
-  grid-column: 2 / 3;
-  grid-raw: 2 / 3;
-  background-color: #444444;
-
-  display: grid;
-  grid-template-columns: 150px;
-  grid-template-rows: 15px 80px;
-}
-#PositiveTitle{
-  font-size: 0.69em;
-  grid-column: 1 / 2;
-  grid-raw: 1 / 2;
-  font-weight: 200;
-}
-#PositiveRanking{
-  grid-column: 1 / 2;
-  grid-raw: 2 / 3;
-}
-
-#Negative{
-  grid-column: 3 / 4;
-  grid-raw: 2 / 3;
-  background-color: #444444;
-  display: grid;
-  grid-template-columns: 150px;
-  grid-template-rows: 15px 80px;
-}
-#NegativeTitle{
-  font-size: 0.69em;
-  grid-column: 1 / 2;
-  grid-raw: 1 / 2;
-  font-weight: 200;
-}
-#NegativeRanking{
-  grid-column: 1 / 2;
-  grid-raw: 2 / 3;
-}
-
-#GDP{
-  grid-column: 4 / 5;
-  grid-raw: 2 / 3;
-  background-color: #444444;
-  display: grid;
-  grid-template-columns: 150px;
-  grid-template-rows: 15px 80px;
-}
-#GDPTitle{
-  font-size: 0.69em;
-  grid-column: 1 / 2;
-  grid-raw: 1 / 2;
-  font-weight: 200;
-}
-#GDPRanking{
-  grid-column: 1 / 2;
-  grid-raw: 2 / 3;
-}
-}
-
-
-/*switch type button */
+/*switch type button(responsive) */
 #rankingWrapper{
   display: grid;
-  grid-template-columns: 700px;
+  grid-template-columns: 320px;
   grid-template-rows: 120px 30px;
 
   position:fixed;
   bottom:0;
   left: 50%;
-  margin-left:-350px;
+  margin-left:-160px;
 
-  width:700px;
+  width:320px;
   height:150px;
 
 }
@@ -307,10 +307,18 @@ html, body {
   overflow: hidden;
 }
 
+#btn li {
+  width: 80px;
+  text-align: center;
+  color: #ffffff;
+  font-size: 1.0em;
+  float: left;
+}
+
 #histgram{
   grid-raw: 1 / 2;
 
-  width:700px;
+  width:320px;
   height:120px;
 
   background-color: rgba(0, 0, 255, 0.0);
@@ -321,12 +329,157 @@ html, body {
   font-weight: 300;
 }
 
-#btn li {
-  width: 175px;
-  text-align: center;
-  color: #ffffff;
-  font-size: 1.2em;
-  float: left;
+@media screen and (min-width: 500px) and (max-width:700px) {
+  #rankingWrapper{
+    display: grid;
+    grid-template-columns: 500px;
+    grid-template-rows: 120px 30px;
+
+    position:fixed;
+    bottom:0;
+    left: 50%;
+    margin-left:-250px;
+
+    width:500px;
+    height:150px;
+
+  }
+
+  #btn{
+    grid-raw: 2 / 3;
+    background-color: rgba(255, 255, 255, 0.0);
+    /*opacity: 0.1;*/
+    font-family: 'Nunito', sans-serif;
+    font-weight: 400;
+
+
+    list-style: none;
+    overflow: hidden;
+  }
+
+  #btn li {
+    width: 125px;
+    text-align: center;
+    color: #ffffff;
+    font-size: 1.2em;
+    float: left;
+  }
+
+  #histgram{
+    grid-raw: 1 / 2;
+
+    width:500px;
+    height:120px;
+
+    background-color: rgba(0, 0, 255, 0.0);
+    color: #ffffff;
+    text-align: center;
+
+    font-family: 'Nunito', sans-serif;
+    font-weight: 300;
+  }
+}
+
+@media screen and (min-width: 700px) and (max-width:900px) {
+  #rankingWrapper{
+    display: grid;
+    grid-template-columns: 700px;
+    grid-template-rows: 120px 30px;
+
+    position:fixed;
+    bottom:0;
+    left: 50%;
+    margin-left:-350px;
+
+    width:700px;
+    height:150px;
+
+  }
+
+  #btn{
+    grid-raw: 2 / 3;
+    background-color: rgba(255, 255, 255, 0.0);
+    /*opacity: 0.1;*/
+    font-family: 'Nunito', sans-serif;
+    font-weight: 400;
+
+
+    list-style: none;
+    overflow: hidden;
+  }
+
+  #btn li {
+    width: 175px;
+    text-align: center;
+    color: #ffffff;
+    font-size: 1.2em;
+    float: left;
+  }
+
+  #histgram{
+    grid-raw: 1 / 2;
+
+    width:700px;
+    height:120px;
+
+    background-color: rgba(0, 0, 255, 0.0);
+    color: #ffffff;
+    text-align: center;
+
+    font-family: 'Nunito', sans-serif;
+    font-weight: 300;
+  }
+}
+
+@media screen and (min-width:900px) {
+  #rankingWrapper{
+    display: grid;
+    grid-template-columns: 900px;
+    grid-template-rows: 120px 30px;
+
+    position:fixed;
+    bottom:0;
+    left: 50%;
+    margin-left:-450px;
+
+    width:900px;
+    height:150px;
+
+  }
+
+  #btn{
+    grid-raw: 2 / 3;
+    background-color: rgba(255, 255, 255, 0.0);
+    /*opacity: 0.1;*/
+    font-family: 'Nunito', sans-serif;
+    font-weight: 400;
+
+
+    list-style: none;
+    overflow: hidden;
+  }
+
+  #btn li {
+    width: 225px;
+    text-align: center;
+    color: #ffffff;
+    font-size: 1.2em;
+    float: left;
+  }
+
+  #histgram{
+    grid-raw: 1 / 2;
+
+    width:900px;
+    height:120px;
+
+    background-color: rgba(0, 0, 255, 0.0);
+    color: #ffffff;
+    text-align: center;
+
+    font-family: 'Nunito', sans-serif;
+    font-weight: 300;
+  }
 }
 
 #btn li:hover {
