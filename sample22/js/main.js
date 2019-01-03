@@ -77,7 +77,7 @@
 
   // val for scroll
   let pageIndex = 1.0;
-  const interactivePageIndex = 4;
+  const interactivePageIndex = 5;
   let initEarthPosition = new THREE.Vector3(0.0, -1.1, 1.0);
   let initCameraPosition = new THREE.Vector3(0.0, 0.0, 2.0);
   let center = new THREE.Vector3(0, 0, 0);
@@ -149,7 +149,8 @@
             }
           });
 
-        }else{
+        }//else if (pageId === interactivePageIndex){}
+        else{
           controls.enableZoom = false;
         }
       },
@@ -161,18 +162,18 @@
       $('.fadein > span').css('opacity','0');  // reset opacity(0.0) for displaying again
       let str = [];
       let pageClass = '.page' + pageNo;
-      $(pageClass + ' > .fadein > span').each(function(i){//セレクタで指定した要素すべて
+      $(pageClass + ' > .fadein > span').each(function(i){
         $(this).css('opacity','1');
         str[i] = $(this).text();  // copy original text
         $(this).text('');  // delete text
         let no = i;
         let self = this;
         let interval = setInterval(function(){
-          if(no === 0 || Number($(pageClass + ' > .fadein > span').eq(no - 1).children('span:last').css('opacity')) === 1){//最初の要素または前の要素が全文字表示された時
+          if(no === 0 || Number($(pageClass + ' > .fadein > span').eq(no - 1).children('span:last').css('opacity')) === 1){  // 最初の要素または前の要素が全文字表示された時
             clearInterval(interval);
             for (let j = 0; j < str[no].length; j++) {
               $(self).append('<span>'+str[no].substr(j, 1)+'</span>');
-              $(self).children('span:last').delay(80 * j).animate({opacity:'1'}, 300);
+              $(self).children('span:last').delay(50 * j).animate({opacity:'1'}, 300);
             }
           }
         }, 50);
@@ -198,25 +199,25 @@
       canvasWidth = window.innerWidth;
       canvasHeight = window.innerHeight;
 
-      let histCanvasWidth;
-      if (canvasWidth < 500){
-        histCanvasWidth = 320;
-      }else if (canvasWidth >= 500 && canvasWidth < 700){
-        histCanvasWidth = 500;
-      }else if (canvasWidth >= 700 && canvasWidth < 900){
-        histCanvasWidth = 700;
-      }else{
-        histCanvasWidth = 900;
+      if (pageIndex === interactivePageIndex){
+        let histCanvasWidth;
+        if (canvasWidth < 500){
+          histCanvasWidth = 320;
+        }else if (canvasWidth >= 500 && canvasWidth < 700){
+          histCanvasWidth = 500;
+        }else if (canvasWidth >= 700 && canvasWidth < 900){
+          histCanvasWidth = 700;
+        }else{
+          histCanvasWidth = 900;
+        }
+
+        if (histCanvas.width !== histCanvasWidth){
+          histCanvas.width = histCanvasWidth;
+          let selectedType = $('.selectedBtn');
+          console.log(selectedType[0].innerHTML);
+          drawHist(selectedType, 0);
+        }
       }
-
-      if (histCanvas.width !== histCanvasWidth){
-        histCanvas.width = histCanvasWidth;
-        let selectedType = $('.selectedBtn');
-        console.log(selectedType[0].innerHTML);
-        drawHist(selectedType, 0);
-      }
-
-
     }, false);
 
     /* set mouse position function */
