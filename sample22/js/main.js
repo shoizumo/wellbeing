@@ -66,6 +66,9 @@
   let mouseonCountry;
   let drawSetInterval;
 
+  let travelRanking;
+  let travelSetInterval;
+
   // val for interactive land function
   let isClicked = false;
   let dragFlag = false;
@@ -110,7 +113,7 @@
       keyboard: false,
       direction: 'vertical', //'horizontal'
 
-      afterMove: function(pageId) {
+      afterMove: function (pageId) {
         typing(pageId);
         pageIndex = pageId;
 
@@ -120,7 +123,7 @@
             .addClass("hiddenBtn");
 
         /* disable scroll function */
-        if (pageId === interactivePageIndex){
+        if (pageId === interactivePageIndex) {
           $('.main').addClass("disabled-onepage-scroll");
           let duration = 2.0;
           let ease = Back.easeOut.config(1);
@@ -135,7 +138,7 @@
           TweenMax.to(camera.position, duration, {
             z: 2.5,
             ease: ease,
-            onComplete: function(){
+            onComplete: function () {
               controls.enableZoom = true;
               $(".wbButton").removeClass("hiddenBtn").addClass("normalBtn");
               let wbButton = document.getElementsByClassName('wbButton');
@@ -150,7 +153,7 @@
           });
 
         }//else if (pageId === interactivePageIndex){}
-        else{
+        else {
           controls.enableZoom = false;
         }
       },
@@ -159,28 +162,28 @@
 
     /* typing effect function */
     function typing(pageNo) {
-      $('.fadein > span').css('opacity','0');  // reset opacity(0.0) for displaying again
+      $('.fadein > span').css('opacity', '0');  // reset opacity(0.0) for displaying again
       let str = [];
       let pageClass = '.page' + pageNo;
-      $(pageClass + ' > .fadein > span').each(function(i){
-        $(this).css('opacity','1');
+      $(pageClass + ' > .fadein > span').each(function (i) {
+        $(this).css('opacity', '1');
         str[i] = $(this).text();  // copy original text
         $(this).text('');  // delete text
         let no = i;
         let self = this;
-        let interval = setInterval(function(){
-          if(no === 0 || Number($(pageClass + ' > .fadein > span').eq(no - 1).children('span:last').css('opacity')) === 1){  // 最初の要素または前の要素が全文字表示された時
+        let interval = setInterval(function () {
+          if (no === 0 || Number($(pageClass + ' > .fadein > span').eq(no - 1).children('span:last').css('opacity')) === 1) {  // 最初の要素または前の要素が全文字表示された時
             clearInterval(interval);
             for (let j = 0; j < str[no].length; j++) {
-              $(self).append('<span>'+str[no].substr(j, 1)+'</span>');
-              $(self).children('span:last').delay(50 * j).animate({opacity:'1'}, 300);
+              $(self).append('<span>' + str[no].substr(j, 1) + '</span>');
+              $(self).children('span:last').delay(50 * j).animate({opacity: '1'}, 300);
             }
           }
         }, 50);
       });
     }
-    typing(1);
 
+    typing(1);
 
 
     /*
@@ -199,19 +202,19 @@
       canvasWidth = window.innerWidth;
       canvasHeight = window.innerHeight;
 
-      if (pageIndex === interactivePageIndex){
+      if (pageIndex === interactivePageIndex) {
         let histCanvasWidth;
-        if (canvasWidth < 500){
+        if (canvasWidth < 500) {
           histCanvasWidth = 320;
-        }else if (canvasWidth >= 500 && canvasWidth < 700){
+        } else if (canvasWidth >= 500 && canvasWidth < 700) {
           histCanvasWidth = 500;
-        }else if (canvasWidth >= 700 && canvasWidth < 900){
+        } else if (canvasWidth >= 700 && canvasWidth < 900) {
           histCanvasWidth = 700;
-        }else{
+        } else {
           histCanvasWidth = 900;
         }
 
-        if (histCanvas.width !== histCanvasWidth){
+        if (histCanvas.width !== histCanvasWidth) {
           histCanvas.width = histCanvasWidth;
           let selectedType = $('.selectedBtn');
           console.log(selectedType[0].innerHTML);
@@ -229,31 +232,35 @@
     }, false);
 
     /* detect mouse drag */
-    window.addEventListener("mousedown", function(){
-        dragFlag = false;
+    window.addEventListener("mousedown", function () {
+      dragFlag = false;
     }, false);
-    window.addEventListener("mousemove", function(){
-        dragFlag = true;
+    window.addEventListener("mousemove", function () {
+      dragFlag = true;
     }, false);
 
     /* switch earth type */
-    window.addEventListener("keydown", function(event){
-        if (event.keyCode === 37){  // left
-          landBaseOpacity = 0.0;
-          landBase.material.opacity = landBaseOpacity;
-          earthOutline.scale.set(1.0, 1.0, 1.0);
-          for (let i = 0, lm = meshList.length; lm > i; i++) {
-            meshList[i].material.opacity = 0.0;
-          }
+    window.addEventListener("keydown", function (event) {
+      if (event.keyCode === 37) {  // left
+        landBaseOpacity = 0.0;
+        landBase.material.opacity = landBaseOpacity;
+        earthOutline.scale.set(1.0, 1.0, 1.0);
+        for (let i = 0, lm = meshList.length; lm > i; i++) {
+          meshList[i].material.opacity = 0.0;
         }
-        if (event.keyCode === 39){  // right
-          landBaseOpacity = 1.0;
-          landBase.material.opacity = landBaseOpacity;
-          earthOutline.scale.set(1.002, 1.002, 1.002);
-          for (let i = 0, lm = meshList.length; lm > i; i++) {
-            meshList[i].material.opacity = 1.0;
-          }
+      }
+      if (event.keyCode === 39) {  // right
+        landBaseOpacity = 1.0;
+        landBase.material.opacity = landBaseOpacity;
+        earthOutline.scale.set(1.002, 1.002, 1.002);
+        for (let i = 0, lm = meshList.length; lm > i; i++) {
+          meshList[i].material.opacity = 1.0;
         }
+      }
+      if (event.keyCode === 38) {
+        console.log(event.keyCode);
+        travelRanking('Ladder')
+      }
     }, false);
 
     // window.addEventListener('dblclick', () => {
@@ -272,6 +279,7 @@
     });
 
   }, false);
+
   /* END Entry point */
 
 
@@ -288,18 +296,20 @@
 
   /////////////////////////
   /* Initialize function */
+
   /////////////////////////
-  function init(vsMain, fsMain, vsPost, fsPost){
+  function init(vsMain, fsMain, vsPost, fsPost) {
     stats = initStats();
+
     function initStats() {
-        let stats = new Stats();
-        stats.setMode(0); // 0: fps, 1: ms
-        // Align top-left
-        stats.domElement.style.position = 'absolute';
-        stats.domElement.style.left = '0px';
-        stats.domElement.style.top = '0px';
-        document.getElementById("Stats-output").appendChild(stats.domElement);
-        return stats;
+      let stats = new Stats();
+      stats.setMode(0); // 0: fps, 1: ms
+      // Align top-left
+      stats.domElement.style.position = 'absolute';
+      stats.domElement.style.left = '0px';
+      stats.domElement.style.top = '0px';
+      document.getElementById("Stats-output").appendChild(stats.domElement);
+      return stats;
     }
 
 
@@ -352,22 +362,22 @@
     /* earth for land in order to hide earth map ver. */
     geometry = new THREE.SphereGeometry(radius + 0.002, 60, 60);
     material = new THREE.MeshBasicMaterial({
-        transparent: true,
-        // depthTest: true,
-        depthWrite: true,
-        opacity: 0.0,
-        //map: sea_texture,
-        color: 0x040410,
-        // alphaTest: 0.5
+      transparent: true,
+      // depthTest: true,
+      depthWrite: true,
+      opacity: 0.0,
+      //map: sea_texture,
+      color: 0x040410,
+      // alphaTest: 0.5
     });
     landBase = new THREE.Mesh(geometry, material);
 
     /* earth outline object */
     geometry = new THREE.SphereGeometry(radius + 0.003, 120, 120);
     material = new THREE.MeshBasicMaterial({
-        color: 0x555555,
-        side: THREE.BackSide
-        // alphaTest: 0.5
+      color: 0x555555,
+      side: THREE.BackSide
+      // alphaTest: 0.5
     });
     earthOutline = new THREE.Mesh(geometry, material);
 
@@ -403,7 +413,7 @@
     /*
     // setting well-being data
     */
-    for(let i=0; wbLength>i; i++ ) {
+    for (let i = 0; wbLength > i; i++) {
       let wb = wbData[i];
 
       let ladder = {country: wb.country, rank: wb.lRank, score: wb.ladder};
@@ -419,55 +429,55 @@
 
 
     /* sort rank array */
-    LadderArray.sort(function sortRank(a, b){
-      if(a.rank < b.rank){
+    LadderArray.sort(function sortRank(a, b) {
+      if (a.rank < b.rank) {
         return -1;
       }
-      else if(a.rank > b.rank){
-        return  1;
+      else if (a.rank > b.rank) {
+        return 1;
       }
       return 0;
     });
 
-    PositiveArray.sort(function sortRank(a, b){
-      if(a.rank < b.rank){
+    PositiveArray.sort(function sortRank(a, b) {
+      if (a.rank < b.rank) {
         return -1;
       }
-      else if(a.rank > b.rank){
-        return  1;
+      else if (a.rank > b.rank) {
+        return 1;
       }
       return 0;
     });
 
-    NegativeArray.sort(function sortRank(a, b){
-      if(a.rank < b.rank){
+    NegativeArray.sort(function sortRank(a, b) {
+      if (a.rank < b.rank) {
         return -1;
       }
-      else if(a.rank > b.rank){
-        return  1;
+      else if (a.rank > b.rank) {
+        return 1;
       }
       return 0;
     });
 
-    GDPArray.sort(function sortRank(a, b){
-      if(a.rank < b.rank){
+    GDPArray.sort(function sortRank(a, b) {
+      if (a.rank < b.rank) {
         return -1;
       }
-      else if(a.rank > b.rank){
-        return  1;
+      else if (a.rank > b.rank) {
+        return 1;
       }
       return 0;
     });
 
     /* calc MaxMin */
     ladderMax = Math.max(LadderArray[0].score);
-    ladderMin = Math.min(LadderArray[wbLength-1].score);
+    ladderMin = Math.min(LadderArray[wbLength - 1].score);
     positiveMax = Math.max(PositiveArray[0].score);
-    positiveMin = Math.min(PositiveArray[wbLength-1].score);
+    positiveMin = Math.min(PositiveArray[wbLength - 1].score);
     negativeMax = Math.max(NegativeArray[0].score);
-    negativeMin = Math.min(NegativeArray[wbLength-1].score);
+    negativeMin = Math.min(NegativeArray[wbLength - 1].score);
     gdpMax = Math.max(GDPArray[0].score);
-    gdpMin = Math.min(GDPArray[wbLength-1].score);
+    gdpMin = Math.min(GDPArray[wbLength - 1].score);
 
     // console.log(ladderMax, ladderMin);
     // console.log(positiveMax, positiveMin);
@@ -490,7 +500,7 @@
       for (let i = 0, lm = meshList.length; lm > i; i++) {
         meshList[i].material.opacity = opacity;
       }
-      if (opacity > 0.0){
+      if (opacity > 0.0) {
         for (let j = 0; wbLength > j; j++) {
           for (let i = 0, lm = meshList.length; lm > i; i++) {
             let countryName = meshList[i].userData.country;
@@ -499,7 +509,7 @@
             }
           }
         }
-      }else{
+      } else {
         earthOutline.scale.set(1.0, 1.0, 1.0);
       }
 
@@ -514,14 +524,14 @@
     */
     function coloringLand(i, j, type) {
       let L;
-      if (type === 'ladderBtn'){
+      if (type === 'ladderBtn') {
         L = (wbData[j].ladder - ladderMin) / (ladderMax - ladderMin); //0.0 - 1.0 scale
-      }else if (type === 'positiveBtn'){
+      } else if (type === 'positiveBtn') {
         L = (wbData[j].positive - positiveMin) / (positiveMax - positiveMin); //0.0 - 1.0 scale
-      }else if (type === 'negativeBtn'){
+      } else if (type === 'negativeBtn') {
         L = (wbData[j].negative - negativeMin) / (negativeMax - negativeMin); //0.0 - 1.0 scale
         L = 1.0 - L  // reverse scale
-      }else{
+      } else {
         L = (wbData[j].logGdp - gdpMin) / (gdpMax - gdpMin); //0.0 - 1.0 scale
       }
       let RGB = hslToRgb(0.5, 1, L);
@@ -570,6 +580,7 @@
       text.setAttributeNS(null, "id", "info" + type);
       return text;
     }
+
     let t1 = createRankText('Ladder');
     let t2 = createRankText('Positive');
     let t3 = createRankText('Negative');
@@ -586,6 +597,7 @@
       text.setAttributeNS(null, "class", "info" + type);
       return text;
     }
+
     let s1 = createScoreText('Ladder');
     let s2 = createScoreText('Positive');
     let s3 = createScoreText('Negative');
@@ -593,6 +605,7 @@
 
     /* display score result */
     let tween;
+
     function displayRanking(type, rank, num, duration, rankText, score, scoreText) {
       let id = '#' + type + 'Ranking';
       let svg = $(id).children().children()[2];
@@ -601,22 +614,22 @@
       let sUnit = type === 'GDP' ? 'US$' : 'pt';
       let rankStr = rank.toString();
       rankStr = rankStr.substring(rankStr.length - 1, rankStr.length);
-      if (rankStr === '1'){
+      if (rankStr === '1') {
         rUnit = 'st'
-      }else if (rankStr === '2'){
+      } else if (rankStr === '2') {
         rUnit = 'nd'
-      }else if (rankStr === '3'){
+      } else if (rankStr === '3') {
         rUnit = 'rd'
-      }else{
+      } else {
         rUnit = 'th'
       }
 
-      tween = TweenMax.fromTo(svg, duration ,
-          {attr:{r: 0}},
+      tween = TweenMax.fromTo(svg, duration,
+          {attr: {r: 0}},
           {
-            attr:{r: radius},
+            attr: {r: radius},
             ease: Power1.easeInOut,
-            onComplete: function(){
+            onComplete: function () {
               rankText.innerHTML = String(rank) + "<tspan font-size='12px'>" + rUnit + "</tspan>";
               $(id).children()[0].appendChild(rankText);
               scoreText.textContent = '(' + String(score) + sUnit + ')';
@@ -638,33 +651,33 @@
         }, nextStartDuration)
       });
       return {
-         promise: promise,
-         cancel: function(){
-           clearTimeout(timeout);
-           isClicked = false;
-         }
-       };
+        promise: promise,
+        cancel: function () {
+          clearTimeout(timeout);
+          isClicked = false;
+        }
+      };
     }
 
     let positive, negative, gdp;
+
     function doRankingPromise(wbData, wbLength) {
       new Promise((resolve) => {
-          resolve(displayRanking('Ladder', wbData['lRank'], wbLength, 1.0, t1, wbData['ladder'], s1));
-        }).then(() => {
-          positive = createPromise('Positive', wbData['pRank'], wbLength, 1.0, t2, 500, wbData['positive'], s2);
-          return positive.promise;
-        }).then(() => {
-          negative = createPromise('Negative', wbData['nRank'], wbLength, 1.0, t3, 500, wbData['negative'], s3);
-          return negative.promise;
-        }).then(() => {
-          gdp = createPromise('GDP', wbData['gRank'], wbLength, 1.0, t4, 500, wbData['gdp'], s4);
-          isFirstClick = false;
-          return gdp.promise;
-        }).catch(() => {
-          console.error('Something wrong!')
+        resolve(displayRanking('Ladder', wbData['lRank'], wbLength, 1.0, t1, wbData['ladder'], s1));
+      }).then(() => {
+        positive = createPromise('Positive', wbData['pRank'], wbLength, 1.0, t2, 500, wbData['positive'], s2);
+        return positive.promise;
+      }).then(() => {
+        negative = createPromise('Negative', wbData['nRank'], wbLength, 1.0, t3, 500, wbData['negative'], s3);
+        return negative.promise;
+      }).then(() => {
+        gdp = createPromise('GDP', wbData['gRank'], wbLength, 1.0, t4, 500, wbData['gdp'], s4);
+        isFirstClick = false;
+        return gdp.promise;
+      }).catch(() => {
+        console.error('Something wrong!')
       });
     }
-
 
 
     /*
@@ -681,7 +694,7 @@
 
     /* mouse over land */
     function onDocumentMouseMove(event) {
-      if (pageIndex === interactivePageIndex){
+      if (pageIndex === interactivePageIndex) {
         if (intersected_object !== 0) {
           intersected_object.scale.set(1.0, 1.0, 1.0);  // 前回のオブジェクトをもとに戻す
         }
@@ -711,7 +724,7 @@
               body.css('cursor', 'pointer');
 
               let res = calcWbInfo(countryName);
-              if(typeof res !== 'undefined') {
+              if (typeof res !== 'undefined') {
                 tooltip.css({top: event.clientY * 0.97});
                 tooltip.css({left: event.clientX * 1.03});
               }
@@ -726,7 +739,7 @@
 
     /* click land */
     function onDocumentMouseClick() {
-      if(!dragFlag) {
+      if (!dragFlag) {
         if (isLand) {
           if (!isFirstClick) {
             TweenMax.killAll();
@@ -795,33 +808,33 @@
     */
     histCanvas = document.querySelector("#histgram");
     // histCanvas.width = 700;  // responsive
-    if (canvasWidth < 500){
+    if (canvasWidth < 500) {
       histCanvas.width = 320;
-    }else if (canvasWidth >= 500 && canvasWidth < 700){
+    } else if (canvasWidth >= 500 && canvasWidth < 700) {
       histCanvas.width = 500;
-    }else if (canvasWidth >= 700 && canvasWidth < 900){
+    } else if (canvasWidth >= 700 && canvasWidth < 900) {
       histCanvas.width = 700;
-    }else{
+    } else {
       histCanvas.width = 900;
     }
     histCanvas.height = 120;
     let canvasContext = histCanvas.getContext("2d");
 
     // function drawHist(data, scoreMax){
-    drawHist = function(type, duration = 3000){
+    drawHist = function (type, duration = 3000) {
       clearInterval(drawSetInterval);
       let data;
       let scoreMax;
-      if (type === 'ladderBtn'){
+      if (type === 'ladderBtn') {
         data = LadderArray;
         scoreMax = ladderMax;
-      }else if (type === 'positiveBtn'){
+      } else if (type === 'positiveBtn') {
         data = PositiveArray;
         scoreMax = positiveMax;
-      }else if (type === 'negativeBtn'){
+      } else if (type === 'negativeBtn') {
         data = NegativeArray;
         scoreMax = negativeMin;
-      }else{
+      } else {
         data = GDPArray;
         scoreMax = gdpMax;
       }
@@ -832,25 +845,25 @@
 
       let rectX = 0.0;
       let numData = data.length;
-      let width  = histCanvas.width / numData;
+      let width = histCanvas.width / numData;
       canvasContext.fillStyle = "rgb(200, 230, 255)";
 
       // draw histgram with loop rect
       let i = 0;
       // console.log(numData, data);
-      drawSetInterval = setInterval(function(){
+      drawSetInterval = setInterval(function () {
         let h = (data[i].score) / scoreMax * histCanvas.height; // 0 ~ 255までの数字が入っている
         canvasContext.fillRect(rectX, histCanvas.height - h, width, h);
         rectX = rectX + width;
         i++;
 
-        if(i > numData - 1){
+        if (i > numData - 1) {
           clearInterval(drawSetInterval);
         }
-      }, duration/numData);
+      }, duration / numData);
 
       isHistDisplay = true;
-      return {width:width, histData:data};
+      return {width: width, histData: data};
     };
 
     /* mouse over histgram */
@@ -860,7 +873,7 @@
     histCanvas.addEventListener('click', clickHistRanking, false);
 
     function onHistRanking(event) {
-      if (isHistDisplay){
+      if (isHistDisplay) {
         let rect = event.target.getBoundingClientRect();
         let mouseX = Math.abs(event.clientX - rect.x);
         let index = Math.floor(mouseX / varWidth);
@@ -915,19 +928,20 @@
       let longitude;
 
       for (let i = 0; wbLength > i; i++) {
-        if (latlon[i].country === countryName){
+        if (latlon[i].country === countryName) {
           latitude = latlon[i].latitude;
           longitude = latlon[i].longitude;
         }
       }
-      return {latitude:latitude, longitude:longitude};
+      return {latitude: latitude, longitude: longitude};
     }
 
     /*
     // move camera position function
     */
+
     /* move position in some separate times using quaternion */
-    function moveCamera(latitude, longitude){
+    function moveCamera(latitude, longitude) {
       let targetPos = convertGeoCoords(latitude, longitude);
       let targetVec = targetPos.sub(center);
       let prevVec = camera.position.sub(center);
@@ -939,27 +953,27 @@
       let step = 25;
       let stepAngle = angle / step;
       let count = 0;
-      let moveCamera = function(stepAngle){
+      let moveCamera = function (stepAngle) {
         q.setFromAxisAngle(crossVec, stepAngle);
         camera.position.applyQuaternion(q);
         camera.lookAt(0.0, 0.0, 0.0);
         count++
       };
 
-      let id = setInterval(function(){
+      let id = setInterval(function () {
         earth.rotation.y = 0;
         moveCamera(stepAngle);
-        if(count > step){
+        if (count > step) {
           clearInterval(id);
         }
-      }, 1000/step);
+      }, 1000 / step);
 
       // console.log(prevVec);
 
     }
 
 
-    function convertGeoCoords(latitude, longitude, radius=1.0) {
+    function convertGeoCoords(latitude, longitude, radius = 1.0) {
       let latRad = latitude * (Math.PI / 180);
       let lonRad = -longitude * (Math.PI / 180);
 
@@ -971,6 +985,38 @@
     }
 
 
+    /*
+    // travel ranking country
+    */
+
+    travelRanking = function (type) {
+      let data;
+      if (type === 'Ladder') {
+        data = LadderArray;
+      } else if (type === 'Positive') {
+        data = PositiveArray;
+      } else if (type === 'Negative') {
+        data = NegativeArray;
+      } else {
+        data = GDPArray;
+      }
+
+      let i = 0;
+      travelSetInterval = setInterval(function () {
+        let countryName = data[i].country;
+        let res = countrynameToLatlon(countryName);
+        latitude = res.latitude;
+        longitude = res.longitude;
+        moveCamera(latitude, longitude);
+        clickHistRankingDisplayScore(countryName);
+        i++;
+        if (i > wbLength - 1) {
+          clearInterval(travelSetInterval);
+        }
+      }, 3500);
+    };
+
+
     // helper
     axesHelper = new THREE.AxesHelper(5.0);
     scene.add(axesHelper);
@@ -980,8 +1026,8 @@
     initPostprocessing(vsPost, fsPost, time);
     render();
   }
-  /* END Initialize function */
 
+  /* END Initialize function */
 
 
   ////////////////////////
@@ -994,7 +1040,7 @@
 
     if (pageIndex !== interactivePageIndex) {
       earth.rotation.x += speed;
-    }else{
+    } else {
       earth.rotation.y += speed * 5;
     }
 
@@ -1002,11 +1048,13 @@
     requestAnimationFrame(render);
 
     /* set 30ftp */
-    if(frame % 2 === 0) {return;}
+    if (frame % 2 === 0) {
+      return;
+    }
     //renderer.render(scene, camera);
 
     //オフスクリーンレンダリング
-    renderer.render( scene, camera, postprocessing.renderTarget );
+    renderer.render(scene, camera, postprocessing.renderTarget);
     //平面オブジェクト用テクスチャ画像を更新
     postprocessing.plane.material.uniforms.texture.value = postprocessing.renderTarget.texture;
     postprocessing.plane.material.uniforms.time.value = nowTime;
@@ -1015,13 +1063,13 @@
     postprocessing.plane.material.uniforms.pageIndex.value = pageIndex;
 
     //平面オブジェクトをレンダリング
-    renderer.render(postprocessing.scene, postprocessing.camera );
+    renderer.render(postprocessing.scene, postprocessing.camera);
   }
-
 
 
   /////////////////////////////
   /* Postprocessing function */
+
   /////////////////////////////
   function initPostprocessing(vsPost, fsPost) {
     time = 0.0;
@@ -1029,18 +1077,18 @@
     postprocessing.camera = new THREE.OrthographicCamera(-1, 1, 1, -1, 0, 1);
 
     postprocessing.plane = new THREE.Mesh(
-      new THREE.PlaneBufferGeometry(2, 2),
-      new THREE.RawShaderMaterial({
-        uniforms: {
-          texture: {type: "t", value: null},
-          resolution: {type: "v2", value: [canvasWidth * devicePixelRatio, canvasHeight * devicePixelRatio]},
-          time: {type: "f", value: time},
-          mouse: {type: "v2", value: mouse},
-          pageIndex: {type: "f", value: pageIndex},
-        },
-        vertexShader: vsPost,
-        fragmentShader: fsPost,
-      })
+        new THREE.PlaneBufferGeometry(2, 2),
+        new THREE.RawShaderMaterial({
+          uniforms: {
+            texture: {type: "t", value: null},
+            resolution: {type: "v2", value: [canvasWidth * devicePixelRatio, canvasHeight * devicePixelRatio]},
+            time: {type: "f", value: time},
+            mouse: {type: "v2", value: mouse},
+            pageIndex: {type: "f", value: pageIndex},
+          },
+          vertexShader: vsPost,
+          fragmentShader: fsPost,
+        })
     );
 
     postprocessing.scene.add(postprocessing.plane);
