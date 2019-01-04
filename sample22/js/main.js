@@ -1008,6 +1008,7 @@
         latitude = res.latitude;
         longitude = res.longitude;
         moveCamera(latitude, longitude);
+        createPoint(latitude, longitude);
         clickHistRankingDisplayScore(countryName);
         i++;
         if (i > wbLength - 1) {
@@ -1015,6 +1016,17 @@
         }
       }, 3500);
     };
+
+
+    function createPoint(latitude = 0, longitude = 0, color=0xFF0000) {
+      const pin = new THREE.Mesh(
+          new THREE.SphereGeometry(radius / 100, 16, 16),
+          new THREE.MeshBasicMaterial({color: color}));
+      pin.position.copy(convertGeoCoords(latitude, longitude));
+      console.log('createPoint');
+      // return pin;
+      earth.add(pin);
+    }
 
 
     // helper
