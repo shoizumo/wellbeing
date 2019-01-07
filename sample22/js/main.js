@@ -61,10 +61,14 @@
   let drawHist;
   let histCanvas;
   let histData;
-  let varWidth;
+  let scoreMax;
+  let barWidth;
   let isHistDisplay = false;
   let mouseonCountry;
   let drawSetInterval;
+
+  const barColor = "rgb(200, 225, 225)";
+  const heightBarColor = "rgb(245, 70, 240)";
 
   let travelRanking;
   let travelSetInterval;
@@ -87,7 +91,7 @@
 
   // val for rendering
   let frame = 0;
-  let speed = 3.141592 * 2 / 90 / 60 / 60 * 2;  // 1round/90m * 2
+  let speed = 3.141592 * 2 / 90 / 60 / 60;  // 1round/90m
   let postprocessing = {};
 
   // temp val
@@ -218,7 +222,10 @@
           histCanvas.width = histCanvasWidth;
           let selectedType = $('.selectedBtn');
           console.log(selectedType[0].innerHTML);
-          drawHist(selectedType, 0);
+          let res = drawHist(selectedType, 0);
+          barWidth = res.width;
+          histData = res.histData;
+          scoreMax = res.scoreMax
         }
       }
     }, false);
@@ -259,7 +266,7 @@
       }
       if (event.keyCode === 38) {
         console.log(event.keyCode);
-        travelRanking('Ladder')
+        travelRanking()
       }
     }, false);
 
@@ -515,8 +522,9 @@
 
       let res = drawHist(type);
       // console.log(res);
-      varWidth = res.width;
+      barWidth = res.width;
       histData = res.histData;
+      scoreMax = res.scoreMax
     };
 
     /*
@@ -843,18 +851,16 @@
       canvasContext.fillStyle = "rgb(0, 0, 0, 0)";  // not fill
       canvasContext.fillRect(0, 0, histCanvas.width, histCanvas.height);
 
-      let rectX = 0.0;
       let numData = data.length;
       let width = histCanvas.width / numData;
-      canvasContext.fillStyle = "rgb(200, 230, 255)";
+      canvasContext.fillStyle = barColor;
 
       // draw histgram with loop rect
       let i = 0;
       // console.log(numData, data);
       drawSetInterval = setInterval(function () {
-        let h = (data[i].score) / scoreMax * histCanvas.height; // 0 ~ 255までの数字が入っている
-        canvasContext.fillRect(rectX, histCanvas.height - h, width, h);
-        rectX = rectX + width;
+        let h = (data[i].score) / scoreMax * histCanvas.height;
+        canvasContext.fillRect(width * i, histCanvas.height - h, width, h);
         i++;
 
         if (i > numData - 1) {
@@ -863,7 +869,7 @@
       }, duration / numData);
 
       isHistDisplay = true;
-      return {width: width, histData: data};
+      return {width: width, histData: data, scoreMax: scoreMax};
     };
 
     /* mouse over histgram */
@@ -876,7 +882,7 @@
       if (isHistDisplay) {
         let rect = event.target.getBoundingClientRect();
         let mouseX = Math.abs(event.clientX - rect.x);
-        let index = Math.floor(mouseX / varWidth);
+        let index = Math.floor(mouseX / barWidth);
         let data = histData;
         // console.log(data[index].country, data[index].rank);
 
@@ -936,6 +942,28 @@
       return {latitude: latitude, longitude: longitude};
     }
 
+
+
+
+    function highlightSelectedBar(index, data, scoreMax) {
+      let h;
+      // highlight color
+      canvasContext.fillStyle = heightBarColor;
+      h = (data[index].score) / scoreMax * histCanvas.height;
+      canvasContext.fillRect(barWidth * index, histCanvas.height - h, barWidth, h);
+
+      // return color
+      canvasContext.fillStyle = barColor;
+      if (index > 0){
+        h = (data[index-1].score) / scoreMax * histCanvas.height;
+        canvasContext.fillRect(barWidth * (index-1), histCanvas.height - h, barWidth, h);
+      }
+      if (index > 1){
+        h = (data[index-2].score) / scoreMax * histCanvas.height;
+        canvasContext.fillRect(barWidth * (index-2), histCanvas.height - h, barWidth, h);
+      }
+    }
+
     /*
     // move camera position function
     */
@@ -989,21 +1017,12 @@
     // travel ranking country
     */
 
-    travelRanking = function (type) {
-      let data;
-      if (type === 'Ladder') {
-        data = LadderArray;
-      } else if (type === 'Positive') {
-        data = PositiveArray;
-      } else if (type === 'Negative') {
-        data = NegativeArray;
-      } else {
-        data = GDPArray;
-      }
-
+    travelRanking = function () {
       let i = 0;
       travelSetInterval = setInterval(function () {
-        let countryName = data[i].country;
+        highlightSelectedBar(i, histData, scoreMax);
+
+        let countryName = histData[i].country;
         let res = countrynameToLatlon(countryName);
         latitude = res.latitude;
         longitude = res.longitude;
@@ -1053,7 +1072,7 @@
     if (pageIndex !== interactivePageIndex) {
       earth.rotation.x += speed;
     } else {
-      earth.rotation.y += speed * 5;
+      earth.rotation.y += speed;
     }
 
     let nowTime = clock.getElapsedTime();
