@@ -992,6 +992,7 @@
         earth.rotation.y = 0;
         moveCamera(stepAngle);
         if (count > step) {
+          createPoint(latitude, longitude);
           clearInterval(id);
         }
       }, 1000 / step);
@@ -1011,30 +1012,6 @@
 
       return new THREE.Vector3(x, y, z);
     }
-
-
-    /*
-    // travel ranking country
-    */
-
-    travelRanking = function () {
-      let i = 0;
-      travelSetInterval = setInterval(function () {
-        highlightSelectedBar(i, histData, scoreMax);
-
-        let countryName = histData[i].country;
-        let res = countrynameToLatlon(countryName);
-        latitude = res.latitude;
-        longitude = res.longitude;
-        moveCamera(latitude, longitude);
-        createPoint(latitude, longitude);
-        clickHistRankingDisplayScore(countryName);
-        i++;
-        if (i > wbLength - 1) {
-          clearInterval(travelSetInterval);
-        }
-      }, 3500);
-    };
 
 
     function createPin() {
@@ -1060,14 +1037,36 @@
 
     function createPoint(latitude = 0, longitude = 0) {
       const pin = createPin();
-      pin.position.copy(convertGeoCoords(latitude, longitude));
       let latRad = latitude * (Math.PI / 180);
       let lonRad = -longitude * (Math.PI / 180);
+
+      pin.position.copy(convertGeoCoords(latitude, longitude));
       pin.rotation.set(0.0, -lonRad, latRad - Math.PI * 0.5);
-      console.log('createPoint');
-      // return pin;
       earth.add(pin);
     }
+
+    /*
+    // travel ranking country
+    */
+
+    travelRanking = function () {
+      let i = 0;
+      travelSetInterval = setInterval(function () {
+        highlightSelectedBar(i, histData, scoreMax);
+
+        let countryName = histData[i].country;
+        let res = countrynameToLatlon(countryName);
+        latitude = res.latitude;
+        longitude = res.longitude;
+        moveCamera(latitude, longitude);
+        // createPoint(latitude, longitude);
+        clickHistRankingDisplayScore(countryName);
+        i++;
+        if (i > wbLength - 1) {
+          clearInterval(travelSetInterval);
+        }
+      }, 3500);
+    };
 
     // helper
     axesHelper = new THREE.AxesHelper(5.0);
