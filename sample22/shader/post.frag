@@ -99,7 +99,8 @@ void main( void ) {
     // small star
     vec2 P = gl_FragCoord.xy - resolution.xy;
     float dist = length(P) / resolution.y;
-    vec2 coord = vec2(pow(dist, 0.1), atan(P.x, P.y) / (PI*2.0));
+//    vec2 coord = vec2(pow(dist, 0.1), atan(P.x, P.y) / (PI*2.0));
+    vec2 coord = vec2(dist, atan(P.x, P.y) / (PI*2.0));
 
     float a = pow((1.0-dist),20.0);
     float t = time*-.035;

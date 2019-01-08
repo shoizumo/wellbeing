@@ -326,7 +326,7 @@
     scene = new THREE.Scene();
 
     /* renderer */
-    renderer = new THREE.WebGLRenderer();
+    renderer = new THREE.WebGLRenderer({antialias: true});
     renderer.setPixelRatio(devicePixelRatio);
     renderer.setClearColor(new THREE.Color(RENDERER_PARAM.clearColor));
     renderer.setSize(canvasWidth, canvasHeight);
