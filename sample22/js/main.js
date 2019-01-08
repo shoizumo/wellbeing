@@ -1037,16 +1037,37 @@
     };
 
 
-    function createPoint(latitude = 0, longitude = 0, color=0xFF0000) {
-      const pin = new THREE.Mesh(
-          new THREE.SphereGeometry(radius / 100, 16, 16),
-          new THREE.MeshBasicMaterial({color: color}));
+    function createPin() {
+      let radius = 0.0025;
+      let sphereRadius = 0.01;
+      let height = 0.025;
+
+      let material = new THREE.MeshBasicMaterial({color: 0xdce1f0});
+
+      let cone = new THREE.Mesh(new THREE.ConeBufferGeometry(radius, height, 16, 1, true), material);
+      cone.position.y = height * 0.5;
+      cone.rotation.x = Math.PI;
+
+      let sphere = new THREE.Mesh(new THREE.SphereBufferGeometry(sphereRadius, 32, 32), material);
+      sphere.position.y = height * 0.95 + sphereRadius;
+
+      let group = new THREE.Group();
+      group.add(cone);
+      group.add(sphere);
+      return group;
+    }
+
+
+    function createPoint(latitude = 0, longitude = 0) {
+      const pin = createPin();
       pin.position.copy(convertGeoCoords(latitude, longitude));
+      let latRad = latitude * (Math.PI / 180);
+      let lonRad = -longitude * (Math.PI / 180);
+      pin.rotation.set(0.0, -lonRad, latRad - Math.PI * 0.5);
       console.log('createPoint');
       // return pin;
       earth.add(pin);
     }
-
 
     // helper
     axesHelper = new THREE.AxesHelper(5.0);
