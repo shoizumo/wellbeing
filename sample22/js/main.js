@@ -54,6 +54,8 @@
   let positiveMax, positiveMin;
   let negativeMax, negativeMin;
   let gdpMax, gdpMin;
+  let t1, t2, t3, t4;
+  let s1, s2, s3, s4;
   let wbButton;
   let svgRadius;
 
@@ -211,8 +213,25 @@
       if (pageIndex === interactivePageIndex) {
         if (canvasWidth < 900) {
           svgRadius = 40;
+          t1.setAttributeNS(null, "font-size", "22px");
+          t2.setAttributeNS(null, "font-size", "22px");
+          t3.setAttributeNS(null, "font-size", "22px");
+          t4.setAttributeNS(null, "font-size", "22px");
+          s1.setAttributeNS(null, "font-size", "12px");
+          s2.setAttributeNS(null, "font-size", "12px");
+          s3.setAttributeNS(null, "font-size", "12px");
+          s4.setAttributeNS(null, "font-size", "12px");
+
         }else{
           svgRadius = 48;
+          t1.setAttributeNS(null, "font-size", "28px");
+          t2.setAttributeNS(null, "font-size", "28px");
+          t3.setAttributeNS(null, "font-size", "28px");
+          t4.setAttributeNS(null, "font-size", "28px");
+          s1.setAttributeNS(null, "font-size", "16px");
+          s2.setAttributeNS(null, "font-size", "16px");
+          s3.setAttributeNS(null, "font-size", "16px");
+          s4.setAttributeNS(null, "font-size", "16px");
         }
 
         let histCanvasWidth;
@@ -590,39 +609,54 @@
       svgRadius = 48;
     }
     function createRankText(type) {
+      let px;
+      if (canvasWidth < 900) {
+          px = "22px";
+        }else{
+          px = "28px";
+        }
       let text = document.createElementNS('http://www.w3.org/2000/svg', 'text');
       text.setAttributeNS(null, "x", '50%');
       text.setAttributeNS(null, "y", '50%');
       text.setAttributeNS(null, 'text-anchor', 'middle');
       text.setAttributeNS(null, 'dominant-baseline', 'central');
       text.setAttributeNS(null, "fill", "#ffffff");
-      text.setAttributeNS(null, "font-size", "20px");
+      text.setAttributeNS(null, "font-size", px);
       text.setAttributeNS(null, "class", "info" + type);
       text.setAttributeNS(null, "id", "info" + type);
       return text;
     }
 
-    let t1 = createRankText('Ladder');
-    let t2 = createRankText('Positive');
-    let t3 = createRankText('Negative');
-    let t4 = createRankText('GDP');
+    t1 = createRankText('Ladder');
+    t2 = createRankText('Positive');
+    t3 = createRankText('Negative');
+    t4 = createRankText('GDP');
+
+    // t1.setAttributeNS(null, "font-size", "25px");
+    // console.log(t1);
 
     function createScoreText(type) {
+      let px;
+      if (canvasWidth < 900) {
+          px = "12px";
+        }else{
+          px = "16px";
+        }
       let text = document.createElementNS('http://www.w3.org/2000/svg', 'text');
       text.setAttributeNS(null, "x", '50%');
       text.setAttributeNS(null, "y", '70%');
       text.setAttributeNS(null, 'text-anchor', 'middle');
       text.setAttributeNS(null, 'dominant-baseline', 'central');
       text.setAttributeNS(null, "fill", "#eeeeee");
-      text.setAttributeNS(null, "font-size", "12px");
+      text.setAttributeNS(null, "font-size", px);
       text.setAttributeNS(null, "class", "info" + type);
       return text;
     }
 
-    let s1 = createScoreText('Ladder');
-    let s2 = createScoreText('Positive');
-    let s3 = createScoreText('Negative');
-    let s4 = createScoreText('GDP');
+    s1 = createScoreText('Ladder');
+    s2 = createScoreText('Positive');
+    s3 = createScoreText('Negative');
+    s4 = createScoreText('GDP');
 
     /* display score result */
     let tween;

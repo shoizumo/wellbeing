@@ -309,7 +309,7 @@ score board(responsive)
     grid-column: 1 / 5;
     grid-raw: 1 / 2;
     background-color: #333333;
-    font-size: 1.3em;
+    font-size: 1.5em;
     font-weight: 400;
   }
 
@@ -323,7 +323,7 @@ score board(responsive)
     grid-template-rows: 20px 100px;
   }
   #LadderTitle{
-    font-size: 0.69em;
+    font-size: 1.05em;
     grid-column: 1 / 2;
     grid-raw: 1 / 2;
     font-weight: 200;
@@ -343,7 +343,7 @@ score board(responsive)
     grid-template-rows: 20px 100px;
   }
   #PositiveTitle{
-    font-size: 0.69em;
+    font-size: 1.05em;
     grid-column: 1 / 2;
     grid-raw: 1 / 2;
     font-weight: 200;
@@ -362,7 +362,7 @@ score board(responsive)
     grid-template-rows: 20px 100px;
   }
   #NegativeTitle{
-    font-size: 0.69em;
+    font-size: 1.05em;
     grid-column: 1 / 2;
     grid-raw: 1 / 2;
     font-weight: 200;
@@ -381,7 +381,7 @@ score board(responsive)
     grid-template-rows: 20px 100px;
   }
   #GDPTitle{
-    font-size: 0.69em;
+    font-size: 1.05em;
     grid-column: 1 / 2;
     grid-raw: 1 / 2;
     font-weight: 200;
