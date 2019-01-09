@@ -54,7 +54,9 @@ html, body {
 }
 
 
-/* score board(responsive) */
+/*
+score board(responsive)
+*/
 /* For SP */
 #infoBoard{
   display: grid;
@@ -166,8 +168,8 @@ html, body {
 }
 
 
-/* for PC */
-@media screen and (min-width: 600px) {
+/* for tablet & PC(medium) */
+@media screen and (min-width: 600px) and (max-width:900px) {
   #infoBoard{
     display: grid;
     grid-template-columns: 150px 150px 150px 150px;
@@ -278,8 +280,176 @@ html, body {
   }
 }
 
+/* for PC(wide) */
+@media screen and (min-width: 900px) {
+  #infoBoard{
+    display: grid;
+    grid-template-columns: 200px 200px 200px 200px;
+    grid-template-rows: 30px 120px;
 
-/*switch type button(responsive) */
+    position:fixed;
+    top:0;
+    /*right:15%;*/
+    left: 50%;
+    margin-left:-400px;
+
+    width:800px;
+    height:150px;
+
+    background-color: rgba(0, 0, 255, 0.5);
+    opacity: 0.0;
+    color: #ffffff;
+    text-align: center;
+
+    font-family: 'Nunito', sans-serif;
+    font-weight: 300;
+  }
+
+  #country{
+    grid-column: 1 / 5;
+    grid-raw: 1 / 2;
+    background-color: #333333;
+    font-size: 1.3em;
+    font-weight: 400;
+  }
+
+  #Ladder{
+    grid-column: 1 / 2;
+    grid-raw: 2 / 3;
+    background-color: #444444;
+
+    display: grid;
+    grid-template-columns: 200px;
+    grid-template-rows: 20px 100px;
+  }
+  #LadderTitle{
+    font-size: 0.69em;
+    grid-column: 1 / 2;
+    grid-raw: 1 / 2;
+    font-weight: 200;
+  }
+  #LadderRanking{
+    grid-column: 1 / 2;
+    grid-raw: 2 / 3;
+  }
+
+  #Positive{
+    grid-column: 2 / 3;
+    grid-raw: 2 / 3;
+    background-color: #444444;
+
+    display: grid;
+    grid-template-columns: 200px;
+    grid-template-rows: 20px 100px;
+  }
+  #PositiveTitle{
+    font-size: 0.69em;
+    grid-column: 1 / 2;
+    grid-raw: 1 / 2;
+    font-weight: 200;
+  }
+  #PositiveRanking{
+    grid-column: 1 / 2;
+    grid-raw: 2 / 3;
+  }
+
+  #Negative{
+    grid-column: 3 / 4;
+    grid-raw: 2 / 3;
+    background-color: #444444;
+    display: grid;
+    grid-template-columns: 200px;
+    grid-template-rows: 20px 100px;
+  }
+  #NegativeTitle{
+    font-size: 0.69em;
+    grid-column: 1 / 2;
+    grid-raw: 1 / 2;
+    font-weight: 200;
+  }
+  #NegativeRanking{
+    grid-column: 1 / 2;
+    grid-raw: 2 / 3;
+  }
+
+  #GDP{
+    grid-column: 4 / 5;
+    grid-raw: 2 / 3;
+    background-color: #444444;
+    display: grid;
+    grid-template-columns: 200px;
+    grid-template-rows: 20px 100px;
+  }
+  #GDPTitle{
+    font-size: 0.69em;
+    grid-column: 1 / 2;
+    grid-raw: 1 / 2;
+    font-weight: 200;
+  }
+  #GDPRanking{
+    grid-column: 1 / 2;
+    grid-raw: 2 / 3;
+  }
+}
+
+/*
+infoBoardSVG(responsive)
+*/
+/* for SP & tablet & PC(medium) */
+.infoContentsSVG {
+  width: 150px;
+  height: 80px;
+}
+
+.infoContentsCircle1 {
+  cx: 75px;
+  cy: 40px;
+  r: 40px;
+}
+
+.infoContentsCircle2 {
+  cx: 75px;
+  cy: 40px;
+  r: 20px;
+}
+
+.infoContentsCircle3 {
+  cx: 75px;
+  cy: 40px;
+  /*r: 0px;*/
+}
+
+/* for PC(wide) */
+@media screen and (min-width: 900px) {
+  .infoContentsSVG {
+    width: 200px;
+    height: 100px;
+  }
+
+  .infoContentsCircle1 {
+    cx: 100px;
+    cy: 48px;
+    r: 48px;
+  }
+
+  .infoContentsCircle2 {
+    cx: 100px;
+    cy: 48px;
+    r: 24px;
+  }
+
+  .infoContentsCircle3 {
+    cx: 100px;
+    cy: 48px;
+    /*r: 0px;*/
+  }
+}
+
+
+/*
+switch type button(responsive)
+*/
+/* for SP */
 #rankingWrapper{
   display: grid;
   grid-template-columns: 320px;
@@ -329,6 +499,7 @@ html, body {
   font-weight: 300;
 }
 
+/* for tablet */
 @media screen and (min-width: 500px) and (max-width:700px) {
   #rankingWrapper{
     display: grid;
@@ -380,6 +551,7 @@ html, body {
   }
 }
 
+/* for PC medium */
 @media screen and (min-width: 700px) and (max-width:900px) {
   #rankingWrapper{
     display: grid;
@@ -431,6 +603,7 @@ html, body {
   }
 }
 
+/* for PC wide */
 @media screen and (min-width:900px) {
   #rankingWrapper{
     display: grid;

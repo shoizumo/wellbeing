@@ -50,28 +50,23 @@
 
   const wbLength = Object.keys(wbData).length;
   let meshList;
-  let clickBtn;
   let ladderMax, ladderMin;
   let positiveMax, positiveMin;
   let negativeMax, negativeMin;
   let gdpMax, gdpMin;
   let wbButton;
+  let svgRadius;
 
   // val for ranking histgram
-  let drawHist;
   let histCanvas;
   let histData;
   let scoreMax;
   let barWidth;
   let isHistDisplay = false;
   let mouseonCountry;
-  let drawSetInterval;
 
   const barColor = "rgb(200, 225, 225)";
   const heightBarColor = "rgb(245, 70, 240)";
-
-  let travelRanking;
-  let travelSetInterval;
 
   // val for interactive land function
   let isClicked = false;
@@ -96,6 +91,13 @@
 
   // temp val
   let stats;
+
+  // function
+  let drawHist;
+  let clickBtn;
+  let travelRanking;
+  let travelSetInterval;
+  let drawSetInterval;
 
 
   /////////////////
@@ -207,6 +209,12 @@
       canvasHeight = window.innerHeight;
 
       if (pageIndex === interactivePageIndex) {
+        if (canvasWidth < 900) {
+          svgRadius = 40;
+        }else{
+          svgRadius = 48;
+        }
+
         let histCanvasWidth;
         if (canvasWidth < 500) {
           histCanvasWidth = 320;
@@ -576,6 +584,11 @@
     /*
     // score ranking board
     */
+    if (canvasWidth < 900) {
+      svgRadius = 40;
+    }else{
+      svgRadius = 48;
+    }
     function createRankText(type) {
       let text = document.createElementNS('http://www.w3.org/2000/svg', 'text');
       text.setAttributeNS(null, "x", '50%');
@@ -617,7 +630,7 @@
     function displayRanking(type, rank, num, duration, rankText, score, scoreText) {
       let id = '#' + type + 'Ranking';
       let svg = $(id).children().children()[2];
-      let radius = (num - rank + 1) / num * 40;
+      let radius = (num - rank + 1) / num * svgRadius; // responsive
       let rUnit;
       let sUnit = type === 'GDP' ? 'US$' : 'pt';
       let rankStr = rank.toString();
@@ -1072,14 +1085,12 @@
     axesHelper = new THREE.AxesHelper(5.0);
     scene.add(axesHelper);
 
-
     /* conduct rendering */
     initPostprocessing(vsPost, fsPost, time);
     render();
   }
 
   /* END Initialize function */
-
 
   ////////////////////////
   /* Rendering function */
