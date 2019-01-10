@@ -10,7 +10,6 @@ uniform float pageIndex;
 
 // from vs
 varying vec3 mvPosition;
-varying vec3 vNormal;
 varying vec2 vUv;
 
 

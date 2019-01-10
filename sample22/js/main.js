@@ -25,11 +25,7 @@
   let axesHelper;
 
   // texture
-  let earthLand;
-  let earthBump;
   let earthMap;
-  let earthLandLoader;
-  let earthBumpLoader;
   let earthMapLoader;
 
   // constant variables
@@ -303,14 +299,8 @@
     // }, false);
 
     /* load texture */
-    earthLandLoader = Loader = new THREE.TextureLoader();
-    earthBumpLoader = new THREE.TextureLoader();
     earthMapLoader = new THREE.TextureLoader();
-    earthLand = earthLandLoader.load('img/earthspec.png', () => {
-      earthBump = earthBumpLoader.load('img/earthbump.png', () => {
-        earthMap = earthMapLoader.load('img/mapNight.jpg', loadShader);
-      })
-    });
+    earthMap = earthMapLoader.load('img/mapNight.jpg', loadShader);
 
   }, false);
 
@@ -378,8 +368,6 @@
       fragmentShader: fsMain,
       uniforms: {
         // Map
-        bumpTex: {type: "t", value: earthBump},
-        landTex: {type: "t", value: earthLand},
         earthTex: {type: "t", value: earthMap},
         time: {type: "f", value: time},
         resolution: {type: "v2", value: [canvasWidth, canvasHeight]},
