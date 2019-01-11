@@ -392,6 +392,10 @@ score board(responsive)
   }
 }
 
+#country:focus {
+    outline: none;
+}
+
 /*
 infoBoardSVG(responsive)
 */
@@ -719,4 +723,11 @@ switch type button(responsive)
   border-radius: 10px;
   font-family: 'Nunito', sans-serif;
   font-weight: 300;
+}
+
+/* search */
+.ui-autocomplete {
+    max-height: 80%;
+    overflow-y: auto;
+    overflow-x: hidden;
 }

@@ -54,6 +54,7 @@
   let s1, s2, s3, s4;
   let wbButton;
   let svgRadius;
+  let searchArray;
 
   // val for ranking histgram
   let histCanvas;
@@ -179,6 +180,14 @@
       // for SP
       $(document).off('.noScroll');
     }
+    // function enableScrollSearch(){
+    //   // for PC
+    //   let scroll_event = 'onwheel' in document ? 'wheel' : 'onmousewheel' in document ? 'mousewheel' : 'DOMMouseScroll';
+    //   $('.ui-autocomplete').off(scroll_event);
+    //   // for SP
+    //   $('.ui-autocomplete').off('.noScroll');
+    // }
+    // enableScrollSearch();
 
 
     /* typing effect function */
@@ -297,12 +306,12 @@
         }
       }
       if (event.keyCode === 39) {  // right
-        landBaseOpacity = 1.0;
-        landBase.material.opacity = landBaseOpacity;
-        earthOutline.scale.set(1.002, 1.002, 1.002);
-        for (let i = 0, lm = meshList.length; lm > i; i++) {
-          meshList[i].material.opacity = 1.0;
-        }
+        // landBaseOpacity = 1.0;
+        // landBase.material.opacity = landBaseOpacity;
+        // earthOutline.scale.set(1.002, 1.002, 1.002);
+        // for (let i = 0, lm = meshList.length; lm > i; i++) {
+        //   meshList[i].material.opacity = 1.0;
+        // }
       }
       if (event.keyCode === 38) {
         console.log(event.keyCode);
@@ -1033,7 +1042,7 @@
       let step = 25;
       let stepAngle = angle / step;
       let count = 0;
-      let moveCamera = function (stepAngle) {
+      let moveCameraQuaternion = function (stepAngle) {
         q.setFromAxisAngle(crossVec, stepAngle);
         camera.position.applyQuaternion(q);
         camera.lookAt(0.0, 0.0, 0.0);
@@ -1042,7 +1051,7 @@
 
       let id = setInterval(function () {
         earth.rotation.y = 0;
-        moveCamera(stepAngle);
+        moveCameraQuaternion(stepAngle);
         if (count > step) {
           createPoint(latitude, longitude);
           clearInterval(id);
@@ -1127,6 +1136,38 @@
     /* conduct rendering */
     initPostprocessing(vsPost, fsPost, time);
     render();
+
+
+    /*
+    serch country name
+    */
+    searchArray = [];
+    for (let i = 0; i < wbLength; i++) {
+      searchArray.push(latlon[i].country);
+    }
+    searchArray = searchArray.sort();
+
+    let selectorSearch = $("#country");
+    selectorSearch.autocomplete({
+      source: searchArray,
+      autoFocus: false, //defo:false
+      delay: 300,
+      minLength: 1
+    });
+
+    selectorSearch.on("autocompleteclose", function(){
+      let inputCountry = document.getElementById('country').textContent;
+      console.log(inputCountry);
+
+      let res = countrynameToLatlon(inputCountry);
+      console.log(res.latitude);
+
+      if( typeof res.latitude !== 'undefined'){
+        moveCamera(res.latitude, res.longitude);
+        clickHistRankingDisplayScore(inputCountry);
+      }
+    });
+
   }
 
   /* END Initialize function */
