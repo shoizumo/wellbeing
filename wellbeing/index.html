@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html>
+    <head>
+      <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      <link rel="stylesheet" href="lib/onepage-scroll.css">
+      <link href="https://fonts.googleapis.com/css?family=Roboto:700i" rel="stylesheet">
+      <link href="https://fonts.googleapis.com/css?family=Nunito:200,300,400" rel="stylesheet">
+      <link rel="stylesheet" href="main.css">
+
+        <script data-src="shader/main.vert" charset="utf-8" data-name="myShaderMain" type="x-shader/x-vertex"></script>
+        <script data-src="shader/main.frag" charset="utf-8"  data-name="myShaderMain" type="x-shader/x-fragment"></script>
+        <script data-src="shader/post.vert" charset="utf-8" data-name="myShaderPost" type="x-shader/x-vertex"></script>
+        <script data-src="shader/post.frag" charset="utf-8"  data-name="myShaderPost" type="x-shader/x-fragment"></script>
+
+
+    </head>
+    <body>
+      <div id="Stats-output">
+      </div>
+      <div id="webgl">
+      </div>
+
+      <div class="wrapper">
+        <div class="main">
+
+          <section class="page1">
+            <p class='fadein'>
+                <!--<span>A visualization of well-being</span><br>-->
+            </p>
+          </section>
+
+          <section class="page2">
+            <p class='fadein'>
+                <span>A visualization of well-being</span><br>
+            </p>
+          </section>
+
+          <section class="page3">
+            <p class='fadein'>
+                <span>There are three indicators of well-being</span><br>
+            </p>
+          </section>
+
+          <section class="page4">
+            <p class='fadein'>
+                <span>1. Life Evaluation Index</span><br>
+                <span>This index measures respondents’ perceptions of where they stand now.</span><br>
+                <span>We asked respondents to place the status of their lives on a “ladder” scale with steps numbered from 0 to 10.</span><br>
+            </p>
+          </section>
+
+          <section class="page5">
+            <p class='fadein'>
+                <span>You can manipulate earth</span><br>
+            </p>
+          </section>
+        </div>
+      </div>
+
+      <div id="infoBoard">
+        <div id="country">Country</div>
+
+        <div id="Ladder">
+          <div id="LadderTitle">Ladder score Ranking</div>
+          <div class="infoContents" id="LadderRanking">
+            <svg class="infoContentsSVG">
+              <circle stroke="#222222" stroke-width="0.3" fill="none" class="infoContentsCircle1"></circle>
+              <circle stroke="#333333" stroke-width="0.3" fill="none" class="infoContentsCircle2"></circle>
+              <circle stroke="#222222" stroke-width="0.3" fill="#ffa443" class="infoContentsCircle3"></circle>
+            </svg>
+          </div>
+        </div>
+
+        <div id="Positive">
+          <div id="PositiveTitle">Positive score Ranking</div>
+          <div class="infoContents" id="PositiveRanking">
+            <svg class="infoContentsSVG">
+              <circle stroke="#222222" stroke-width="0.3" fill="none" class="infoContentsCircle1"></circle>
+              <circle stroke="#333333" stroke-width="0.3" fill="none" class="infoContentsCircle2"></circle>
+              <circle stroke="#222222" stroke-width="0.3" fill="#ffa443" class="infoContentsCircle3"></circle>
+            </svg>
+          </div>
+        </div>
+
+
+        <div id="Negative">
+          <div id="NegativeTitle">Negative score Ranking</div>
+          <div class="infoContents" id="NegativeRanking">
+            <svg class="infoContentsSVG">
+              <circle stroke="#222222" stroke-width="0.3" fill="none" class="infoContentsCircle1"></circle>
+              <circle stroke="#333333" stroke-width="0.3" fill="none" class="infoContentsCircle2"></circle>
+              <circle stroke="#222222" stroke-width="0.3" fill="#ffa443" class="infoContentsCircle3"></circle>
+            </svg>
+          </div>
+        </div>
+
+        <div id="GDP">
+          <div id="GDPTitle">GDP per capita Ranking</div>
+          <div class="infoContents" id="GDPRanking">
+            <svg class="infoContentsSVG">
+              <circle stroke="#222222" stroke-width="0.3" fill="none" class="infoContentsCircle1"></circle>
+              <circle stroke="#333333" stroke-width="0.3" fill="none" class="infoContentsCircle2"></circle>
+              <circle stroke="#222222" stroke-width="0.3" fill="#ffa443" class="infoContentsCircle3"></circle>
+            </svg>
+          </div>
+        </div>
+       </div>
+
+      <div id="rankingWrapper">
+        <div id="canvasWrapper">
+          <canvas id="histgram"></canvas>
+        </div>
+
+        <ul id="btn">
+          <li id="ladderBtn" class="wbButton hiddenBtn">Ladder</li>
+          <li id="positiveBtn" class="wbButton hiddenBtn">Positive</li>
+          <li id="negativeBtn" class="wbButton hiddenBtn">Negative</li>
+          <li id="gdpBtn" class="wbButton hiddenBtn">GDP</li>
+        </ul>
+      </div>
+
+      <div id="tooltip">aaaaa</div>
+      <div id="tooltipHist">
+        <p>aaaaa</p>
+      </div>
+
+    <script src="lib/jquery-3.3.1.min.js"></script>
+    <script src="lib/ShaderLoader.min.js"></script>
+    <script src="lib/jquery.onepage-scroll.min.js"></script>
+
+    <script type="text/javascript" src="lib/stats.min.js"></script>
+    <script type="text/javascript" src="lib/three97.min.js"></script>
+    <script type="text/javascript" src="lib/OrbitControls.js"></script>
+    <script type="text/javascript" src="lib/tessellator3d.js"></script>
+    <script type="text/javascript" src="lib/country_data.js"></script>
+    <script type="text/javascript" src="lib/lat_lon.js"></script>
+    <script type="text/javascript" src="lib/wellbeing_data.json"></script>
+    <script type="text/javascript" src="lib/TweenMax.min.js"></script>
+    <script src="js/main.js"></script>
+
+    </body>
+</html>
