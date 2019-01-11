@@ -396,6 +396,10 @@ score board(responsive)
     outline: none;
 }
 
+#country{
+  cursor: text;
+}
+
 /*
 infoBoardSVG(responsive)
 */

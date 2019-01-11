@@ -965,13 +965,16 @@
     /* mouse click histgram */
     function clickHistRanking() {
       console.log('click', mouseonCountry);
-      let res = countrynameToLatlon(mouseonCountry);
-      latitude = res.latitude;
-      longitude = res.longitude;
 
-      moveCamera(latitude, longitude);
-      clickHistRankingDisplayScore(mouseonCountry);
+      // after setting mouseonCountry, this function can be used
+      if( typeof mouseonCountry !== 'undefined'){
+        let res = countrynameToLatlon(mouseonCountry);
+        latitude = res.latitude;
+        longitude = res.longitude;
 
+        moveCamera(latitude, longitude);
+        clickHistRankingDisplayScore(mouseonCountry);
+      }
       //tooltipHist.css({opacity: 0.0});
     }
 
