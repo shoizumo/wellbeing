@@ -15,6 +15,9 @@
   let scene;
   let camera;
   let controls;
+  let ambientLight;
+  let directionalLight1;
+  let directionalLight2;
   let renderer;
   let geometry;
   let material;
@@ -386,6 +389,18 @@
     controls.rotateSpeed = 2.0;
     controls.enableDamping = true;
     controls.dampingFactor = 0.2;
+
+    /* light for marker Pin */
+    ambientLight = new THREE.AmbientLight(0xffffff, 0.5);
+    scene.add(ambientLight);
+
+    directionalLight1 = new THREE.DirectionalLight(0xffffff, 0.5);
+    directionalLight1.position.set(5.0, 2.0, 5.0);
+    scene.add(directionalLight1);
+
+    directionalLight2 = new THREE.DirectionalLight(0xffffff, 0.5);
+    directionalLight2.position.set(-5.0, 2.0, -5.0);
+    scene.add(directionalLight2);
 
     /* earth map ver. */
     geometry = new THREE.SphereBufferGeometry(radius, 60, 60);
@@ -1083,13 +1098,13 @@
       let sphereRadius = 0.01;
       let height = 0.025;
 
-      let material = new THREE.MeshBasicMaterial({color: 0xdce1f0});
+      let material = new THREE.MeshPhongMaterial({color: 0xC9C7B7});
 
       let cone = new THREE.Mesh(new THREE.ConeBufferGeometry(radius, height, 16, 1, true), material);
       cone.position.y = height * 0.5;
       cone.rotation.x = Math.PI;
 
-      let sphere = new THREE.Mesh(new THREE.SphereBufferGeometry(sphereRadius, 32, 32), material);
+      let sphere = new THREE.Mesh(new THREE.SphereBufferGeometry(sphereRadius, 60, 60), material);
       sphere.position.y = height * 0.95 + sphereRadius;
 
       let group = new THREE.Group();
@@ -1109,10 +1124,10 @@
       earth.add(pin);
     }
 
+
     /*
     // travel ranking country
     */
-
     travelRanking = function () {
       let i = 0;
       travelSetInterval = setInterval(function () {
