@@ -74,6 +74,9 @@
   let isClicked = false;
   let dragFlag = false;
   let isLand = false;
+  let isInfoObject = false;
+  let infoObject1;
+  let infoObject2;
   let isFirstClick = true;
   let latitude;
   let longitude;
@@ -349,7 +352,6 @@
 
   /////////////////////////
   /* Initialize function */
-
   /////////////////////////
   function init(vsMain, fsMain, vsPost, fsPost) {
     stats = initStats();
@@ -771,17 +773,17 @@
     let infoBoard = $('#infoBoard');
     let body = $('body');
 
-    let intersected_object = 0;
-    let hover_scale = 1.0;
+    // let intersected_object = 0;
+    // let hover_scale = 1.0;
     window.addEventListener('mousemove', onDocumentMouseMove, false);
     window.addEventListener('click', onDocumentMouseClick, false);
 
     /* mouse over land */
     function onDocumentMouseMove(event) {
       if (pageIndex === interactivePageIndex) {
-        if (intersected_object !== 0) {
-          intersected_object.scale.set(1.0, 1.0, 1.0);  // 前回のオブジェクトをもとに戻す
-        }
+        // if (intersected_object !== 0) {
+        //   intersected_object.scale.set(1.0, 1.0, 1.0);  // 前回のオブジェクトをもとに戻す
+        // }
         event.preventDefault();
         let mouseX = (event.clientX / window.innerWidth) * 2 - 1;
         let mouseY = -(event.clientY / window.innerHeight) * 2 + 1;
@@ -795,31 +797,52 @@
         isLand = false;
         body.css('cursor', 'default');
 
-        if (intersects.length > 0) {
-          if (intersects[0].point !== null) {
-            if (intersects[0].object.name === "land") {
-              //console.log(intersects[0]);
+        if (!isInfoObject) {
+          if (intersects.length > 0) {
+            if (intersects[0].point !== null) {
+              if (intersects[0].object.name === "land") {
+                //console.log(intersects[0]);
 
-              countryName = intersects[0].object.userData.country;
-              tooltip[0].innerText = countryName;
-              tooltip.css({opacity: 1.0});
-              // infoBoard.css({opacity: 1.0});
-              isLand = true;
-              body.css('cursor', 'pointer');
+                countryName = intersects[0].object.userData.country;
+                tooltip[0].innerText = countryName;
+                tooltip.css({opacity: 1.0});
+                // infoBoard.css({opacity: 1.0});
+                isLand = true;
+                body.css('cursor', 'pointer');
 
-              let res = calcWbInfo(countryName);
-              if (typeof res !== 'undefined') {
-                tooltip.css({top: event.clientY * 0.97});
-                tooltip.css({left: event.clientX * 1.03});
+                let res = calcWbInfo(countryName);
+                if (typeof res !== 'undefined') {
+                  tooltip.css({top: event.clientY * 0.97});
+                  tooltip.css({left: event.clientX * 1.03});
+                }
+
+                // intersects[0].object.scale.set(hover_scale, hover_scale, hover_scale);
+                // intersected_object = intersects[0].object;
               }
-
-              intersects[0].object.scale.set(hover_scale, hover_scale, hover_scale);
-              intersected_object = intersects[0].object;
             }
           }
         }
       }
     }
+
+    /* detect whether onInfo or not */
+    let infoObject1 = document.getElementById('infoBoard');
+    let infoObject2 = document.getElementById('rankingWrapper');
+    infoObject1.addEventListener('mouseenter', onInfoObject, false);
+    infoObject2.addEventListener('mouseenter', onInfoObject, false);
+    infoObject1.addEventListener('mouseleave', outInfoObject, false);
+    infoObject2.addEventListener('mouseleave', outInfoObject, false);
+
+    function onInfoObject() {
+      isInfoObject = true;
+      console.log(isInfoObject);
+    }
+    function outInfoObject() {
+      isInfoObject = false;
+      console.log(isInfoObject);
+    }
+
+
 
     /* click land */
     function onDocumentMouseClick() {
@@ -1187,7 +1210,6 @@
     });
 
   }
-
   /* END Initialize function */
 
   ////////////////////////
