@@ -750,3 +750,18 @@ switch type button(responsive)
   font-family: 'Nunito', sans-serif;
   font-weight: 300;
 }
+
+#stopMove {
+  position: fixed;
+  top: 75%;
+  /*left: 3%;*/
+
+  text-align: center;
+  padding : 0.1em 0.5em 0.1em 0.5em;
+  color: #ffffff;
+  opacity: 0.0;
+  background-color: #646464;
+  border-radius: 10px;
+  font-family: 'Nunito', sans-serif;
+  font-weight: 300;
+}

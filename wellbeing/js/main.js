@@ -104,6 +104,7 @@
   let clickBtn;
   let travelRanking;
   let travelSetInterval;
+  let stopTravelRanking;
   let drawSetInterval;
 
 
@@ -307,11 +308,22 @@
 
     /* switch earth type */
     let autoMove = document.getElementById('autoMove');
+    let stopMove = document.getElementById('stopMove');
+
     autoMove.addEventListener('click', () => {
       autoMove.setAttribute('style', 'background-color:#ffa443;opacity:1.0;');
+      stopMove.setAttribute('style', 'opacity:1.0;');
       console.log('auto');
-      travelRanking()
+      travelRanking();
     }, false);
+
+    stopMove.addEventListener('click', () => {
+      autoMove.setAttribute('style', 'background-color:#646464;opacity:1.0;');
+      stopMove.setAttribute('style', 'opacity:0.0;');
+      console.log('stop');
+      stopTravelRanking();
+    }, false);
+
 
     // window.addEventListener("keydown", function (event) {
     //   if (event.keyCode === 37) {  // left
@@ -1216,6 +1228,10 @@
           clearInterval(travelSetInterval);
         }
       }, 3500);
+    };
+
+    stopTravelRanking = function () {
+      clearInterval(travelSetInterval);
     };
 
     // helper
