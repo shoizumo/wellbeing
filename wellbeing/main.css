@@ -735,3 +735,18 @@ switch type button(responsive)
     overflow-y: auto;
     overflow-x: hidden;
 }
+
+#autoMove {
+  position: fixed;
+  top: 70%;
+  /*left: 3%;*/
+
+  text-align: center;
+  padding : 0.1em 0.5em 0.1em 0.5em;
+  color: #ffffff;
+  opacity: 0.0;
+  background-color: #646464;
+  border-radius: 10px;
+  font-family: 'Nunito', sans-serif;
+  font-weight: 300;
+}

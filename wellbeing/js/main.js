@@ -151,6 +151,8 @@
             z: 2.5,
             ease: ease,
             onComplete: function () {
+              $('#autoMove').css('opacity', '1');
+
               controls.enableZoom = true;
               preventScroll();
               document.addEventListener('touchmove', function(e) {e.preventDefault();}, {passive: false});
@@ -304,28 +306,35 @@
     }, false);
 
     /* switch earth type */
-    window.addEventListener("keydown", function (event) {
-      if (event.keyCode === 37) {  // left
-        landBaseOpacity = 0.0;
-        landBase.material.opacity = landBaseOpacity;
-        earthOutline.scale.set(1.0, 1.0, 1.0);
-        for (let i = 0, lm = meshList.length; lm > i; i++) {
-          meshList[i].material.opacity = 0.0;
-        }
-      }
-      if (event.keyCode === 39) {  // right
-        // landBaseOpacity = 1.0;
-        // landBase.material.opacity = landBaseOpacity;
-        // earthOutline.scale.set(1.002, 1.002, 1.002);
-        // for (let i = 0, lm = meshList.length; lm > i; i++) {
-        //   meshList[i].material.opacity = 1.0;
-        // }
-      }
-      if (event.keyCode === 38) {
-        console.log(event.keyCode);
-        travelRanking()
-      }
+    let autoMove = document.getElementById('autoMove');
+    autoMove.addEventListener('click', () => {
+      autoMove.setAttribute('style', 'background-color:#ffa443;opacity:1.0;');
+      console.log('auto');
+      travelRanking()
     }, false);
+
+    // window.addEventListener("keydown", function (event) {
+    //   if (event.keyCode === 37) {  // left
+    //     landBaseOpacity = 0.0;
+    //     landBase.material.opacity = landBaseOpacity;
+    //     earthOutline.scale.set(1.0, 1.0, 1.0);
+    //     for (let i = 0, lm = meshList.length; lm > i; i++) {
+    //       meshList[i].material.opacity = 0.0;
+    //     }
+    //   }
+    //   if (event.keyCode === 39) {  // right
+    //     // landBaseOpacity = 1.0;
+    //     // landBase.material.opacity = landBaseOpacity;
+    //     // earthOutline.scale.set(1.002, 1.002, 1.002);
+    //     // for (let i = 0, lm = meshList.length; lm > i; i++) {
+    //     //   meshList[i].material.opacity = 1.0;
+    //     // }
+    //   }
+    //   if (event.keyCode === 38) {
+    //     console.log(event.keyCode);
+    //     travelRanking()
+    //   }
+    // }, false);
 
     // window.addEventListener('dblclick', () => {
     //     isdDblclick = true;
