@@ -58,6 +58,7 @@
   let wbButton;
   let svgRadius;
   let searchArray;
+  let pinList;
 
   // val for ranking histgram
   let histCanvas;
@@ -106,6 +107,8 @@
   let travelSetInterval;
   let stopTravelRanking;
   let drawSetInterval;
+  let createPin;
+  let deletePin;
 
 
   /////////////////
@@ -322,6 +325,7 @@
       stopMove.setAttribute('style', 'opacity:0.0;');
       console.log('stop');
       stopTravelRanking();
+      deletePin();
     }, false);
 
 
@@ -1073,6 +1077,7 @@
           latitude = res.latitude;
           longitude = res.longitude;
 
+          deletePin();
           moveCamera(latitude, longitude);
           clickHistRankingDisplayScore(mouseonCountry);
         }
@@ -1176,7 +1181,7 @@
     }
 
 
-    function createPin() {
+    createPin = function () {
       let radius = 0.0025;
       let sphereRadius = 0.01;
       let height = 0.025;
@@ -1194,9 +1199,9 @@
       group.add(cone);
       group.add(sphere);
       return group;
-    }
+    };
 
-
+    pinList = [];
     function createPoint(latitude = 0, longitude = 0) {
       const pin = createPin();
       let latRad = latitude * (Math.PI / 180);
@@ -1204,8 +1209,16 @@
 
       pin.position.copy(convertGeoCoords(latitude, longitude));
       pin.rotation.set(0.0, -lonRad, latRad - Math.PI * 0.5);
+      pinList.push(pin);
       earth.add(pin);
     }
+
+    deletePin = function () {
+      console.log(pinList);
+      for (let i = 0, l = pinList.length; l > i; i++) {
+        earth.remove(pinList[i]);
+      }
+    };
 
 
     /*
