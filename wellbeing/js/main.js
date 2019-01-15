@@ -67,14 +67,16 @@
   let isHistDisplay = false;
   let mouseonCountry;
 
-  const barColor = "rgb(200, 225, 225, 0.8)";
+  const barColor = "rgb(200, 225, 225, 0.7)";
   const heightBarColor = "rgb(245, 70, 240)";
 
   // val for interactive land function
+  let countryName = 0;
   let isClicked = false;
   let dragFlag = false;
   let isLand = false;
   let isInfoObject = false;
+  let isFillHist = false;
   let infoObject1;
   let infoObject2;
   let isFirstClick = true;
@@ -544,10 +546,6 @@
     gdpMax = Math.max(GDPArray[0].score);
     gdpMin = Math.min(GDPArray[wbLength - 1].score);
 
-    // console.log(ladderMax, ladderMin);
-    // console.log(positiveMax, positiveMin);
-    // console.log(negativeMax, negativeMin);
-    // console.log(gdpMax, gdpMin);
 
     /* make well-being button in order to show score */
     wbButton = document.getElementsByClassName('wbButton');
@@ -854,6 +852,7 @@
 
       // if nofill, isInfoObject = false
       isInfoObject = (pixelData[0] > 0);
+      isFillHist = (pixelData[0] > 0);
     }
 
     function getElementPosition(obj) {
@@ -1011,19 +1010,26 @@
 
     function onHistRanking(event) {
       if (isHistDisplay) {
-        let rect = event.target.getBoundingClientRect();
-        let mouseX = Math.abs(event.clientX - rect.x);
-        let index = Math.floor(mouseX / barWidth);
-        let data = histData;
-        // console.log(data[index].country, data[index].rank);
+        if (isFillHist){
+          let rect = event.target.getBoundingClientRect();
+          let mouseX = Math.abs(event.clientX - rect.x);
+          let index = Math.floor(mouseX / barWidth);
+          let data = histData;
+          // console.log(data[index].country, data[index].rank);
 
-        document.getElementById("canvasWrapper").classList.add("canvasWrapperPointer");
-        mouseonCountry = data[index].country;
-        tooltipHist[0].innerText = mouseonCountry;
-        tooltipHist.css({opacity: 1.0});
+          document.getElementById("canvasWrapper").classList.add("canvasWrapperPointer");
+          mouseonCountry = data[index].country;
+          tooltipHist[0].innerText = mouseonCountry;
+          tooltipHist.css({opacity: 1.0});
 
-        tooltipHist.css({top: event.clientY * 0.95});
-        tooltipHist.css({left: event.clientX * 1.0 - tooltipHist.width() / 2 - 5});
+          tooltipHist.css({top: event.clientY * 0.95});
+          tooltipHist.css({left: event.clientX * 1.0 - tooltipHist.width() / 2 - 5});
+        }else{
+          document.getElementById("canvasWrapper").classList.remove("canvasWrapperPointer");
+          tooltipHist.css({opacity: 0.0});
+          tooltipHist.css({top: 0});
+          tooltipHist.css({left: 0});
+        }
       }
     }
 
@@ -1034,18 +1040,20 @@
 
     /* mouse click histgram */
     function clickHistRanking() {
-      console.log('click', mouseonCountry);
+      if (isFillHist) {
+        console.log('click', mouseonCountry);
 
-      // after setting mouseonCountry, this function can be used
-      if( typeof mouseonCountry !== 'undefined'){
-        let res = countrynameToLatlon(mouseonCountry);
-        latitude = res.latitude;
-        longitude = res.longitude;
+        // after setting mouseonCountry, this function can be used
+        if (typeof mouseonCountry !== 'undefined') {
+          let res = countrynameToLatlon(mouseonCountry);
+          latitude = res.latitude;
+          longitude = res.longitude;
 
-        moveCamera(latitude, longitude);
-        clickHistRankingDisplayScore(mouseonCountry);
+          moveCamera(latitude, longitude);
+          clickHistRankingDisplayScore(mouseonCountry);
+        }
+        //tooltipHist.css({opacity: 0.0});
       }
-      //tooltipHist.css({opacity: 0.0});
     }
 
     function clickHistRankingDisplayScore(countryName) {
