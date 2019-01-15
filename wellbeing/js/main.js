@@ -67,7 +67,7 @@
   let isHistDisplay = false;
   let mouseonCountry;
 
-  const barColor = "rgb(200, 225, 225)";
+  const barColor = "rgb(200, 225, 225, 0.8)";
   const heightBarColor = "rgb(245, 70, 240)";
 
   // val for interactive land function
@@ -826,22 +826,55 @@
     }
 
     /* detect whether onInfo or not */
-    let infoObject1 = document.getElementById('infoBoard');
-    let infoObject2 = document.getElementById('rankingWrapper');
+    infoObject1 = document.getElementById('infoBoard');
+    infoObject2 = document.getElementById('rankingWrapper');
+    histCanvas = document.querySelector("#histgram");
+
     infoObject1.addEventListener('mouseenter', onInfoObject, false);
     infoObject2.addEventListener('mouseenter', onInfoObject, false);
+
     infoObject1.addEventListener('mouseleave', outInfoObject, false);
     infoObject2.addEventListener('mouseleave', outInfoObject, false);
 
+    histCanvas.addEventListener('mousemove', getCanvasColor, false);
+
+
     function onInfoObject() {
       isInfoObject = true;
-      console.log(isInfoObject);
     }
     function outInfoObject() {
       isInfoObject = false;
-      console.log(isInfoObject);
     }
 
+    /* get canvas color */
+    function getCanvasColor(event){
+      let eventLocation = getEventLocation(this, event);
+      let context = this.getContext('2d');
+      let pixelData = context.getImageData(eventLocation.x, eventLocation.y, 1, 1).data;
+
+      // if nofill, isInfoObject = false
+      isInfoObject = (pixelData[0] > 0);
+    }
+
+    function getElementPosition(obj) {
+      let curleft = 0, curtop = 0;
+      if (obj.offsetParent) {
+        do {
+          curleft += obj.offsetLeft;
+          curtop += obj.offsetTop;
+        } while (obj = obj.offsetParent);
+        return { x: curleft, y: curtop };
+      }
+      return undefined;
+    }
+
+    function getEventLocation(element,event){
+      let pos = getElementPosition(element);
+      return {
+        x: (event.pageX - pos.x),
+        y: (event.pageY - pos.y)
+      };
+    }
 
 
     /* click land */
@@ -913,7 +946,6 @@
     /*
     // ranking
     */
-    histCanvas = document.querySelector("#histgram");
     // histCanvas.width = 700;  // responsive
     if (canvasWidth < 500) {
       histCanvas.width = 320;
@@ -947,8 +979,8 @@
       }
 
       canvasContext.clearRect(0, 0, histCanvas.width, histCanvas.height);
-      canvasContext.fillStyle = "rgb(0, 0, 0, 0)";  // not fill
-      canvasContext.fillRect(0, 0, histCanvas.width, histCanvas.height);
+      // canvasContext.fillStyle = "rgb(0, 0, 0, 0)";  // not fill
+      // canvasContext.fillRect(0, 0, histCanvas.width, histCanvas.height);
 
       let numData = data.length;
       let width = histCanvas.width / numData;
@@ -1044,9 +1076,6 @@
       return {latitude: latitude, longitude: longitude};
     }
 
-
-
-
     function highlightSelectedBar(index, data, scoreMax) {
       let h;
       // highlight color
@@ -1069,7 +1098,6 @@
     /*
     // move camera position function
     */
-
     /* move position in some separate times using quaternion */
     function moveCamera(latitude, longitude) {
       let targetPos = convertGeoCoords(latitude, longitude);
@@ -1251,7 +1279,6 @@
 
   /////////////////////////////
   /* Postprocessing function */
-
   /////////////////////////////
   function initPostprocessing(vsPost, fsPost) {
     time = 0.0;
