@@ -289,7 +289,7 @@
 
     /* set mouse position function */
     mouse = new THREE.Vector2();
-    window.addEventListener('mousemove', () => {
+    window.addEventListener('mousemove', (event) => {
       event.preventDefault();
       mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
       mouse.y = -(event.clientY / window.innerHeight) * 2 + 1;
@@ -986,7 +986,7 @@
       let width = histCanvas.width / numData;
       canvasContext.fillStyle = barColor;
 
-      // draw histgram with loop rect
+      // draw histogram with loop rect
       let i = 0;
       // console.log(numData, data);
       drawSetInterval = setInterval(function () {
@@ -1003,13 +1003,14 @@
       return {width: width, histData: data, scoreMax: scoreMax};
     };
 
-    /* mouse over histgram */
+    /* mouse over histogram */
     let tooltipHist = $('#tooltipHist');
     histCanvas.addEventListener('mousemove', onHistRanking, false);
     histCanvas.addEventListener('mouseout', outHistRanking, false);
     histCanvas.addEventListener('click', clickHistRanking, false);
 
     function onHistRanking(event) {
+      console.log('onHist', isFillHist);
       if (isHistDisplay) {
         if (isFillHist){
           let rect = event.target.getBoundingClientRect();
@@ -1039,8 +1040,9 @@
       tooltipHist.css({opacity: 0.0});
     }
 
-    /* mouse click histgram */
+    /* mouse click histogram */
     function clickHistRanking() {
+      console.log(isFillHist);
       if (isFillHist) {
         console.log('click', mouseonCountry);
 
