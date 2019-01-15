@@ -67,7 +67,7 @@
   let isHistDisplay = false;
   let mouseonCountry;
 
-  const barColor = "rgb(200, 225, 225, 0.7)";
+  const barColor = "rgb(200, 225, 225)";
   const heightBarColor = "rgb(245, 70, 240)";
 
   // val for interactive land function
@@ -957,6 +957,7 @@
     }
     histCanvas.height = 120;
     let canvasContext = histCanvas.getContext("2d");
+    canvasContext.globalAlpha = 0.7;  // for safari(fillStyle alpha doesn't work)
 
     // function drawHist(data, scoreMax){
     drawHist = function (type, duration = 3000) {
