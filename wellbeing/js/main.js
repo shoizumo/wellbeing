@@ -317,6 +317,7 @@
       autoMove.setAttribute('style', 'background-color:#ffa443;opacity:1.0;');
       stopMove.setAttribute('style', 'opacity:1.0;');
       console.log('auto');
+      deletePin();
       travelRanking();
     }, false);
 
@@ -1039,13 +1040,13 @@
       if (isHistDisplay) {
         if (isFillHist){
           let rect = event.target.getBoundingClientRect();
-          let mouseX = Math.abs(event.clientX - rect.x);
+          let mouseX = Math.abs(event.clientX - rect.left);
           let index = Math.floor(mouseX / barWidth);
           let data = histData;
           // console.log(data[index].country, data[index].rank);
 
           document.getElementById("canvasWrapper").classList.add("canvasWrapperPointer");
-          mouseonCountry = data[index].country;
+          mouseonCountry = data[index]['country'];
           tooltipHist[0].innerText = mouseonCountry;
           tooltipHist.css({opacity: 1.0});
 
