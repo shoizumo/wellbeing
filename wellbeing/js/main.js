@@ -981,7 +981,7 @@
     } else {
       histCanvas.width = 900;
     }
-    histCanvas.height = 120;
+    histCanvas.height = 90;
     let canvasContext = histCanvas.getContext("2d");
     canvasContext.globalAlpha = 0.7;  // for safari(fillStyle alpha doesn't work)
 

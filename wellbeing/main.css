@@ -60,17 +60,17 @@ score board(responsive)
 /* For SP */
 #infoBoard{
   display: grid;
-  grid-template-columns: 150px 150px;
-  grid-template-rows: 25px 95px 95px;
+  grid-template-columns: 80px 80px 80px 80px;
+  grid-template-rows: 25px 95px;
 
   position:fixed;
   top:0;
-  right:15%;
+  /*right:15%;*/
   left: 50%;
-  margin-left:-150px;
+  margin-left:-160px;
 
-  width:300px;
-  height:215px;
+  width:320px;
+  height:120px;
 
   background-color: rgba(0, 0, 255, 0.5);
   opacity: 0.0;
@@ -95,7 +95,7 @@ score board(responsive)
   background-color: #444444;
 
   display: grid;
-  grid-template-columns: 150px;
+  grid-template-columns: 80px;
   grid-template-rows: 15px 80px;
 }
 #LadderTitle{
@@ -115,7 +115,7 @@ score board(responsive)
   background-color: #444444;
 
   display: grid;
-  grid-template-columns: 150px;
+  grid-template-columns: 80px;
   grid-template-rows: 15px 80px;
 }
 #PositiveTitle{
@@ -130,11 +130,11 @@ score board(responsive)
 }
 
 #Negative{
-  grid-column: 1 / 2;
-  grid-raw: 4 / 5;
+  grid-column: 3 / 4;
+  grid-raw: 2 / 3;
   background-color: #444444;
   display: grid;
-  grid-template-columns: 150px;
+  grid-template-columns: 80px;
   grid-template-rows: 15px 80px;
 }
 #NegativeTitle{
@@ -149,11 +149,11 @@ score board(responsive)
 }
 
 #GDP{
-  grid-column: 2 / 3;
-  grid-raw: 4 / 5;
+  grid-column: 4 / 5;
+  grid-raw: 2 / 3;
   background-color: #444444;
   display: grid;
-  grid-template-columns: 150px;
+  grid-template-columns: 80px;
   grid-template-rows: 15px 80px;
 }
 #GDPTitle{
@@ -403,28 +403,29 @@ score board(responsive)
 /*
 infoBoardSVG(responsive)
 */
-/* for SP & tablet & PC(medium) */
+/* for SP */
 .infoContentsSVG {
-  width: 150px;
+  width: 80px;
   height: 80px;
 }
 
 .infoContentsCircle1 {
-  cx: 75px;
-  cy: 40px;
   r: 40px;
 }
 
 .infoContentsCircle2 {
-  cx: 75px;
-  cy: 40px;
   r: 20px;
 }
 
-.infoContentsCircle3 {
-  cx: 75px;
-  cy: 40px;
-  /*r: 0px;*/
+
+/* for tablet & PC(medium) */
+@media screen and (min-width: 600px) and (max-width:900px) {
+  .infoContentsSVG {
+    width: 150px;
+    height: 80px;
+  }
+
+
 }
 
 /* for PC(wide) */
@@ -435,21 +436,11 @@ infoBoardSVG(responsive)
   }
 
   .infoContentsCircle1 {
-    cx: 100px;
-    cy: 48px;
     r: 48px;
   }
 
   .infoContentsCircle2 {
-    cx: 100px;
-    cy: 48px;
     r: 24px;
-  }
-
-  .infoContentsCircle3 {
-    cx: 100px;
-    cy: 48px;
-    /*r: 0px;*/
   }
 }
 
@@ -461,7 +452,7 @@ switch type button(responsive)
 #rankingWrapper{
   display: grid;
   grid-template-columns: 320px;
-  grid-template-rows: 120px 30px;
+  grid-template-rows: 90px 30px;
 
   position:fixed;
   bottom:0;
@@ -469,7 +460,7 @@ switch type button(responsive)
   margin-left:-160px;
 
   width:320px;
-  height:150px;
+  height:120px;
 
 }
 
@@ -486,6 +477,7 @@ switch type button(responsive)
 }
 
 #btn li {
+  line-height: 30px;
   width: 80px;
   text-align: center;
   color: #ffffff;
@@ -497,7 +489,7 @@ switch type button(responsive)
   grid-raw: 1 / 2;
 
   width:320px;
-  height:120px;
+  height:90px;
 
   background-color: rgba(0, 0, 255, 0.0);
   color: #ffffff;
@@ -512,7 +504,7 @@ switch type button(responsive)
   #rankingWrapper{
     display: grid;
     grid-template-columns: 500px;
-    grid-template-rows: 120px 30px;
+    grid-template-rows: 90px 30px;
 
     position:fixed;
     bottom:0;
@@ -520,7 +512,7 @@ switch type button(responsive)
     margin-left:-250px;
 
     width:500px;
-    height:150px;
+    height:120px;
 
   }
 
@@ -548,7 +540,7 @@ switch type button(responsive)
     grid-raw: 1 / 2;
 
     width:500px;
-    height:120px;
+    height:90px;
 
     background-color: rgba(0, 0, 255, 0.0);
     color: #ffffff;
@@ -564,7 +556,7 @@ switch type button(responsive)
   #rankingWrapper{
     display: grid;
     grid-template-columns: 700px;
-    grid-template-rows: 120px 30px;
+    grid-template-rows: 90px 30px;
 
     position:fixed;
     bottom:0;
@@ -572,7 +564,7 @@ switch type button(responsive)
     margin-left:-350px;
 
     width:700px;
-    height:150px;
+    height:120px;
 
   }
 
@@ -600,7 +592,7 @@ switch type button(responsive)
     grid-raw: 1 / 2;
 
     width:700px;
-    height:120px;
+    height:90px;
 
     background-color: rgba(0, 0, 255, 0.0);
     color: #ffffff;
@@ -624,7 +616,7 @@ switch type button(responsive)
     margin-left:-450px;
 
     width:900px;
-    height:150px;
+    height:120px;
 
   }
 
