@@ -46,6 +46,10 @@
   let LadderArray = [];
   let PositiveArray = [];
   let NegativeArray = [];
+  let GDPScoreArray = [];
+  let LadderScoreArray = [];
+  let PositiveScoreArray = [];
+  let NegativeScoreArray = [];
 
   const wbLength = Object.keys(wbData).length;
   let meshList;
@@ -514,64 +518,72 @@
       let negative = {country: wb.country, rank: wb.nRank, score: wb.negative};
       let logGdp = {country: wb.country, rank: wb.gRank, score: wb.logGdp};
 
+      // add all data
       LadderArray.push(ladder);
       PositiveArray.push(positive);
       NegativeArray.push(negative);
       GDPArray.push(logGdp);
+
+      // add score
+      LadderScoreArray.push(wb.ladder);
+      PositiveScoreArray.push(wb.positive);
+      NegativeScoreArray.push(wb.negative);
+      GDPScoreArray.push(wb.logGdp);
     }
 
 
-    /* sort rank array */
+    /* sort rank array(alphabetical order) */
     LadderArray.sort(function sortRank(a, b) {
-      if (a.rank < b.rank) {
+      if (a.country < b.country) {
         return -1;
       }
-      else if (a.rank > b.rank) {
+      else if (a.country > b.country) {
         return 1;
       }
       return 0;
     });
 
     PositiveArray.sort(function sortRank(a, b) {
-      if (a.rank < b.rank) {
+      if (a.country < b.country) {
         return -1;
       }
-      else if (a.rank > b.rank) {
+      else if (a.country > b.country) {
         return 1;
       }
       return 0;
     });
 
     NegativeArray.sort(function sortRank(a, b) {
-      if (a.rank < b.rank) {
+      if (a.country < b.country) {
         return -1;
       }
-      else if (a.rank > b.rank) {
+      else if (a.country > b.country) {
         return 1;
       }
       return 0;
     });
 
     GDPArray.sort(function sortRank(a, b) {
-      if (a.rank < b.rank) {
+      if (a.country < b.country) {
         return -1;
       }
-      else if (a.rank > b.rank) {
+      else if (a.country > b.country) {
         return 1;
       }
       return 0;
     });
 
-    /* calc MaxMin */
-    ladderMax = Math.max(LadderArray[0].score);
-    ladderMin = Math.min(LadderArray[wbLength - 1].score);
-    positiveMax = Math.max(PositiveArray[0].score);
-    positiveMin = Math.min(PositiveArray[wbLength - 1].score);
-    negativeMax = Math.max(NegativeArray[0].score);
-    negativeMin = Math.min(NegativeArray[wbLength - 1].score);
-    gdpMax = Math.max(GDPArray[0].score);
-    gdpMin = Math.min(GDPArray[wbLength - 1].score);
 
+    /* calc MaxMin */
+    ladderMax = Math.max(...LadderScoreArray);
+    ladderMin = Math.min(...LadderScoreArray);
+    positiveMax = Math.max(...PositiveScoreArray);
+    positiveMin = Math.min(...PositiveScoreArray);
+    // inverse
+    negativeMax = Math.min(...NegativeScoreArray);
+    negativeMin = Math.max(...NegativeScoreArray);
+    gdpMax = Math.max(...GDPScoreArray);
+    gdpMin = Math.min(...GDPScoreArray);
 
     /* make well-being button in order to show score */
     wbButton = document.getElementsByClassName('wbButton');
