@@ -605,7 +605,7 @@ switch type button(responsive)
   #rankingWrapper{
     display: grid;
     grid-template-columns: 900px;
-    grid-template-rows: 120px 30px;
+    grid-template-rows: 90px 30px;
 
     position:fixed;
     bottom:0;
@@ -641,7 +641,7 @@ switch type button(responsive)
     grid-raw: 1 / 2;
 
     width:900px;
-    height:120px;
+    height:90px;
 
     background-color: rgba(0, 0, 255, 0.0);
     color: #ffffff;
