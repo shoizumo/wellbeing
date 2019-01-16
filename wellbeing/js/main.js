@@ -67,6 +67,7 @@
   // val for ranking histgram
   let histCanvas;
   let histData;
+  let histScoreData;
   let scoreMax;
   let barWidth;
   let isHistDisplay = false;
@@ -292,7 +293,8 @@
           let res = drawHist(selectedType, 0);
           barWidth = res.width;
           histData = res.histData;
-          scoreMax = res.scoreMax
+          scoreMax = res.scoreMax;
+          histScoreData = res.scoreData;
         }
       }
     }, false);
@@ -518,17 +520,15 @@
       let negative = {country: wb.country, rank: wb.nRank, score: wb.negative};
       let logGdp = {country: wb.country, rank: wb.gRank, score: wb.logGdp};
 
-      // add all data
       LadderArray.push(ladder);
       PositiveArray.push(positive);
       NegativeArray.push(negative);
       GDPArray.push(logGdp);
 
-      // add score
-      LadderScoreArray.push(wb.ladder);
-      PositiveScoreArray.push(wb.positive);
-      NegativeScoreArray.push(wb.negative);
-      GDPScoreArray.push(wb.logGdp);
+      LadderScoreArray.push(ladder);
+      PositiveScoreArray.push(positive);
+      NegativeScoreArray.push(negative);
+      GDPScoreArray.push(logGdp);
     }
 
 
@@ -574,16 +574,56 @@
     });
 
 
+    /* sort rank array(rank order) */
+    LadderScoreArray.sort(function sortRank(a, b) {
+      if (a.rank < b.rank) {
+        return -1;
+      }
+      else if (a.rank > b.rank) {
+        return 1;
+      }
+      return 0;
+    });
+
+    PositiveScoreArray.sort(function sortRank(a, b) {
+      if (a.rank < b.rank) {
+        return -1;
+      }
+      else if (a.rank > b.rank) {
+        return 1;
+      }
+      return 0;
+    });
+
+    NegativeScoreArray.sort(function sortRank(a, b) {
+      if (a.rank < b.rank) {
+        return -1;
+      }
+      else if (a.rank > b.rank) {
+        return 1;
+      }
+      return 0;
+    });
+
+    GDPScoreArray.sort(function sortRank(a, b) {
+      if (a.rank < b.rank) {
+        return -1;
+      }
+      else if (a.rank > b.rank) {
+        return 1;
+      }
+      return 0;
+    });
+
     /* calc MaxMin */
-    ladderMax = Math.max(...LadderScoreArray);
-    ladderMin = Math.min(...LadderScoreArray);
-    positiveMax = Math.max(...PositiveScoreArray);
-    positiveMin = Math.min(...PositiveScoreArray);
-    // inverse
-    negativeMax = Math.min(...NegativeScoreArray);
-    negativeMin = Math.max(...NegativeScoreArray);
-    gdpMax = Math.max(...GDPScoreArray);
-    gdpMin = Math.min(...GDPScoreArray);
+    ladderMax = Math.max(LadderScoreArray[0].score);
+    ladderMin = Math.min(LadderScoreArray[wbLength - 1].score);
+    positiveMax = Math.max(PositiveScoreArray[0].score);
+    positiveMin = Math.min(PositiveScoreArray[wbLength - 1].score);
+    negativeMax = Math.max(NegativeScoreArray[0].score);
+    negativeMin = Math.min(NegativeScoreArray[wbLength - 1].score);
+    gdpMax = Math.max(GDPScoreArray[0].score);
+    gdpMin = Math.min(GDPScoreArray[wbLength - 1].score);
 
     /* make well-being button in order to show score */
     wbButton = document.getElementsByClassName('wbButton');
@@ -618,7 +658,8 @@
       // console.log(res);
       barWidth = res.width;
       histData = res.histData;
-      scoreMax = res.scoreMax
+      scoreMax = res.scoreMax;
+      histScoreData = res.scoreData;
     };
 
     /*
@@ -1002,18 +1043,23 @@
       clearInterval(drawSetInterval);
       let data;
       let scoreMax;
+      let scoreData;
       if (type === 'ladderBtn') {
         data = LadderArray;
         scoreMax = ladderMax;
+        scoreData = LadderScoreArray;
       } else if (type === 'positiveBtn') {
         data = PositiveArray;
         scoreMax = positiveMax;
+        scoreData = PositiveScoreArray;
       } else if (type === 'negativeBtn') {
         data = NegativeArray;
         scoreMax = negativeMin;
+        scoreData = NegativeScoreArray;
       } else {
         data = GDPArray;
         scoreMax = gdpMax;
+        scoreData = GDPScoreArray;
       }
 
       canvasContext.clearRect(0, 0, histCanvas.width, histCanvas.height);
@@ -1038,7 +1084,7 @@
       }, duration / numData);
 
       isHistDisplay = true;
-      return {width: width, histData: data, scoreMax: scoreMax};
+      return {width: width, histData: data, scoreMax: scoreMax, scoreData: scoreData};
     };
 
     /* mouse over histogram */
@@ -1126,23 +1172,30 @@
       return {latitude: latitude, longitude: longitude};
     }
 
-    function highlightSelectedBar(index, data, scoreMax) {
+    function highlightSelectedBar(countryName, data, scoreMax) {
       let h;
+      let index;
+      for (let i = 0; wbLength > i; i++) {
+        if (data[i].country === countryName) {
+          index = i;
+        }
+      }
+
       // highlight color
       canvasContext.fillStyle = heightBarColor;
       h = (data[index].score) / scoreMax * histCanvas.height;
       canvasContext.fillRect(barWidth * index, histCanvas.height - h, barWidth, h);
 
-      // return color
-      canvasContext.fillStyle = barColor;
-      if (index > 0){
-        h = (data[index-1].score) / scoreMax * histCanvas.height;
-        canvasContext.fillRect(barWidth * (index-1), histCanvas.height - h, barWidth, h);
-      }
-      if (index > 1){
-        h = (data[index-2].score) / scoreMax * histCanvas.height;
-        canvasContext.fillRect(barWidth * (index-2), histCanvas.height - h, barWidth, h);
-      }
+      // // return color
+      // canvasContext.fillStyle = barColor;
+      // if (index > 0){
+      //   h = (data[index-1].score) / scoreMax * histCanvas.height;
+      //   canvasContext.fillRect(barWidth * (index-1), histCanvas.height - h, barWidth, h);
+      // }
+      // if (index > 1){
+      //   h = (data[index-2].score) / scoreMax * histCanvas.height;
+      //   canvasContext.fillRect(barWidth * (index-2), histCanvas.height - h, barWidth, h);
+      // }
     }
 
     /*
@@ -1240,9 +1293,8 @@
     travelRanking = function () {
       let i = 0;
       travelSetInterval = setInterval(function () {
-        highlightSelectedBar(i, histData, scoreMax);
-
-        let countryName = histData[i].country;
+        let countryName = histScoreData[i].country;
+        highlightSelectedBar(countryName, histData, scoreMax);
         let res = countrynameToLatlon(countryName);
         latitude = res.latitude;
         longitude = res.longitude;
