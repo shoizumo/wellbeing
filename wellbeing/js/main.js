@@ -10,6 +10,8 @@
   let targetDOM = null;
   let devicePixelRatio = 1;
   // let devicePixelRatio = window.devicePixelRatio;
+  let isSP;
+  let userAgent;
 
   // three objects
   let scene;
@@ -241,6 +243,11 @@
     canvasWidth = window.innerWidth;
     canvasHeight = window.innerHeight;
     targetDOM = document.getElementById('webgl');
+
+    userAgent = navigator.userAgent;
+    if (userAgent.indexOf('iPhone') > 0 || userAgent.indexOf('Android') > 0 && userAgent.indexOf('Mobile') > 0){
+      isSP = true;
+    }
 
     /* window size setting */
     window.addEventListener('resize', () => {
@@ -1317,9 +1324,12 @@
     scene.add(axesHelper);
 
     /* conduct rendering */
-    initPostprocessing(vsPost, fsPost, time);
-    render();
-
+    if (isSP){
+      spRender();
+    }else{
+      initPostprocessing(vsPost, fsPost);
+      render();
+    }
 
     /*
     serch country name
@@ -1388,6 +1398,26 @@
 
     //平面オブジェクトをレンダリング
     renderer.render(postprocessing.scene, postprocessing.camera);
+  }
+
+  /* Rendering function for SP */
+  function spRender() {
+    stats.update();
+    frame++;
+
+    if (pageIndex !== interactivePageIndex) {
+      earth.rotation.x += speed;
+    } else {
+      earth.rotation.y += speed;
+    }
+
+    requestAnimationFrame(spRender);
+
+    /* set 30ftp */
+    if (frame % 2 === 0) {
+      return;
+    }
+    renderer.render(scene, camera);
   }
 
 
