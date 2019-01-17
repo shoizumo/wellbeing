@@ -434,7 +434,7 @@
     controls.enableZoom = false;
     controls.minDistance = 2.0;
     controls.maxDistance = 4.0;
-    controls.rotateSpeed = 2.0;
+    controls.rotateSpeed = 0.1;
     controls.enableDamping = true;
     controls.dampingFactor = 0.2;
 
