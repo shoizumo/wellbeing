@@ -90,7 +90,6 @@
   let isFirstClick = true;
   let latitude;
   let longitude;
-  let landBaseOpacity = 0.0;
 
   // val for scroll
   let pageIndex = 1.0;
@@ -175,7 +174,7 @@
               }, 400);
               setTimeout(() => {
                 // landBase.material.opacity = 1.0;
-                clickBtn('ladderBtn', 0.0);
+                clickBtn('ladderBtn');
               }, 500);
             }
           });
@@ -342,29 +341,6 @@
       deletePin();
     }, false);
 
-
-    // window.addEventListener("keydown", function (event) {
-    //   if (event.keyCode === 37) {  // left
-    //     landBaseOpacity = 0.0;
-    //     landBase.material.opacity = landBaseOpacity;
-    //     earthOutline.scale.set(1.0, 1.0, 1.0);
-    //     for (let i = 0, lm = meshList.length; lm > i; i++) {
-    //       meshList[i].material.opacity = 0.0;
-    //     }
-    //   }
-    //   if (event.keyCode === 39) {  // right
-    //     // landBaseOpacity = 1.0;
-    //     // landBase.material.opacity = landBaseOpacity;
-    //     // earthOutline.scale.set(1.002, 1.002, 1.002);
-    //     // for (let i = 0, lm = meshList.length; lm > i; i++) {
-    //     //   meshList[i].material.opacity = 1.0;
-    //     // }
-    //   }
-    //   if (event.keyCode === 38) {
-    //     console.log(event.keyCode);
-    //     travelRanking()
-    //   }
-    // }, false);
 
     // window.addEventListener('dblclick', () => {
     //     isdDblclick = true;
@@ -641,31 +617,14 @@
     wbButton = document.getElementsByClassName('wbButton');
     for (let i = 0, wbLen = wbButton.length; i < wbLen; i++) {
       wbButton[i].addEventListener('click', (e) => {
-        let type = e.target.id;
         $(".wbButton").removeClass("selectedBtn");
-
         wbButton[i].classList.add("selectedBtn");
-        clickBtn(type, landBaseOpacity);
+        let type = e.target.id;
+        clickBtn(type);
       }, false);
     }
 
-    clickBtn = function (type, opacity = 1.0) {
-      for (let i = 0, lm = meshList.length; lm > i; i++) {
-        meshList[i].material.opacity = opacity;
-      }
-      if (opacity > 0.0) {
-        for (let j = 0; wbLength > j; j++) {
-          for (let i = 0, lm = meshList.length; lm > i; i++) {
-            let countryName = meshList[i].userData.country;
-            if (wbData[j].country === countryName) {
-              coloringLand(i, j, type)
-            }
-          }
-        }
-      } else {
-        earthOutline.scale.set(1.0, 1.0, 1.0);
-      }
-
+    clickBtn = function (type) {
       let res = drawHist(type);
       // console.log(res);
       barWidth = res.width;
@@ -674,51 +633,6 @@
       histScoreData = res.scoreData;
     };
 
-    /*
-    // coloring land object using well-being score
-    */
-    function coloringLand(i, j, type) {
-      let L;
-      if (type === 'ladderBtn') {
-        L = (wbData[j].ladder - ladderMin) / (ladderMax - ladderMin); //0.0 - 1.0 scale
-      } else if (type === 'positiveBtn') {
-        L = (wbData[j].positive - positiveMin) / (positiveMax - positiveMin); //0.0 - 1.0 scale
-      } else if (type === 'negativeBtn') {
-        L = (wbData[j].negative - negativeMin) / (negativeMax - negativeMin); //0.0 - 1.0 scale
-        L = 1.0 - L  // reverse scale
-      } else {
-        L = (wbData[j].logGdp - gdpMin) / (gdpMax - gdpMin); //0.0 - 1.0 scale
-      }
-      let RGB = hslToRgb(0.5, 1, L);
-      //console.log(RGB, RGB[0]);
-      meshList[i].material.color.r = RGB[0];
-      meshList[i].material.color.g = RGB[1];
-      meshList[i].material.color.b = RGB[2];
-      meshList[i].material.opacity = 1.0;
-      earthOutline.scale.set(1.002, 1.002, 1.002);
-    }
-
-    function hslToRgb(h, s, l) {
-      let r, g, b;
-      if (s === 0) {
-        r = g = b = l; // achromatic
-      } else {
-        let hue2rgb = function hue2rgb(p, q, t) {
-          if (t < 0) t += 1;
-          if (t > 1) t -= 1;
-          if (t < 1 / 6) return p + (q - p) * 6 * t;
-          if (t < 1 / 2) return q;
-          if (t < 2 / 3) return p + (q - p) * (2 / 3 - t) * 6;
-          return p;
-        };
-        let q = l < 0.5 ? l * (1 + s) : l + s - l * s;
-        let p = 2 * l - q;
-        r = hue2rgb(p, q, h + 1 / 3);
-        g = hue2rgb(p, q, h);
-        b = hue2rgb(p, q, h - 1 / 3);
-      }
-      return [r, g, b];
-    }
 
     /*
     // score ranking board
@@ -1192,22 +1106,11 @@
           index = i;
         }
       }
-
       // highlight color
       canvasContext.fillStyle = heightBarColor;
       h = (data[index].score) / scoreMax * histCanvas.height;
       canvasContext.fillRect(barWidth * index, histCanvas.height - h, barWidth, h);
 
-      // // return color
-      // canvasContext.fillStyle = barColor;
-      // if (index > 0){
-      //   h = (data[index-1].score) / scoreMax * histCanvas.height;
-      //   canvasContext.fillRect(barWidth * (index-1), histCanvas.height - h, barWidth, h);
-      // }
-      // if (index > 1){
-      //   h = (data[index-2].score) / scoreMax * histCanvas.height;
-      //   canvasContext.fillRect(barWidth * (index-2), histCanvas.height - h, barWidth, h);
-      // }
     }
 
     /*
