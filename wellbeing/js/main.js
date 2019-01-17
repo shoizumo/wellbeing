@@ -373,7 +373,12 @@
 
     /* load texture */
     earthMapLoader = new THREE.TextureLoader();
-    earthMap = earthMapLoader.load('img/mapNight.jpg', loadShader);
+    if (isSP){
+      earthMap = earthMapLoader.load('img/mapNightSP.jpg', loadShader);
+      console.log('sp')
+    }else{
+      earthMap = earthMapLoader.load('img/mapNight.jpg', loadShader);
+    }
 
   }, false);
 
