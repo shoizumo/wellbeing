@@ -96,20 +96,20 @@ void main( void ) {
     vec3 color = vec3(f*.15, f*.45, f)*.7;
     color += starCol.rgb;
 
-    // small star
-    vec2 P = gl_FragCoord.xy - resolution.xy;
-    float dist = length(P) / resolution.y;
-//    vec2 coord = vec2(pow(dist, 0.1), atan(P.x, P.y) / (PI*2.0));
-    vec2 coord = vec2(dist, atan(P.x, P.y) / (PI*2.0));
-
-    float a = pow((1.0-dist),20.0);
-    float t = time*-.035;
-    float r = coord.x - (t*0.0025);
-    float c = fract(a+coord.y + 0.0*.543);
-    vec2  p = vec2(r, c*.5)*5000.0;
-    vec2 uv = fract(p)*2.0-1.0;
-    float m = clamp((rand(floor(p))-.9)*10.0, 0.0, 1.0);
-    color +=  clamp((1.0-length(uv*2.0))*m*dist, 0.0, 1.0);
+//    // small star
+//    vec2 P = gl_FragCoord.xy - resolution.xy;
+//    float dist = length(P) / resolution.y;
+////    vec2 coord = vec2(pow(dist, 0.1), atan(P.x, P.y) / (PI*2.0));
+//    vec2 coord = vec2(dist, atan(P.x, P.y) / (PI*2.0));
+//
+//    float a = pow((1.0-dist),20.0);
+//    float t = time*-.035;
+//    float r = coord.x - (t*0.0025);
+//    float c = fract(a+coord.y + 0.0*.543);
+//    vec2  p = vec2(r, c*.5)*5000.0;
+//    vec2 uv = fract(p)*2.0-1.0;
+//    float m = clamp((rand(floor(p))-.9)*10.0, 0.0, 1.0);
+//    color +=  clamp((1.0-length(uv*2.0))*m*dist, 0.0, 1.0);
 
 
     float mixRatio;
