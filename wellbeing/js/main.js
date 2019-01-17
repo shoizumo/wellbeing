@@ -64,7 +64,15 @@
   let wbButton;
   let svgRadius;
   let searchArray;
+
+  // val for marker pin
   let pinList;
+  let pinRadius;
+  let pinSphereRadius;
+  let pinHeight;
+  let pinMaterial;
+  let pinConeGeometry;
+  let pinSphereGeometry;
 
   // val for ranking histgram
   let histCanvas;
@@ -113,7 +121,6 @@
   let travelSetInterval;
   let stopTravelRanking;
   let drawSetInterval;
-  let createPin;
   let deletePin;
 
 
@@ -338,7 +345,7 @@
       stopMove.setAttribute('style', 'opacity:0.0;');
       console.log('stop');
       stopTravelRanking();
-      deletePin();
+      // deletePin();
     }, false);
 
 
@@ -1144,9 +1151,6 @@
           clearInterval(id);
         }
       }, 1000 / step);
-
-      // console.log(prevVec);
-
     }
 
 
@@ -1161,26 +1165,27 @@
       return new THREE.Vector3(x, y, z);
     }
 
-
-    createPin = function () {
-      let radius = 0.0025;
-      let sphereRadius = 0.01;
-      let height = 0.025;
-
-      let material = new THREE.MeshPhongMaterial({color: 0xC9C7B7});
-
-      let cone = new THREE.Mesh(new THREE.ConeBufferGeometry(radius, height, 16, 1, true), material);
-      cone.position.y = height * 0.5;
+    pinRadius = 0.0025;
+    pinSphereRadius = 0.01;
+    pinHeight = 0.025;
+    pinConeGeometry = new THREE.ConeBufferGeometry(pinRadius, pinHeight, 16, 1, true);
+    pinSphereGeometry = new THREE.SphereBufferGeometry(pinSphereRadius, 60, 60);
+    function createPin() {
+      pinMaterial = new THREE.MeshPhongMaterial({color: 0xf15b47});
+      let cone = new THREE.Mesh(pinConeGeometry, pinMaterial);
+      cone.position.y = pinHeight * 0.5;
       cone.rotation.x = Math.PI;
 
-      let sphere = new THREE.Mesh(new THREE.SphereBufferGeometry(sphereRadius, 60, 60), material);
-      sphere.position.y = height * 0.95 + sphereRadius;
+      let sphere = new THREE.Mesh(pinSphereGeometry, pinMaterial);
+      sphere.position.y = pinHeight * 0.95 + pinSphereRadius;
 
       let group = new THREE.Group();
       group.add(cone);
       group.add(sphere);
+
+      console.log(group.children[0].material.color);
       return group;
-    };
+    }
 
     pinList = [];
     function createPoint(latitude = 0, longitude = 0) {
@@ -1195,10 +1200,10 @@
     }
 
     deletePin = function () {
-      console.log(pinList);
       for (let i = 0, l = pinList.length; l > i; i++) {
         earth.remove(pinList[i]);
       }
+      pinList = [];
     };
 
 
@@ -1208,6 +1213,10 @@
     travelRanking = function () {
       let i = 0;
       travelSetInterval = setInterval(function () {
+        if (i>0){
+          console.log(pinList);
+          pinList[i-1].children[1].material.color.setHex(0xC9C7B7);
+        }
         let countryName = histScoreData[i].country;
         highlightSelectedBar(countryName, histData, scoreMax);
         let res = countrynameToLatlon(countryName);
