@@ -167,7 +167,7 @@ score board(responsive)
 }
 
 
-/* for tablet & PC(medium) */
+/* for Tablet & PC(medium) */
 @media screen and (min-width: 600px) and (max-width:900px) {
   #infoBoard{
     display: grid;
@@ -415,7 +415,7 @@ infoBoardSVG(responsive)
 }
 
 
-/* for tablet & PC(medium) */
+/* for Tablet & PC(medium) */
 @media screen and (min-width: 600px) and (max-width:900px) {
   .infoContentsSVG {
     width: 150px;
@@ -496,7 +496,7 @@ switch type button(responsive)
   font-weight: 300;
 }
 
-/* for tablet */
+/* for Tablet */
 @media screen and (min-width: 500px) and (max-width:700px) {
   #rankingWrapper{
     display: grid;
@@ -773,6 +773,67 @@ switch type button(responsive)
   background-color: rgba(0, 0, 0, 0.5);
 }
 
+#modalTitle{
+  grid-raw: 1 / 2;
+  text-align: center;
+  line-height: 30px;
+}
+
+#modalClose{
+  grid-raw: 3 / 4;
+  text-align: center;
+  font-size: 0.9em;
+  line-height: 20px;
+}
+
+#travelBtn{
+  grid-raw: 2 / 3;
+  background-color: rgba(255, 255, 255, 0.0);
+  /*opacity: 0.1;*/
+  font-family: 'Nunito', sans-serif;
+  font-weight: 400;
+
+  list-style: none;
+  overflow: hidden;
+}
+
+#travelBtn li:hover {
+  background: #ffa443;
+  cursor: pointer;
+}
+
+
+/*
+modal window(responsive)
+*/
+/* for SP & Tablet */
+#modalContent{
+  display: grid;
+  grid-template-columns: 280px;
+  grid-template-rows: 30px 70px 20px;
+
+  top: 50%;
+  left: 50%;
+  margin-top:-125px;
+  margin-left:-140px;
+  border: 2px solid #aaaaaa;
+  background: #dddddd;
+  position: fixed;
+  z-index: 2;
+
+  width:280px;
+  height:130px;
+}
+
+#travelBtn li {
+  width: 70px;
+  text-align: center;
+  font-size: 1.0em;
+  float: left;
+  line-height: 70px;
+}
+
+/* for PC */
 @media screen and (min-width: 600px) {
   #modalContent{
     display: grid;
@@ -790,24 +851,6 @@ switch type button(responsive)
 
     width:400px;
     height:150px;
-
-  }
-
-  #modalTitle{
-    grid-raw: 1 / 2;
-    text-align: center;
-    line-height: 30px;
-  }
-
-  #travelBtn{
-    grid-raw: 2 / 3;
-    background-color: rgba(255, 255, 255, 0.0);
-    /*opacity: 0.1;*/
-    font-family: 'Nunito', sans-serif;
-    font-weight: 400;
-
-    list-style: none;
-    overflow: hidden;
   }
 
   #travelBtn li {
@@ -816,11 +859,5 @@ switch type button(responsive)
     font-size: 1.2em;
     float: left;
     line-height: 100px;
-  }
-
-  #modalClose{
-    grid-raw: 3 / 4;
-    text-align: center;
-    line-height: 20px;
   }
 }
