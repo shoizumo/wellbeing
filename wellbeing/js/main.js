@@ -335,17 +335,17 @@
 
     autoMove.addEventListener('click', () => {
       $(this).blur();
-      if ($("#modal-overlay")[0]) {
+      if ($("#modalOverlay")[0]) {
         return false;
       }
-      $("body").append('<div id="modal-overlay"></div>');
-      $("#modal-overlay").fadeIn(400);
+      $("body").append('<div id="modalOverlay"></div>');
+      $("#modalOverlay").fadeIn(400);
+      $("#modalContentWrapper").fadeIn(400);
 
-      $("#modal-content").fadeIn(400);
-      $("#modal-overlay, .modal-close").unbind()
+      $("#modalOverlay, .modalClose").unbind()
           .click(function () {
-            $("#modal-content, #modal-overlay").fadeOut(400, function () {
-              $("#modal-overlay").remove();
+            $("#modalContentWrapper, #modalOverlay").fadeOut(400, function () {
+              $("#modalOverlay").remove();
             });
           });
     }, false);
