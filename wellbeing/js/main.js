@@ -328,17 +328,51 @@
       dragFlag = true;
     }, false);
 
-    /* switch earth type */
+
+    /* modal window for travel ranking */
     let autoMove = document.getElementById('autoMove');
     let stopMove = document.getElementById('stopMove');
 
     autoMove.addEventListener('click', () => {
-      autoMove.setAttribute('style', 'background-color:#ffa443;opacity:1.0;');
-      stopMove.setAttribute('style', 'opacity:1.0;');
-      console.log('auto');
-      deletePin();
-      travelRanking();
+      $(this).blur();
+      if ($("#modal-overlay")[0]) {
+        return false;
+      }
+      $("body").append('<div id="modal-overlay"></div>');
+      $("#modal-overlay").fadeIn(400);
+
+      $("#modal-content").fadeIn(400);
+      $("#modal-overlay, .modal-close").unbind()
+          .click(function () {
+            $("#modal-content, #modal-overlay").fadeOut(400, function () {
+              $("#modal-overlay").remove();
+            });
+          });
     }, false);
+
+    let travelButton = document.getElementsByClassName('travelButton');
+    for (let i = 0, l = travelButton.length; i < l; i++) {
+      travelButton[i].addEventListener('click', (e) => {
+        let type = e.target.id;
+
+        if (type === 'travelLadder') {
+          histScoreData = LadderScoreArray;
+        } else if (type === 'travelPositive') {
+          histScoreData = PositiveScoreArray;
+        } else if (type === 'travelNegative') {
+          histScoreData = NegativeScoreArray;
+        } else {
+          histScoreData = GDPScoreArray;
+        }
+
+        // autoMove.setAttribute('style', 'background-color:#ffa443;opacity:1.0;');
+        stopMove.setAttribute('style', 'opacity:1.0;');
+        deletePin();
+        travelRanking();
+
+      }, false);
+    }
+
 
     stopMove.addEventListener('click', () => {
       autoMove.setAttribute('style', 'background-color:#646464;opacity:1.0;');
@@ -509,7 +543,6 @@
     */
     for (let i = 0; wbLength > i; i++) {
       let wb = wbData[i];
-
       let ladder = {country: wb.country, rank: wb.lRank, score: wb.ladder};
       let positive = {country: wb.country, rank: wb.pRank, score: wb.positive};
       let negative = {country: wb.country, rank: wb.nRank, score: wb.negative};
@@ -969,7 +1002,7 @@
     }
     histCanvas.height = 90;
     let canvasContext = histCanvas.getContext("2d");
-    canvasContext.globalAlpha = 0.7;  // for safari(fillStyle alpha doesn't work)
+    canvasContext.globalAlpha = 0.5;  // for safari(fillStyle alpha doesn't work)
 
     // function drawHist(data, scoreMax){
     drawHist = function (type, duration = 3000) {
@@ -1218,6 +1251,7 @@
           pinList[i-1].children[0].material.color.setHex(0xC9C7B7);
           pinList[i-1].children[1].material.color.setHex(0xC9C7B7);
         }
+
         let countryName = histScoreData[i].country;
         highlightSelectedBar(countryName, histData, scoreMax);
         let res = countrynameToLatlon(countryName);
@@ -1230,6 +1264,7 @@
         if (i > wbLength - 1) {
           clearInterval(travelSetInterval);
         }
+
       }, 3500);
     };
 

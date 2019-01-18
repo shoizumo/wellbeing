@@ -727,7 +727,7 @@ switch type button(responsive)
 
 #autoMove {
   position: fixed;
-  top: 70%;
+  top: 50%;
   /*left: 3%;*/
 
   text-align: center;
@@ -742,7 +742,7 @@ switch type button(responsive)
 
 #stopMove {
   position: fixed;
-  top: 75%;
+  top: 55%;
   /*left: 3%;*/
 
   text-align: center;
@@ -753,4 +753,33 @@ switch type button(responsive)
   border-radius: 10px;
   font-family: 'Nunito', sans-serif;
   font-weight: 300;
+}
+
+#modal-content {
+  width: 50%;
+  top: 50%;
+  left: 100px;
+  margin: 0;
+  padding: 10px 20px;
+  border: 2px solid #aaaaaa;
+  background: #dddddd;
+  position: fixed;
+  display: none;
+  z-index: 2;
+}
+
+#modal-content > p {
+  color: #111111;
+  font-family: "Helvetica Neue", "Helvetica", "Arial", sans-serif;
+}
+
+#modal-overlay {
+  z-index: 1;
+  /*display: none;*/
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
 }
