@@ -901,7 +901,7 @@
 
           clearInfo();
           let res = calcWbInfo(countryName);
-          infoBoard.css({opacity: 1.0});
+          infoBoard.css({opacity: 0.8});
 
           if (typeof res !== 'undefined') {
             $('#country').empty().append(countryName);
@@ -1086,7 +1086,7 @@
       }
       clearInfo();
       let res = calcWbInfo(countryName);
-      infoBoard.css({opacity: 1.0});
+      infoBoard.css({opacity: 0.8});
 
       $('#country').empty().append(countryName);
       doRankingPromise(res, wbLength);
@@ -1133,7 +1133,7 @@
       let angle = prevVec.angleTo(targetVec);
 
       let q = new THREE.Quaternion();
-      let step = 25;
+      let step = 200;
       let stepAngle = angle / step;
       let count = 0;
       let moveCameraQuaternion = function (stepAngle) {
@@ -1215,6 +1215,7 @@
       travelSetInterval = setInterval(function () {
         if (i>0){
           console.log(pinList);
+          pinList[i-1].children[0].material.color.setHex(0xC9C7B7);
           pinList[i-1].children[1].material.color.setHex(0xC9C7B7);
         }
         let countryName = histScoreData[i].country;
