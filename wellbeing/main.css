@@ -674,7 +674,7 @@ switch type button(responsive)
   line-height: 20px;
 }
 
-#travelBtn{
+#wbButton{
   grid-raw: 2 / 3;
   background-color: rgba(255, 255, 255, 0.0);
   /*opacity: 0.1;*/
@@ -685,7 +685,7 @@ switch type button(responsive)
   overflow: hidden;
 }
 
-#travelBtn li:hover {
+#wbButton li:hover {
   background: #ffa443;
   cursor: pointer;
 }
@@ -713,7 +713,7 @@ modal window(responsive)
   height:130px;
 }
 
-#travelBtn li {
+#wbButton li {
   width: 70px;
   text-align: center;
   font-size: 1.0em;
@@ -741,7 +741,7 @@ modal window(responsive)
     height:150px;
   }
 
-  #travelBtn li {
+  #wbButton li {
     width: 100px;
     text-align: center;
     font-size: 1.2em;

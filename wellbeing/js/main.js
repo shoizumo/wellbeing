@@ -174,7 +174,7 @@
       TweenMax.to(".load", duration, {
         opacity: 0.0,
         onComplete: function () {
-          $('main').remove();
+          $('.load').remove();
         }
       })
     });
@@ -291,65 +291,6 @@
       dragFlag = true;
     }, false);
 
-
-    /* modal window for travel ranking */
-    let autoMove = document.getElementById('autoMove');
-    let stopMove = document.getElementById('stopMove');
-
-    autoMove.addEventListener('click', () => {
-      $(this).blur();
-      if ($("#modalOverlay")[0]) {
-        return false;
-      }
-      $("body").append('<div id="modalOverlay"></div>');
-      $("#modalOverlay").fadeIn(400);
-      $("#modalContentWrapper").fadeIn(400);
-
-      $("#modalOverlay, .modalClose").unbind()
-          .click(function () {
-            $("#modalContentWrapper, #modalOverlay").fadeOut(400, function () {
-              $("#modalOverlay").remove();
-            });
-          });
-    }, false);
-
-    let travelButton = document.getElementsByClassName('travelButton');
-    for (let i = 0, l = travelButton.length; i < l; i++) {
-      travelButton[i].addEventListener('click', (e) => {
-        let type = e.target.id;
-
-        if (type === 'travelLadder') {
-          histScoreData = LadderScoreArray;
-        } else if (type === 'travelPositive') {
-          histScoreData = PositiveScoreArray;
-        } else if (type === 'travelNegative') {
-          histScoreData = NegativeScoreArray;
-        } else {
-          histScoreData = GDPScoreArray;
-        }
-
-        // autoMove.setAttribute('style', 'background-color:#ffa443;opacity:1.0;');
-        stopMove.setAttribute('style', 'opacity:1.0;');
-        deletePin();
-        travelRanking();
-
-      }, false);
-    }
-
-
-    stopMove.addEventListener('click', () => {
-      autoMove.setAttribute('style', 'background-color:#646464;opacity:1.0;');
-      stopMove.setAttribute('style', 'opacity:0.0;');
-      console.log('stop');
-      stopTravelRanking();
-      // deletePin();
-    }, false);
-
-
-    // window.addEventListener('dblclick', () => {
-    //     isdDblclick = true;
-    //     $('.main').removeClass("disabled-onepage-scroll");
-    // }, false);
 
     /* load texture */
     earthMapLoader = new THREE.TextureLoader();
@@ -522,6 +463,58 @@
       NegativeScoreArray.push(negative);
       GDPScoreArray.push(logGdp);
     }
+
+    /* modal window for travel ranking */
+    let autoMove = document.getElementById('autoMove');
+    let stopMove = document.getElementById('stopMove');
+
+    autoMove.addEventListener('click', () => {
+      $(this).blur();
+      if ($("#modalOverlay")[0]) {
+        return false;
+      }
+      $("body").append('<div id="modalOverlay"></div>');
+      $("#modalOverlay").fadeIn(400);
+      $("#modalContentWrapper").fadeIn(400);
+
+      $("#modalOverlay, .modalClose").unbind()
+          .click(function () {
+            $("#modalContentWrapper, #modalOverlay").fadeOut(400, function () {
+              $("#modalOverlay").remove();
+            });
+          });
+    }, false);
+
+    let travelButton = document.getElementsByClassName('wbButton');
+    for (let i = 0, l = travelButton.length; i < l; i++) {
+      travelButton[i].addEventListener('click', (e) => {
+        let type = e.target.id;
+
+        if (type === 'ladderBtn') {
+          histScoreData = LadderScoreArray;
+        } else if (type === 'positiveBtn') {
+          histScoreData = PositiveScoreArray;
+        } else if (type === 'negativeBtn') {
+          histScoreData = NegativeScoreArray;
+        } else {
+          histScoreData = GDPScoreArray;
+        }
+
+        // autoMove.setAttribute('style', 'background-color:#ffa443;opacity:1.0;');
+        stopMove.setAttribute('style', 'opacity:1.0;');
+        deletePin();
+        travelRanking();
+
+      }, false);
+    }
+
+    stopMove.addEventListener('click', () => {
+      autoMove.setAttribute('style', 'background-color:#646464;opacity:1.0;');
+      stopMove.setAttribute('style', 'opacity:0.0;');
+      console.log('stop');
+      stopTravelRanking();
+      // deletePin();
+    }, false);
 
 
     /* sort rank array(alphabetical order) */
