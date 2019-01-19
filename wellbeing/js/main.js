@@ -101,7 +101,7 @@
 
   // val for scroll
   let pageIndex = 1.0;
-  const interactivePageIndex = 5;
+  const interactivePageIndex = 1;
   let initEarthPosition = new THREE.Vector3(0.0, -1.1, 1.0);
   let initCameraPosition = new THREE.Vector3(0.0, 0.0, 2.0);
   let center = new THREE.Vector3(0, 0, 0);
@@ -128,93 +128,56 @@
   /* Entry point */
   /////////////////
   window.addEventListener('load', () => {
-    /*
-    // scroll function
-    */
-    $('.main').onepage_scroll({
-      sectionContainer: 'section',
-      responsiveFallback: false, //600,
-      easing: 'ease',
-      pagination: true,
-      //updateURL: true,
-      animationTime: 500,
-      loop: false,
-      keyboard: false,
-      direction: 'vertical', //'horizontal'
 
-      afterMove: function (pageId) {
-        typing(pageId);
-        pageIndex = pageId;
+    /* start function */
+    let startButton = document.getElementById('startButton');
+    startButton.addEventListener('click', () => {
+      pageIndex = 1;
 
-        /* show well-being button */
-        $(".wbButton").removeClass("selectedBtn")
-            .removeClass("normalBtn")
-            .addClass("hiddenBtn");
+      $(".wbButton").removeClass("selectedBtn")
+          .removeClass("normalBtn")
+          .addClass("hiddenBtn");
 
-        /* disable scroll function */
-        if (pageId === interactivePageIndex) {
-          $('.main').addClass("disabled-onepage-scroll");
-          let duration = 2.0;
-          let ease = Back.easeOut.config(1);
+      let duration = 2.0;
+      let ease = Back.easeOut.config(1);
 
-          TweenMax.to(earth.position, duration, {
-            y: 0.0,
-            z: 0.0,
-            ease: ease
-          });
+      TweenMax.to(earth.position, duration, {
+        y: 0.0,
+        z: 0.0,
+        ease: ease
+      });
 
-          /* show button & land*/
-          TweenMax.to(camera.position, duration, {
-            z: 2.5,
-            ease: ease,
-            onComplete: function () {
-              $('#autoMove').css('opacity', '1');
+      /* show button & land*/
+      TweenMax.to(camera.position, duration, {
+        z: 2.5,
+        ease: ease,
+        onComplete: function () {
+          $('#autoMove').css('opacity', '1');
 
-              controls.enableZoom = true;
-              preventScroll();
-              document.addEventListener('touchmove', function(e) {e.preventDefault();}, {passive: false});
+          controls.enableZoom = true;
+          document.addEventListener('touchmove', function (e) {
+            e.preventDefault();
+          }, {passive: false});
 
-              $(".wbButton").removeClass("hiddenBtn").addClass("normalBtn");
-              let wbButton = document.getElementsByClassName('wbButton');
-              setTimeout(() => {
-                wbButton[0].classList.add("selectedBtn");
-              }, 400);
-              setTimeout(() => {
-                // landBase.material.opacity = 1.0;
-                clickBtn('ladderBtn');
-              }, 500);
-            }
-          });
+          $(".wbButton").removeClass("hiddenBtn").addClass("normalBtn");
+          let wbButton = document.getElementsByClassName('wbButton');
+          setTimeout(() => {
+            wbButton[0].classList.add("selectedBtn");
+          }, 400);
+          setTimeout(() => {
+            // landBase.material.opacity = 1.0;
+            clickBtn('ladderBtn');
+          }, 500);
         }
-        else {
-          controls.enableZoom = false;
-          enableScroll();
+      });
+
+      TweenMax.to(".load", duration, {
+        opacity: 0.0,
+        onComplete: function () {
+          $('main').remove();
         }
-      },
+      })
     });
-
-    function preventScroll(){
-      // for PC
-      let scroll_event = 'onwheel' in document ? 'wheel' : 'onmousewheel' in document ? 'mousewheel' : 'DOMMouseScroll';
-      $(document).on(scroll_event,function(e){e.preventDefault();});
-      // for SP
-      $(document).on('touchmove.noScroll', function(e) {e.preventDefault();});
-    }
-    function enableScroll(){
-      // for PC
-      let scroll_event = 'onwheel' in document ? 'wheel' : 'onmousewheel' in document ? 'mousewheel' : 'DOMMouseScroll';
-      $(document).off(scroll_event);
-      // for SP
-      $(document).off('.noScroll');
-    }
-    // function enableScrollSearch(){
-    //   // for PC
-    //   let scroll_event = 'onwheel' in document ? 'wheel' : 'onmousewheel' in document ? 'mousewheel' : 'DOMMouseScroll';
-    //   $('.ui-autocomplete').off(scroll_event);
-    //   // for SP
-    //   $('.ui-autocomplete').off('.noScroll');
-    // }
-    // enableScrollSearch();
 
 
     /* typing effect function */
@@ -251,7 +214,7 @@
     targetDOM = document.getElementById('webgl');
 
     userAgent = navigator.userAgent;
-    if (userAgent.indexOf('iPhone') > 0 || userAgent.indexOf('Android') > 0 && userAgent.indexOf('Mobile') > 0){
+    if (userAgent.indexOf('iPhone') > 0 || userAgent.indexOf('Android') > 0 && userAgent.indexOf('Mobile') > 0) {
       isSP = true;
     }
 
@@ -276,7 +239,7 @@
           s3.setAttributeNS(null, "font-size", "12px");
           s4.setAttributeNS(null, "font-size", "12px");
 
-        }else{
+        } else {
           svgRadius = 48;
           t1.setAttributeNS(null, "font-size", "28px");
           t2.setAttributeNS(null, "font-size", "28px");
@@ -390,10 +353,10 @@
 
     /* load texture */
     earthMapLoader = new THREE.TextureLoader();
-    if (isSP){
+    if (isSP) {
       earthMap = earthMapLoader.load('img/mapNightSP.jpg', loadShader);
       console.log('sp')
-    }else{
+    } else {
       earthMap = earthMapLoader.load('img/mapNight.jpg', loadShader);
     }
 
@@ -415,6 +378,7 @@
 
   /////////////////////////
   /* Initialize function */
+
   /////////////////////////
   function init(vsMain, fsMain, vsPost, fsPost) {
     stats = initStats();
@@ -679,16 +643,17 @@
     */
     if (canvasWidth < 900) {
       svgRadius = 40;
-    }else{
+    } else {
       svgRadius = 48;
     }
+
     function createRankText(type) {
       let px;
       if (canvasWidth < 900) {
-          px = "22px";
-        }else{
-          px = "28px";
-        }
+        px = "22px";
+      } else {
+        px = "28px";
+      }
       let text = document.createElementNS('http://www.w3.org/2000/svg', 'text');
       text.setAttributeNS(null, "x", '50%');
       text.setAttributeNS(null, "y", '50%');
@@ -712,10 +677,10 @@
     function createScoreText(type) {
       let px;
       if (canvasWidth < 900) {
-          px = "12px";
-        }else{
-          px = "16px";
-        }
+        px = "12px";
+      } else {
+        px = "16px";
+      }
       let text = document.createElementNS('http://www.w3.org/2000/svg', 'text');
       text.setAttributeNS(null, "x", '50%');
       text.setAttributeNS(null, "y", '70%');
@@ -885,12 +850,13 @@
     function onInfoObject() {
       isInfoObject = true;
     }
+
     function outInfoObject() {
       isInfoObject = false;
     }
 
     /* get canvas color */
-    function getCanvasColor(event){
+    function getCanvasColor(event) {
       let eventLocation = getEventLocation(this, event);
       let context = this.getContext('2d');
       let pixelData = context.getImageData(eventLocation.x, eventLocation.y, 1, 1).data;
@@ -907,12 +873,12 @@
           curleft += obj.offsetLeft;
           curtop += obj.offsetTop;
         } while (obj = obj.offsetParent);
-        return { x: curleft, y: curtop };
+        return {x: curleft, y: curtop};
       }
       return undefined;
     }
 
-    function getEventLocation(element,event){
+    function getEventLocation(element, event) {
       let pos = getElementPosition(element);
       return {
         x: (event.pageX - pos.x),
@@ -1062,7 +1028,7 @@
     function onHistRanking(event) {
       console.log('onHist', isFillHist);
       if (isHistDisplay) {
-        if (isFillHist){
+        if (isFillHist) {
           let rect = event.target.getBoundingClientRect();
           let mouseX = Math.abs(event.clientX - rect.left);
           let index = Math.floor(mouseX / barWidth);
@@ -1076,7 +1042,7 @@
 
           tooltipHist.css({top: event.clientY * 0.95});
           tooltipHist.css({left: event.clientX * 1.0 - tooltipHist.width() / 2 - 5});
-        }else{
+        } else {
           document.getElementById("canvasWrapper").classList.remove("canvasWrapperPointer");
           tooltipHist.css({opacity: 0.0});
           tooltipHist.css({top: 0});
@@ -1156,6 +1122,7 @@
     /*
     // move camera position function
     */
+
     /* move position in some separate times using quaternion */
     function moveCamera(latitude, longitude) {
       let targetPos = convertGeoCoords(latitude, longitude);
@@ -1203,6 +1170,7 @@
     pinHeight = 0.025;
     pinConeGeometry = new THREE.ConeBufferGeometry(pinRadius, pinHeight, 16, 1, true);
     pinSphereGeometry = new THREE.SphereBufferGeometry(pinSphereRadius, 60, 60);
+
     function createPin() {
       pinMaterial = new THREE.MeshPhongMaterial({color: 0xf15b47});
       let cone = new THREE.Mesh(pinConeGeometry, pinMaterial);
@@ -1221,6 +1189,7 @@
     }
 
     pinList = [];
+
     function createPoint(latitude = 0, longitude = 0) {
       const pin = createPin();
       let latRad = latitude * (Math.PI / 180);
@@ -1246,10 +1215,10 @@
     travelRanking = function () {
       let i = 0;
       travelSetInterval = setInterval(function () {
-        if (i>0){
+        if (i > 0) {
           console.log(pinList);
-          pinList[i-1].children[0].material.color.setHex(0xC9C7B7);
-          pinList[i-1].children[1].material.color.setHex(0xC9C7B7);
+          pinList[i - 1].children[0].material.color.setHex(0xC9C7B7);
+          pinList[i - 1].children[1].material.color.setHex(0xC9C7B7);
         }
 
         let countryName = histScoreData[i].country;
@@ -1277,9 +1246,9 @@
     scene.add(axesHelper);
 
     /* conduct rendering */
-    if (isSP){
+    if (isSP) {
       spRender();
-    }else{
+    } else {
       initPostprocessing(vsPost, fsPost);
       render();
     }
@@ -1301,24 +1270,26 @@
       minLength: 1
     });
 
-    selectorSearch.on("autocompleteclose", function(){
+    selectorSearch.on("autocompleteclose", function () {
       let inputCountry = document.getElementById('country').textContent;
       console.log(inputCountry);
 
       let res = countrynameToLatlon(inputCountry);
       console.log(res.latitude);
 
-      if( typeof res.latitude !== 'undefined'){
+      if (typeof res.latitude !== 'undefined') {
         moveCamera(res.latitude, res.longitude);
         clickHistRankingDisplayScore(inputCountry);
       }
     });
 
   }
+
   /* END Initialize function */
 
   ////////////////////////
   /* Rendering function */
+
   ////////////////////////
   function render() {
     // controls.update();
@@ -1376,6 +1347,7 @@
 
   /////////////////////////////
   /* Postprocessing function */
+
   /////////////////////////////
   function initPostprocessing(vsPost, fsPost) {
     time = 0.0;

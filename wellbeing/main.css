@@ -14,22 +14,27 @@ html, body {
   height:100%;
 }
 
-.wrapper {
-  height: 100%;
-  margin: 0 auto;
-  overflow: hidden;
-  /*display: none;*/
-  /*visibility : hidden;*/
+.noDisplay{
+  opacity: 0;
 }
 
-.main {
+.load {
   position:absolute;
+  margin: 0 auto;
+  overflow: hidden;
   top:0;
   left:0;
   float: left;
+  height: 100%;
   width: 100%;
-  margin: 0 auto;
-  background-color: rgba(255, 255, 255, 0.0);
+  background-color: rgba(100, 0, 0, 0.8);
+}
+
+#startButton {
+  position: absolute;
+  top: 50%;
+  right: 50%;
+  color: #dddddd;
 }
 
 
