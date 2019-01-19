@@ -76,6 +76,7 @@
 
   // val for ranking histgram
   let histCanvas;
+  let canvasContext;
   let histData;
   let histScoreData;
   let scoreMax;
@@ -266,6 +267,7 @@
           histCanvas.width = histCanvasWidth;
           let selectedType = $('.selectedBtn');
           // console.log(selectedType[0].innerHTML);  // ボタンを作ったあとに
+          canvasContext.globalAlpha = 0.5;
           let res = drawHist(selectedType, 0);
           barWidth = res.width;
           histData = res.histData;
@@ -960,7 +962,7 @@
       histCanvas.width = 900;
     }
     histCanvas.height = 90;
-    let canvasContext = histCanvas.getContext("2d");
+    canvasContext = histCanvas.getContext("2d");
     canvasContext.globalAlpha = 0.5;  // for safari(fillStyle alpha doesn't work)
 
     // function drawHist(data, scoreMax){
