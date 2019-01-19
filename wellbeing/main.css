@@ -452,51 +452,21 @@ switch type button(responsive)
 */
 /* for SP */
 #rankingWrapper{
-  display: grid;
-  grid-template-columns: 320px;
-  grid-template-rows: 90px 30px;
-
   position:fixed;
   bottom:0;
   left: 50%;
   margin-left:-160px;
-
   width:320px;
-  height:120px;
-
-}
-
-#btn{
-  grid-raw: 2 / 3;
-  background-color: rgba(255, 255, 255, 0.0);
-  /*opacity: 0.1;*/
-  font-family: 'Nunito', sans-serif;
-  font-weight: 400;
-
-
-  list-style: none;
-  overflow: hidden;
-}
-
-#btn li {
-  line-height: 30px;
-  width: 80px;
-  text-align: center;
-  color: #ffffff;
-  font-size: 1.0em;
-  float: left;
+  height:90px;
 }
 
 #histgram{
-  grid-raw: 1 / 2;
-
   width:320px;
   height:90px;
 
   background-color: rgba(0, 0, 255, 0.0);
   color: #ffffff;
   text-align: center;
-
   font-family: 'Nunito', sans-serif;
   font-weight: 300;
 }
@@ -504,50 +474,21 @@ switch type button(responsive)
 /* for Tablet */
 @media screen and (min-width: 500px) and (max-width:700px) {
   #rankingWrapper{
-    display: grid;
-    grid-template-columns: 500px;
-    grid-template-rows: 90px 30px;
-
     position:fixed;
     bottom:0;
     left: 50%;
     margin-left:-250px;
-
     width:500px;
-    height:120px;
-
-  }
-
-  #btn{
-    grid-raw: 2 / 3;
-    background-color: rgba(255, 255, 255, 0.0);
-    /*opacity: 0.1;*/
-    font-family: 'Nunito', sans-serif;
-    font-weight: 400;
-
-
-    list-style: none;
-    overflow: hidden;
-  }
-
-  #btn li {
-    width: 125px;
-    text-align: center;
-    color: #ffffff;
-    font-size: 1.2em;
-    float: left;
+    height:90px;
   }
 
   #histgram{
-    grid-raw: 1 / 2;
-
     width:500px;
     height:90px;
 
     background-color: rgba(0, 0, 255, 0.0);
     color: #ffffff;
     text-align: center;
-
     font-family: 'Nunito', sans-serif;
     font-weight: 300;
   }
@@ -556,50 +497,21 @@ switch type button(responsive)
 /* for PC medium */
 @media screen and (min-width: 700px) and (max-width:900px) {
   #rankingWrapper{
-    display: grid;
-    grid-template-columns: 700px;
-    grid-template-rows: 90px 30px;
-
     position:fixed;
     bottom:0;
     left: 50%;
     margin-left:-350px;
-
     width:700px;
-    height:120px;
-
-  }
-
-  #btn{
-    grid-raw: 2 / 3;
-    background-color: rgba(255, 255, 255, 0.0);
-    /*opacity: 0.1;*/
-    font-family: 'Nunito', sans-serif;
-    font-weight: 400;
-
-
-    list-style: none;
-    overflow: hidden;
-  }
-
-  #btn li {
-    width: 175px;
-    text-align: center;
-    color: #ffffff;
-    font-size: 1.2em;
-    float: left;
+    height:90px;
   }
 
   #histgram{
-    grid-raw: 1 / 2;
-
     width:700px;
     height:90px;
 
     background-color: rgba(0, 0, 255, 0.0);
     color: #ffffff;
     text-align: center;
-
     font-family: 'Nunito', sans-serif;
     font-weight: 300;
   }
@@ -608,50 +520,21 @@ switch type button(responsive)
 /* for PC wide */
 @media screen and (min-width:900px) {
   #rankingWrapper{
-    display: grid;
-    grid-template-columns: 900px;
-    grid-template-rows: 90px 30px;
-
     position:fixed;
     bottom:0;
     left: 50%;
     margin-left:-450px;
-
     width:900px;
-    height:120px;
-
-  }
-
-  #btn{
-    grid-raw: 2 / 3;
-    background-color: rgba(255, 255, 255, 0.0);
-    /*opacity: 0.1;*/
-    font-family: 'Nunito', sans-serif;
-    font-weight: 400;
-
-
-    list-style: none;
-    overflow: hidden;
-  }
-
-  #btn li {
-    width: 225px;
-    text-align: center;
-    color: #ffffff;
-    font-size: 1.2em;
-    float: left;
+    height:90px;
   }
 
   #histgram{
-    grid-raw: 1 / 2;
-
     width:900px;
     height:90px;
 
     background-color: rgba(0, 0, 255, 0.0);
     color: #ffffff;
     text-align: center;
-
     font-family: 'Nunito', sans-serif;
     font-weight: 300;
   }

@@ -162,7 +162,7 @@
           $(".wbButton").removeClass("hiddenBtn").addClass("normalBtn");
           let wbButton = document.getElementsByClassName('wbButton');
           setTimeout(() => {
-            wbButton[0].classList.add("selectedBtn");
+            // wbButton[0].classList.add("selectedBtn"); // ボタンを作ったあとに
           }, 400);
           setTimeout(() => {
             // landBase.material.opacity = 1.0;
@@ -265,7 +265,7 @@
         if (histCanvas.width !== histCanvasWidth) {
           histCanvas.width = histCanvasWidth;
           let selectedType = $('.selectedBtn');
-          console.log(selectedType[0].innerHTML);
+          // console.log(selectedType[0].innerHTML);  // ボタンを作ったあとに
           let res = drawHist(selectedType, 0);
           barWidth = res.width;
           histData = res.histData;
