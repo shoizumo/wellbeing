@@ -190,17 +190,8 @@
         z: 2.5,
         ease: ease,
         onComplete: function () {
-
-          console.log('finishTween');
-          isFinishStartTween = true;
-
-
           $('.allButton').css('opacity', '1');
-          // $('#travelModeSwitch').css('opacity', '1');
 
-
-
-          controls.enableZoom = true;
           document.addEventListener('touchmove', function (e) {
             e.preventDefault();
           }, {passive: false});
@@ -215,6 +206,9 @@
           setTimeout(() => {
             // landBase.material.opacity = 1.0;
             clickBtn('ladderBtn');
+            console.log('finishTween');
+            isFinishStartTween = true;
+            controls.enableZoom = true;
           }, 500);
         }
       });
@@ -332,7 +326,7 @@
     //   mouse.y = -(event.clientY / window.innerHeight) * 2 + 1;
     // }, false);
 
-    /* detect mouse drag */
+    /* detect mouse drag(distinguish mouse “click” and “drag”) */
     window.addEventListener("mousedown", function () {
       dragFlag = false;
       $('#country2').css({opacity: 0.0});
@@ -930,26 +924,28 @@
         isLand = false;
         body.css('cursor', 'default');
 
-        if (!isInfoObject) {
-          if (intersects.length > 0) {
-            if (intersects[0].point !== null) {
-              if (intersects[0].object.name === "land") {
-                //console.log(intersects[0]);
+        if (isFinishStartTween){
+          if (!isInfoObject) {
+            if (intersects.length > 0) {
+              if (intersects[0].point !== null) {
+                if (intersects[0].object.name === "land") {
+                  //console.log(intersects[0]);
 
-                countryName = intersects[0].object.userData.country;
-                tooltip[0].innerText = countryName;
-                tooltip.css({opacity: 1.0});
-                isLand = true;
-                body.css('cursor', 'pointer');
+                  countryName = intersects[0].object.userData.country;
+                  tooltip[0].innerText = countryName;
+                  tooltip.css({opacity: 1.0});
+                  isLand = true;
+                  body.css('cursor', 'pointer');
 
-                let res = calcWbInfo(countryName);
-                if (typeof res !== 'undefined') {
-                  tooltip.css({top: event.clientY * 0.97});
-                  tooltip.css({left: event.clientX * 1.03});
+                  let res = calcWbInfo(countryName);
+                  if (typeof res !== 'undefined') {
+                    tooltip.css({top: event.clientY * 0.97});
+                    tooltip.css({left: event.clientX * 1.03});
+                  }
+
+                  // intersects[0].object.scale.set(hover_scale, hover_scale, hover_scale);
+                  // intersected_object = intersects[0].object;
                 }
-
-                // intersects[0].object.scale.set(hover_scale, hover_scale, hover_scale);
-                // intersected_object = intersects[0].object;
               }
             }
           }
@@ -1013,75 +1009,77 @@
 
     /* click land */
     function onDocumentMouseClick() {
-      if (!dragFlag) {
-        if (isLand) {
-          if (!isFirstClick) {
-            TweenMax.killAll();
-            positive.cancel();
-            negative.cancel();
-            gdp.cancel();
-          }
+      if (isFinishStartTween){
+        if (!dragFlag) {
+          if (isLand) {
+            if (!isFirstClick) {
+              TweenMax.killAll();
+              positive.cancel();
+              negative.cancel();
+              gdp.cancel();
+            }
 
-          clearInfo();
-          let res = calcWbInfo(countryName);
-          infoBoard.css({opacity: 0.8});
+            clearInfo();
+            let res = calcWbInfo(countryName);
+            infoBoard.css({opacity: 0.8});
 
-          if (typeof res !== 'undefined') {
-            $('#country').empty().append(countryName);
-            doRankingPromise(res, wbLength);
-            doRankingPromise2(countryName, res);  // テキストでの結果表示
+            if (typeof res !== 'undefined') {
+              $('#country').empty().append(countryName);
+              doRankingPromise(res, wbLength);
+              doRankingPromise2(countryName, res);  // テキストでの結果表示
 
-            let location = countrynameToLatlon(countryName);
-            latitude = location.latitude;
-            longitude = location.longitude;
-            moveCamera(latitude, longitude);
-            deletePin();
-            tooltip.css({opacity: 0.0});
+              let location = countrynameToLatlon(countryName);
+              latitude = location.latitude;
+              longitude = location.longitude;
+              moveCamera(latitude, longitude);
+              deletePin();
+              tooltip.css({opacity: 0.0});
 
-          } else {
+            } else {
 
-            /* infoBoard1 */
-            $('#country').empty().append(countryName);
-            setTimeout(() => {
-              t1.textContent = 'No data';
-              $('#LadderRanking').children()[0].appendChild(t1);
-              t2.textContent = 'No data';
-              $('#PositiveRanking').children()[0].appendChild(t2);
-              t3.textContent = 'No data';
-              $('#NegativeRanking').children()[0].appendChild(t3);
-              t4.textContent = 'No data';
-              $('#GDPRanking').children()[0].appendChild(t4);
+              /* infoBoard1 */
+              $('#country').empty().append(countryName);
+              setTimeout(() => {
+                t1.textContent = 'No data';
+                $('#LadderRanking').children()[0].appendChild(t1);
+                t2.textContent = 'No data';
+                $('#PositiveRanking').children()[0].appendChild(t2);
+                t3.textContent = 'No data';
+                $('#NegativeRanking').children()[0].appendChild(t3);
+                t4.textContent = 'No data';
+                $('#GDPRanking').children()[0].appendChild(t4);
 
-              $('#infoLadder').attr('opacity', 1.0);
-              $('#infoPositive').attr('opacity', 1.0);
-              $('#infoNegative').attr('opacity', 1.0);
-              $('#infoGDP').attr('opacity', 1.0);
-            }, 500);
+                $('#infoLadder').attr('opacity', 1.0);
+                $('#infoPositive').attr('opacity', 1.0);
+                $('#infoNegative').attr('opacity', 1.0);
+                $('#infoGDP').attr('opacity', 1.0);
+              }, 500);
 
 
 
-            /* infoBoard2 */
-            $('#country2').css({opacity: 0.0});
-            $('.infoBoardContent2').css({opacity: 0.0});
-            // $('#infoBoard2').css({opacity: 1.0});
-            setTimeout(() => {
-              TweenMax.to("#country2", 1.0, {
-                opacity: 1.0,
-                onComplete: function () {
-                  console.log('tween');
-                  TweenMax.to(".infoBoardContent2", 1.0, {
-                    opacity: 1.0,
-                  });
-                }
-              })
-            }, 1000);
+              /* infoBoard2 */
+              $('#country2').css({opacity: 0.0});
+              $('.infoBoardContent2').css({opacity: 0.0});
+              // $('#infoBoard2').css({opacity: 1.0});
+              setTimeout(() => {
+                TweenMax.to("#country2", 1.0, {
+                  opacity: 1.0,
+                  onComplete: function () {
+                    console.log('tween');
+                    TweenMax.to(".infoBoardContent2", 1.0, {
+                      opacity: 1.0,
+                    });
+                  }
+                })
+              }, 1000);
 
-            document.getElementById("country2").innerHTML = countryName;
-            document.getElementById("Ladder2").innerHTML = 'No data';
-            document.getElementById("Positive2").innerHTML = '';
-            document.getElementById("Negative2").innerHTML = '';
-            document.getElementById("GDP2").innerHTML = '';
+              document.getElementById("country2").innerHTML = countryName;
+              document.getElementById("Ladder2").innerHTML = 'No data';
+              document.getElementById("Positive2").innerHTML = '';
+              document.getElementById("Negative2").innerHTML = '';
+              document.getElementById("GDP2").innerHTML = '';
 
+            }
           }
         }
       }
@@ -1130,7 +1128,7 @@
     canvasContext.globalAlpha = 0.5;  // for safari(fillStyle alpha doesn't work)
 
     // function drawHist(data, scoreMax){
-    drawHist = function (type, duration = 3000) {
+    drawHist = function (type, duration = 2500) {
       clearInterval(drawSetInterval);
       let data;
       let scoreMax;
