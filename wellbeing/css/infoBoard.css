@@ -1,0 +1,415 @@
+@charset "UTF-8";
+
+/* /////////////////////
+infoBoard1
+*/
+/* For SP */
+#infoBoard{
+  display: grid;
+  grid-template-columns: 80px 80px 80px 80px;
+  grid-template-rows: 25px 95px;
+
+  position:fixed;
+  top:0;
+  /*right:15%;*/
+  left: 50%;
+  margin-left:-160px;
+
+  width:320px;
+  height:120px;
+
+ opacity: 0.0;
+  color: #ffffff;
+  text-align: center;
+
+  font-family: 'Nunito', sans-serif;
+  font-weight: 300;
+}
+
+#country{
+  grid-column: 1 / 5;
+  grid-raw: 1 / 2;
+  background-color: #333333;
+  font-size: 1.3em;
+  font-weight: 400;
+}
+
+#Ladder{
+  grid-column: 1 / 2;
+  grid-raw: 2 / 3;
+  background-color: #444444;
+
+  display: grid;
+  grid-template-columns: 80px;
+  grid-template-rows: 15px 80px;
+}
+#LadderTitle{
+  font-size: 0.69em;
+  grid-column: 1 / 2;
+  grid-raw: 1 / 2;
+  font-weight: 200;
+}
+#LadderRanking{
+  grid-column: 1 / 2;
+  grid-raw: 2 / 3;
+}
+
+#Positive{
+  grid-column: 2 / 3;
+  grid-raw: 2 / 3;
+  background-color: #444444;
+
+  display: grid;
+  grid-template-columns: 80px;
+  grid-template-rows: 15px 80px;
+}
+#PositiveTitle{
+  font-size: 0.69em;
+  grid-column: 1 / 2;
+  grid-raw: 1 / 2;
+  font-weight: 200;
+}
+#PositiveRanking{
+  grid-column: 1 / 2;
+  grid-raw: 2 / 3;
+}
+
+#Negative{
+  grid-column: 3 / 4;
+  grid-raw: 2 / 3;
+  background-color: #444444;
+  display: grid;
+  grid-template-columns: 80px;
+  grid-template-rows: 15px 80px;
+}
+#NegativeTitle{
+  font-size: 0.69em;
+  grid-column: 1 / 2;
+  grid-raw: 1 / 2;
+  font-weight: 200;
+}
+#NegativeRanking{
+  grid-column: 1 / 2;
+  grid-raw: 2 / 3;
+}
+
+#GDP{
+  grid-column: 4 / 5;
+  grid-raw: 2 / 3;
+  background-color: #444444;
+  display: grid;
+  grid-template-columns: 80px;
+  grid-template-rows: 15px 80px;
+}
+#GDPTitle{
+  font-size: 0.69em;
+  grid-column: 1 / 2;
+  grid-raw: 1 / 2;
+  font-weight: 200;
+}
+#GDPRanking{
+  grid-column: 1 / 2;
+  grid-raw: 2 / 3;
+}
+
+
+/* for Tablet & PC(medium) */
+@media screen and (min-width: 600px) and (max-width:900px) {
+  #infoBoard{
+    display: grid;
+    grid-template-columns: 150px 150px 150px 150px;
+    grid-template-rows: 25px 95px;
+
+    position:fixed;
+    top:0;
+    /*right:15%;*/
+    left: 50%;
+    margin-left:-300px;
+
+    width:600px;
+    height:120px;
+
+    opacity: 0.0;
+    color: #ffffff;
+    text-align: center;
+
+    font-family: 'Nunito', sans-serif;
+    font-weight: 300;
+  }
+
+  #country{
+    grid-column: 1 / 5;
+    grid-raw: 1 / 2;
+    background-color: #333333;
+    font-size: 1.3em;
+    font-weight: 400;
+  }
+
+  #Ladder{
+    grid-column: 1 / 2;
+    grid-raw: 2 / 3;
+    background-color: #444444;
+
+    display: grid;
+    grid-template-columns: 150px;
+    grid-template-rows: 15px 80px;
+  }
+  #LadderTitle{
+    font-size: 0.69em;
+    grid-column: 1 / 2;
+    grid-raw: 1 / 2;
+    font-weight: 200;
+  }
+  #LadderRanking{
+    grid-column: 1 / 2;
+    grid-raw: 2 / 3;
+  }
+
+  #Positive{
+    grid-column: 2 / 3;
+    grid-raw: 2 / 3;
+    background-color: #444444;
+
+    display: grid;
+    grid-template-columns: 150px;
+    grid-template-rows: 15px 80px;
+  }
+  #PositiveTitle{
+    font-size: 0.69em;
+    grid-column: 1 / 2;
+    grid-raw: 1 / 2;
+    font-weight: 200;
+  }
+  #PositiveRanking{
+    grid-column: 1 / 2;
+    grid-raw: 2 / 3;
+  }
+
+  #Negative{
+    grid-column: 3 / 4;
+    grid-raw: 2 / 3;
+    background-color: #444444;
+    display: grid;
+    grid-template-columns: 150px;
+    grid-template-rows: 15px 80px;
+  }
+  #NegativeTitle{
+    font-size: 0.69em;
+    grid-column: 1 / 2;
+    grid-raw: 1 / 2;
+    font-weight: 200;
+  }
+  #NegativeRanking{
+    grid-column: 1 / 2;
+    grid-raw: 2 / 3;
+  }
+
+  #GDP{
+    grid-column: 4 / 5;
+    grid-raw: 2 / 3;
+    background-color: #444444;
+    display: grid;
+    grid-template-columns: 150px;
+    grid-template-rows: 15px 80px;
+  }
+  #GDPTitle{
+    font-size: 0.69em;
+    grid-column: 1 / 2;
+    grid-raw: 1 / 2;
+    font-weight: 200;
+  }
+  #GDPRanking{
+    grid-column: 1 / 2;
+    grid-raw: 2 / 3;
+  }
+}
+
+/* for PC(wide) */
+@media screen and (min-width: 900px) {
+  #infoBoard{
+    display: grid;
+    grid-template-columns: 200px 200px 200px 200px;
+    grid-template-rows: 30px 120px;
+
+    position:fixed;
+    top:0;
+    /*right:15%;*/
+    left: 50%;
+    margin-left:-400px;
+
+    width:800px;
+    height:150px;
+
+    opacity: 0.0;
+    color: #ffffff;
+    text-align: center;
+
+    font-family: 'Nunito', sans-serif;
+    font-weight: 300;
+  }
+
+  #country{
+    grid-column: 1 / 5;
+    grid-raw: 1 / 2;
+    background-color: #333333;
+    font-size: 1.5em;
+    font-weight: 400;
+  }
+
+  #Ladder{
+    grid-column: 1 / 2;
+    grid-raw: 2 / 3;
+    background-color: #444444;
+
+    display: grid;
+    grid-template-columns: 200px;
+    grid-template-rows: 20px 100px;
+  }
+  #LadderTitle{
+    font-size: 1.05em;
+    grid-column: 1 / 2;
+    grid-raw: 1 / 2;
+    font-weight: 200;
+  }
+  #LadderRanking{
+    grid-column: 1 / 2;
+    grid-raw: 2 / 3;
+  }
+
+  #Positive{
+    grid-column: 2 / 3;
+    grid-raw: 2 / 3;
+    background-color: #444444;
+
+    display: grid;
+    grid-template-columns: 200px;
+    grid-template-rows: 20px 100px;
+  }
+  #PositiveTitle{
+    font-size: 1.05em;
+    grid-column: 1 / 2;
+    grid-raw: 1 / 2;
+    font-weight: 200;
+  }
+  #PositiveRanking{
+    grid-column: 1 / 2;
+    grid-raw: 2 / 3;
+  }
+
+  #Negative{
+    grid-column: 3 / 4;
+    grid-raw: 2 / 3;
+    background-color: #444444;
+    display: grid;
+    grid-template-columns: 200px;
+    grid-template-rows: 20px 100px;
+  }
+  #NegativeTitle{
+    font-size: 1.05em;
+    grid-column: 1 / 2;
+    grid-raw: 1 / 2;
+    font-weight: 200;
+  }
+  #NegativeRanking{
+    grid-column: 1 / 2;
+    grid-raw: 2 / 3;
+  }
+
+  #GDP{
+    grid-column: 4 / 5;
+    grid-raw: 2 / 3;
+    background-color: #444444;
+    display: grid;
+    grid-template-columns: 200px;
+    grid-template-rows: 20px 100px;
+  }
+  #GDPTitle{
+    font-size: 1.05em;
+    grid-column: 1 / 2;
+    grid-raw: 1 / 2;
+    font-weight: 200;
+  }
+  #GDPRanking{
+    grid-column: 1 / 2;
+    grid-raw: 2 / 3;
+  }
+}
+
+#country:focus {
+    outline: none;
+}
+
+#country{
+  cursor: text;
+}
+
+/*
+infoBoardSVG(responsive)
+*/
+/* for SP */
+.infoContentsSVG {
+  width: 80px;
+  height: 80px;
+}
+
+.infoContentsCircle1 {
+  r: 40px;
+}
+
+.infoContentsCircle2 {
+  r: 20px;
+}
+
+
+/* for Tablet & PC(medium) */
+@media screen and (min-width: 600px) and (max-width:900px) {
+  .infoContentsSVG {
+    width: 150px;
+    height: 80px;
+  }
+
+
+}
+
+/* for PC(wide) */
+@media screen and (min-width: 900px) {
+  .infoContentsSVG {
+    width: 200px;
+    height: 100px;
+  }
+
+  .infoContentsCircle1 {
+    r: 48px;
+  }
+
+  .infoContentsCircle2 {
+    r: 24px;
+  }
+}
+
+
+
+/* /////////////////////
+infoBoard2
+*/
+
+#infoBoard2 {
+  position: fixed;
+  top: 50%;
+  left:50%;
+  margin-top:-30px;
+  margin-left:30px;
+
+  width: 300px;
+  height: 25px;
+  line-height: 25px;
+  font-size: 20px;
+  color: #ffffff;
+  opacity: 0.0;
+  font-family: 'Nunito', sans-serif;
+  font-weight: 300;
+}
+
+.infoBoardContent2{
+  margin-left:5px;
+}

@@ -732,19 +732,9 @@
       let id = '#' + type + 'Ranking';
       let svg = $(id).children().children()[2];
       let radius = (num - rank + 1) / num * svgRadius; // responsive
-      let rUnit;
-      let sUnit = type === 'GDP' ? 'US$' : 'pt';
-      let rankStr = rank.toString();
-      rankStr = rankStr.substring(rankStr.length - 1, rankStr.length);
-      if (rankStr === '1') {
-        rUnit = 'st'
-      } else if (rankStr === '2') {
-        rUnit = 'nd'
-      } else if (rankStr === '3') {
-        rUnit = 'rd'
-      } else {
-        rUnit = 'th'
-      }
+      let rOrdinal;
+      let sOrdinal = type === 'GDP' ? 'US$' : 'pt';
+      rOrdinal = rankOrdinal(rank);
 
       tween = TweenMax.fromTo(svg, duration,
           {attr: {r: 0}},
@@ -752,9 +742,9 @@
             attr: {r: radius},
             ease: Power1.easeInOut,
             onComplete: function () {
-              rankText.innerHTML = String(rank) + "<tspan font-size='12px'>" + rUnit + "</tspan>";
+              rankText.innerHTML = String(rank) + "<tspan font-size='12px'>" + rOrdinal + "</tspan>";
               $(id).children()[0].appendChild(rankText);
-              scoreText.textContent = '(' + String(score) + sUnit + ')';
+              scoreText.textContent = '(' + String(score) + sOrdinal + ')';
               $(id).children()[0].appendChild(scoreText);
 
               $('.info' + type).attr('opacity', 1.0);
@@ -762,6 +752,23 @@
           }
       );
     }
+
+    function rankOrdinal(rank){
+      let ordinal;
+      let rankStr = rank.toString();
+      rankStr = rankStr.substring(rankStr.length - 1, rankStr.length);
+      if (rankStr === '1') {
+        ordinal = 'st'
+      } else if (rankStr === '2') {
+        ordinal = 'nd'
+      } else if (rankStr === '3') {
+        ordinal = 'rd'
+      } else {
+        ordinal = 'th'
+      }
+      return ordinal;
+    }
+
 
     /* display in turn rank type */
     function createPromise(type, rank, num, svgDuration, text, nextStartDuration, score, scoreText) {
@@ -802,6 +809,30 @@
     }
 
 
+
+
+    /* テキストでの結果表示 */
+    function doRankingPromise2(countryName, wbData) {
+      let lRank = wbData['lRank'];
+      let pRank = wbData['pRank'];
+      let nRank = wbData['nRank'];
+      let gRank = wbData['gRank'];
+
+      console.log('doRankingPromise2');
+      $('#infoBoard2').css({opacity: 1.0});
+      document.getElementById("country2").innerHTML = countryName;
+      document.getElementById("Ladder2").innerHTML = 'L : ' + lRank + rankOrdinal(lRank);
+      document.getElementById("Positive2").innerHTML = 'P : ' + pRank + rankOrdinal(pRank);
+      document.getElementById("Negative2").innerHTML = 'N : ' + nRank + rankOrdinal(nRank);
+      document.getElementById("GDP2").innerHTML = 'G : ' + gRank + rankOrdinal(gRank);
+    }
+
+
+    /* テキストでの結果表示 */
+
+
+
+
     /*
     // interactive land object function
     */
@@ -829,7 +860,6 @@
         let intersects = raycaster.intersectObject(earth, true);
         // set tooltip not display
         tooltip.css({opacity: 0.0});
-        // infoBoard.css({opacity: 0.0});
         isLand = false;
         body.css('cursor', 'default');
 
@@ -842,7 +872,6 @@
                 countryName = intersects[0].object.userData.country;
                 tooltip[0].innerText = countryName;
                 tooltip.css({opacity: 1.0});
-                // infoBoard.css({opacity: 1.0});
                 isLand = true;
                 body.css('cursor', 'pointer');
 
@@ -933,9 +962,11 @@
           if (typeof res !== 'undefined') {
             $('#country').empty().append(countryName);
             doRankingPromise(res, wbLength);
+            doRankingPromise2(countryName, res);  // テキストでの結果表示
           } else {
-            $('#country').empty().append(countryName);
 
+            /* infoBoard1 */
+            $('#country').empty().append(countryName);
             setTimeout(() => {
               t1.textContent = 'No data';
               $('#LadderRanking').children()[0].appendChild(t1);
@@ -950,7 +981,16 @@
               $('#infoPositive').attr('opacity', 1.0);
               $('#infoNegative').attr('opacity', 1.0);
               $('#infoGDP').attr('opacity', 1.0);
-            }, 500)
+            }, 500);
+
+            /* infoBoard2 */
+            $('#infoBoard2').css({opacity: 1.0});
+            document.getElementById("country2").innerHTML = countryName;
+            document.getElementById("Ladder2").innerHTML = 'No data';
+            document.getElementById("Positive2").innerHTML = '';
+            document.getElementById("Negative2").innerHTML = '';
+            document.getElementById("GDP2").innerHTML = '';
+
           }
         }
       }
@@ -1117,6 +1157,7 @@
 
       $('#country').empty().append(countryName);
       doRankingPromise(res, wbLength);
+      doRankingPromise2(countryName, res);  // テキストでの結果表示
     }
 
     function countrynameToLatlon(countryName) {

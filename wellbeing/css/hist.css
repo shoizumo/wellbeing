@@ -1,0 +1,121 @@
+@charset "UTF-8";
+
+/* rank histogram */
+/* for SP */
+#rankingWrapper{
+  position:fixed;
+  bottom:0;
+  left: 50%;
+  margin-left:-160px;
+  width:320px;
+  height:90px;
+}
+
+#histgram{
+  width:320px;
+  height:90px;
+
+  background-color: rgba(0, 0, 255, 0.0);
+  color: #ffffff;
+  text-align: center;
+  font-family: 'Nunito', sans-serif;
+  font-weight: 300;
+}
+
+/* for Tablet */
+@media screen and (min-width: 500px) and (max-width:700px) {
+  #rankingWrapper{
+    position:fixed;
+    bottom:0;
+    left: 50%;
+    margin-left:-250px;
+    width:500px;
+    height:90px;
+  }
+
+  #histgram{
+    width:500px;
+    height:90px;
+
+    background-color: rgba(0, 0, 255, 0.0);
+    color: #ffffff;
+    text-align: center;
+    font-family: 'Nunito', sans-serif;
+    font-weight: 300;
+  }
+}
+
+/* for PC medium */
+@media screen and (min-width: 700px) and (max-width:900px) {
+  #rankingWrapper{
+    position:fixed;
+    bottom:0;
+    left: 50%;
+    margin-left:-350px;
+    width:700px;
+    height:90px;
+  }
+
+  #histgram{
+    width:700px;
+    height:90px;
+
+    background-color: rgba(0, 0, 255, 0.0);
+    color: #ffffff;
+    text-align: center;
+    font-family: 'Nunito', sans-serif;
+    font-weight: 300;
+  }
+}
+
+/* for PC wide */
+@media screen and (min-width:900px) {
+  #rankingWrapper{
+    position:fixed;
+    bottom:0;
+    left: 50%;
+    margin-left:-450px;
+    width:900px;
+    height:90px;
+  }
+
+  #histgram{
+    width:900px;
+    height:90px;
+
+    background-color: rgba(0, 0, 255, 0.0);
+    color: #ffffff;
+    text-align: center;
+    font-family: 'Nunito', sans-serif;
+    font-weight: 300;
+  }
+}
+
+.canvasWrapperPointer{
+  cursor: pointer;
+}
+
+#tooltipHist {
+  position: absolute;
+  text-align: center;
+  font-size: 12px;
+  padding : 1px 5px 1px 5px;
+  color: #ffffff;
+  opacity: 0.0;
+  background-color: #646464;
+  border-radius: 5px;
+  font-family: 'Nunito', sans-serif;
+  font-weight: 300;
+}
+
+#tooltipHist:before{
+  content: "";
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  margin-left: -5px;
+  border: 5px solid transparent;
+  border-top: 5px solid #646464;
+}
+
+
