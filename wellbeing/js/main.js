@@ -162,8 +162,6 @@
 
       })
     }
-    infoBtn[0].classList.add("selectedBtn");
-
 
 
     /* start function */
@@ -171,9 +169,9 @@
     startButton.addEventListener('click', () => {
       pageIndex = 1;
 
-      $(".wbButton").removeClass("selectedBtn")
-          .removeClass("normalBtn")
-          .addClass("hiddenBtn");
+      // $(".wbButton").removeClass("selectedBtn")
+      //     .removeClass("normalBtn")
+      //     .addClass("hiddenBtn");
 
       let duration = 5.0;
       let ease = Back.easeOut.config(1);
@@ -189,18 +187,24 @@
         z: 2.5,
         ease: ease,
         onComplete: function () {
-          $('#autoMove').css('opacity', '1');
-          $('#travelModeSwitch').css('opacity', '1');
+
+
+          $('.allButton').css('opacity', '1');
+          // $('#travelModeSwitch').css('opacity', '1');
+
+
 
           controls.enableZoom = true;
           document.addEventListener('touchmove', function (e) {
             e.preventDefault();
           }, {passive: false});
 
-          $(".wbButton").removeClass("hiddenBtn").addClass("normalBtn");
+          // $(".wbButton").removeClass("hiddenBtn").addClass("normalBtn");
           let wbButton = document.getElementsByClassName('wbButton');
           setTimeout(() => {
             wbButton[0].classList.add("selectedBtn");
+            infoBtn[0].classList.add("selectedBtn");
+
           }, 400);
           setTimeout(() => {
             // landBase.material.opacity = 1.0;
@@ -643,7 +647,6 @@
     /* modal window for travel ranking */
     let autoMove = document.getElementById('autoMove');
     let stopMove = document.getElementById('stopMove');
-    let travelModeSwitch = document.getElementById('travelModeSwitch');
 
     autoMove.addEventListener('click', () => {
       $(this).blur();
