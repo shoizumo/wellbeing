@@ -963,6 +963,14 @@
             $('#country').empty().append(countryName);
             doRankingPromise(res, wbLength);
             doRankingPromise2(countryName, res);  // テキストでの結果表示
+
+            let location = countrynameToLatlon(countryName);
+            latitude = location.latitude;
+            longitude = location.longitude;
+            moveCamera(latitude, longitude);
+            deletePin();
+            tooltip.css({opacity: 0.0});
+
           } else {
 
             /* infoBoard1 */
