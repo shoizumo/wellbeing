@@ -41,7 +41,7 @@
   // val for shader
   const clock = new THREE.Clock();
   let time = 0.0;
-  let mouse;
+  // let mouse;
 
   // val for well-being data
   let GDPArray = [];
@@ -103,6 +103,7 @@
   let isFirstClick = true;
   let latitude;
   let longitude;
+  let isFinishStartTween = false;
 
   // val for scroll
   let pageIndex = 1.0;
@@ -176,6 +177,8 @@
       let duration = 5.0;
       let ease = Back.easeOut.config(1);
 
+      console.log('startTween');
+
       TweenMax.to(earth.position, duration, {
         y: 0.0,
         z: 0.0,
@@ -187,6 +190,9 @@
         z: 2.5,
         ease: ease,
         onComplete: function () {
+
+          console.log('finishTween');
+          isFinishStartTween = true;
 
 
           $('.allButton').css('opacity', '1');
@@ -319,20 +325,23 @@
     }, false);
 
     /* set mouse position function */
-    mouse = new THREE.Vector2();
-    window.addEventListener('mousemove', (event) => {
-      event.preventDefault();
-      mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
-      mouse.y = -(event.clientY / window.innerHeight) * 2 + 1;
-    }, false);
+    // mouse = new THREE.Vector2();
+    // window.addEventListener('mousemove', (event) => {
+    //   event.preventDefault();
+    //   mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
+    //   mouse.y = -(event.clientY / window.innerHeight) * 2 + 1;
+    // }, false);
 
     /* detect mouse drag */
     window.addEventListener("mousedown", function () {
       dragFlag = false;
       $('#country2').css({opacity: 0.0});
       $('.infoBoardContent2').css({opacity: 0.0});
-      TweenMax.killAll();
-      deletePin();
+
+      if (isFinishStartTween){
+        TweenMax.killAll();
+        deletePin();
+      }
     }, false);
 
     window.addEventListener("mousemove", function () {
@@ -1468,7 +1477,7 @@
     postprocessing.plane.material.uniforms.texture.value = postprocessing.renderTarget.texture;
     postprocessing.plane.material.uniforms.time.value = nowTime;
     postprocessing.plane.material.uniforms.resolution.value = [canvasWidth * devicePixelRatio, canvasHeight * devicePixelRatio];
-    postprocessing.plane.material.uniforms.mouse.value = mouse;
+    // postprocessing.plane.material.uniforms.mouse.value = mouse;
     postprocessing.plane.material.uniforms.pageIndex.value = pageIndex;
 
     //平面オブジェクトをレンダリング
@@ -1512,7 +1521,7 @@
             texture: {type: "t", value: null},
             resolution: {type: "v2", value: [canvasWidth * devicePixelRatio, canvasHeight * devicePixelRatio]},
             time: {type: "f", value: time},
-            mouse: {type: "v2", value: mouse},
+            // mouse: {type: "v2", value: mouse},
             pageIndex: {type: "f", value: pageIndex},
           },
           vertexShader: vsPost,
