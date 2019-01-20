@@ -36,6 +36,8 @@ html, body {
   left: 50%;
   margin-left:-80px;
   color: #dddddd;
+  font-family: 'Nunito', sans-serif;
+  font-weight: 300;
   cursor: pointer;
 }
 

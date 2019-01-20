@@ -388,6 +388,13 @@ infoBoardSVG(responsive)
 }
 
 
+/* temp */
+#infoBoard {
+  position: fixed;
+  top: -100%;
+  left: 50%;
+}
+/* temp */
 
 /* /////////////////////
 infoBoard2

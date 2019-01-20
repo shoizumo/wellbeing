@@ -149,7 +149,7 @@
           .removeClass("normalBtn")
           .addClass("hiddenBtn");
 
-      let duration = 2.0;
+      let duration = 5.0;
       let ease = Back.easeOut.config(1);
 
       TweenMax.to(earth.position, duration, {
@@ -164,6 +164,7 @@
         ease: ease,
         onComplete: function () {
           $('#autoMove').css('opacity', '1');
+          $('#travelModeSwitch').css('opacity', '1');
 
           controls.enableZoom = true;
           document.addEventListener('touchmove', function (e) {
@@ -182,7 +183,7 @@
         }
       });
 
-      TweenMax.to(".load", duration, {
+      TweenMax.to(".load", duration - 3.0, {
         opacity: 0.0,
         onComplete: function () {
           $('.load').remove();
@@ -298,7 +299,12 @@
     /* detect mouse drag */
     window.addEventListener("mousedown", function () {
       dragFlag = false;
+      $('#country2').css({opacity: 0.0});
+      $('.infoBoardContent2').css({opacity: 0.0});
+      TweenMax.killAll();
+      deletePin();
     }, false);
+
     window.addEventListener("mousemove", function () {
       dragFlag = true;
     }, false);
@@ -611,6 +617,7 @@
     /* modal window for travel ranking */
     let autoMove = document.getElementById('autoMove');
     let stopMove = document.getElementById('stopMove');
+    let travelModeSwitch = document.getElementById('travelModeSwitch');
 
     autoMove.addEventListener('click', () => {
       $(this).blur();
@@ -1016,6 +1023,8 @@
 
 
             /* infoBoard2 */
+            $('#country2').css({opacity: 0.0});
+            $('.infoBoardContent2').css({opacity: 0.0});
             // $('#infoBoard2').css({opacity: 1.0});
             setTimeout(() => {
               TweenMax.to("#country2", 1.0, {
