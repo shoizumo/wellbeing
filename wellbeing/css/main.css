@@ -73,7 +73,7 @@ html, body {
   opacity: 0.0;
 }
 .normalBtn{
-  background: #646464;
+  /*background: #646464;*/
   opacity: 1.0;
 }
 .selectedBtn{
@@ -111,8 +111,12 @@ html, body {
 #wbButton2 {
   position: fixed;
   top: 70%;
+  /*left: 100px;*/
   font-family: 'Nunito', sans-serif;
-  font-weight: 300;
+  font-weight: 400;
+  color: #ffffff;
+
+  list-style: none;
 }
 
 #autoMove {

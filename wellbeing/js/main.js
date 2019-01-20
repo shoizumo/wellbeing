@@ -66,6 +66,8 @@
   let searchArray;
   let onoffSwitch;
   let travelAuto;
+  let infoTypeText = true;
+  let infoBtn;
 
   // val for marker pin
   let pinList;
@@ -139,6 +141,30 @@
       travelAuto = !travelAuto;
       console.log(travelAuto);
     });
+
+
+    infoBtn = document.getElementsByClassName('infoType');
+    for (let i = 0, l = infoBtn.length; i < l; i++) {
+      infoBtn[i].addEventListener('click', (e) => {
+        $(".infoType").removeClass("selectedBtn");
+        infoBtn[i].classList.add("selectedBtn");
+        infoTypeText = e.target.id.slice(4,) === 'Text';
+
+
+        let infoBoard1 = $('#infoBoard');
+        if (infoTypeText){
+           infoBoard1.css("top", -1000);
+           $('.infoBoardContent2').css("margin-left", 5);
+        }else{
+          infoBoard1.css("top", 0);
+          $('.infoBoardContent2').css("margin-left", -1000);
+        }
+
+      })
+    }
+    infoBtn[0].classList.add("selectedBtn");
+
+
 
     /* start function */
     let startButton = document.getElementById('startButton');
