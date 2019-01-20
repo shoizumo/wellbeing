@@ -64,6 +64,8 @@
   let wbButton;
   let svgRadius;
   let searchArray;
+  let onoffSwitch;
+  let travelAuto;
 
   // val for marker pin
   let pinList;
@@ -130,6 +132,14 @@
   /////////////////
   window.addEventListener('load', () => {
 
+
+    onoffSwitch = document.getElementById('travelModeSwitch-label');
+    travelAuto = false;
+    onoffSwitch.addEventListener('click', () => {
+      travelAuto = !travelAuto;
+      console.log(travelAuto);
+    });
+
     /* start function */
     let startButton = document.getElementById('startButton');
     startButton.addEventListener('click', () => {
@@ -163,7 +173,7 @@
           $(".wbButton").removeClass("hiddenBtn").addClass("normalBtn");
           let wbButton = document.getElementsByClassName('wbButton');
           setTimeout(() => {
-            // wbButton[0].classList.add("selectedBtn"); // ボタンを作ったあとに
+            wbButton[0].classList.add("selectedBtn");
           }, 400);
           setTimeout(() => {
             // landBase.material.opacity = 1.0;
@@ -266,7 +276,7 @@
         if (histCanvas.width !== histCanvasWidth) {
           histCanvas.width = histCanvasWidth;
           let selectedType = $('.selectedBtn');
-          // console.log(selectedType[0].innerHTML);  // ボタンを作ったあとに
+          console.log(selectedType[0].innerHTML);
           canvasContext.globalAlpha = 0.5;
           let res = drawHist(selectedType, 0);
           barWidth = res.width;
@@ -321,7 +331,6 @@
 
   /////////////////////////
   /* Initialize function */
-
   /////////////////////////
   function init(vsMain, fsMain, vsPost, fsPost) {
     stats = initStats();
@@ -332,7 +341,7 @@
       // Align top-left
       stats.domElement.style.position = 'absolute';
       stats.domElement.style.left = '0px';
-      stats.domElement.style.top = '0px';
+      stats.domElement.style.top = '200px';
       document.getElementById("Stats-output").appendChild(stats.domElement);
       return stats;
     }
@@ -466,59 +475,6 @@
       GDPScoreArray.push(logGdp);
     }
 
-    /* modal window for travel ranking */
-    let autoMove = document.getElementById('autoMove');
-    let stopMove = document.getElementById('stopMove');
-
-    autoMove.addEventListener('click', () => {
-      $(this).blur();
-      if ($("#modalOverlay")[0]) {
-        return false;
-      }
-      $("body").append('<div id="modalOverlay"></div>');
-      $("#modalOverlay").fadeIn(400);
-      $("#modalContentWrapper").fadeIn(400);
-
-      $("#modalOverlay, .modalClose").unbind()
-          .click(function () {
-            $("#modalContentWrapper, #modalOverlay").fadeOut(400, function () {
-              $("#modalOverlay").remove();
-            });
-          });
-    }, false);
-
-    let travelButton = document.getElementsByClassName('wbButton');
-    for (let i = 0, l = travelButton.length; i < l; i++) {
-      travelButton[i].addEventListener('click', (e) => {
-        let type = e.target.id;
-
-        if (type === 'ladderBtn') {
-          histScoreData = LadderScoreArray;
-        } else if (type === 'positiveBtn') {
-          histScoreData = PositiveScoreArray;
-        } else if (type === 'negativeBtn') {
-          histScoreData = NegativeScoreArray;
-        } else {
-          histScoreData = GDPScoreArray;
-        }
-
-        // autoMove.setAttribute('style', 'background-color:#ffa443;opacity:1.0;');
-        stopMove.setAttribute('style', 'opacity:1.0;');
-        deletePin();
-        travelRanking();
-
-      }, false);
-    }
-
-    stopMove.addEventListener('click', () => {
-      autoMove.setAttribute('style', 'background-color:#646464;opacity:1.0;');
-      stopMove.setAttribute('style', 'opacity:0.0;');
-      console.log('stop');
-      stopTravelRanking();
-      // deletePin();
-    }, false);
-
-
     /* sort rank array(alphabetical order) */
     LadderArray.sort(function sortRank(a, b) {
       if (a.country < b.country) {
@@ -620,6 +576,28 @@
         wbButton[i].classList.add("selectedBtn");
         let type = e.target.id;
         clickBtn(type);
+
+
+
+
+        /* travel */
+        if (travelAuto) {
+          if (type === 'ladderBtn') {
+            histScoreData = LadderScoreArray;
+          } else if (type === 'positiveBtn') {
+            histScoreData = PositiveScoreArray;
+          } else if (type === 'negativeBtn') {
+            histScoreData = NegativeScoreArray;
+          } else {
+            histScoreData = GDPScoreArray;
+          }
+
+          // autoMove.setAttribute('style', 'background-color:#ffa443;opacity:1.0;');
+          stopMove.setAttribute('style', 'opacity:1.0;');
+          deletePin();
+          travelRanking();
+        }
+
       }, false);
     }
 
@@ -631,6 +609,61 @@
       scoreMax = res.scoreMax;
       histScoreData = res.scoreData;
     };
+
+    /* modal window for travel ranking */
+    let autoMove = document.getElementById('autoMove');
+    let stopMove = document.getElementById('stopMove');
+
+    autoMove.addEventListener('click', () => {
+      $(this).blur();
+      if ($("#modalOverlay")[0]) {
+        return false;
+      }
+      $("body").append('<div id="modalOverlay"></div>');
+      $("#modalOverlay").fadeIn(400);
+      $("#modalContentWrapper").fadeIn(400);
+
+      $("#modalOverlay, .modalClose").unbind()
+          .click(function () {
+            $("#modalContentWrapper, #modalOverlay").fadeOut(400, function () {
+              $("#modalOverlay").remove();
+            });
+          });
+    }, false);
+
+    // let travelButton = document.getElementsByClassName('wbButton');
+    // for (let i = 0, l = travelButton.length; i < l; i++) {
+    //   travelButton[i].addEventListener('click', (e) => {
+    //     let type = e.target.id;
+    //
+    //     if (type === 'ladderBtn') {
+    //       histScoreData = LadderScoreArray;
+    //     } else if (type === 'positiveBtn') {
+    //       histScoreData = PositiveScoreArray;
+    //     } else if (type === 'negativeBtn') {
+    //       histScoreData = NegativeScoreArray;
+    //     } else {
+    //       histScoreData = GDPScoreArray;
+    //     }
+    //
+    //     // autoMove.setAttribute('style', 'background-color:#ffa443;opacity:1.0;');
+    //     stopMove.setAttribute('style', 'opacity:1.0;');
+    //     deletePin();
+    //
+    //
+    //
+    //     travelRanking();
+    //
+    //   }, false);
+    // }
+
+    stopMove.addEventListener('click', () => {
+      autoMove.setAttribute('style', 'background-color:#646464;opacity:1.0;');
+      stopMove.setAttribute('style', 'opacity:0.0;');
+      console.log('stop');
+      stopTravelRanking();
+      // deletePin();
+    }, false);
 
 
     /*

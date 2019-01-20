@@ -27,13 +27,14 @@ html, body {
   float: left;
   height: 100%;
   width: 100%;
-  background-color: rgba(100, 0, 0, 0.8);
+  background-color: rgba(0, 0, 0, 0.9);
 }
 
 #startButton {
   position: absolute;
   top: 50%;
-  right: 50%;
+  left: 50%;
+  margin-left:-80px;
   color: #dddddd;
 }
 
@@ -616,6 +617,96 @@ switch type button(responsive)
 
 
 /* travel ranking */
+/*#travelMode {*/
+  /*position: relative;*/
+  /*color: #ffffff;*/
+  /*font-weight: 300;*/
+/*}*/
+
+#travelModeButton{
+
+}
+
+#travelModeSwitch {
+  position: fixed;
+  top: 1%;
+  left: 1%;
+  width: 90px;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+}
+
+#travelModeSwitch-checkbox {
+  display: none;
+}
+
+#travelModeSwitch-label {
+  display: block;
+  overflow: hidden;
+  cursor: pointer;
+  border: 1px solid #ffffff;
+  border-radius: 10px;
+}
+
+#travelModeSwitch-inner {
+  display: block;
+  width: 200%;
+  margin-left: -100%;
+  transition: margin 0.3s ease-in 0s;
+}
+
+#travelModeSwitch-inner:before, #travelModeSwitch-inner:after {
+  display: block;
+  float: left;
+  width: 50%;
+  height: 30px;
+  padding: 0;
+  line-height: 15px;
+  font-size: 14px;
+  color: #ffffff;
+  font-family: 'Nunito', sans-serif;
+  box-sizing: border-box;
+}
+
+#travelModeSwitch-inner:before {
+  content: "Manual\A\00a0Travel";
+  white-space: pre;
+  padding-left: 10px;
+  background-color: #647d7d;
+  color: #ffffff;
+}
+
+#travelModeSwitch-inner:after {
+  content: "Auto\00a0\ATravel";
+  padding-right: 18px;
+  background-color: #111111;
+  color: #ffffff;
+  text-align: right;
+}
+
+#travelModeSwitch-switch {
+  display: block;
+  width: 18px;
+  margin: 6px;
+  background: #ffffff;
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  right: 56px;
+  border: 1px solid #ffffff;
+  border-radius: 10px;
+  transition: all 0.3s ease-in 0s;
+}
+
+#travelModeSwitch-checkbox:checked + #travelModeSwitch-label #travelModeSwitch-inner {
+  margin-left: 0;
+}
+
+#travelModeSwitch-checkbox:checked + #travelModeSwitch-label #travelModeSwitch-switch {
+  right: 0px;
+}
+
 #autoMove {
   position: fixed;
   top: 50%;
