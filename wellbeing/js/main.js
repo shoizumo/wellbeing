@@ -578,8 +578,6 @@
         clickBtn(type);
 
 
-
-
         /* travel */
         if (travelAuto) {
           if (type === 'ladderBtn') {
@@ -819,7 +817,31 @@
       let gRank = wbData['gRank'];
 
       console.log('doRankingPromise2');
-      $('#infoBoard2').css({opacity: 1.0});
+      $('#country2').css({opacity: 0.0});
+      $('.infoBoardContent2').css({opacity: 0.0});
+      //
+      // TweenMax.to("#country2", 1.0, {
+      //   opacity: 1.0,
+      //   onComplete: function () {
+      //     console.log('tween');
+      //     TweenMax.to(".infoBoardContent2", 1.0, {
+      //       opacity: 1.0,
+      //     });
+      //   }
+      // });
+
+      setTimeout(() => {
+        TweenMax.to("#country2", 1.0, {
+          opacity: 1.0,
+          onComplete: function () {
+            console.log('tween');
+            TweenMax.to(".infoBoardContent2", 1.0, {
+              opacity: 1.0,
+            });
+          }
+        })
+      }, 1000);
+
       document.getElementById("country2").innerHTML = countryName;
       document.getElementById("Ladder2").innerHTML = 'L : ' + lRank + rankOrdinal(lRank);
       document.getElementById("Positive2").innerHTML = 'P : ' + pRank + rankOrdinal(pRank);
@@ -991,8 +1013,22 @@
               $('#infoGDP').attr('opacity', 1.0);
             }, 500);
 
+
+
             /* infoBoard2 */
-            $('#infoBoard2').css({opacity: 1.0});
+            // $('#infoBoard2').css({opacity: 1.0});
+            setTimeout(() => {
+              TweenMax.to("#country2", 1.0, {
+                opacity: 1.0,
+                onComplete: function () {
+                  console.log('tween');
+                  TweenMax.to(".infoBoardContent2", 1.0, {
+                    opacity: 1.0,
+                  });
+                }
+              })
+            }, 1000);
+
             document.getElementById("country2").innerHTML = countryName;
             document.getElementById("Ladder2").innerHTML = 'No data';
             document.getElementById("Positive2").innerHTML = '';
