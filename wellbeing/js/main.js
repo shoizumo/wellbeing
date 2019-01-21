@@ -104,6 +104,7 @@
   let latitude;
   let longitude;
   let isFinishStartTween = false;
+  let isMoveCamera = false;
 
   // val for scroll
   let initEarthPosition = new THREE.Vector3(0.0, -1.1, 1.0);
@@ -339,10 +340,12 @@
       if (dragFlag) {
         if (isFinishStartTween) {
           if (!travelAuto) {
-            $('#country2').css({opacity: 0.0});
-            $('.infoBoardContent2').css({opacity: 0.0});
-            TweenMax.killAll();
-            deletePin();
+            if (!isMoveCamera){
+              $('#country2').css({opacity: 0.0});
+              $('.infoBoardContent2').css({opacity: 0.0});
+              TweenMax.killAll();
+              deletePin();
+            }
           }
         }
       }
@@ -352,17 +355,17 @@
     /* touch event for SP */
     window.addEventListener("touchstart", function () {
       if (isFinishStartTween) {
-          if (!travelAuto) {
+        if (!travelAuto) {
+          if (!isMoveCamera){
             $('#country2').css({opacity: 0.0});
             $('.infoBoardContent2').css({opacity: 0.0});
             TweenMax.killAll();
             deletePin();
           }
         }
+      }
     }, false);
     /* touch */
-
-
 
 
     /* load texture */
@@ -689,31 +692,6 @@
           });
     }, false);
 
-    // let travelButton = document.getElementsByClassName('wbButton');
-    // for (let i = 0, l = travelButton.length; i < l; i++) {
-    //   travelButton[i].addEventListener('click', (e) => {
-    //     let type = e.target.id;
-    //
-    //     if (type === 'ladderBtn') {
-    //       histScoreData = LadderScoreArray;
-    //     } else if (type === 'positiveBtn') {
-    //       histScoreData = PositiveScoreArray;
-    //     } else if (type === 'negativeBtn') {
-    //       histScoreData = NegativeScoreArray;
-    //     } else {
-    //       histScoreData = GDPScoreArray;
-    //     }
-    //
-    //     // autoMove.setAttribute('style', 'background-color:#ffa443;opacity:1.0;');
-    //     stopMove.setAttribute('style', 'opacity:1.0;');
-    //     deletePin();
-    //
-    //
-    //
-    //     travelRanking();
-    //
-    //   }, false);
-    // }
 
     stopMove.addEventListener('click', () => {
       autoMove.setAttribute('style', 'background-color:#646464;opacity:1.0;');
@@ -757,8 +735,6 @@
     t3 = createRankText('Negative');
     t4 = createRankText('GDP');
 
-    // t1.setAttributeNS(null, "font-size", "25px");
-    // console.log(t1);
 
     function createScoreText(type) {
       let px;
@@ -946,25 +922,27 @@
         if (isFinishStartTween){
           if (!travelAuto){
             if (!isInfoObject) {
-              if (intersects.length > 0) {
-                if (intersects[0].point !== null) {
-                  if (intersects[0].object.name === "land") {
-                    //console.log(intersects[0]);
+              if (!isMoveCamera){
+                if (intersects.length > 0) {
+                  if (intersects[0].point !== null) {
+                    if (intersects[0].object.name === "land") {
+                      //console.log(intersects[0]);
 
-                    countryName = intersects[0].object.userData.country;
-                    tooltip[0].innerText = countryName;
-                    tooltip.css({opacity: 1.0});
-                    isLand = true;
-                    body.css('cursor', 'pointer');
+                      countryName = intersects[0].object.userData.country;
+                      tooltip[0].innerText = countryName;
+                      tooltip.css({opacity: 1.0});
+                      isLand = true;
+                      body.css('cursor', 'pointer');
 
-                    let res = calcWbInfo(countryName);
-                    if (typeof res !== 'undefined') {
-                      tooltip.css({top: event.clientY * 0.97});
-                      tooltip.css({left: event.clientX * 1.03});
+                      let res = calcWbInfo(countryName);
+                      if (typeof res !== 'undefined') {
+                        tooltip.css({top: event.clientY * 0.97});
+                        tooltip.css({left: event.clientX * 1.03});
+                      }
+
+                      // intersects[0].object.scale.set(hover_scale, hover_scale, hover_scale);
+                      // intersected_object = intersects[0].object;
                     }
-
-                    // intersects[0].object.scale.set(hover_scale, hover_scale, hover_scale);
-                    // intersected_object = intersects[0].object;
                   }
                 }
               }
@@ -1076,8 +1054,6 @@
                 $('#infoGDP').attr('opacity', 1.0);
               }, 500);
 
-
-
               /* infoBoard2 */
               $('#country2').css({opacity: 0.0});
               $('.infoBoardContent2').css({opacity: 0.0});
@@ -1099,7 +1075,6 @@
               document.getElementById("Positive2").innerHTML = '';
               document.getElementById("Negative2").innerHTML = '';
               document.getElementById("GDP2").innerHTML = '';
-
             }
           }
         }
@@ -1239,19 +1214,21 @@
       console.log(isFillHist);
       if (!travelAuto){
         if (isFillHist) {
-          console.log('click', mouseonCountry);
+          if (!isMoveCamera){
+            console.log('click', mouseonCountry);
 
-          // after setting mouseonCountry, this function can be used
-          if (typeof mouseonCountry !== 'undefined') {
-            let res = countrynameToLatlon(mouseonCountry);
-            latitude = res.latitude;
-            longitude = res.longitude;
+            // after setting mouseonCountry, this function can be used
+            if (typeof mouseonCountry !== 'undefined') {
+              let res = countrynameToLatlon(mouseonCountry);
+              latitude = res.latitude;
+              longitude = res.longitude;
 
-            deletePin();
-            moveCamera(latitude, longitude);
-            clickHistRankingDisplayScore(mouseonCountry);
+              deletePin();
+              moveCamera(latitude, longitude);
+              clickHistRankingDisplayScore(mouseonCountry);
+            }
+            //tooltipHist.css({opacity: 0.0});
           }
-          //tooltipHist.css({opacity: 0.0});
         }
       }
     }
@@ -1305,6 +1282,7 @@
     */
 
     /* move position in some separate times using quaternion */
+    /* dring move, rotate is not enable */
     function moveCamera(latitude, longitude) {
       let targetPos = convertGeoCoords(latitude, longitude);
       let targetVec = targetPos.sub(center);
@@ -1326,10 +1304,14 @@
 
       let id = setInterval(function () {
         earth.rotation.y = 0;
+        isMoveCamera = true;
+        controls.enableRotate = false;
         moveCameraQuaternion(stepAngle);
         if (count > step) {
           createPoint(latitude, longitude);
           clearInterval(id);
+          isMoveCamera = false;
+          controls.enableRotate = true;
         }
       }, 1000 / step);
     }
