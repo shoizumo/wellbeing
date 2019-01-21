@@ -106,8 +106,6 @@
   let isFinishStartTween = false;
 
   // val for scroll
-  let pageIndex = 1.0;
-  const interactivePageIndex = 1;
   let initEarthPosition = new THREE.Vector3(0.0, -1.1, 1.0);
   let initCameraPosition = new THREE.Vector3(0.0, 0.0, 2.0);
   let center = new THREE.Vector3(0, 0, 0);
@@ -167,16 +165,8 @@
     /* start function */
     let startButton = document.getElementById('startButton');
     startButton.addEventListener('click', () => {
-      pageIndex = 1;
-
-      // $(".wbButton").removeClass("selectedBtn")
-      //     .removeClass("normalBtn")
-      //     .addClass("hiddenBtn");
-
       let duration = 5.0;
       let ease = Back.easeOut.config(1);
-
-      console.log('startTween');
 
       TweenMax.to(earth.position, duration, {
         y: 0.0,
@@ -205,7 +195,6 @@
           setTimeout(() => {
             // landBase.material.opacity = 1.0;
             clickBtn('ladderBtn');
-            console.log('finishTween');
             isFinishStartTween = true;
             controls.enableZoom = true;
           }, 500);
@@ -222,29 +211,29 @@
 
 
     /* typing effect function */
-    function typing(pageNo) {
-      $('.fadein > span').css('opacity', '0');  // reset opacity(0.0) for displaying again
-      let str = [];
-      let pageClass = '.page' + pageNo;
-      $(pageClass + ' > .fadein > span').each(function (i) {
-        $(this).css('opacity', '1');
-        str[i] = $(this).text();  // copy original text
-        $(this).text('');  // delete text
-        let no = i;
-        let self = this;
-        let interval = setInterval(function () {
-          if (no === 0 || Number($(pageClass + ' > .fadein > span').eq(no - 1).children('span:last').css('opacity')) === 1) {  // 最初の要素または前の要素が全文字表示された時
-            clearInterval(interval);
-            for (let j = 0; j < str[no].length; j++) {
-              $(self).append('<span>' + str[no].substr(j, 1) + '</span>');
-              $(self).children('span:last').delay(50 * j).animate({opacity: '1'}, 300);
-            }
-          }
-        }, 50);
-      });
-    }
-
-    typing(1);
+    // function typing(pageNo) {
+    //   $('.fadein > span').css('opacity', '0');  // reset opacity(0.0) for displaying again
+    //   let str = [];
+    //   let pageClass = '.page' + pageNo;
+    //   $(pageClass + ' > .fadein > span').each(function (i) {
+    //     $(this).css('opacity', '1');
+    //     str[i] = $(this).text();  // copy original text
+    //     $(this).text('');  // delete text
+    //     let no = i;
+    //     let self = this;
+    //     let interval = setInterval(function () {
+    //       if (no === 0 || Number($(pageClass + ' > .fadein > span').eq(no - 1).children('span:last').css('opacity')) === 1) {  // 最初の要素または前の要素が全文字表示された時
+    //         clearInterval(interval);
+    //         for (let j = 0; j < str[no].length; j++) {
+    //           $(self).append('<span>' + str[no].substr(j, 1) + '</span>');
+    //           $(self).children('span:last').delay(50 * j).animate({opacity: '1'}, 300);
+    //         }
+    //       }
+    //     }, 50);
+    //   });
+    // }
+    //
+    // typing(1);
 
 
     /*
@@ -268,7 +257,7 @@
       canvasWidth = window.innerWidth;
       canvasHeight = window.innerHeight;
 
-      if (pageIndex === interactivePageIndex) {
+      if (isFinishStartTween) {
         if (canvasWidth < 900) {
           svgRadius = 40;
           t1.setAttributeNS(null, "font-size", "22px");
@@ -433,7 +422,6 @@
         earthTex: {type: "t", value: earthMap},
         time: {type: "f", value: time},
         resolution: {type: "v2", value: [canvasWidth, canvasHeight]},
-        pageIndex: {type: "f", value: pageIndex},
       },
       side: THREE.FrontSide, //DoubleSide,
       //depthWrite: false,
@@ -909,7 +897,7 @@
 
     /* mouse over land */
     function onDocumentMouseMove(event) {
-      if (pageIndex === interactivePageIndex) {
+      if (isFinishStartTween) {
         // if (intersected_object !== 0) {
         //   intersected_object.scale.set(1.0, 1.0, 1.0);  // 前回のオブジェクトをもとに戻す
         // }
@@ -1457,7 +1445,7 @@
     stats.update();
     frame++;
 
-    if (pageIndex !== interactivePageIndex) {
+    if (!isFinishStartTween) {
       earth.rotation.x += speed;
     } else {
       earth.rotation.y += speed;
@@ -1478,8 +1466,6 @@
     postprocessing.plane.material.uniforms.texture.value = postprocessing.renderTarget.texture;
     postprocessing.plane.material.uniforms.time.value = nowTime;
     postprocessing.plane.material.uniforms.resolution.value = [canvasWidth * devicePixelRatio, canvasHeight * devicePixelRatio];
-    // postprocessing.plane.material.uniforms.mouse.value = mouse;
-    postprocessing.plane.material.uniforms.pageIndex.value = pageIndex;
 
     //平面オブジェクトをレンダリング
     renderer.render(postprocessing.scene, postprocessing.camera);
@@ -1490,7 +1476,7 @@
     stats.update();
     frame++;
 
-    if (pageIndex !== interactivePageIndex) {
+    if (!isFinishStartTween) {
       earth.rotation.x += speed;
     } else {
       earth.rotation.y += speed;
@@ -1522,8 +1508,6 @@
             texture: {type: "t", value: null},
             resolution: {type: "v2", value: [canvasWidth * devicePixelRatio, canvasHeight * devicePixelRatio]},
             time: {type: "f", value: time},
-            // mouse: {type: "v2", value: mouse},
-            pageIndex: {type: "f", value: pageIndex},
           },
           vertexShader: vsPost,
           fragmentShader: fsPost,

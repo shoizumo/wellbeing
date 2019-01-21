@@ -5,8 +5,6 @@ uniform sampler2D bumpTex;
 uniform sampler2D landTex;
 uniform sampler2D earthTex;
 uniform mat4 viewMatrix;
-uniform float pageIndex;
-
 
 // from vs
 varying vec3 mvPosition;

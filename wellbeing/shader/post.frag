@@ -3,8 +3,6 @@ precision mediump float;
 uniform float time;
 uniform vec2 resolution;
 uniform sampler2D texture;
-//uniform vec2 mouse;
-uniform float pageIndex;
 
 varying vec2 vUv;
 const float PI = 3.14159265358979323;
