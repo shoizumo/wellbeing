@@ -139,6 +139,9 @@
     onoffSwitch.addEventListener('click', () => {
       travelAuto = !travelAuto;
       console.log(travelAuto);
+      if (travelAuto){
+        travelRanking();
+      }
     });
 
 
@@ -641,6 +644,7 @@
         clickBtn(type);
 
         // delete infoBoard2
+        TweenMax.killAll();
         $('#country2').css({opacity: 0.0});
         $('.infoBoardContent2').css({opacity: 0.0});
         deletePin();
@@ -656,10 +660,6 @@
           } else {
             histScoreData = GDPScoreArray;
           }
-
-          // autoMove.setAttribute('style', 'background-color:#ffa443;opacity:1.0;');
-          stopMove.setAttribute('style', 'opacity:1.0;');
-          deletePin();
           travelRanking();
         }
 
@@ -1378,6 +1378,8 @@
     // travel ranking country
     */
     travelRanking = function () {
+      stopMove.setAttribute('style', 'opacity:1.0;');
+      deletePin();
       stopTravelRanking();  // clear previous travel
       let i = 0;
       travelSetInterval = setInterval(function () {
