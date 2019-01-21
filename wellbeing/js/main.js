@@ -65,7 +65,7 @@
   let svgRadius;
   let searchArray;
   let onoffSwitch;
-  let travelAuto;
+  let travelAuto = false;
   let infoTypeText = true;
   let infoBtn;
 
@@ -137,7 +137,6 @@
 
 
     onoffSwitch = document.getElementById('travelModeSwitch-label');
-    travelAuto = false;
     onoffSwitch.addEventListener('click', () => {
       travelAuto = !travelAuto;
       console.log(travelAuto);
@@ -333,8 +332,10 @@
       $('.infoBoardContent2').css({opacity: 0.0});
 
       if (isFinishStartTween){
-        TweenMax.killAll();
-        deletePin();
+        if (!travelAuto){
+          TweenMax.killAll();
+          deletePin();
+        }
       }
     }, false);
 
@@ -1216,20 +1217,22 @@
     /* mouse click histogram */
     function clickHistRanking() {
       console.log(isFillHist);
-      if (isFillHist) {
-        console.log('click', mouseonCountry);
+      if (!travelAuto){
+        if (isFillHist) {
+          console.log('click', mouseonCountry);
 
-        // after setting mouseonCountry, this function can be used
-        if (typeof mouseonCountry !== 'undefined') {
-          let res = countrynameToLatlon(mouseonCountry);
-          latitude = res.latitude;
-          longitude = res.longitude;
+          // after setting mouseonCountry, this function can be used
+          if (typeof mouseonCountry !== 'undefined') {
+            let res = countrynameToLatlon(mouseonCountry);
+            latitude = res.latitude;
+            longitude = res.longitude;
 
-          deletePin();
-          moveCamera(latitude, longitude);
-          clickHistRankingDisplayScore(mouseonCountry);
+            deletePin();
+            moveCamera(latitude, longitude);
+            clickHistRankingDisplayScore(mouseonCountry);
+          }
+          //tooltipHist.css({opacity: 0.0});
         }
-        //tooltipHist.css({opacity: 0.0});
       }
     }
 
