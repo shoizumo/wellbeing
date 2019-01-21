@@ -315,20 +315,38 @@
     // }, false);
 
     /* detect mouse drag(distinguish mouse “click” and “drag”) */
-    window.addEventListener("mousedown", function () {
+    let dragStartPos = new THREE.Vector2();
+    window.addEventListener("mousedown", function (event) {
       dragFlag = false;
-      if (isFinishStartTween){
-        if (!travelAuto){
-          $('#country2').css({opacity: 0.0});
-          $('.infoBoardContent2').css({opacity: 0.0});
-          TweenMax.killAll();
-          deletePin();
-        }
-      }
+      dragStartPos.x = event.clientX;
+      dragStartPos.y = event.clientY;
     }, false);
 
-    window.addEventListener("mousemove", function () {
-      dragFlag = true;
+    // window.addEventListener("mousemove", function () {
+    //   dragFlag = true;
+    // }, false);
+
+
+    window.addEventListener("mouseup", function (event) {
+
+      let dragEndPos = new THREE.Vector2();
+      dragEndPos.x = event.clientX;
+      dragEndPos.y = event.clientY;
+
+      let length = Math.pow((dragEndPos.x - dragStartPos.x), 2) + Math.pow((dragEndPos.y - dragStartPos.y), 2);
+      console.log(length);
+      dragFlag = length > 100;
+
+      if (dragFlag) {
+        if (isFinishStartTween) {
+          if (!travelAuto) {
+            $('#country2').css({opacity: 0.0});
+            $('.infoBoardContent2').css({opacity: 0.0});
+            TweenMax.killAll();
+            deletePin();
+          }
+        }
+      }
     }, false);
 
 
@@ -1453,10 +1471,10 @@
     let nowTime = clock.getElapsedTime();
     requestAnimationFrame(render);
 
-    /* set 30ftp */
-    if (frame % 2 === 0) {
-      return;
-    }
+    // /* set 30ftp */
+    // if (frame % 2 === 0) {
+    //   return;
+    // }
     //renderer.render(scene, camera);
 
     //オフスクリーンレンダリング
