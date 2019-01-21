@@ -640,6 +640,10 @@
         let type = e.target.id;
         clickBtn(type);
 
+        // delete infoBoard2
+        $('#country2').css({opacity: 0.0});
+        $('.infoBoardContent2').css({opacity: 0.0});
+        deletePin();
 
         /* travel */
         if (travelAuto) {
