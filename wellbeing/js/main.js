@@ -317,11 +317,10 @@
     /* detect mouse drag(distinguish mouse “click” and “drag”) */
     window.addEventListener("mousedown", function () {
       dragFlag = false;
-      $('#country2').css({opacity: 0.0});
-      $('.infoBoardContent2').css({opacity: 0.0});
-
       if (isFinishStartTween){
         if (!travelAuto){
+          $('#country2').css({opacity: 0.0});
+          $('.infoBoardContent2').css({opacity: 0.0});
           TweenMax.killAll();
           deletePin();
         }
@@ -844,7 +843,6 @@
       let nRank = wbData['nRank'];
       let gRank = wbData['gRank'];
 
-      console.log('doRankingPromise2');
       $('#country2').css({opacity: 0.0});
       $('.infoBoardContent2').css({opacity: 0.0});
       //
@@ -862,7 +860,6 @@
         TweenMax.to("#country2", 1.0, {
           opacity: 1.0,
           onComplete: function () {
-            console.log('tween');
             TweenMax.to(".infoBoardContent2", 1.0, {
               opacity: 1.0,
             });
@@ -914,26 +911,28 @@
         body.css('cursor', 'default');
 
         if (isFinishStartTween){
-          if (!isInfoObject) {
-            if (intersects.length > 0) {
-              if (intersects[0].point !== null) {
-                if (intersects[0].object.name === "land") {
-                  //console.log(intersects[0]);
+          if (!travelAuto){
+            if (!isInfoObject) {
+              if (intersects.length > 0) {
+                if (intersects[0].point !== null) {
+                  if (intersects[0].object.name === "land") {
+                    //console.log(intersects[0]);
 
-                  countryName = intersects[0].object.userData.country;
-                  tooltip[0].innerText = countryName;
-                  tooltip.css({opacity: 1.0});
-                  isLand = true;
-                  body.css('cursor', 'pointer');
+                    countryName = intersects[0].object.userData.country;
+                    tooltip[0].innerText = countryName;
+                    tooltip.css({opacity: 1.0});
+                    isLand = true;
+                    body.css('cursor', 'pointer');
 
-                  let res = calcWbInfo(countryName);
-                  if (typeof res !== 'undefined') {
-                    tooltip.css({top: event.clientY * 0.97});
-                    tooltip.css({left: event.clientX * 1.03});
+                    let res = calcWbInfo(countryName);
+                    if (typeof res !== 'undefined') {
+                      tooltip.css({top: event.clientY * 0.97});
+                      tooltip.css({left: event.clientX * 1.03});
+                    }
+
+                    // intersects[0].object.scale.set(hover_scale, hover_scale, hover_scale);
+                    // intersected_object = intersects[0].object;
                   }
-
-                  // intersects[0].object.scale.set(hover_scale, hover_scale, hover_scale);
-                  // intersected_object = intersects[0].object;
                 }
               }
             }
@@ -1332,8 +1331,6 @@
       let group = new THREE.Group();
       group.add(cone);
       group.add(sphere);
-
-      console.log(group.children[0].material.color);
       return group;
     }
 
@@ -1362,9 +1359,11 @@
     // travel ranking country
     */
     travelRanking = function () {
+      stopTravelRanking();  // clear previous travel
       let i = 0;
       travelSetInterval = setInterval(function () {
         if (i > 0) {
+          console.log('travelRanking', i);
           console.log(pinList);
           pinList[i - 1].children[0].material.color.setHex(0xC9C7B7);
           pinList[i - 1].children[1].material.color.setHex(0xC9C7B7);
