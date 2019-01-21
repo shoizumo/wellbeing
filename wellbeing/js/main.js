@@ -316,6 +316,8 @@
 
     /* detect mouse drag(distinguish mouse “click” and “drag”) */
     let dragStartPos = new THREE.Vector2();
+    let dragEndPos = new THREE.Vector2();
+
     window.addEventListener("mousedown", function (event) {
       dragFlag = false;
       dragStartPos.x = event.clientX;
@@ -328,11 +330,8 @@
 
 
     window.addEventListener("mouseup", function (event) {
-
-      let dragEndPos = new THREE.Vector2();
       dragEndPos.x = event.clientX;
       dragEndPos.y = event.clientY;
-
       let length = Math.pow((dragEndPos.x - dragStartPos.x), 2) + Math.pow((dragEndPos.y - dragStartPos.y), 2);
       console.log(length);
       dragFlag = length > 100;
@@ -348,6 +347,22 @@
         }
       }
     }, false);
+
+
+    /* touch event for SP */
+    window.addEventListener("touchstart", function () {
+      if (isFinishStartTween) {
+          if (!travelAuto) {
+            $('#country2').css({opacity: 0.0});
+            $('.infoBoardContent2').css({opacity: 0.0});
+            TweenMax.killAll();
+            deletePin();
+          }
+        }
+    }, false);
+    /* touch */
+
+
 
 
     /* load texture */
