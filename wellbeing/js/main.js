@@ -136,6 +136,16 @@
   /////////////////
   window.addEventListener('load', () => {
 
+    $('.navToggle').click(function () {
+      $(this).toggleClass('active');
+
+      if ($(this).hasClass('active')) {
+        $('.globalMenu').addClass('active');
+      } else {
+        $('.globalMenu').removeClass('active');
+      }
+    });
+
 
     onoffSwitch = document.getElementById('travelModeSwitch-label');
     onoffSwitch.addEventListener('click', () => {
