@@ -139,6 +139,22 @@
     onoffSwitch.addEventListener('click', () => {
       travelAuto = !travelAuto;
       console.log(travelAuto);
+
+      let selectedType = $('#wbButton2').find('.selectedBtn').attr("id");
+      canvasContext.globalAlpha = 0.5;
+      let res = drawHist(selectedType, 0);
+      barWidth = res.width;
+      histData = res.histData;
+      scoreMax = res.scoreMax;
+      histScoreData = res.scoreData;
+
+      $('#country2').css({opacity: 0.0});
+      $('.infoBoardContent2').css({opacity: 0.0});
+      TweenMax.killAll();
+      deletePin();
+      stopMove.setAttribute('style', 'opacity:0.0;');
+      stopTravelRanking();
+
       if (travelAuto){
         travelRanking();
       }
@@ -298,8 +314,7 @@
 
         if (histCanvas.width !== histCanvasWidth) {
           histCanvas.width = histCanvasWidth;
-          let selectedType = $('.selectedBtn');
-          console.log(selectedType[0].innerHTML);
+          let selectedType = $('#wbButton2').find('.selectedBtn').attr("id");
           canvasContext.globalAlpha = 0.5;
           let res = drawHist(selectedType, 0);
           barWidth = res.width;
@@ -1296,7 +1311,7 @@
       let angle = prevVec.angleTo(targetVec);
 
       let q = new THREE.Quaternion();
-      let step = 200;
+      let step = 100;
       let stepAngle = angle / step;
       let count = 0;
       let moveCameraQuaternion = function (stepAngle) {
@@ -1311,7 +1326,7 @@
         isMoveCamera = true;
         controls.enableRotate = false;
         moveCameraQuaternion(stepAngle);
-        if (count > step) {
+        if (count > step - 1) {
           createPoint(latitude, longitude);
           clearInterval(id);
           isMoveCamera = false;
