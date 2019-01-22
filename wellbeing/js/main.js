@@ -87,6 +87,7 @@
   let barWidth;
   let isHistDisplay = false;
   let mouseonCountry;
+  let travelIndex = 0;
 
   const barColor = "rgb(200, 225, 225)";
   const heightBarColor = "rgb(245, 70, 240)";
@@ -105,6 +106,7 @@
   let longitude;
   let isFinishStartTween = false;
   let isMoveCamera = false;
+  let isMoveStop = true;
 
   // val for scroll
   let initEarthPosition = new THREE.Vector3(0.0, -1.1, 1.0);
@@ -156,7 +158,13 @@
       stopTravelRanking();
 
       if (travelAuto){
+        isMoveStop = true;
         travelRanking();
+        stopMove.innerText = 'Stop';
+        stopMove.setAttribute('style', 'opacity:1.0;');
+      }else{
+        isMoveStop = false;
+        stopMove.setAttribute('style', 'opacity:0.0;');
       }
     });
 
@@ -675,6 +683,7 @@
           } else {
             histScoreData = GDPScoreArray;
           }
+          deletePin();
           travelRanking();
         }
 
@@ -713,12 +722,16 @@
 
 
     stopMove.addEventListener('click', () => {
-      autoMove.setAttribute('style', 'background-color:#646464;opacity:1.0;');
-      stopMove.setAttribute('style', 'opacity:0.0;');
-      console.log('stop');
-      stopTravelRanking();
-      // deletePin();
+      if (isMoveStop){
+        stopMove.innerText = 'Play';
+        stopTravelRanking();
+      }else{
+        stopMove.innerText = 'Stop';
+        travelRanking(travelIndex);
+      }
+      isMoveStop = !isMoveStop;
     }, false);
+
 
 
     /*
@@ -1392,15 +1405,13 @@
     /*
     // travel ranking country
     */
-    travelRanking = function () {
-      stopMove.setAttribute('style', 'opacity:1.0;');
-      deletePin();
+    travelRanking = function (index = 0) {
       stopTravelRanking();  // clear previous travel
-      let i = 0;
+      let i = index;
       travelSetInterval = setInterval(function () {
         if (i > 0) {
-          console.log('travelRanking', i);
-          console.log(pinList);
+          // console.log('travelRanking', i);
+          // console.log(pinList);
           pinList[i - 1].children[0].material.color.setHex(0xC9C7B7);
           pinList[i - 1].children[1].material.color.setHex(0xC9C7B7);
         }
@@ -1414,6 +1425,7 @@
         // createPoint(latitude, longitude);
         clickHistRankingDisplayScore(countryName);
         i++;
+        travelIndex = i;  // val for continue
         if (i > wbLength - 1) {
           clearInterval(travelSetInterval);
         }
