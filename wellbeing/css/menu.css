@@ -144,20 +144,20 @@ modal window(responsive)
 
 .modalContent{
   display: grid;
-  grid-template-columns: 280px;
-  grid-template-rows: 30px 70px 20px;
+  grid-template-columns: 600px;
+  grid-template-rows: 30px 300px 20px;
 
   top: 50%;
   left: 50%;
-  margin-top:-125px;
-  margin-left:-140px;
+  margin-top:-175px;
+  margin-left:-300px;
   border: 2px solid #aaaaaa;
   background: #dddddd;
   position: fixed;
   z-index: 2;
 
-  width:280px;
-  height:130px;
+  width:600px;
+  height:350px;
 }
 
 
@@ -165,135 +165,112 @@ modal window(responsive)
   grid-raw: 1 / 2;
   text-align: center;
   line-height: 30px;
+  font-size: 1.5em;
 }
 
 .modalClose{
   grid-raw: 3 / 4;
   text-align: center;
-  font-size: 0.9em;
+  font-size: 1.2em;
   line-height: 20px;
 }
 
 /* modal1 */
-/*#modalContentWrapper1{*/
-  /*display: none;*/
-/*}*/
 
-/*#modalTitle1{*/
-  /*grid-raw: 1 / 2;*/
-  /*text-align: center;*/
-  /*line-height: 30px;*/
-/*}*/
-
-/*#modalCloseBtn1{*/
-  /*grid-raw: 3 / 4;*/
-  /*text-align: center;*/
-  /*font-size: 0.9em;*/
-  /*line-height: 20px;*/
-/*}*/
-
-/*!* for SP & Tablet *!*/
-/*#modalContent1{*/
-  /*display: grid;*/
-  /*grid-template-columns: 280px;*/
-  /*grid-template-rows: 30px 70px 20px;*/
-
-  /*top: 50%;*/
-  /*left: 50%;*/
-  /*margin-top:-125px;*/
-  /*margin-left:-140px;*/
-  /*border: 2px solid #aaaaaa;*/
-  /*background: #dddddd;*/
-  /*position: fixed;*/
-  /*z-index: 2;*/
-
-  /*width:280px;*/
-  /*height:130px;*/
-/*}*/
-
-
-/*!* for PC *!*/
-/*@media screen and (min-width: 600px) {*/
-  /*#modalContent1{*/
-    /*display: grid;*/
-    /*grid-template-columns: 400px;*/
-    /*grid-template-rows: 30px 100px 20px;*/
-
-    /*top: 50%;*/
-    /*left: 50%;*/
-    /*margin-top:-150px;*/
-    /*margin-left:-200px;*/
-    /*border: 2px solid #aaaaaa;*/
-    /*background: #dddddd;*/
-    /*position: fixed;*/
-    /*z-index: 2;*/
-
-    /*width:400px;*/
-    /*height:150px;*/
-  /*}*/
-/*}*/
 
 
 
 /* modal2 */
-/*#modalContentWrapper2{*/
-  /*display: none;*/
-/*}*/
+＃settingContent{
+  grid-raw: 2 / 3;
 
-/*#modalTitle2{*/
-  /*grid-raw: 1 / 2;*/
-  /*text-align: center;*/
-  /*line-height: 30px;*/
-/*}*/
+  display: grid;
+  grid-template-columns: 600px;
+  grid-template-rows: 40px 60px 40px 60px 40px 60px;
 
-/*#modalCloseBtn2{*/
-  /*grid-raw: 3 / 4;*/
-  /*text-align: center;*/
-  /*font-size: 0.9em;*/
-  /*line-height: 20px;*/
-/*}*/
+  width:600px;
+  height:300px;
 
-/*
-modal window(responsive)
-*/
-/*!* for SP & Tablet *!*/
-/*#modalContent2{*/
-  /*display: grid;*/
-  /*grid-template-columns: 280px;*/
-  /*grid-template-rows: 30px 70px 20px;*/
+}
 
-  /*top: 50%;*/
-  /*left: 50%;*/
-  /*margin-top:-125px;*/
-  /*margin-left:-140px;*/
-  /*border: 2px solid #aaaaaa;*/
-  /*background: #dddddd;*/
+#settingContent ul{
+  font-family: 'Nunito', sans-serif;
+  font-weight: 400;
+
+  list-style: none;
+  overflow: hidden;
+}
+
+#settingContent p{
+  /* title */
+  text-align: center;
+  font-size: 1.2em;
+  height: 40px;
+  line-height: 40px;
+}
+
+#settingContent li {
+  text-align: center;
+  font-size: 1.0em;
+  float: left;
+  height: 60px;
+  line-height: 60px;
+}
+
+#settingContent li:hover {
+  background: #ffa443;
+  cursor: pointer;
+}
+
+
+
+#settingContentTitle1{
+  grid-raw: 1 / 2;
+}
+
+#wbButton1{
+  grid-raw: 2 / 3;
+}
+
+#wbButton1 li {
+  width: 150px;
+}
+
+#settingContentTitle2{
+  grid-raw: 3 / 4;
+}
+
+#infoType {
+  grid-raw: 4 / 5;
+}
+
+#infoType li {
+  width: 300px;
+}
+
+
+/*#infoType {*/
   /*position: fixed;*/
-  /*z-index: 2;*/
+  /*top: 50px;*/
+  /*right: 10px;*/
+  /*!*margin-top:-125px;*!*/
+  /*!*margin-left:-140px;*!*/
+  /*font-family: 'Nunito', sans-serif;*/
+  /*font-weight: 400;*/
+  /*color: #ffffff;*/
 
-  /*width:280px;*/
-  /*height:130px;*/
+  /*list-style: none;*/
+  /*!*overflow: hidden;*!*/
 /*}*/
 
-
-/*!* for PC *!*/
-/*@media screen and (min-width: 600px) {*/
-  /*#modalContent2{*/
-    /*display: grid;*/
-    /*grid-template-columns: 400px;*/
-    /*grid-template-rows: 30px 100px 20px;*/
-
-    /*top: 50%;*/
-    /*left: 50%;*/
-    /*margin-top:-150px;*/
-    /*margin-left:-200px;*/
-    /*border: 2px solid #aaaaaa;*/
-    /*background: #dddddd;*/
-    /*position: fixed;*/
-    /*z-index: 2;*/
-
-    /*width:400px;*/
-    /*height:150px;*/
-  /*}*/
+/*#infoType li:hover {*/
+  /*background: #ffa443;*/
+  /*cursor: pointer;*/
 /*}*/
 
+/*#infoType li {*/
+  /*width: 70px;*/
+  /*text-align: center;*/
+  /*font-size: 1.0em;*/
+  /*float: left;*/
+/*}*/

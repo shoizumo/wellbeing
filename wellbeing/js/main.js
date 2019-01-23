@@ -62,6 +62,8 @@
   let t1, t2, t3, t4;
   let s1, s2, s3, s4;
   let wbButton;
+  let wbButton1;
+  let wbButton2;
   let svgRadius;
   let searchArray;
   let onoffSwitch;
@@ -152,7 +154,8 @@
       travelAuto = !travelAuto;
       console.log(travelAuto);
 
-      let selectedType = $('#wbButton2').find('.selectedBtn').attr("id");
+      let selectedType = $('#wbButton2').find('.selectedBtn').attr("id").slice(0,-1);
+      console.log(selectedType);
       canvasContext.globalAlpha = 0.5;
       let res = drawHist(selectedType, 0);
       barWidth = res.width;
@@ -224,9 +227,11 @@
           }, {passive: false});
 
           // $(".wbButton").removeClass("hiddenBtn").addClass("normalBtn");
-          let wbButton = document.getElementsByClassName('wbButton');
+          let wbButton1 = document.getElementsByClassName('wbButton1');
+          let wbButton2 = document.getElementsByClassName('wbButton2');
           setTimeout(() => {
-            wbButton[0].classList.add("selectedBtn");
+            wbButton1[0].classList.add("selectedBtn");
+            wbButton2[0].classList.add("selectedBtn");
             infoBtn[0].classList.add("selectedBtn");
 
           }, 400);
@@ -332,7 +337,7 @@
 
         if (histCanvas.width !== histCanvasWidth) {
           histCanvas.width = histCanvasWidth;
-          let selectedType = $('#wbButton2').find('.selectedBtn').attr("id");
+          let selectedType = $('#wbButton2').find('.selectedBtn').attr("id").slice(0,-1);
           canvasContext.globalAlpha = 0.5;
           let res = drawHist(selectedType, 0);
           barWidth = res.width;
@@ -669,12 +674,26 @@
 
     /* make well-being button in order to show score */
     wbButton = document.getElementsByClassName('wbButton');
+    wbButton1 = document.getElementsByClassName('wbButton1');
+    wbButton2 = document.getElementsByClassName('wbButton2');
     for (let i = 0, wbLen = wbButton.length; i < wbLen; i++) {
       wbButton[i].addEventListener('click', (e) => {
-        $(".wbButton").removeClass("selectedBtn");
-        wbButton[i].classList.add("selectedBtn");
-        let type = e.target.id;
+        let type = e.target.id.slice(0,-1);
         clickBtn(type);
+        let index;
+        if (type === 'ladderBtn') {
+          index = 0;
+        } else if (type === 'positiveBtn') {
+          index = 1;
+        } else if (type === 'negativeBtn') {
+          index = 2;
+        } else {
+          index = 3;
+        }
+
+        $(".wbButton").removeClass("selectedBtn");
+        wbButton1[index].classList.add("selectedBtn");
+        wbButton2[index].classList.add("selectedBtn");
 
         // delete infoBoard2
         TweenMax.killAll();

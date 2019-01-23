@@ -120,12 +120,12 @@ html, body {
   list-style: none;
 }
 
-.wbButton2{
+#wbButton2 li{
   padding-left: 5px;
   padding-right: 5px;
 }
 
-.wbButton2:hover {
+#wbButton2 li:hover {
   background: #ffa443;
   cursor: pointer;
 }

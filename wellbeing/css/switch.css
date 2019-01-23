@@ -105,31 +105,4 @@
 
 
 
-/*
-infoType
-*/
-#infoType {
-  position: fixed;
-  top: 50px;
-  right: 10px;
-  /*margin-top:-125px;*/
-  /*margin-left:-140px;*/
-  font-family: 'Nunito', sans-serif;
-  font-weight: 400;
-  color: #ffffff;
 
-  list-style: none;
-  /*overflow: hidden;*/
-}
-
-#infoType li:hover {
-  background: #ffa443;
-  cursor: pointer;
-}
-
-#infoType li {
-  width: 70px;
-  text-align: center;
-  font-size: 1.0em;
-  float: left;
-}
