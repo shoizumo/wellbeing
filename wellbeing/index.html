@@ -13,10 +13,10 @@
       <link rel="stylesheet" href="css/switch.css">
       <link rel="stylesheet" href="css/menu.css">
 
-        <script data-src="shader/main.vert" charset="utf-8" data-name="myShaderMain" type="x-shader/x-vertex"></script>
-        <script data-src="shader/main.frag" charset="utf-8"  data-name="myShaderMain" type="x-shader/x-fragment"></script>
-        <script data-src="shader/post.vert" charset="utf-8" data-name="myShaderPost" type="x-shader/x-vertex"></script>
-        <script data-src="shader/post.frag" charset="utf-8"  data-name="myShaderPost" type="x-shader/x-fragment"></script>
+      <script data-src="shader/main.vert" charset="utf-8" data-name="myShaderMain" type="x-shader/x-vertex"></script>
+      <script data-src="shader/main.frag" charset="utf-8" data-name="myShaderMain" type="x-shader/x-fragment"></script>
+      <script data-src="shader/post.vert" charset="utf-8" data-name="myShaderPost" type="x-shader/x-vertex"></script>
+      <script data-src="shader/post.frag" charset="utf-8" data-name="myShaderPost" type="x-shader/x-fragment"></script>
 
 
     </head>
@@ -108,24 +108,9 @@
         </label>
       </div>
 
-      <div id="autoMove">autoMove</div>
+      <!--<div id="autoMove">autoMove</div>-->
       <div id="stopMove">Stop</div>
 
-
-      <div id="modalContentWrapper">
-        <div id="modalContent">
-          <p id="modalTitle">Travel Well-being Ranking</p>
-
-          <!--<ul id="wbButton">-->
-            <!--<li id="ladderBtn" class="wbButton modalClose">Ladder</li>-->
-            <!--<li id="positiveBtn" class="wbButton modalClose">Positive</li>-->
-            <!--<li id="negativeBtn" class="wbButton modalClose">Negative</li>-->
-            <!--<li id="gdpBtn" class="wbButton modalClose">GDP</li>-->
-          <!--</ul>-->
-
-          <p id="modalClose" class="modalClose">Close</p>
-        </div>
-      </div>
 
       <ul id="wbButton2" class="allButton">
         <li id="ladderBtn" class="wbButton wbButton2 modalClose">Ladder</li>
@@ -143,13 +128,13 @@
 
       <!--hamburger menu-->
       <!--global menu-->
-      <nav class="globalMenu">
+      <nav id="aaa" class="globalMenu">
         <ul>
-          <li><a href="#">About</a></li>
-          <li><a href="#">Setting</a></li>
-          <li><a href="#">Credit</a></li>
-          <li><a href="#">Menu</a></li>
-          <li><a href="#">Menu</a></li>
+          <li><a id="menu1" class="menu">About</a></li>
+          <li><a id="menu2" class="menu">Setting</a></li>
+          <li><a id='menu3' class="menu">Menu1</a></li>
+          <li><a id='menu4' class="menu">Menu2</a></li>
+          <li><a id='menu5' class="menu">Menu3</a></li>
         </ul>
       </nav>
 
@@ -158,6 +143,30 @@
         <span></span><span></span><span></span><span>menu</span>
       </div>
 
+
+      <div id="modalContentWrapper1" class="modalContentWrapper">
+        <div id="modalContent1" class="modalContent">
+          <p class="modalTitle">About</p>
+          <p>This is ...</p>
+          <p id="modalCloseBtn1" class="modalClose">Close</p>
+        </div>
+      </div>
+
+
+      <div id="modalContentWrapper2" class="modalContentWrapper">
+        <div id="modalContent2" class="modalContent">
+          <p class="modalTitle">Setting</p>
+
+          <!--<ul id="wbButton">-->
+          <!--<li id="ladderBtn" class="wbButton modalClose">Ladder</li>-->
+          <!--<li id="positiveBtn" class="wbButton modalClose">Positive</li>-->
+          <!--<li id="negativeBtn" class="wbButton modalClose">Negative</li>-->
+          <!--<li id="gdpBtn" class="wbButton modalClose">GDP</li>-->
+          <!--</ul>-->
+
+          <p id="modalClose2" class="modalClose">Close</p>
+        </div>
+      </div>
 
       <script src="lib/jquery-3.3.1.min.js"></script>
       <script src="lib/jquery-ui.min.js"></script>

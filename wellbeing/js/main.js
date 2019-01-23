@@ -710,27 +710,56 @@
     };
 
     /* modal window for travel ranking */
-    let autoMove = document.getElementById('autoMove');
-    let stopMove = document.getElementById('stopMove');
+    // let autoMove = document.getElementById('autoMove');
 
-    autoMove.addEventListener('click', () => {
-      $(this).blur();
-      if ($("#modalOverlay")[0]) {
-        return false;
-      }
-      $("body").append('<div id="modalOverlay"></div>');
-      $("#modalOverlay").fadeIn(400);
-      $("#modalContentWrapper").fadeIn(400);
+    let menuSetting = document.getElementsByClassName('menu');
+    for (let i = 0, l = menuSetting.length; i < l; i++) {
+      menuSetting[i].addEventListener('click', (e) => {
 
-      $("#modalOverlay, .modalClose").unbind()
-          .click(function () {
-            $("#modalContentWrapper, #modalOverlay").fadeOut(400, function () {
-              $("#modalOverlay").remove();
+        let id = e.target.id.slice(4,);
+        console.log(id);
+
+        $(this).blur();
+        if ($("#modalOverlay")[0]) {
+          return false;
+        }
+        $("body").append('<div id="modalOverlay"></div>');
+        $("#modalOverlay").fadeIn(400);
+
+        // contentごとに書き換え
+        $("#modalContentWrapper" + id.toString()).fadeIn(400);
+        //
+
+        $("#modalOverlay, .modalClose").unbind()
+            .click(function () {
+              $("#modalContentWrapper"  + id.toString() + ", #modalOverlay").fadeOut(400, function () {
+                $("#modalOverlay").remove();
+              });
             });
-          });
-    }, false);
+      }, false);
+    }
 
 
+
+    // let menuSetting = document.getElementById('menuSetting');
+    // menuSetting.addEventListener('click', () => {
+    //   $(this).blur();
+    //   if ($("#modalOverlay")[0]) {
+    //     return false;
+    //   }
+    //   $("body").append('<div id="modalOverlay"></div>');
+    //   $("#modalOverlay").fadeIn(400);
+    //   $("#modalContentWrapper").fadeIn(400);
+    //
+    //   $("#modalOverlay, .modalClose").unbind()
+    //       .click(function () {
+    //         $("#modalContentWrapper, #modalOverlay").fadeOut(400, function () {
+    //           $("#modalOverlay").remove();
+    //         });
+    //       });
+    // }, false);
+
+    let stopMove = document.getElementById('stopMove');
     stopMove.addEventListener('click', () => {
       if (isMoveStop){
         stopMove.innerText = 'Play';
@@ -1511,11 +1540,10 @@
     let nowTime = clock.getElapsedTime();
     requestAnimationFrame(render);
 
-    // /* set 30ftp */
-    // if (frame % 2 === 0) {
-    //   return;
-    // }
-    //renderer.render(scene, camera);
+    /* set 30ftp */
+    if (frame % 2 === 0) {
+      return;
+    }
 
     //オフスクリーンレンダリング
     renderer.render(scene, camera, postprocessing.renderTarget);

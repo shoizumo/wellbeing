@@ -122,129 +122,29 @@ html, body {
 
 .wbButton2{
   padding-left: 5px;
+  padding-right: 5px;
 }
 
-#autoMove {
-  position: fixed;
-  top: -50%;  /* Move to setting modal */
-  /*left: 3%;*/
-
-  text-align: center;
-  padding : 0.1em 0.5em 0.1em 0.5em;
-  color: #ffffff;
-  opacity: 0.0;
-  background-color: #646464;
-  border-radius: 10px;
-  font-family: 'Nunito', sans-serif;
-  font-weight: 300;
-}
-
-
-
-
-#modalContentWrapper{
-  display: none;
-}
-
-#modalOverlay {
-  z-index: 1;
-  display: none;
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background-color: rgba(0, 0, 0, 0.5);
-}
-
-#modalTitle{
-  grid-raw: 1 / 2;
-  text-align: center;
-  line-height: 30px;
-}
-
-#modalClose{
-  grid-raw: 3 / 4;
-  text-align: center;
-  font-size: 0.9em;
-  line-height: 20px;
-}
-
-#wbButton{
-  grid-raw: 2 / 3;
-  background-color: rgba(255, 255, 255, 0.0);
-  /*opacity: 0.1;*/
-  font-family: 'Nunito', sans-serif;
-  font-weight: 400;
-
-  list-style: none;
-  overflow: hidden;
-}
-
-#wbButton li:hover {
+.wbButton2:hover {
   background: #ffa443;
   cursor: pointer;
 }
 
+/*#autoMove {*/
+  /*position: fixed;*/
+  /*top: -50%;  !* Move to setting modal *!*/
+  /*!*left: 3%;*!*/
 
-/*
-modal window(responsive)
-*/
-/* for SP & Tablet */
-#modalContent{
-  display: grid;
-  grid-template-columns: 280px;
-  grid-template-rows: 30px 70px 20px;
+  /*text-align: center;*/
+  /*padding : 0.1em 0.5em 0.1em 0.5em;*/
+  /*color: #ffffff;*/
+  /*opacity: 0.0;*/
+  /*background-color: #646464;*/
+  /*border-radius: 10px;*/
+  /*font-family: 'Nunito', sans-serif;*/
+  /*font-weight: 300;*/
+/*}*/
 
-  top: 50%;
-  left: 50%;
-  margin-top:-125px;
-  margin-left:-140px;
-  border: 2px solid #aaaaaa;
-  background: #dddddd;
-  position: fixed;
-  z-index: 2;
-
-  width:280px;
-  height:130px;
-}
-
-#wbButton li {
-  width: 70px;
-  text-align: center;
-  font-size: 1.0em;
-  float: left;
-  line-height: 70px;
-}
-
-/* for PC */
-@media screen and (min-width: 600px) {
-  #modalContent{
-    display: grid;
-    grid-template-columns: 400px;
-    grid-template-rows: 30px 100px 20px;
-
-    top: 50%;
-    left: 50%;
-    margin-top:-150px;
-    margin-left:-200px;
-    border: 2px solid #aaaaaa;
-    background: #dddddd;
-    position: fixed;
-    z-index: 2;
-
-    width:400px;
-    height:150px;
-  }
-
-  #wbButton li {
-    width: 100px;
-    text-align: center;
-    font-size: 1.2em;
-    float: left;
-    line-height: 100px;
-  }
-}
 
 
 .allButton{
