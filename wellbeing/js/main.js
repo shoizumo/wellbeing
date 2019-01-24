@@ -90,6 +90,7 @@
   let isHistDisplay = false;
   let mouseonCountry;
   let travelIndex = 0;
+  let highlightSelectedBarList;
 
   const barColor = "rgb(200, 225, 225)";
   const heightBarColor = "rgb(245, 70, 240)";
@@ -125,6 +126,9 @@
 
   // function
   let drawHist;
+  let drawHistDurationNomal = 2500;
+  let drawHistDurationRedraw = 0;
+  let redrawHighlightSelectedBar;
   let clickBtn;
   let travelRanking;
   let travelSetInterval;
@@ -152,12 +156,12 @@
     onoffSwitch = document.getElementById('travelModeSwitch-label');
     onoffSwitch.addEventListener('click', () => {
       travelAuto = !travelAuto;
-      console.log(travelAuto);
+       highlightSelectedBarList = [];  // reset
 
       let selectedType = $('#wbButton2').find('.selectedBtn').attr("id").slice(0,-1);
       console.log(selectedType);
       canvasContext.globalAlpha = 0.5;
-      let res = drawHist(selectedType, 0);
+      let res = drawHist(selectedType, drawHistDurationNomal, 'new');
       barWidth = res.width;
       histData = res.histData;
       scoreMax = res.scoreMax;
@@ -339,7 +343,13 @@
           histCanvas.width = histCanvasWidth;
           let selectedType = $('#wbButton2').find('.selectedBtn').attr("id").slice(0,-1);
           canvasContext.globalAlpha = 0.5;
-          let res = drawHist(selectedType, 0);
+          let res = drawHist(selectedType, drawHistDurationRedraw, 'redraw');
+
+          // setTimeout(() => {
+          //   console.log('setTimeout');
+          //   redrawHighlightSelectedBar(highlightSelectedBarList, histData, scoreMax);
+          // }, 1000);
+
           barWidth = res.width;
           histData = res.histData;
           scoreMax = res.scoreMax;
@@ -720,7 +730,8 @@
     }
 
     clickBtn = function (type) {
-      let res = drawHist(type);
+       highlightSelectedBarList = [];  // reset
+      let res = drawHist(type, drawHistDurationNomal, 'new');
       // console.log(res);
       barWidth = res.width;
       histData = res.histData;
@@ -914,7 +925,7 @@
 
     let positive, negative, gdp;
 
-    function doRankingPromise(wbData, wbLength) {
+    function displayVisualInfo(wbData, wbLength) {
       new Promise((resolve) => {
         resolve(displayRanking('Ladder', wbData['lRank'], wbLength, 1.0, t1, wbData['ladder'], s1));
       }).then(() => {
@@ -936,7 +947,7 @@
 
 
     /* テキストでの結果表示 */
-    function doRankingPromise2(countryName, wbData) {
+    function displayTextInfo(countryName, wbData) {
       let lRank = wbData['lRank'];
       let pRank = wbData['pRank'];
       let nRank = wbData['nRank'];
@@ -1114,8 +1125,8 @@
 
             if (typeof res !== 'undefined') {
               $('#country').empty().append(countryName);
-              doRankingPromise(res, wbLength);
-              doRankingPromise2(countryName, res);  // テキストでの結果表示
+              displayVisualInfo(res, wbLength);
+              displayTextInfo(countryName, res);  // テキストでの結果表示
 
               let location = countrynameToLatlon(countryName);
               latitude = location.latitude;
@@ -1213,8 +1224,7 @@
     canvasContext = histCanvas.getContext("2d");
     canvasContext.globalAlpha = 0.5;  // for safari(fillStyle alpha doesn't work)
 
-    // function drawHist(data, scoreMax){
-    drawHist = function (type, duration = 2500) {
+    drawHist = function (type, duration, drawType) {
       clearInterval(drawSetInterval);
       let data;
       let scoreMax;
@@ -1238,23 +1248,25 @@
       }
 
       canvasContext.clearRect(0, 0, histCanvas.width, histCanvas.height);
-      // canvasContext.fillStyle = "rgb(0, 0, 0, 0)";  // not fill
-      // canvasContext.fillRect(0, 0, histCanvas.width, histCanvas.height);
-
       let numData = data.length;
       let width = histCanvas.width / numData;
-      canvasContext.fillStyle = barColor;
 
       // draw histogram with loop rect
       let i = 0;
       // console.log(numData, data);
       drawSetInterval = setInterval(function () {
+        canvasContext.fillStyle = barColor;
         let h = (data[i].score) / scoreMax * histCanvas.height;
         canvasContext.fillRect(width * i, histCanvas.height - h, width, h);
         i++;
 
         if (i > numData - 1) {
           clearInterval(drawSetInterval);
+
+          // 再描画時の関数
+          if (drawType === 'redraw'){
+            redrawHighlightSelectedBar(highlightSelectedBarList, histData, scoreMax);
+          }
         }
       }, duration / numData);
 
@@ -1335,8 +1347,8 @@
       infoBoard.css({opacity: 0.8});
 
       $('#country').empty().append(countryName);
-      doRankingPromise(res, wbLength);
-      doRankingPromise2(countryName, res);  // テキストでの結果表示
+      displayVisualInfo(res, wbLength);
+      displayTextInfo(countryName, res);  // テキストでの結果表示
     }
 
     function countrynameToLatlon(countryName) {
@@ -1352,20 +1364,34 @@
       return {latitude: latitude, longitude: longitude};
     }
 
+
+    highlightSelectedBarList = [];
     function highlightSelectedBar(countryName, data, scoreMax) {
       let h;
       let index;
       for (let i = 0; wbLength > i; i++) {
         if (data[i].country === countryName) {
           index = i;
+          highlightSelectedBarList.push(i)
         }
       }
       // highlight color
       canvasContext.fillStyle = heightBarColor;
       h = (data[index].score) / scoreMax * histCanvas.height;
       canvasContext.fillRect(barWidth * index, histCanvas.height - h, barWidth, h);
-
     }
+
+    redrawHighlightSelectedBar = function(indexList, data, scoreMax) {
+      let h;
+      for (let i = 0; indexList.length > i; i++) {
+        console.log('redrawHighlightSelectedBar', i);
+        // highlight color
+        canvasContext.fillStyle = heightBarColor;
+        h = (data[indexList[i]].score) / scoreMax * histCanvas.height;
+        canvasContext.fillRect(barWidth * indexList[i], histCanvas.height - h, barWidth, h);
+      }
+    }
+
 
     /*
     // move camera position function
