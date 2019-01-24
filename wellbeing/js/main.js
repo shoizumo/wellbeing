@@ -1057,60 +1057,6 @@
       }
     }
 
-    /* detect whether onInfo or not */
-    infoObject1 = document.getElementById('infoBoard');
-    infoObject2 = document.getElementById('rankingWrapper');
-    histCanvas = document.querySelector("#histgram");
-
-    infoObject1.addEventListener('mouseenter', onInfoObject, false);
-    infoObject2.addEventListener('mouseenter', onInfoObject, false);
-
-    infoObject1.addEventListener('mouseleave', outInfoObject, false);
-    infoObject2.addEventListener('mouseleave', outInfoObject, false);
-
-    histCanvas.addEventListener('mousemove', getCanvasColor, false);
-
-
-    function onInfoObject() {
-      isInfoObject = true;
-    }
-
-    function outInfoObject() {
-      isInfoObject = false;
-    }
-
-    /* get canvas color */
-    function getCanvasColor(event) {
-      let eventLocation = getEventLocation(this, event);
-      let context = this.getContext('2d');
-      let pixelData = context.getImageData(eventLocation.x, eventLocation.y, 1, 1).data;
-
-      // if nofill, isInfoObject = false
-      isInfoObject = (pixelData[0] > 0);
-      isFillHist = (pixelData[0] > 0);
-    }
-
-    function getElementPosition(obj) {
-      let curleft = 0, curtop = 0;
-      if (obj.offsetParent) {
-        do {
-          curleft += obj.offsetLeft;
-          curtop += obj.offsetTop;
-        } while (obj = obj.offsetParent);
-        return {x: curleft, y: curtop};
-      }
-      return undefined;
-    }
-
-    function getEventLocation(element, event) {
-      let pos = getElementPosition(element);
-      return {
-        x: (event.pageX - pos.x),
-        y: (event.pageY - pos.y)
-      };
-    }
-
-
     /* click land */
     function onDocumentMouseClick() {
       if (isFinishStartTween){
@@ -1126,6 +1072,8 @@
             clearInfo();
             let res = calcWbInfo(countryName);
             infoBoard.css({opacity: 0.8});
+            deletePin();
+            tooltip.css({opacity: 0.0});
 
             if (typeof res !== 'undefined') {
               $('#country').empty().append(countryName);
@@ -1136,11 +1084,8 @@
               latitude = location.latitude;
               longitude = location.longitude;
               moveCamera(latitude, longitude);
-              deletePin();
-              tooltip.css({opacity: 0.0});
 
             } else {
-
               /* infoBoard1 */
               $('#country').empty().append(countryName);
               setTimeout(() => {
@@ -1210,6 +1155,62 @@
       $('.infoNegative').attr('opacity', 0.0);
       $('.infoGDP').attr('opacity', 0.0);
     }
+
+    /* detect whether onInfo or not */
+    infoObject1 = document.getElementById('infoBoard');
+    infoObject2 = document.getElementById('rankingWrapper');
+    histCanvas = document.querySelector("#histgram");
+
+    infoObject1.addEventListener('mouseenter', onInfoObject, false);
+    infoObject2.addEventListener('mouseenter', onInfoObject, false);
+
+    infoObject1.addEventListener('mouseleave', outInfoObject, false);
+    infoObject2.addEventListener('mouseleave', outInfoObject, false);
+
+    histCanvas.addEventListener('mousemove', getCanvasColor, false);
+
+
+    function onInfoObject() {
+      isInfoObject = true;
+    }
+
+    function outInfoObject() {
+      isInfoObject = false;
+    }
+
+    /* get canvas color */
+    function getCanvasColor(event) {
+      let eventLocation = getEventLocation(this, event);
+      let context = this.getContext('2d');
+      let pixelData = context.getImageData(eventLocation.x, eventLocation.y, 1, 1).data;
+
+      // if nofill, isInfoObject = false
+      isInfoObject = (pixelData[0] > 0);
+      isFillHist = (pixelData[0] > 0);
+    }
+
+    function getElementPosition(obj) {
+      let curleft = 0, curtop = 0;
+      if (obj.offsetParent) {
+        do {
+          curleft += obj.offsetLeft;
+          curtop += obj.offsetTop;
+        } while (obj = obj.offsetParent);
+        return {x: curleft, y: curtop};
+      }
+      return undefined;
+    }
+
+    function getEventLocation(element, event) {
+      let pos = getElementPosition(element);
+      return {
+        x: (event.pageX - pos.x),
+        y: (event.pageY - pos.y)
+      };
+    }
+
+
+
 
     /*
     // ranking
