@@ -1,7 +1,7 @@
 @charset "UTF-8";
 
-/* /////////////////////
-infoBoard1
+/*
+infoBoard1(visual)
 */
 /* For SP */
 #infoBoard{
@@ -388,16 +388,8 @@ infoBoardSVG(responsive)
 }
 
 
-/* temp */
-#infoBoard {
-  position: fixed;
-  top: -100%;
-  left: 50%;
-}
-/* temp */
-
-/* /////////////////////
-infoBoard2
+/*
+infoBoard2(text)
 */
 
 #infoBoard2 {

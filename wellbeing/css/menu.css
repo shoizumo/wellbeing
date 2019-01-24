@@ -1,6 +1,9 @@
 @charset "UTF-8";
 
-/*global menu*/
+/*
+hamburger menu
+*/
+/* global menu */
 nav.globalMenu {
   position: fixed;
   z-index: 2;
@@ -55,6 +58,7 @@ nav.globalMenu.active {
     width: 100%;
   }
 }
+
 
 /* hamburger */
 .navToggle {
@@ -145,11 +149,11 @@ modal window(responsive)
 .modalContent{
   display: grid;
   grid-template-columns: 600px;
-  grid-template-rows: 30px 300px 20px;
+  grid-template-rows: 50px 300px;
 
   top: 50%;
   left: 50%;
-  margin-top:-175px;
+  margin-top:-185px;
   margin-left:-300px;
   border: 2px solid #aaaaaa;
   background: #dddddd;
@@ -158,26 +162,34 @@ modal window(responsive)
 
   width:600px;
   height:350px;
-}
 
+  font-family: 'Nunito', sans-serif;
+  font-weight: 400;
+}
 
 .modalTitle{
   grid-raw: 1 / 2;
   text-align: center;
-  line-height: 30px;
-  font-size: 1.5em;
+  line-height: 50px;
+  font-size: 1.7em;
+  border: 1px dotted #aaaaaa;
+  background: #bbbbbb;
+
+  font-family: 'Nunito', sans-serif;
+  font-weight: 600;
 }
 
-.modalClose{
-  grid-raw: 3 / 4;
-  text-align: center;
-  font-size: 1.2em;
-  line-height: 20px;
+.modalClose  {
+  display: block;
+  position: absolute;
+  right: 0;
+  padding: 0 15px;
+  line-height: 50px;
+  font-size: 2.0em;
+  cursor: pointer;
 }
 
 /* modal1 */
-
-
 
 
 /* modal2 */
@@ -194,9 +206,6 @@ modal window(responsive)
 }
 
 #settingContent ul{
-  font-family: 'Nunito', sans-serif;
-  font-weight: 400;
-
   list-style: none;
   overflow: hidden;
 }
@@ -222,9 +231,9 @@ modal window(responsive)
   cursor: pointer;
 }
 
-
-
 #settingContentTitle1{
+  border: 1px dotted #aaaaaa;
+  background: #d7d7d7;
   grid-raw: 1 / 2;
 }
 
@@ -233,10 +242,13 @@ modal window(responsive)
 }
 
 #wbButton1 li {
-  width: 150px;
+  border: 1px dotted #aaaaaa;
+  width: 148px;
 }
 
 #settingContentTitle2{
+  border: 1px dotted #aaaaaa;
+  background: #d7d7d7;
   grid-raw: 3 / 4;
 }
 
@@ -245,32 +257,42 @@ modal window(responsive)
 }
 
 #infoType li {
-  width: 300px;
+  border: 1px dotted #aaaaaa;
+  width: 298px;
 }
 
 
-/*#infoType {*/
-  /*position: fixed;*/
-  /*top: 50px;*/
-  /*right: 10px;*/
-  /*!*margin-top:-125px;*!*/
-  /*!*margin-left:-140px;*!*/
-  /*font-family: 'Nunito', sans-serif;*/
-  /*font-weight: 400;*/
-  /*color: #ffffff;*/
+#wbButton2 {
+  position: fixed;
+  top: 70%;
+  /*left: 100px;*/
+  padding-left: 5px;
+  font-family: 'Nunito', sans-serif;
+  font-weight: 400;
+  color: #ffffff;
 
-  /*list-style: none;*/
-  /*!*overflow: hidden;*!*/
-/*}*/
+  list-style: none;
+}
 
-/*#infoType li:hover {*/
-  /*background: #ffa443;*/
-  /*cursor: pointer;*/
-/*}*/
 
-/*#infoType li {*/
-  /*width: 70px;*/
-  /*text-align: center;*/
-  /*font-size: 1.0em;*/
-  /*float: left;*/
-/*}*/
+#wbButton2 li{
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#wbButton2 li:hover {
+  background: #ffa443;
+  cursor: pointer;
+}
+
+
+.hiddenBtn{
+  opacity: 0.0;
+}
+.normalBtn{
+  /*background: #646464;*/
+  opacity: 1.0;
+}
+.selectedBtn{
+  background: #ffa443;
+}

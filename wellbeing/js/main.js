@@ -4,7 +4,7 @@
   /* Declare variables */
   ///////////////////////
 
-  // global val
+  /* global */
   let canvasWidth = null;
   let canvasHeight = null;
   let targetDOM = null;
@@ -13,7 +13,8 @@
   let isSP;
   let userAgent;
 
-  // three objects
+
+  /* three objects */
   let scene;
   let camera;
   let controls;
@@ -25,25 +26,24 @@
   let material;
   let earth;
   let earthOutline;
-  let landBase;
   let radius = 0.994;
   let axesHelper;
-
-  // texture
-  let earthMap;
-  let earthMapLoader;
-
-  // constant variables
   const RENDERER_PARAM = {
     clearColor: 0x000000
   };
 
-  // val for shader
+
+  /* texture */
+  let earthMap;
+  let earthMapLoader;
+
+
+  /* shader */
   const clock = new THREE.Clock();
   let time = 0.0;
-  // let mouse;
 
-  // val for well-being data
+
+  /* well-being data */
   let GDPArray = [];
   let LadderArray = [];
   let PositiveArray = [];
@@ -66,12 +66,13 @@
   let wbButton2;
   let svgRadius;
   let searchArray;
-  let onoffSwitch;
+  let travelModeSwitch;
   let isTravelAuto = false;
   let infoTypeText = true;
   let infoBtn;
 
-  // val for marker pin
+
+  /* marker pin */
   let pinList;
   let pinRadius;
   let pinSphereRadius;
@@ -80,7 +81,8 @@
   let pinConeGeometry;
   let pinSphereGeometry;
 
-  // val for ranking histgram
+
+  /* ranking histogram */
   let histCanvas;
   let canvasContext;
   let histData;
@@ -88,14 +90,15 @@
   let scoreMax;
   let barWidth;
   let isHistDisplay = false;
-  let mouseonCountry;
+  let mouseOnCountry;
   let travelIndex = 0;
   let highlightSelectedBarList;
 
   const barColor = "rgb(200, 225, 225)";
   const heightBarColor = "rgb(245, 70, 240)";
 
-  // val for interactive land function
+
+  /* interactive land function */
   let countryName = 0;
   let isClicked = false;
   let dragFlag = false;
@@ -111,20 +114,22 @@
   let isMoveCamera = false;
   let isMoveStop = true;
 
-  // val for scroll
+
+  /* init tween */
   let initEarthPosition = new THREE.Vector3(0.0, -1.1, 1.0);
   let initCameraPosition = new THREE.Vector3(0.0, 0.0, 2.0);
   let center = new THREE.Vector3(0, 0, 0);
 
-  // val for rendering
+
+  /* rendering */
   let frame = 0;
   let speed = 3.141592 * 2 / 90 / 60 / 60;  // 1round/90m
   let postprocessing = {};
-
   // temp val
   let stats;
 
-  // function
+
+  /* function */
   let drawHist;
   let drawHistDurationNomal = 2500;
   let drawHistDurationRedraw = 0;
@@ -137,11 +142,13 @@
   let deletePin;
 
 
+
   /////////////////
   /* Entry point */
   /////////////////
   window.addEventListener('load', () => {
 
+    /* menu */
     $('.navToggle').click(function () {
       $(this).toggleClass('active');
 
@@ -152,44 +159,38 @@
       }
     });
 
-
-    onoffSwitch = document.getElementById('travelModeSwitch-label');
-    onoffSwitch.addEventListener('click', () => {
-      isTravelAuto = !isTravelAuto;
-      highlightSelectedBarList = [];  // reset
-
-      let selectedType = $('#wbButton2').find('.selectedBtn').attr("id").slice(0,-1);
-      console.log(selectedType);
-      canvasContext.globalAlpha = 0.5;
-      let res = drawHist(selectedType, drawHistDurationNomal, 'new');
-      barWidth = res.width;
-      histData = res.histData;
-      scoreMax = res.scoreMax;
-      histScoreData = res.scoreData;
-
-      $('#country2').css({opacity: 0.0});
-      $('.infoBoardContent2').css({opacity: 0.0});
-      TweenMax.killAll();
-      deletePin();
-      // stopMove.setAttribute('style', 'opacity:0.0;');
-      stopTravelRanking();
-
-
-
-      if (isTravelAuto){
-        isMoveStop = true;
-        controls.enableRotate = false;
-        travelRanking();
-        stopMove.innerText = 'Stop';
-        stopMove.setAttribute('style', 'opacity:1.0;');
-      }else{
-        isMoveStop = false;
-        controls.enableRotate = true;
-        stopMove.setAttribute('style', 'opacity:0.0;');
-      }
+    // if content is clicked, close menu.
+    $('.globalMenu').click(function () {
+      $('.navToggle').removeClass('active');
+      $('.globalMenu').removeClass('active');
     });
 
 
+    /* modal window */
+    let menuSetting = document.getElementsByClassName('menu');
+    for (let i = 0, l = menuSetting.length; i < l; i++) {
+      menuSetting[i].addEventListener('click', (e) => {
+        let id = e.target.id.slice(4,);
+        $(this).blur();
+        if ($("#modalOverlay")[0]) {
+          return false;
+        }
+        $("body").append('<div id="modalOverlay"></div>');
+        $("#modalOverlay").fadeIn(400);
+
+        // contentごとに書き換え
+        $("#modalContentWrapper" + id.toString()).fadeIn(400);
+        $("#modalOverlay, .modalClose").unbind()
+            .click(function () {
+              $("#modalContentWrapper"  + id.toString() + ", #modalOverlay").fadeOut(400, function () {
+                $("#modalOverlay").remove();
+              });
+            });
+      }, false);
+    }
+
+
+    /* setting info type */
     infoBtn = document.getElementsByClassName('infoType');
     for (let i = 0, l = infoBtn.length; i < l; i++) {
       infoBtn[i].addEventListener('click', (e) => {
@@ -206,12 +207,58 @@
           infoBoard1.css("top", 0);
           $('.infoBoardContent2').css("margin-left", -1000);
         }
-
       })
     }
 
 
-    /* start function */
+    /* switch travel type button */
+    travelModeSwitch = document.getElementById('travelModeSwitch-label');
+    travelModeSwitch.addEventListener('click', () => {
+      isTravelAuto = !isTravelAuto;
+      highlightSelectedBarList = [];  // reset
+
+      let selectedType = $('#wbButton2').find('.selectedBtn').attr("id").slice(0,-1);
+      console.log(selectedType);
+      canvasContext.globalAlpha = 0.5;
+      let res = drawHist(selectedType, drawHistDurationNomal, 'new');
+      barWidth = res.width;
+      histData = res.histData;
+      scoreMax = res.scoreMax;
+      histScoreData = res.scoreData;
+
+      $('#country2').css({opacity: 0.0});
+      $('.infoBoardContent2').css({opacity: 0.0});
+      TweenMax.killAll();
+      deletePin();
+      stopTravelRanking();
+
+      if (isTravelAuto){
+        isMoveStop = true;
+        controls.enableRotate = false;
+        travelRanking();
+        stopMove.innerText = 'Stop';
+        stopMove.setAttribute('style', 'opacity:1.0;');
+      }else{
+        isMoveStop = false;
+        controls.enableRotate = true;
+        stopMove.setAttribute('style', 'opacity:0.0;');
+      }
+    });
+
+    let stopMove = document.getElementById('stopMove');
+    stopMove.addEventListener('click', () => {
+      if (isMoveStop){
+        stopMove.innerText = 'Play';
+        stopTravelRanking();
+      }else{
+        stopMove.innerText = 'Stop';
+        travelRanking(travelIndex);
+      }
+      isMoveStop = !isMoveStop;
+    }, false);
+
+
+    /* start button */
     let startButton = document.getElementById('startButton');
     startButton.addEventListener('click', () => {
       let duration = 5.0;
@@ -294,10 +341,13 @@
     canvasHeight = window.innerHeight;
     targetDOM = document.getElementById('webgl');
 
+
+    /* device check */
     userAgent = navigator.userAgent;
     if (userAgent.indexOf('iPhone') > 0 || userAgent.indexOf('Android') > 0 && userAgent.indexOf('Mobile') > 0) {
       isSP = true;
     }
+
 
     /* window size setting */
     window.addEventListener('resize', () => {
@@ -349,11 +399,6 @@
           canvasContext.globalAlpha = 0.5;
           let res = drawHist(selectedType, drawHistDurationRedraw, 'redraw');
 
-          // setTimeout(() => {
-          //   console.log('setTimeout');
-          //   redrawHighlightSelectedBar(highlightSelectedBarList, histData, scoreMax);
-          // }, 1000);
-
           barWidth = res.width;
           histData = res.histData;
           scoreMax = res.scoreMax;
@@ -370,6 +415,7 @@
     //   mouse.y = -(event.clientY / window.innerHeight) * 2 + 1;
     // }, false);
 
+
     /* detect mouse drag(distinguish mouse “click” and “drag”) */
     let dragStartPos = new THREE.Vector2();
     let dragEndPos = new THREE.Vector2();
@@ -379,10 +425,6 @@
       dragStartPos.x = event.clientX;
       dragStartPos.y = event.clientY;
     }, false);
-
-    // window.addEventListener("mousemove", function () {
-    //   dragFlag = true;
-    // }, false);
 
 
     window.addEventListener("mouseup", function (event) {
@@ -420,10 +462,9 @@
         }
       }
     }, false);
-    /* touch */
 
 
-    /* load texture */
+    /* load earth texture */
     earthMapLoader = new THREE.TextureLoader();
     if (isSP) {
       earthMap = earthMapLoader.load('img/mapNightSP.jpg', loadShader);
@@ -437,6 +478,7 @@
   /* END Entry point */
 
 
+
   function loadShader() {
     SHADER_LOADER.load((data) => {
       const vsMain = data.myShaderMain.vertex;
@@ -446,6 +488,7 @@
       init(vsMain, fsMain, vsPost, fsPost);
     })
   }
+
 
 
   /////////////////////////
@@ -478,6 +521,7 @@
     renderer.setSize(canvasWidth, canvasHeight);
     targetDOM.appendChild(renderer.domElement);
 
+
     /* camera */
     camera = new THREE.PerspectiveCamera(60, canvasWidth / canvasHeight, 0.1, 5.0);
     camera.position.z = initCameraPosition.z;
@@ -490,6 +534,7 @@
     controls.enableDamping = true;
     controls.dampingFactor = 0.2;
 
+
     /* light for marker Pin */
     ambientLight = new THREE.AmbientLight(0xffffff, 0.5);
     scene.add(ambientLight);
@@ -501,6 +546,7 @@
     directionalLight2 = new THREE.DirectionalLight(0xffffff, 0.5);
     directionalLight2.position.set(-5.0, 2.0, -5.0);
     scene.add(directionalLight2);
+
 
     /* earth map ver. */
     geometry = new THREE.SphereBufferGeometry(radius, 60, 60);
@@ -521,18 +567,6 @@
     });
     earth = new THREE.Mesh(geometry, material);
 
-    /* earth for land in order to hide earth map ver. */
-    geometry = new THREE.SphereGeometry(radius + 0.002, 60, 60);
-    material = new THREE.MeshBasicMaterial({
-      transparent: true,
-      // depthTest: true,
-      depthWrite: true,
-      opacity: 0.0,
-      //map: sea_texture,
-      color: 0x040410,
-      // alphaTest: 0.5
-    });
-    landBase = new THREE.Mesh(geometry, material);
 
     /* earth outline object */
     geometry = new THREE.SphereGeometry(radius + 0.003, 120, 120);
@@ -566,10 +600,10 @@
 
     /* add to scene */
     earth.add(earthOutline);
-    earth.add(landBase);
     scene.add(earth);
     earth.position.y = initEarthPosition.y;
     earth.position.z = initEarthPosition.z;
+
 
 
     /*
@@ -592,6 +626,7 @@
       NegativeScoreArray.push(negative);
       GDPScoreArray.push(logGdp);
     }
+
 
     /* sort rank array(alphabetical order) */
     LadderArray.sort(function sortRank(a, b) {
@@ -676,6 +711,7 @@
       return 0;
     });
 
+
     /* calc MaxMin */
     ladderMax = Math.max(LadderScoreArray[0].score);
     ladderMin = Math.min(LadderScoreArray[wbLength - 1].score);
@@ -686,10 +722,12 @@
     gdpMax = Math.max(GDPScoreArray[0].score);
     gdpMin = Math.min(GDPScoreArray[wbLength - 1].score);
 
+
     /* make well-being button in order to show score */
     wbButton = document.getElementsByClassName('wbButton');
     wbButton1 = document.getElementsByClassName('wbButton1');
     wbButton2 = document.getElementsByClassName('wbButton2');
+
     for (let i = 0, wbLen = wbButton.length; i < wbLen; i++) {
       wbButton[i].addEventListener('click', (e) => {
         let type = e.target.id.slice(0,-1);
@@ -709,13 +747,13 @@
         wbButton1[index].classList.add("selectedBtn");
         wbButton2[index].classList.add("selectedBtn");
 
-        // delete infoBoard2
+        /* delete infoBoard2 */
         TweenMax.killAll();
         $('#country2').css({opacity: 0.0});
         $('.infoBoardContent2').css({opacity: 0.0});
         deletePin();
 
-        /* travel */
+        /* travel type check */
         if (isTravelAuto) {
           if (type === 'ladderBtn') {
             histScoreData = LadderScoreArray;
@@ -729,7 +767,6 @@
           deletePin();
           travelRanking();
         }
-
       }, false);
     }
 
@@ -743,79 +780,20 @@
       histScoreData = res.scoreData;
     };
 
-    /* modal window for travel ranking */
-    // let autoMove = document.getElementById('autoMove');
-
-    let menuSetting = document.getElementsByClassName('menu');
-    for (let i = 0, l = menuSetting.length; i < l; i++) {
-      menuSetting[i].addEventListener('click', (e) => {
-
-        let id = e.target.id.slice(4,);
-        console.log(id);
-
-        $(this).blur();
-        if ($("#modalOverlay")[0]) {
-          return false;
-        }
-        $("body").append('<div id="modalOverlay"></div>');
-        $("#modalOverlay").fadeIn(400);
-
-        // contentごとに書き換え
-        $("#modalContentWrapper" + id.toString()).fadeIn(400);
-        //
-
-        $("#modalOverlay, .modalClose").unbind()
-            .click(function () {
-              $("#modalContentWrapper"  + id.toString() + ", #modalOverlay").fadeOut(400, function () {
-                $("#modalOverlay").remove();
-              });
-            });
-      }, false);
-    }
-
-
-
-    // let menuSetting = document.getElementById('menuSetting');
-    // menuSetting.addEventListener('click', () => {
-    //   $(this).blur();
-    //   if ($("#modalOverlay")[0]) {
-    //     return false;
-    //   }
-    //   $("body").append('<div id="modalOverlay"></div>');
-    //   $("#modalOverlay").fadeIn(400);
-    //   $("#modalContentWrapper").fadeIn(400);
-    //
-    //   $("#modalOverlay, .modalClose").unbind()
-    //       .click(function () {
-    //         $("#modalContentWrapper, #modalOverlay").fadeOut(400, function () {
-    //           $("#modalOverlay").remove();
-    //         });
-    //       });
-    // }, false);
-
-    let stopMove = document.getElementById('stopMove');
-    stopMove.addEventListener('click', () => {
-      if (isMoveStop){
-        stopMove.innerText = 'Play';
-        stopTravelRanking();
-      }else{
-        stopMove.innerText = 'Stop';
-        travelRanking(travelIndex);
-      }
-      isMoveStop = !isMoveStop;
-    }, false);
-
 
 
     /*
     // score ranking board
     */
+    /* setting infoBoard circle size */
     if (canvasWidth < 900) {
       svgRadius = 40;
     } else {
       svgRadius = 48;
     }
 
+
+    /* infoBoard text */
     function createRankText(type) {
       let px;
       if (canvasWidth < 900) {
@@ -834,7 +812,6 @@
       text.setAttributeNS(null, "id", "info" + type);
       return text;
     }
-
     t1 = createRankText('Ladder');
     t2 = createRankText('Positive');
     t3 = createRankText('Negative');
@@ -858,41 +835,39 @@
       text.setAttributeNS(null, "class", "info" + type);
       return text;
     }
-
     s1 = createScoreText('Ladder');
     s2 = createScoreText('Positive');
     s3 = createScoreText('Negative');
     s4 = createScoreText('GDP');
 
-    /* display score result */
-    let tween;
 
+    /* display score result */
+    let displayTween;
     function displayRanking(type, rank, num, duration, rankText, score, scoreText) {
       let id = '#' + type + 'Ranking';
       let svg = $(id).children().children()[2];
       let radius = (num - rank + 1) / num * svgRadius; // responsive
-      let rOrdinal;
-      let sOrdinal = type === 'GDP' ? 'US$' : 'pt';
-      rOrdinal = rankOrdinal(rank);
+      let rankOrdinal;
+      let scoreUnit = type === 'GDP' ? 'US$' : 'pt';
+      rankOrdinal = putRankOrdinal(rank);
 
-      tween = TweenMax.fromTo(svg, duration,
+      displayTween = TweenMax.fromTo(svg, duration,
           {attr: {r: 0}},
           {
             attr: {r: radius},
             ease: Power1.easeInOut,
             onComplete: function () {
-              rankText.innerHTML = String(rank) + "<tspan font-size='12px'>" + rOrdinal + "</tspan>";
+              rankText.innerHTML = String(rank) + "<tspan font-size='12px'>" + rankOrdinal + "</tspan>";
               $(id).children()[0].appendChild(rankText);
-              scoreText.textContent = '(' + String(score) + sOrdinal + ')';
+              scoreText.textContent = '(' + String(score) + scoreUnit + ')';
               $(id).children()[0].appendChild(scoreText);
 
               $('.info' + type).attr('opacity', 1.0);
             }
-          }
-      );
+          });
     }
 
-    function rankOrdinal(rank){
+    function putRankOrdinal(rank){
       let ordinal;
       let rankStr = rank.toString();
       rankStr = rankStr.substring(rankStr.length - 1, rankStr.length);
@@ -909,7 +884,7 @@
     }
 
 
-    /* display in turn rank type */
+    /* display each rank type */
     function createPromise(type, rank, num, svgDuration, text, nextStartDuration, score, scoreText) {
       let promise;
       let timeout;
@@ -927,8 +902,8 @@
       };
     }
 
-    let positive, negative, gdp;
 
+    let positive, negative, gdp;
     function displayVisualInfo(wbData, wbLength) {
       new Promise((resolve) => {
         resolve(displayRanking('Ladder', wbData['lRank'], wbLength, 1.0, t1, wbData['ladder'], s1));
@@ -948,9 +923,6 @@
     }
 
 
-
-
-    /* テキストでの結果表示 */
     function displayTextInfo(countryName, wbData) {
       let lRank = wbData['lRank'];
       let pRank = wbData['pRank'];
@@ -959,16 +931,6 @@
 
       $('#country2').css({opacity: 0.0});
       $('.infoBoardContent2').css({opacity: 0.0});
-      //
-      // TweenMax.to("#country2", 1.0, {
-      //   opacity: 1.0,
-      //   onComplete: function () {
-      //     console.log('tween');
-      //     TweenMax.to(".infoBoardContent2", 1.0, {
-      //       opacity: 1.0,
-      //     });
-      //   }
-      // });
 
       setTimeout(() => {
         TweenMax.to("#country2", 1.0, {
@@ -982,15 +944,11 @@
       }, 1000);
 
       document.getElementById("country2").innerHTML = countryName;
-      document.getElementById("Ladder2").innerHTML = 'L : ' + lRank + rankOrdinal(lRank);
-      document.getElementById("Positive2").innerHTML = 'P : ' + pRank + rankOrdinal(pRank);
-      document.getElementById("Negative2").innerHTML = 'N : ' + nRank + rankOrdinal(nRank);
-      document.getElementById("GDP2").innerHTML = 'G : ' + gRank + rankOrdinal(gRank);
+      document.getElementById("Ladder2").innerHTML = 'L : ' + lRank + putRankOrdinal(lRank);
+      document.getElementById("Positive2").innerHTML = 'P : ' + pRank + putRankOrdinal(pRank);
+      document.getElementById("Negative2").innerHTML = 'N : ' + nRank + putRankOrdinal(nRank);
+      document.getElementById("GDP2").innerHTML = 'G : ' + gRank + putRankOrdinal(gRank);
     }
-
-
-    /* テキストでの結果表示 */
-
 
 
 
@@ -1001,17 +959,13 @@
     let infoBoard = $('#infoBoard');
     let body = $('body');
 
-    // let intersected_object = 0;
-    // let hover_scale = 1.0;
     window.addEventListener('mousemove', onDocumentMouseMove, false);
     window.addEventListener('click', onDocumentMouseClick, false);
+
 
     /* mouse over land */
     function onDocumentMouseMove(event) {
       if (isFinishStartTween) {
-        // if (intersected_object !== 0) {
-        //   intersected_object.scale.set(1.0, 1.0, 1.0);  // 前回のオブジェクトをもとに戻す
-        // }
         event.preventDefault();
         let mouseX = (event.clientX / window.innerWidth) * 2 - 1;
         let mouseY = -(event.clientY / window.innerHeight) * 2 + 1;
@@ -1019,6 +973,7 @@
         vector.unproject(camera);
         let raycaster = new THREE.Raycaster(camera.position, vector.sub(camera.position).normalize());
         let intersects = raycaster.intersectObject(earth, true);
+
         // set tooltip not display
         tooltip.css({opacity: 0.0});
         isLand = false;
@@ -1031,7 +986,6 @@
                 if (intersects.length > 0) {
                   if (intersects[0].point !== null) {
                     if (intersects[0].object.name === "land") {
-                      //console.log(intersects[0]);
 
                       countryName = intersects[0].object.userData.country;
                       tooltip[0].innerText = countryName;
@@ -1044,9 +998,6 @@
                         tooltip.css({top: event.clientY * 0.97});
                         tooltip.css({left: event.clientX * 1.03});
                       }
-
-                      // intersects[0].object.scale.set(hover_scale, hover_scale, hover_scale);
-                      // intersected_object = intersects[0].object;
                     }
                   }
                 }
@@ -1056,6 +1007,7 @@
         }
       }
     }
+
 
     /* click land */
     function onDocumentMouseClick() {
@@ -1086,7 +1038,7 @@
               moveCamera(latitude, longitude);
 
             } else {
-              /* infoBoard1 */
+              /* visual info */
               $('#country').empty().append(countryName);
               setTimeout(() => {
                 t1.textContent = 'No data';
@@ -1104,10 +1056,9 @@
                 $('#infoGDP').attr('opacity', 1.0);
               }, 500);
 
-              /* infoBoard2 */
+              /* text info */
               $('#country2').css({opacity: 0.0});
               $('.infoBoardContent2').css({opacity: 0.0});
-              // $('#infoBoard2').css({opacity: 1.0});
               setTimeout(() => {
                 TweenMax.to("#country2", 1.0, {
                   opacity: 1.0,
@@ -1156,6 +1107,21 @@
       $('.infoGDP').attr('opacity', 0.0);
     }
 
+
+    function countrynameToLatlon(countryName) {
+      let latitude;
+      let longitude;
+
+      for (let i = 0; wbLength > i; i++) {
+        if (latlon[i].country === countryName) {
+          latitude = latlon[i].latitude;
+          longitude = latlon[i].longitude;
+        }
+      }
+      return {latitude: latitude, longitude: longitude};
+    }
+
+
     /* detect whether onInfo or not */
     infoObject1 = document.getElementById('infoBoard');
     infoObject2 = document.getElementById('rankingWrapper');
@@ -1177,6 +1143,7 @@
     function outInfoObject() {
       isInfoObject = false;
     }
+
 
     /* get canvas color */
     function getCanvasColor(event) {
@@ -1211,9 +1178,8 @@
 
 
 
-
     /*
-    // ranking
+    // ranking histogram
     */
     // histCanvas.width = 700;  // responsive
     if (canvasWidth < 500) {
@@ -1279,7 +1245,8 @@
       return {width: width, histData: data, scoreMax: scoreMax, scoreData: scoreData};
     };
 
-    /* mouse over histogram */
+
+    /* mouse event histogram */
     let tooltipHist = $('#tooltipHist');
     histCanvas.addEventListener('mousemove', onHistRanking, false);
     histCanvas.addEventListener('mouseout', outHistRanking, false);
@@ -1296,8 +1263,8 @@
           // console.log(data[index].country, data[index].rank);
 
           document.getElementById("canvasWrapper").classList.add("canvasWrapperPointer");
-          mouseonCountry = data[index]['country'];
-          tooltipHist[0].innerText = mouseonCountry;
+          mouseOnCountry = data[index]['country'];
+          tooltipHist[0].innerText = mouseOnCountry;
           tooltipHist.css({opacity: 1.0});
 
           tooltipHist.css({top: event.clientY * 0.95});
@@ -1311,28 +1278,26 @@
       }
     }
 
-    /* mouse off histgram */
     function outHistRanking() {
       tooltipHist.css({opacity: 0.0});
     }
 
-    /* mouse click histogram */
     function clickHistRanking() {
       console.log(isFillHist);
       if (!isTravelAuto){
         if (isFillHist) {
           if (!isMoveCamera){
-            console.log('click', mouseonCountry);
+            console.log('click', mouseOnCountry);
 
-            // after setting mouseonCountry, this function can be used
-            if (typeof mouseonCountry !== 'undefined') {
-              let res = countrynameToLatlon(mouseonCountry);
+            // after setting mouseOnCountry, this function can be used
+            if (typeof mouseOnCountry !== 'undefined') {
+              let res = countrynameToLatlon(mouseOnCountry);
               latitude = res.latitude;
               longitude = res.longitude;
 
               deletePin();
               moveCamera(latitude, longitude);
-              clickHistRankingDisplayScore(mouseonCountry);
+              clickHistRankingDisplayScore(mouseOnCountry);
             }
             //tooltipHist.css({opacity: 0.0});
           }
@@ -1340,6 +1305,8 @@
       }
     }
 
+
+    /* show info */
     function clickHistRankingDisplayScore(countryName) {
       if (!isFirstClick) {
         TweenMax.killAll();
@@ -1356,20 +1323,8 @@
       displayTextInfo(countryName, res);  // テキストでの結果表示
     }
 
-    function countrynameToLatlon(countryName) {
-      let latitude;
-      let longitude;
 
-      for (let i = 0; wbLength > i; i++) {
-        if (latlon[i].country === countryName) {
-          latitude = latlon[i].latitude;
-          longitude = latlon[i].longitude;
-        }
-      }
-      return {latitude: latitude, longitude: longitude};
-    }
-
-
+    /* highlight selected country */
     highlightSelectedBarList = [];
     function highlightSelectedBar(countryName, data, scoreMax) {
       let h;
@@ -1398,10 +1353,10 @@
     }
 
 
+
     /*
     // move camera position function
     */
-
     /* move position in some separate times using quaternion */
     /* dring move, rotate is not enable */
     function moveCamera(latitude, longitude) {
@@ -1447,10 +1402,11 @@
       let x = Math.cos(latRad) * Math.cos(lonRad) * radius;
       let y = Math.sin(latRad) * radius;
       let z = Math.cos(latRad) * Math.sin(lonRad) * radius;
-
       return new THREE.Vector3(x, y, z);
     }
 
+
+    /* marker pin */
     pinRadius = 0.0025;
     pinSphereRadius = 0.01;
     pinHeight = 0.025;
@@ -1473,7 +1429,6 @@
     }
 
     pinList = [];
-
     function createPoint(latitude = 0, longitude = 0) {
       const pin = createPin();
       let latRad = latitude * (Math.PI / 180);
@@ -1493,6 +1448,7 @@
     };
 
 
+
     /*
     // travel ranking country
     */
@@ -1501,8 +1457,6 @@
       let i = index;
       travelSetInterval = setInterval(function () {
         if (i > 0) {
-          // console.log('travelRanking', i);
-          // console.log(pinList);
           pinList[i - 1].children[0].material.color.setHex(0xC9C7B7);
           pinList[i - 1].children[1].material.color.setHex(0xC9C7B7);
         }
@@ -1524,13 +1478,16 @@
       }, 3500);
     };
 
+
     stopTravelRanking = function () {
       clearInterval(travelSetInterval);
     };
 
+
     // helper
     axesHelper = new THREE.AxesHelper(5.0);
     scene.add(axesHelper);
+
 
     /* conduct rendering */
     if (isSP) {
@@ -1539,6 +1496,8 @@
       initPostprocessing(vsPost, fsPost);
       render();
     }
+
+
 
     /*
     serch country name
@@ -1571,12 +1530,10 @@
     });
 
   }
-
   /* END Initialize function */
 
   ////////////////////////
   /* Rendering function */
-
   ////////////////////////
   function render() {
     // controls.update();
@@ -1631,7 +1588,6 @@
 
   /////////////////////////////
   /* Postprocessing function */
-
   /////////////////////////////
   function initPostprocessing(vsPost, fsPost) {
     time = 0.0;

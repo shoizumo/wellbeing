@@ -43,52 +43,31 @@ html, body {
 
 
 /* scroll text */
-.fadein span{
-  color: #ffffff;
-  opacity:0;
-  font-size: 1.5em;
-  font-family: 'Roboto', sans-serif;
-}
+/*.fadein span{*/
+  /*color: #ffffff;*/
+  /*opacity:0;*/
+  /*font-size: 1.5em;*/
+  /*font-family: 'Roboto', sans-serif;*/
+/*}*/
 
-.fadein{
-  position: absolute;
-  top: 30%;
-  right: 0;
-  bottom: 0;
-  left: 0;
-  margin: auto;
-  width: 50%;
-  /*height: 4.0rem;*/
-  text-align: center;
-}
+/*.fadein{*/
+  /*position: absolute;*/
+  /*top: 30%;*/
+  /*right: 0;*/
+  /*bottom: 0;*/
+  /*left: 0;*/
+  /*margin: auto;*/
+  /*width: 50%;*/
+  /*!*height: 4.0rem;*!*/
+  /*text-align: center;*/
+/*}*/
 
-
-
-
-#btn li:hover {
-  background: #ffa443;
-}
-
-.hiddenBtn{
-  opacity: 0.0;
-}
-.normalBtn{
-  /*background: #646464;*/
-  opacity: 1.0;
-}
-.selectedBtn{
-  background: #ffa443;
-}
 
 
 
 /* moueseover land */
 #tooltip {
   position: fixed;
-  /*width: 150px;*/
-  /*bottom: 200px;*/
-  /*left: 200px;*/
-  /*width: 150%;*/
   text-align: center;
   padding : 0.1em 0.5em 0.1em 0.5em;
   color: #ffffff;
@@ -106,45 +85,6 @@ html, body {
     overflow-y: auto;
     overflow-x: hidden;
 }
-
-
-#wbButton2 {
-  position: fixed;
-  top: 70%;
-  /*left: 100px;*/
-  padding-left: 5px;
-  font-family: 'Nunito', sans-serif;
-  font-weight: 400;
-  color: #ffffff;
-
-  list-style: none;
-}
-
-#wbButton2 li{
-  padding-left: 5px;
-  padding-right: 5px;
-}
-
-#wbButton2 li:hover {
-  background: #ffa443;
-  cursor: pointer;
-}
-
-/*#autoMove {*/
-  /*position: fixed;*/
-  /*top: -50%;  !* Move to setting modal *!*/
-  /*!*left: 3%;*!*/
-
-  /*text-align: center;*/
-  /*padding : 0.1em 0.5em 0.1em 0.5em;*/
-  /*color: #ffffff;*/
-  /*opacity: 0.0;*/
-  /*background-color: #646464;*/
-  /*border-radius: 10px;*/
-  /*font-family: 'Nunito', sans-serif;*/
-  /*font-weight: 300;*/
-/*}*/
-
 
 
 .allButton{
