@@ -67,7 +67,7 @@
   let svgRadius;
   let searchArray;
   let onoffSwitch;
-  let travelAuto = false;
+  let isTravelAuto = false;
   let infoTypeText = true;
   let infoBtn;
 
@@ -155,8 +155,8 @@
 
     onoffSwitch = document.getElementById('travelModeSwitch-label');
     onoffSwitch.addEventListener('click', () => {
-      travelAuto = !travelAuto;
-       highlightSelectedBarList = [];  // reset
+      isTravelAuto = !isTravelAuto;
+      highlightSelectedBarList = [];  // reset
 
       let selectedType = $('#wbButton2').find('.selectedBtn').attr("id").slice(0,-1);
       console.log(selectedType);
@@ -171,16 +171,20 @@
       $('.infoBoardContent2').css({opacity: 0.0});
       TweenMax.killAll();
       deletePin();
-      stopMove.setAttribute('style', 'opacity:0.0;');
+      // stopMove.setAttribute('style', 'opacity:0.0;');
       stopTravelRanking();
 
-      if (travelAuto){
+
+
+      if (isTravelAuto){
         isMoveStop = true;
+        controls.enableRotate = false;
         travelRanking();
         stopMove.innerText = 'Stop';
         stopMove.setAttribute('style', 'opacity:1.0;');
       }else{
         isMoveStop = false;
+        controls.enableRotate = true;
         stopMove.setAttribute('style', 'opacity:0.0;');
       }
     });
@@ -390,7 +394,7 @@
 
       if (dragFlag) {
         if (isFinishStartTween) {
-          if (!travelAuto) {
+          if (!isTravelAuto) {
             if (!isMoveCamera){
               $('#country2').css({opacity: 0.0});
               $('.infoBoardContent2').css({opacity: 0.0});
@@ -406,7 +410,7 @@
     /* touch event for SP */
     window.addEventListener("touchstart", function () {
       if (isFinishStartTween) {
-        if (!travelAuto) {
+        if (!isTravelAuto) {
           if (!isMoveCamera){
             $('#country2').css({opacity: 0.0});
             $('.infoBoardContent2').css({opacity: 0.0});
@@ -712,7 +716,7 @@
         deletePin();
 
         /* travel */
-        if (travelAuto) {
+        if (isTravelAuto) {
           if (type === 'ladderBtn') {
             histScoreData = LadderScoreArray;
           } else if (type === 'positiveBtn') {
@@ -1021,7 +1025,7 @@
         body.css('cursor', 'default');
 
         if (isFinishStartTween){
-          if (!travelAuto){
+          if (!isTravelAuto){
             if (!isInfoObject) {
               if (!isMoveCamera){
                 if (intersects.length > 0) {
@@ -1314,7 +1318,7 @@
     /* mouse click histogram */
     function clickHistRanking() {
       console.log(isFillHist);
-      if (!travelAuto){
+      if (!isTravelAuto){
         if (isFillHist) {
           if (!isMoveCamera){
             console.log('click', mouseonCountry);
@@ -1427,7 +1431,9 @@
           createPoint(latitude, longitude);
           clearInterval(id);
           isMoveCamera = false;
-          controls.enableRotate = true;
+          if (!isTravelAuto){
+            controls.enableRotate = true;
+          }
         }
       }, 1000 / step);
     }
