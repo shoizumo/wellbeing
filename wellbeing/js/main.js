@@ -859,7 +859,7 @@
             onComplete: function () {
               rankText.innerHTML = String(rank) + "<tspan font-size='12px'>" + rankOrdinal + "</tspan>";
               $(id).children()[0].appendChild(rankText);
-              scoreText.textContent = '(' + String(score) + scoreUnit + ')';
+              scoreText.textContent = '(' + String(score.toFixed(1)) + scoreUnit + ')';
               $(id).children()[0].appendChild(scoreText);
 
               $('.info' + type).attr('opacity', 1.0);
@@ -1539,12 +1539,7 @@
     // controls.update();
     stats.update();
     frame++;
-
-    if (!isFinishStartTween) {
-      earth.rotation.x += speed;
-    } else {
-      earth.rotation.y += speed;
-    }
+    earth.rotation.y += speed;
 
     let nowTime = clock.getElapsedTime();
     requestAnimationFrame(render);
@@ -1569,12 +1564,7 @@
   function spRender() {
     stats.update();
     frame++;
-
-    if (!isFinishStartTween) {
-      earth.rotation.x += speed;
-    } else {
-      earth.rotation.y += speed;
-    }
+    earth.rotation.y += speed;
 
     requestAnimationFrame(spRender);
 

@@ -387,6 +387,13 @@ infoBoardSVG(responsive)
   }
 }
 
+/* initial position */
+#infoBoard {
+  position: fixed;
+  top: -100%;
+  left: 50%;
+}
+
 
 /*
 infoBoard2(text)
