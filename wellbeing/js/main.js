@@ -628,88 +628,27 @@
     }
 
 
-    /* sort rank array(alphabetical order) */
-    LadderArray.sort(function sortRank(a, b) {
-      if (a.country < b.country) {
-        return -1;
-      }
-      else if (a.country > b.country) {
-        return 1;
-      }
-      return 0;
-    });
+    sortDesc(LadderArray, 'country');
+    sortDesc(PositiveArray, 'country');
+    sortDesc(NegativeArray, 'country');
+    sortDesc(GDPArray, 'country');
 
-    PositiveArray.sort(function sortRank(a, b) {
-      if (a.country < b.country) {
-        return -1;
-      }
-      else if (a.country > b.country) {
-        return 1;
-      }
-      return 0;
-    });
+    sortDesc(LadderScoreArray, 'rank');
+    sortDesc(PositiveScoreArray, 'rank');
+    sortDesc(NegativeScoreArray, 'rank');
+    sortDesc(GDPScoreArray, 'rank');
 
-    NegativeArray.sort(function sortRank(a, b) {
-      if (a.country < b.country) {
-        return -1;
-      }
-      else if (a.country > b.country) {
-        return 1;
-      }
-      return 0;
-    });
-
-    GDPArray.sort(function sortRank(a, b) {
-      if (a.country < b.country) {
-        return -1;
-      }
-      else if (a.country > b.country) {
-        return 1;
-      }
-      return 0;
-    });
-
-
-    /* sort rank array(rank order) */
-    LadderScoreArray.sort(function sortRank(a, b) {
-      if (a.rank < b.rank) {
-        return -1;
-      }
-      else if (a.rank > b.rank) {
-        return 1;
-      }
-      return 0;
-    });
-
-    PositiveScoreArray.sort(function sortRank(a, b) {
-      if (a.rank < b.rank) {
-        return -1;
-      }
-      else if (a.rank > b.rank) {
-        return 1;
-      }
-      return 0;
-    });
-
-    NegativeScoreArray.sort(function sortRank(a, b) {
-      if (a.rank < b.rank) {
-        return -1;
-      }
-      else if (a.rank > b.rank) {
-        return 1;
-      }
-      return 0;
-    });
-
-    GDPScoreArray.sort(function sortRank(a, b) {
-      if (a.rank < b.rank) {
-        return -1;
-      }
-      else if (a.rank > b.rank) {
-        return 1;
-      }
-      return 0;
-    });
+    function sortDesc(array, type) {
+      array.sort(function sortRank(a, b) {
+        if (a[type] < b[type]) {
+          return -1;
+        }
+        else if (a[type] > b[type]) {
+          return 1;
+        }
+        return 0;
+      });
+    }
 
 
     /* calc MaxMin */
@@ -1350,7 +1289,7 @@
         h = (data[indexList[i]].score) / scoreMax * histCanvas.height;
         canvasContext.fillRect(barWidth * indexList[i], histCanvas.height - h, barWidth, h);
       }
-    }
+    };
 
 
 
