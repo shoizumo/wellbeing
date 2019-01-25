@@ -105,8 +105,7 @@
   let isLand = false;
   let isInfoObject = false;
   let isFillHist = false;
-  let infoObject1;
-  let infoObject2;
+  let infoObject;
   let isFirstClick = true;
   let latitude;
   let longitude;
@@ -262,7 +261,8 @@
     let startButton = document.getElementById('startButton');
     startButton.addEventListener('click', () => {
       let duration = 5.0;
-      let ease = Back.easeOut.config(1);
+      // let ease = Back.easeOut.config(1);
+      let ease = CustomEase.create("custom", "M0,0 C0.404,0.594 0.339,0.958 0.594,1.032 0.754,1.078 0.838,1 1,1");
 
       TweenMax.to(earth.position, duration, {
         y: 0.0,
@@ -1062,18 +1062,12 @@
 
 
     /* detect whether onInfo or not */
-    infoObject1 = document.getElementById('infoBoard');
-    infoObject2 = document.getElementById('rankingWrapper');
-    histCanvas = document.querySelector("#histgram");
-
-    infoObject1.addEventListener('mouseenter', onInfoObject, false);
-    infoObject2.addEventListener('mouseenter', onInfoObject, false);
-
-    infoObject1.addEventListener('mouseleave', outInfoObject, false);
-    infoObject2.addEventListener('mouseleave', outInfoObject, false);
-
-    histCanvas.addEventListener('mousemove', getCanvasColor, false);
-
+    infoObject = document.getElementsByClassName('infoObject');
+    for (let i = 0, l = infoObject.length; i < l; i++) {
+      console.log(infoObject[i]);
+      infoObject[i].addEventListener('mouseenter', onInfoObject, false);
+      infoObject[i].addEventListener('mouseleave', outInfoObject, false);
+    }
 
     function onInfoObject() {
       isInfoObject = true;
@@ -1083,6 +1077,9 @@
       isInfoObject = false;
     }
 
+
+    histCanvas = document.querySelector("#histgram");
+    histCanvas.addEventListener('mousemove', getCanvasColor, false);
 
     /* get canvas color */
     function getCanvasColor(event) {

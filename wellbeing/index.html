@@ -32,7 +32,7 @@
       </div>
 
 
-      <div id="infoBoard">
+      <div id="infoBoard" class='infoObject'>
         <div id="country" contenteditable="true">Country</div>
 
         <div id="Ladder">
@@ -81,7 +81,7 @@
         </div>
        </div>
 
-      <div id="infoBoard2">
+      <div id="infoBoard2" class='infoObject'>
         <div id="country2"></div>
         <div id="Ladder2" class="infoBoardContent2"></div>
         <div id="Positive2" class="infoBoardContent2"></div>
@@ -89,10 +89,8 @@
         <div id="GDP2" class="infoBoardContent2"></div>
       </div>
 
-      <div id="rankingWrapper">
-        <div id="canvasWrapper">
-          <canvas id="histgram"></canvas>
-        </div>
+      <div id="canvasWrapper" class='infoObject'>
+        <canvas id="histgram"></canvas>
       </div>
 
       <div id="tooltip"></div>
@@ -100,18 +98,17 @@
         <p></p>
       </div>
 
-      <div id="travelModeSwitch" class="allButton">
+      <div id="travelModeSwitch" class="allButton infoObject">
         <input type="checkbox" name="travelModeSwitch" id="travelModeSwitch-checkbox" checked>
         <label id="travelModeSwitch-label" for="travelModeSwitch-checkbox">
           <span id="travelModeSwitch-inner"></span>
           <span id="travelModeSwitch-switch"></span>
         </label>
       </div>
-      <div id="stopMove">Stop</div>
+      <div id="stopMove" class='infoObject'>Stop</div>
 
 
-      <!--<ul id="wbButton2" class="allButton">-->
-      <ul id="wbButton2">
+      <ul id="wbButton2" class='allButton infoObject'>
         <li id="ladderBtn2" class="wbButton wbButton2">Ladder</li>
         <li id="positiveBtn2" class="wbButton wbButton2">Positive</li>
         <li id="negativeBtn2" class="wbButton wbButton2">Negative</li>
@@ -121,7 +118,7 @@
 
       <!--hamburger menu-->
       <!--global menu-->
-      <nav class="globalMenu">
+      <nav class="globalMenu allButton infoObject">
         <ul>
           <li><a id="menu1" class="menu">About</a></li>
           <li><a id="menu2" class="menu">Setting</a></li>
@@ -132,13 +129,13 @@
       </nav>
 
       <!--hamburger-->
-      <div class="navToggle">
+      <div class="navToggle allButton infoObject">
         <span></span><span></span><span></span><span>menu</span>
       </div>
 
 
       <!--about-->
-      <div id="modalContentWrapper1" class="modalContentWrapper">
+      <div id="modalContentWrapper1" class="modalContentWrapper infoObject">
         <div id="modalContent1" class="modalContent">
           <p class="modalTitle">About</p>
           <p>This is ...</p>
@@ -148,7 +145,7 @@
 
 
       <!--setting-->
-      <div id="modalContentWrapper2" class="modalContentWrapper">
+      <div id="modalContentWrapper2" class="modalContentWrapper infoObject">
         <div id="modalContent2" class="modalContent">
           <p class="modalTitle">Setting</p>
 
@@ -185,6 +182,7 @@
       <script type="text/javascript" src="lib/lat_lon.js"></script>
       <script type="text/javascript" src="lib/wellbeing_data.json"></script>
       <script type="text/javascript" src="lib/TweenMax.min.js"></script>
+      <script type="text/javascript" src="lib/CustomEase.min.js"></script>
       <script src="js/main.js"></script>
 
     </body>

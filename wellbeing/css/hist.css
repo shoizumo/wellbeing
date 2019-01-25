@@ -2,7 +2,7 @@
 
 /* rank histogram */
 /* for SP */
-#rankingWrapper{
+#canvasWrapper{
   position:fixed;
   bottom:0;
   left: 50%;
@@ -24,7 +24,7 @@
 
 /* for Tablet */
 @media screen and (min-width: 500px) and (max-width:700px) {
-  #rankingWrapper{
+  #canvasWrapper{
     position:fixed;
     bottom:0;
     left: 50%;
@@ -47,7 +47,7 @@
 
 /* for PC medium */
 @media screen and (min-width: 700px) and (max-width:900px) {
-  #rankingWrapper{
+  #canvasWrapper{
     position:fixed;
     bottom:0;
     left: 50%;
@@ -70,7 +70,7 @@
 
 /* for PC wide */
 @media screen and (min-width:900px) {
-  #rankingWrapper{
+  #canvasWrapper{
     position:fixed;
     bottom:0;
     left: 50%;
