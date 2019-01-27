@@ -461,11 +461,13 @@
     window.addEventListener("touchstart", function () {
       if (isFinishStartTween) {
         if (!isTravelAuto) {
-          if (!isMoveCamera){
-            $('#country2').css({opacity: 0.0});
-            $('.infoBoardContent2').css({opacity: 0.0});
-            TweenMax.killAll();
-            deletePin();
+          if (!isMoveCamera) {
+            if (isLand) {
+              $('#country2').css({opacity: 0.0});
+              $('.infoBoardContent2').css({opacity: 0.0});
+              TweenMax.killAll();
+              deletePin();
+            }
           }
         }
       }
