@@ -8,11 +8,11 @@ nav.globalMenu {
   position: fixed;
   z-index: 2;
   top: 0;
-  left: 60%;
+  left: 0;
   text-align: center;
   transform: translateX(100%);
   transition: all 0.6s;
-  width: 40%;
+  width: 100%;
   cursor: pointer;
 
   font-family: 'Nunito', sans-serif;
@@ -52,10 +52,10 @@ nav.globalMenu.active {
 }
 
 /* responsive */
-@media screen and (max-width: 500px) {
+@media screen and (min-width: 600px) {
   nav.globalMenu {
-    left: 0;
-    width: 100%;
+    left: 60%;
+    width: 40%;
   }
 }
 
@@ -148,19 +148,19 @@ modal window(responsive)
 
 .modalContent{
   display: grid;
-  grid-template-columns: 600px;
+  grid-template-columns: 300px;
   grid-template-rows: 50px 300px;
 
   top: 50%;
   left: 50%;
   margin-top:-185px;
-  margin-left:-300px;
+  margin-left:-150px;
   border: 2px solid #aaaaaa;
   background: #dddddd;
   position: fixed;
   z-index: 2;
 
-  width:600px;
+  width:300px;
   height:350px;
 
   font-family: 'Nunito', sans-serif;
@@ -189,6 +189,17 @@ modal window(responsive)
   cursor: pointer;
 }
 
+
+/* responsive */
+@media screen and (min-width: 600px) {
+  .modalContent {
+    grid-template-columns: 600px;
+    margin-left: -300px;
+    width: 600px;
+  }
+}
+
+
 /* modal1 */
 
 
@@ -197,10 +208,10 @@ modal window(responsive)
   grid-raw: 2 / 3;
 
   display: grid;
-  grid-template-columns: 600px;
+  grid-template-columns: 300px;
   grid-template-rows: 40px 60px 40px 60px 40px 60px;
 
-  width:600px;
+  width:300px;
   height:300px;
 
 }
@@ -243,7 +254,7 @@ modal window(responsive)
 
 #wbButton1 li {
   border: 1px dotted #aaaaaa;
-  width: 148px;
+  width: 73px;
 }
 
 #settingContentTitle2{
@@ -258,7 +269,7 @@ modal window(responsive)
 
 #infoType li {
   border: 1px dotted #aaaaaa;
-  width: 298px;
+  width: 148px;
 }
 
 
@@ -295,4 +306,20 @@ modal window(responsive)
 }
 .selectedBtn{
   background: #ffa443;
+}
+
+/* responsive */
+@media screen and (min-width: 600px) {
+  ＃settingContent {
+    grid-template-columns: 600px;
+    width: 600px;
+  }
+
+  #wbButton1 li {
+    width: 148px;
+  }
+
+  #infoType li {
+    width: 298px;
+  }
 }

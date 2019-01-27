@@ -11,7 +11,6 @@ infoBoard1(visual)
 
   position:fixed;
   top:0;
-  /*right:15%;*/
   left: 50%;
   margin-left:-160px;
 
@@ -114,224 +113,78 @@ infoBoard1(visual)
 
 
 /* for Tablet & PC(medium) */
-@media screen and (min-width: 600px) and (max-width:900px) {
+@media screen and (min-width: 800px) and (max-width:1000px) {
   #infoBoard{
-    display: grid;
     grid-template-columns: 150px 150px 150px 150px;
-    grid-template-rows: 25px 95px;
-
-    position:fixed;
-    top:0;
-    /*right:15%;*/
-    left: 50%;
     margin-left:-300px;
 
     width:600px;
-    height:120px;
-
-    opacity: 0.0;
-    color: #ffffff;
-    text-align: center;
-
-    font-family: 'Nunito', sans-serif;
-    font-weight: 300;
   }
 
-  #country{
-    grid-column: 1 / 5;
-    grid-raw: 1 / 2;
-    background-color: #333333;
-    font-size: 1.3em;
-    font-weight: 400;
-  }
 
   #Ladder{
-    grid-column: 1 / 2;
-    grid-raw: 2 / 3;
-    background-color: #444444;
-
-    display: grid;
     grid-template-columns: 150px;
-    grid-template-rows: 15px 80px;
-  }
-  #LadderTitle{
-    font-size: 0.69em;
-    grid-column: 1 / 2;
-    grid-raw: 1 / 2;
-    font-weight: 200;
-  }
-  #LadderRanking{
-    grid-column: 1 / 2;
-    grid-raw: 2 / 3;
   }
 
   #Positive{
-    grid-column: 2 / 3;
-    grid-raw: 2 / 3;
-    background-color: #444444;
-
-    display: grid;
     grid-template-columns: 150px;
-    grid-template-rows: 15px 80px;
-  }
-  #PositiveTitle{
-    font-size: 0.69em;
-    grid-column: 1 / 2;
-    grid-raw: 1 / 2;
-    font-weight: 200;
-  }
-  #PositiveRanking{
-    grid-column: 1 / 2;
-    grid-raw: 2 / 3;
   }
 
   #Negative{
-    grid-column: 3 / 4;
-    grid-raw: 2 / 3;
-    background-color: #444444;
-    display: grid;
     grid-template-columns: 150px;
-    grid-template-rows: 15px 80px;
-  }
-  #NegativeTitle{
-    font-size: 0.69em;
-    grid-column: 1 / 2;
-    grid-raw: 1 / 2;
-    font-weight: 200;
-  }
-  #NegativeRanking{
-    grid-column: 1 / 2;
-    grid-raw: 2 / 3;
   }
 
   #GDP{
-    grid-column: 4 / 5;
-    grid-raw: 2 / 3;
-    background-color: #444444;
-    display: grid;
     grid-template-columns: 150px;
-    grid-template-rows: 15px 80px;
-  }
-  #GDPTitle{
-    font-size: 0.69em;
-    grid-column: 1 / 2;
-    grid-raw: 1 / 2;
-    font-weight: 200;
-  }
-  #GDPRanking{
-    grid-column: 1 / 2;
-    grid-raw: 2 / 3;
   }
 }
 
 /* for PC(wide) */
-@media screen and (min-width: 900px) {
+@media screen and (min-width: 1000px) {
   #infoBoard{
-    display: grid;
     grid-template-columns: 200px 200px 200px 200px;
     grid-template-rows: 30px 120px;
 
-    position:fixed;
-    top:0;
-    /*right:15%;*/
-    left: 50%;
     margin-left:-400px;
 
     width:800px;
     height:150px;
-
-    opacity: 0.0;
-    color: #ffffff;
-    text-align: center;
-
-    font-family: 'Nunito', sans-serif;
-    font-weight: 300;
   }
 
   #country{
-    grid-column: 1 / 5;
-    grid-raw: 1 / 2;
-    background-color: #333333;
     font-size: 1.5em;
-    font-weight: 400;
   }
 
   #Ladder{
-    grid-column: 1 / 2;
-    grid-raw: 2 / 3;
-    background-color: #444444;
-
-    display: grid;
     grid-template-columns: 200px;
     grid-template-rows: 20px 100px;
   }
   #LadderTitle{
     font-size: 1.05em;
-    grid-column: 1 / 2;
-    grid-raw: 1 / 2;
-    font-weight: 200;
-  }
-  #LadderRanking{
-    grid-column: 1 / 2;
-    grid-raw: 2 / 3;
   }
 
   #Positive{
-    grid-column: 2 / 3;
-    grid-raw: 2 / 3;
-    background-color: #444444;
-
-    display: grid;
     grid-template-columns: 200px;
     grid-template-rows: 20px 100px;
   }
   #PositiveTitle{
     font-size: 1.05em;
-    grid-column: 1 / 2;
-    grid-raw: 1 / 2;
-    font-weight: 200;
-  }
-  #PositiveRanking{
-    grid-column: 1 / 2;
-    grid-raw: 2 / 3;
   }
 
   #Negative{
-    grid-column: 3 / 4;
-    grid-raw: 2 / 3;
-    background-color: #444444;
-    display: grid;
     grid-template-columns: 200px;
     grid-template-rows: 20px 100px;
   }
   #NegativeTitle{
     font-size: 1.05em;
-    grid-column: 1 / 2;
-    grid-raw: 1 / 2;
-    font-weight: 200;
-  }
-  #NegativeRanking{
-    grid-column: 1 / 2;
-    grid-raw: 2 / 3;
   }
 
   #GDP{
-    grid-column: 4 / 5;
-    grid-raw: 2 / 3;
-    background-color: #444444;
-    display: grid;
     grid-template-columns: 200px;
     grid-template-rows: 20px 100px;
   }
   #GDPTitle{
     font-size: 1.05em;
-    grid-column: 1 / 2;
-    grid-raw: 1 / 2;
-    font-weight: 200;
-  }
-  #GDPRanking{
-    grid-column: 1 / 2;
-    grid-raw: 2 / 3;
   }
 }
 
@@ -362,17 +215,14 @@ infoBoardSVG(responsive)
 
 
 /* for Tablet & PC(medium) */
-@media screen and (min-width: 600px) and (max-width:900px) {
+@media screen and (min-width: 800px) and (max-width:1000px) {
   .infoContentsSVG {
     width: 150px;
-    height: 80px;
   }
-
-
 }
 
 /* for PC(wide) */
-@media screen and (min-width: 900px) {
+@media screen and (min-width: 1000px) {
   .infoContentsSVG {
     width: 200px;
     height: 100px;

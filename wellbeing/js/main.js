@@ -71,6 +71,12 @@
   let infoTypeText = true;
   let infoBtn;
 
+  const widthWidePC = 1000;
+  const widthMediumPC = 800;
+  const widthTablet = 680;
+  const widthSP = 500;
+
+
 
   /* marker pin */
   let pinList;
@@ -359,7 +365,7 @@
       canvasHeight = window.innerHeight;
 
       if (isFinishStartTween) {
-        if (canvasWidth < 900) {
+        if (canvasWidth < widthWidePC) {
           svgRadius = 40;
           t1.setAttributeNS(null, "font-size", "22px");
           t2.setAttributeNS(null, "font-size", "22px");
@@ -383,12 +389,14 @@
         }
 
         let histCanvasWidth;
-        if (canvasWidth < 500) {
+        if (canvasWidth < widthSP) {
           histCanvasWidth = 320;
-        } else if (canvasWidth >= 500 && canvasWidth < 700) {
-          histCanvasWidth = 500;
-        } else if (canvasWidth >= 700 && canvasWidth < 900) {
-          histCanvasWidth = 700;
+        } else if (canvasWidth >= widthSP && canvasWidth < widthTablet) {
+          histCanvasWidth = widthSP;
+        } else if (canvasWidth >= widthTablet && canvasWidth < widthMediumPC) {
+          histCanvasWidth = widthTablet;
+        } else if (canvasWidth >= widthMediumPC && canvasWidth < widthWidePC) {
+          histCanvasWidth = widthMediumPC;
         } else {
           histCanvasWidth = 900;
         }
@@ -725,7 +733,7 @@
     // score ranking board
     */
     /* setting infoBoard circle size */
-    if (canvasWidth < 900) {
+    if (canvasWidth < widthWidePC) {
       svgRadius = 40;
     } else {
       svgRadius = 48;
@@ -735,7 +743,7 @@
     /* infoBoard text */
     function createRankText(type) {
       let px;
-      if (canvasWidth < 900) {
+      if (canvasWidth < widthWidePC) {
         px = "22px";
       } else {
         px = "28px";
@@ -759,7 +767,7 @@
 
     function createScoreText(type) {
       let px;
-      if (canvasWidth < 900) {
+      if (canvasWidth < widthWidePC) {
         px = "12px";
       } else {
         px = "16px";
@@ -1064,7 +1072,6 @@
     /* detect whether onInfo or not */
     infoObject = document.getElementsByClassName('infoObject');
     for (let i = 0, l = infoObject.length; i < l; i++) {
-      console.log(infoObject[i]);
       infoObject[i].addEventListener('mouseenter', onInfoObject, false);
       infoObject[i].addEventListener('mouseleave', outInfoObject, false);
     }
@@ -1117,13 +1124,14 @@
     /*
     // ranking histogram
     */
-    // histCanvas.width = 700;  // responsive
-    if (canvasWidth < 500) {
+    if (canvasWidth < widthSP) {
       histCanvas.width = 320;
-    } else if (canvasWidth >= 500 && canvasWidth < 700) {
-      histCanvas.width = 500;
-    } else if (canvasWidth >= 700 && canvasWidth < 900) {
-      histCanvas.width = 700;
+    } else if (canvasWidth >= widthSP && canvasWidth < widthTablet) {
+      histCanvas.width = widthSP;
+    } else if (canvasWidth >= widthTablet && canvasWidth < widthMediumPC) {
+      histCanvas.width = widthTablet;
+    } else if (canvasWidth >= widthMediumPC && canvasWidth < widthWidePC) {
+      histCanvas.width = widthMediumPC;
     } else {
       histCanvas.width = 900;
     }
@@ -1189,7 +1197,7 @@
     histCanvas.addEventListener('click', clickHistRanking, false);
 
     function onHistRanking(event) {
-      console.log('onHist', isFillHist);
+      // console.log('onHist', isFillHist);
       if (isHistDisplay) {
         if (isFillHist) {
           let rect = event.target.getBoundingClientRect();
