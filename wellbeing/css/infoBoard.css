@@ -111,8 +111,34 @@ infoBoard1(visual)
   grid-raw: 2 / 3;
 }
 
+/* for Tablet */
+@media screen and (min-width: 680px) and (max-width:800px) {
+  #infoBoard{
+    grid-template-columns: 120px 120px 120px 120px;
+    margin-left:-240px;
 
-/* for Tablet & PC(medium) */
+    width:480px;
+  }
+
+
+  #Ladder{
+    grid-template-columns: 120px;
+  }
+
+  #Positive{
+    grid-template-columns: 120px;
+  }
+
+  #Negative{
+    grid-template-columns: 120px;
+  }
+
+  #GDP{
+    grid-template-columns: 120px;
+  }
+}
+
+/* for PC(medium) */
 @media screen and (min-width: 800px) and (max-width:1000px) {
   #infoBoard{
     grid-template-columns: 150px 150px 150px 150px;
