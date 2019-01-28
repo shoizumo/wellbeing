@@ -205,12 +205,14 @@
 
 
         let infoBoard1 = $('#infoBoard');
+
+        let infoBoardContent2 = $('.infoBoardContent2');
         if (infoTypeText){
-           infoBoard1.css("top", -1000);
-           $('.infoBoardContent2').css("margin-left", 5);
+           infoBoard1.css("display", 'none');
+           infoBoardContent2.css("display", 'block');
         }else{
-          infoBoard1.css("top", 0);
-          $('.infoBoardContent2').css("margin-left", -1000);
+          infoBoard1.css("display", 'grid');
+          infoBoardContent2.css("display", 'none');
         }
       })
     }

@@ -23,6 +23,8 @@ infoBoard1(visual)
 
   font-family: 'Nunito', sans-serif;
   font-weight: 300;
+
+  display: none;
 }
 
 #country{
@@ -263,12 +265,12 @@ infoBoardSVG(responsive)
   }
 }
 
-/* initial position */
-#infoBoard {
-  position: fixed;
-  top: -100%;
-  left: 50%;
-}
+/*!* initial position *!*/
+/*#infoBoard {*/
+  /*position: fixed;*/
+  /*top: -100%;*/
+  /*left: 50%;*/
+/*}*/
 
 
 /*
@@ -281,9 +283,6 @@ infoBoard2(text)
   left:50%;
   margin-top:-20px;
   margin-left:20px;
-
-  width: 300px;
-  height: 25px;
   line-height: 25px;
   font-size: 20px;
   color: #ffffff;
