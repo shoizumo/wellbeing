@@ -70,6 +70,8 @@
   let isTravelAuto = false;
   let infoTypeText = true;
   let infoBtn;
+  let isTouchInfoObject = false;
+  let isSPBtnDisplay = true;
 
   const widthWidePC = 1000;
   const widthMediumPC = 800;
@@ -471,7 +473,21 @@
               deletePin();
             }
           }
+        }else{  // travelAuto
+          if (!isTouchInfoObject) {
+            if (isSPBtnDisplay) {
+              $('#travelModeSwitch').css({'display': 'none'});
+              $('#stopMove').css({'display': 'none'});
+              $('.navToggle').css({'display': 'none'});
+            } else {
+              $('#travelModeSwitch').css({'display': 'block'});
+              $('#stopMove').css({'display': 'block'});
+              $('.navToggle').css({'display': 'block'});
+            }
+            isSPBtnDisplay = !isSPBtnDisplay;
+          }
         }
+        isTouchInfoObject = false;
       }
     }, false);
 
@@ -1078,6 +1094,7 @@
     for (let i = 0, l = infoObject.length; i < l; i++) {
       infoObject[i].addEventListener('mouseenter', onInfoObject, false);
       infoObject[i].addEventListener('mouseleave', outInfoObject, false);
+      infoObject[i].addEventListener('touchstart', touchInfoObject, false);
     }
 
     function onInfoObject() {
@@ -1088,6 +1105,9 @@
       isInfoObject = false;
     }
 
+    function touchInfoObject() {
+      isTouchInfoObject = true;
+    }
 
     histCanvas = document.querySelector("#histgram");
     histCanvas.addEventListener('mousemove', getCanvasColor, false);
