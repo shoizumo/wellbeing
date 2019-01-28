@@ -68,7 +68,7 @@
   let searchArray;
   let travelModeSwitch;
   let isTravelAuto = false;
-  let infoTypeText = true;
+  let isInfoTypeText = true;
   let infoBtn;
   let isTouchInfoObject = false;
   let isSPBtnDisplay = true;
@@ -203,13 +203,11 @@
       infoBtn[i].addEventListener('click', (e) => {
         $(".infoType").removeClass("selectedBtn");
         infoBtn[i].classList.add("selectedBtn");
-        infoTypeText = e.target.id.slice(4,) === 'Text';
-
+        isInfoTypeText = e.target.id.slice(4,) === 'Text';
 
         let infoBoard1 = $('#infoBoard');
-
         let infoBoardContent2 = $('.infoBoardContent2');
-        if (infoTypeText){
+        if (isInfoTypeText){
            infoBoard1.css("display", 'none');
            infoBoardContent2.css("display", 'block');
         }else{
@@ -237,6 +235,7 @@
 
       $('#country2').css({opacity: 0.0});
       $('.infoBoardContent2').css({opacity: 0.0});
+      $('#infoBoard').css({opacity: 0.0});
       TweenMax.killAll();
       deletePin();
       stopTravelRanking();
@@ -926,12 +925,12 @@
     let infoBoard = $('#infoBoard');
     let body = $('body');
 
-    window.addEventListener('mousemove', onDocumentMouseMove, false);
-    window.addEventListener('click', onDocumentMouseClick, false);
+    window.addEventListener('mousemove', onLandMouseMove, false);
+    window.addEventListener('click', onLandMouseClick, false);
 
 
     /* mouse over land */
-    function onDocumentMouseMove(event) {
+    function onLandMouseMove(event) {
       if (isFinishStartTween) {
         event.preventDefault();
         let mouseX = (event.clientX / window.innerWidth) * 2 - 1;
@@ -977,7 +976,7 @@
 
 
     /* click land */
-    function onDocumentMouseClick() {
+    function onLandMouseClick() {
       if (isFinishStartTween){
         if (!dragFlag) {
           if (isLand) {
@@ -987,7 +986,6 @@
               negative.cancel();
               gdp.cancel();
             }
-
             clearInfo();
             let res = calcWbInfo(countryName);
             infoBoard.css({opacity: 0.8});
