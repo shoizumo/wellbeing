@@ -148,6 +148,13 @@
   let drawSetInterval;
   let deletePin;
 
+  let setInfoTypeText;
+  let setInfoTypeVisual;
+  let fadeInfoBoardContent1;
+  let fadeInfoBoardContent2;
+  let returnSelectedWBtype;
+  let setSelectedWBButton;
+
 
 
   /////////////////
@@ -204,18 +211,42 @@
         $(".infoType").removeClass("selectedBtn");
         infoBtn[i].classList.add("selectedBtn");
         isInfoTypeText = e.target.id.slice(4,) === 'Text';
-
-        let infoBoard1 = $('#infoBoard');
-        let infoBoardContent2 = $('.infoBoardContent2');
         if (isInfoTypeText){
-           infoBoard1.css("display", 'none');
-           infoBoardContent2.css("display", 'block');
+           setInfoTypeText();
         }else{
-          infoBoard1.css("display", 'grid');
-          infoBoardContent2.css("display", 'none');
+          setInfoTypeVisual();
         }
       })
     }
+
+    setInfoTypeText = function() {
+      $('#infoBoard').css("display", 'none');
+      $('.infoBoardContent2').css("display", 'block');
+    };
+
+    setInfoTypeVisual = function() {
+      $('#infoBoard').css("display", 'grid');
+      $('.infoBoardContent2').css("display", 'none');
+    };
+
+    fadeInfoBoardContent1 = function() {
+      $('#infoBoard').css({opacity: 0.0});
+    };
+
+    fadeInfoBoardContent2 = function() {
+      $('#country2').css({opacity: 0.0});
+      $('.infoBoardContent2').css({opacity: 0.0});
+    };
+
+    returnSelectedWBtype = function() {
+      return $('#wbButton2').find('.selectedBtn').attr("id").slice(0,-1);
+    };
+
+    setSelectedWBButton = function(index) {
+      $(".wbButton").removeClass("selectedBtn");
+      document.getElementsByClassName('wbButton1')[index].classList.add("selectedBtn");
+      document.getElementsByClassName('wbButton2')[index].classList.add("selectedBtn");
+    };
 
 
     /* switch travel type button */
@@ -224,7 +255,7 @@
       isTravelAuto = !isTravelAuto;
       highlightSelectedBarList = [];  // reset
 
-      let selectedType = $('#wbButton2').find('.selectedBtn').attr("id").slice(0,-1);
+      let selectedType = returnSelectedWBtype();
       console.log(selectedType);
       canvasContext.globalAlpha = 0.5;
       let res = drawHist(selectedType, drawHistDurationNomal, 'new');
@@ -233,9 +264,9 @@
       scoreMax = res.scoreMax;
       histScoreData = res.scoreData;
 
-      $('#country2').css({opacity: 0.0});
-      $('.infoBoardContent2').css({opacity: 0.0});
-      $('#infoBoard').css({opacity: 0.0});
+      fadeInfoBoardContent1();
+      fadeInfoBoardContent2();
+
       TweenMax.killAll();
       deletePin();
       stopTravelRanking();
@@ -290,12 +321,8 @@
             e.preventDefault();
           }, {passive: false});
 
-          // $(".wbButton").removeClass("hiddenBtn").addClass("normalBtn");
-          let wbButton1 = document.getElementsByClassName('wbButton1');
-          let wbButton2 = document.getElementsByClassName('wbButton2');
           setTimeout(() => {
-            wbButton1[0].classList.add("selectedBtn");
-            wbButton2[0].classList.add("selectedBtn");
+            setSelectedWBButton(0);
             infoBtn[0].classList.add("selectedBtn");
 
           }, 400);
@@ -406,7 +433,7 @@
 
         if (histCanvas.width !== histCanvasWidth) {
           histCanvas.width = histCanvasWidth;
-          let selectedType = $('#wbButton2').find('.selectedBtn').attr("id").slice(0,-1);
+          let selectedType = returnSelectedWBtype();
           canvasContext.globalAlpha = 0.5;
           let res = drawHist(selectedType, drawHistDurationRedraw, 'redraw');
 
@@ -449,8 +476,7 @@
         if (isFinishStartTween) {
           if (!isTravelAuto) {
             if (!isMoveCamera){
-              $('#country2').css({opacity: 0.0});
-              $('.infoBoardContent2').css({opacity: 0.0});
+              fadeInfoBoardContent2();
               TweenMax.killAll();
               deletePin();
             }
@@ -466,8 +492,7 @@
         if (!isTravelAuto) {
           if (!isMoveCamera) {
             if (isLand) {
-              $('#country2').css({opacity: 0.0});
-              $('.infoBoardContent2').css({opacity: 0.0});
+              fadeInfoBoardContent2();
               TweenMax.killAll();
               deletePin();
             }
@@ -691,9 +716,6 @@
 
     /* make well-being button in order to show score */
     wbButton = document.getElementsByClassName('wbButton');
-    wbButton1 = document.getElementsByClassName('wbButton1');
-    wbButton2 = document.getElementsByClassName('wbButton2');
-
     for (let i = 0, wbLen = wbButton.length; i < wbLen; i++) {
       wbButton[i].addEventListener('click', (e) => {
         let type = e.target.id.slice(0,-1);
@@ -708,15 +730,11 @@
         } else {
           index = 3;
         }
-
-        $(".wbButton").removeClass("selectedBtn");
-        wbButton1[index].classList.add("selectedBtn");
-        wbButton2[index].classList.add("selectedBtn");
+        setSelectedWBButton(index);
 
         /* delete infoBoard2 */
         TweenMax.killAll();
-        $('#country2').css({opacity: 0.0});
-        $('.infoBoardContent2').css({opacity: 0.0});
+        fadeInfoBoardContent2();
         deletePin();
 
         /* travel type check */
@@ -895,9 +913,7 @@
       let nRank = wbData['nRank'];
       let gRank = wbData['gRank'];
 
-      $('#country2').css({opacity: 0.0});
-      $('.infoBoardContent2').css({opacity: 0.0});
-
+      fadeInfoBoardContent2();
       setTimeout(() => {
         TweenMax.to("#country2", 1.0, {
           opacity: 1.0,
@@ -1022,8 +1038,7 @@
               }, 500);
 
               /* text info */
-              $('#country2').css({opacity: 0.0});
-              $('.infoBoardContent2').css({opacity: 0.0});
+              fadeInfoBoardContent2();
               setTimeout(() => {
                 TweenMax.to("#country2", 1.0, {
                   opacity: 1.0,
@@ -1438,17 +1453,15 @@
         clickHistRankingDisplayScore(countryName);
         i++;
         travelIndex = i;  // val for continue
-        if (i > wbLength - 1) {
-        // if (i > 3 - 1) {
+        // if (i > wbLength - 1) {
+        if (i > 3 - 1) {
           console.log('clearInterval', i);
           clearInterval(travelSetInterval);
 
           // next travel
           setTimeout(() => {
-            let selectedType = $('#wbButton2').find('.selectedBtn').attr("id").slice(0, -1);
+            let selectedType = returnSelectedWBtype();
             let nextType;
-            let wbButton1 = document.getElementsByClassName('wbButton1');
-            let wbButton2 = document.getElementsByClassName('wbButton2');
             let btnIndex;
             if (selectedType === 'ladderBtn') {
               nextType = 'positiveBtn';
@@ -1464,15 +1477,11 @@
               btnIndex = 0;
             }
 
-            $(".wbButton").removeClass("selectedBtn");
-            wbButton1[btnIndex].classList.add("selectedBtn");
-            wbButton2[btnIndex].classList.add("selectedBtn");
-
+            setSelectedWBButton(btnIndex);
             console.log('next travel', nextType);
 
-            $('#infoBoard').css({opacity: 0.0});
-            $('#country2').css({opacity: 0.0});
-            $('.infoBoardContent2').css({opacity: 0.0});
+            fadeInfoBoardContent1();
+            fadeInfoBoardContent2();
             let res = drawHist(nextType, drawHistDurationNomal, 'new');
             histData = res.histData;
             scoreMax = res.scoreMax;
@@ -1525,11 +1534,7 @@
 
     selectorSearch.on("autocompleteclose", function () {
       let inputCountry = document.getElementById('country').textContent;
-      console.log(inputCountry);
-
       let res = countrynameToLatlon(inputCountry);
-      console.log(res.latitude);
-
       if (typeof res.latitude !== 'undefined') {
         moveCamera(res.latitude, res.longitude);
         clickHistRankingDisplayScore(inputCountry);
