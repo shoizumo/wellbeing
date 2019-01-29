@@ -1422,6 +1422,7 @@
       stopTravelRanking();  // clear previous travel
       let i = index;
       travelSetInterval = setInterval(function () {
+        console.log(i);
         if (i > 0) {
           pinList[i - 1].children[0].material.color.setHex(0xC9C7B7);
           pinList[i - 1].children[1].material.color.setHex(0xC9C7B7);
@@ -1438,9 +1439,49 @@
         i++;
         travelIndex = i;  // val for continue
         if (i > wbLength - 1) {
+        // if (i > 3 - 1) {
+          console.log('clearInterval', i);
           clearInterval(travelSetInterval);
-        }
 
+          // next travel
+          setTimeout(() => {
+            let selectedType = $('#wbButton2').find('.selectedBtn').attr("id").slice(0, -1);
+            let nextType;
+            let wbButton1 = document.getElementsByClassName('wbButton1');
+            let wbButton2 = document.getElementsByClassName('wbButton2');
+            let btnIndex;
+            if (selectedType === 'ladderBtn') {
+              nextType = 'positiveBtn';
+              btnIndex = 1;
+            } else if (selectedType === 'positiveBtn') {
+              nextType = 'negativeBtn';
+              btnIndex = 2;
+            } else if (selectedType === 'negativeBtn') {
+              nextType = 'gdpBtn';
+              btnIndex = 3;
+            } else {
+              nextType = 'ladderButton';
+              btnIndex = 0;
+            }
+
+            $(".wbButton").removeClass("selectedBtn");
+            wbButton1[btnIndex].classList.add("selectedBtn");
+            wbButton2[btnIndex].classList.add("selectedBtn");
+
+            console.log('next travel', nextType);
+
+            $('#infoBoard').css({opacity: 0.0});
+            $('#country2').css({opacity: 0.0});
+            $('.infoBoardContent2').css({opacity: 0.0});
+            let res = drawHist(nextType, drawHistDurationNomal, 'new');
+            histData = res.histData;
+            scoreMax = res.scoreMax;
+            histScoreData = res.scoreData;
+            deletePin();
+            travelRanking();
+          }, 5000);
+
+        }
       }, 3500);
     };
 
