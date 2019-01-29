@@ -216,6 +216,15 @@ modal window(responsive)
 
 }
 
+/* safari */
+/*@media screen and (-webkit-min-device-pixel-ratio: 0) {*/
+  /*_::-webkit-full-page-media, _:future, :root #wbButton1 li {*/
+    /*border: 0;*/
+    /*width: 73px;*/
+    /*height: 58px;*/
+  /*}*/
+/*}*/
+
 #settingContent ul{
   list-style: none;
   overflow: hidden;
@@ -243,7 +252,7 @@ modal window(responsive)
 }
 
 #settingContentTitle1{
-  border: 1px dotted #aaaaaa;
+  /*border: 1px dotted #aaaaaa;*/
   background: #d7d7d7;
   grid-raw: 1 / 2;
 }
@@ -255,10 +264,11 @@ modal window(responsive)
 #wbButton1 li {
   border: 1px dotted #aaaaaa;
   width: 73px;
+  height: 58px;
 }
 
 #settingContentTitle2{
-  border: 1px dotted #aaaaaa;
+  /*border: 1px dotted #aaaaaa;*/
   background: #d7d7d7;
   grid-raw: 3 / 4;
 }
@@ -270,8 +280,22 @@ modal window(responsive)
 #infoType li {
   border: 1px dotted #aaaaaa;
   width: 148px;
+  height: 58px;
 }
 
+@media screen and (-webkit-min-device-pixel-ratio: 0) {
+  _::-webkit-full-page-media, _:future, :root #wbButton1 li {
+    border: 1px dotted #aaaaaa;
+    width: 72px;
+    height: 57px;
+  }
+
+  _::-webkit-full-page-media, _:future, :root #infoType li {
+    border: 1px dotted #aaaaaa;
+    width: 147px;
+    height: 57px;
+  }
+}
 
 #wbButton2 {
   position: fixed;
@@ -321,5 +345,19 @@ modal window(responsive)
 
   #infoType li {
     width: 298px;
+  }
+
+  @media screen and (-webkit-min-device-pixel-ratio: 0) {
+    _::-webkit-full-page-media, _:future, :root #wbButton1 li {
+      border: 1px dotted #aaaaaa;
+      width: 147px;
+      height: 57px;
+    }
+
+    _::-webkit-full-page-media, _:future, :root #infoType li {
+      border: 1px dotted #aaaaaa;
+      width: 297px;
+      height: 57px;
+    }
   }
 }

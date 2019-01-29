@@ -5,7 +5,7 @@ infoBoard1(visual)
 */
 /* For SP */
 #infoBoard{
-  display: grid;
+  /*display: grid;*/
   grid-template-columns: 80px 80px 80px 80px;
   grid-template-rows: 25px 95px;
 
@@ -33,6 +33,18 @@ infoBoard1(visual)
   background-color: #333333;
   font-size: 1.3em;
   font-weight: 400;
+
+  cursor: text;
+  -webkit-user-select: text;
+  user-select: text;
+}
+
+#country:focus {
+    outline: none;
+}
+
+#country{
+
 }
 
 #Ladder{
@@ -214,14 +226,6 @@ infoBoard1(visual)
   #GDPTitle{
     font-size: 1.05em;
   }
-}
-
-#country:focus {
-    outline: none;
-}
-
-#country{
-  cursor: text;
 }
 
 /*
