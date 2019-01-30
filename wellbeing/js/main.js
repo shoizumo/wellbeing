@@ -561,23 +561,39 @@
               deletePin();
             }
           }
-        }else{  // travelAuto
-          if (!isTouchInfoObject) {
-            if (isSPBtnDisplay) {
-              $('#travelModeSwitch').css({'display': 'none'});
-              $('#stopMove').css({'display': 'none'});
-              $('.navToggle').css({'display': 'none'});
-            } else {
-              $('#travelModeSwitch').css({'display': 'block'});
-              $('#stopMove').css({'display': 'block'});
-              $('.navToggle').css({'display': 'block'});
-            }
-            isSPBtnDisplay = !isSPBtnDisplay;
-          }
         }
         isTouchInfoObject = false;
       }
     }, false);
+
+
+    /* double tap event for SP */　
+    let tapCount = 0;
+    window.addEventListener("touchstart", function () {
+      // single tap
+      if (!tapCount) {
+        ++tapCount;
+
+        setTimeout(function () {
+          tapCount = 0;
+        }, 350);
+
+        // double tap
+      } else {
+        if (isSPBtnDisplay) {
+          $('#travelModeSwitch').css({'display': 'none'});
+          $('#stopMove').css({'display': 'none'});
+          $('.navToggle').css({'display': 'none'});
+        } else {
+          $('#travelModeSwitch').css({'display': 'block'});
+          $('#stopMove').css({'display': 'block'});
+          $('.navToggle').css({'display': 'block'});
+        }
+        isSPBtnDisplay = !isSPBtnDisplay;
+        e.preventDefault();
+        tapCount = 0;
+      }
+    });
 
 
     /* load earth texture */
