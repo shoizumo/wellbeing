@@ -99,3 +99,11 @@ html, body {
   opacity: 0.0;
 }
 
+
+
+/* drag & drop, to change position */
+.dragDrop {
+    cursor: move;
+    position: fixed;
+    z-index: 100;
+}

@@ -62,8 +62,6 @@
   let t1, t2, t3, t4;
   let s1, s2, s3, s4;
   let wbButton;
-  let wbButton1;
-  let wbButton2;
   let svgRadius;
   let searchArray;
   let travelModeSwitch;
@@ -343,6 +341,72 @@
       })
     });
 
+
+    /* drag object function */
+    let draggableObject = document.getElementsByClassName("dragDrop");
+    console.log(draggableObject);
+
+    let draggableObjectX;
+    let draggableObjectY;
+
+    for (let i = 0; i < draggableObject.length; i++) {
+      draggableObject[i].addEventListener("mousedown", dragMousedown, false);
+      draggableObject[i].addEventListener("touchstart", dragMousedown, false);
+    }
+
+    function dragMousedown(e) {
+      let event;
+      this.classList.add("drag");
+
+      // mouse & touch event
+      if (e.type === "mousedown") {
+        event = e;
+      } else {
+        event = e.changedTouches[0];
+      }
+      draggableObjectX = event.pageX - this.offsetLeft;
+      draggableObjectY = event.pageY - this.offsetTop;
+
+      document.body.addEventListener("mousemove", dragMousemove, false);
+      document.body.addEventListener("touchmove", dragMousemove, false);
+    }
+
+
+    function dragMousemove(e) {
+      let drag = document.getElementsByClassName("drag")[0];
+      let event;
+
+      // mouse & touch event
+      if (e.type === "mousemove") {
+        event = e;
+      } else {
+        event = e.changedTouches[0];
+      }
+
+      // prevent flick
+      e.preventDefault();
+
+      drag.style.left = event.pageX - draggableObjectX + "px";
+      drag.style.top = event.pageY - draggableObjectY + "px";
+
+      drag.addEventListener("mouseup", dragMouseUp, false);
+      document.body.addEventListener("mouseleave", dragMouseUp, false);
+      drag.addEventListener("touchend", dragMouseUp, false);
+      document.body.addEventListener("touchleave", dragMouseUp, false);
+
+    }
+
+    function dragMouseUp() {
+      let drag = document.getElementsByClassName("drag")[0];
+      if (typeof drag !== 'undefined'){
+        document.body.removeEventListener("mousemove", dragMousemove, false);
+        drag.removeEventListener("mouseup", dragMouseUp, false);
+        document.body.removeEventListener("touchmove", dragMousemove, false);
+        drag.removeEventListener("touchend", dragMouseUp, false);
+
+        drag.classList.remove("drag");
+      }
+    }
 
     /* typing effect function */
     // function typing(pageNo) {
