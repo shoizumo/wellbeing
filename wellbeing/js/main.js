@@ -159,6 +159,7 @@
   /* Entry point */
   /////////////////
   window.addEventListener('load', () => {
+    // console.log(pantheon);
 
     /* menu */
     $('.navToggle').click(function () {
@@ -567,7 +568,7 @@
     }, false);
 
 
-    /* double tap event for SP */　
+    /* double tap event for SP */
     let tapCount = 0;
     window.addEventListener("touchstart", function () {
       // single tap
@@ -1010,6 +1011,24 @@
       document.getElementById("Positive2").innerHTML = 'P : ' + pRank + putRankOrdinal(pRank);
       document.getElementById("Negative2").innerHTML = 'N : ' + nRank + putRankOrdinal(nRank);
       document.getElementById("GDP2").innerHTML = 'G : ' + gRank + putRankOrdinal(gRank);
+    }
+
+
+
+    console.log(pantheon);
+    let infoBoardContent3 = document.getElementsByClassName('infoBoardContent3');
+    const path1 = '<a href=http://pantheon.media.mit.edu/people/';
+    const path2 = ' target="_blank"> - ';
+    const path3 = '</a>';
+    let url;
+    let name;
+
+    let d = pantheon[0];
+    document.getElementById("country3").innerHTML = d.country;
+    for (let i = 0; d['name'].length > i; i++){
+      url = d['url'][i];
+      name = d['name'][i];
+      infoBoardContent3[i].innerHTML = path1 + url + path2 + name + path3;
     }
 
 
