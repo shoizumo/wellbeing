@@ -66,7 +66,7 @@
   let searchArray;
   let travelModeSwitch;
   let isTravelAuto = false;
-  let isInfoTypeText = true;
+  let infoType;
   let infoBtn;
   let isTouchInfoObject = false;
   let isSPBtnDisplay = true;
@@ -133,6 +133,7 @@
   // temp val
   let stats;
 
+  let isPantheon;
 
   /* function */
   let drawHist;
@@ -141,15 +142,18 @@
   let redrawHighlightSelectedBar;
   let clickBtn;
   let travelRanking;
+  let travelPantheon;
   let travelSetInterval;
-  let stopTravelRanking;
+  let stopTravel;
   let drawSetInterval;
   let deletePin;
 
   let setInfoTypeText;
   let setInfoTypeVisual;
+  let setInfoTypeNone;
   let fadeInfoBoardContent1;
   let fadeInfoBoardContent2;
+  let fadeInfoBoardContent3;
   let returnSelectedWBtype;
   let setSelectedWBButton;
 
@@ -209,11 +213,16 @@
       infoBtn[i].addEventListener('click', (e) => {
         $(".infoType").removeClass("selectedBtn");
         infoBtn[i].classList.add("selectedBtn");
-        isInfoTypeText = e.target.id.slice(4,) === 'Text';
-        if (isInfoTypeText){
-           setInfoTypeText();
-        }else{
+        infoType = e.target.id.slice(4,);
+        if (infoType === 'Text'){
+          console.log('text');
+          setInfoTypeText();
+        }else if (infoType === 'Visual'){
+          console.log('visual');
           setInfoTypeVisual();
+        }else{
+          console.log('none');
+          setInfoTypeNone();
         }
       })
     }
@@ -228,6 +237,11 @@
       $('.infoBoardContent2').css("display", 'none');
     };
 
+    setInfoTypeNone = function() {
+      $('#infoBoard').css("display", 'none');
+      $('.infoBoardContent2').css("display", 'none');
+    };
+
     fadeInfoBoardContent1 = function() {
       $('#infoBoard').css({opacity: 0.0});
     };
@@ -235,6 +249,11 @@
     fadeInfoBoardContent2 = function() {
       $('#country2').css({opacity: 0.0});
       $('.infoBoardContent2').css({opacity: 0.0});
+    };
+
+    fadeInfoBoardContent3 = function() {
+      $('#country3').css({opacity: 0.0});
+      $('.infoBoardContent3').css({opacity: 0.0});
     };
 
     returnSelectedWBtype = function() {
@@ -268,12 +287,16 @@
 
       TweenMax.killAll();
       deletePin();
-      stopTravelRanking();
+      stopTravel();
 
       if (isTravelAuto){
         isMoveStop = true;
         controls.enableRotate = false;
-        travelRanking();
+        if (!isPantheon){
+          travelRanking();
+        }else{
+          travelPantheon();
+        }
         stopMove.innerText = 'Stop';
         stopMove.setAttribute('style', 'opacity:1.0;');
       }else{
@@ -287,10 +310,14 @@
     stopMove.addEventListener('click', () => {
       if (isMoveStop){
         stopMove.innerText = 'Play';
-        stopTravelRanking();
+        stopTravel();
       }else{
         stopMove.innerText = 'Stop';
-        travelRanking(travelIndex);
+        if (!isPantheon){
+          travelRanking(travelIndex);
+        }else{
+          travelPantheon(travelIndex);
+        }
       }
       isMoveStop = !isMoveStop;
     }, false);
@@ -1014,6 +1041,76 @@
     }
 
 
+    function displayPantheon(countryName) {
+      let pIndex = -1;
+      for (let i = 0; pantheon.length > i; i++) {
+        if (pantheon[i]['country'] === countryName) {
+          pIndex = i;
+        }
+      }
+      let d = pantheon[pIndex];
+      document.getElementById("country3").innerHTML = d.country;
+      for (let i = 0; d['name'].length > i; i++) {
+        url = d['url'][i];
+        name = d['name'][i];
+        infoBoardContent3[i].innerHTML = path1 + url + path2 + name + path3;
+      }
+
+      fadeInfoBoardContent3();
+      setTimeout(() => {
+        TweenMax.to("#country3", 1.0, {
+          opacity: 1.0,
+          onComplete: function () {
+            TweenMax.to(".infoBoardContent3", 1.0, {
+              opacity: 1.0,
+            });
+          }
+        })
+      }, 1000);
+
+    }
+
+
+    /* pantheon mode */
+    isPantheon = false;
+    window.addEventListener("keydown", function (event) {
+      // console.log(event.keyCode, event.keyCode === 32);
+      if (event.keyCode === 32) {  // space
+        console.log('space');
+        onPantheon();
+      }else if (event.keyCode === 27) {
+        console.log('esc');
+        offPantheon();
+      }
+    }, false);
+
+
+    function onPantheon() {
+      $('#country2').css("display", 'none');
+      $('#infoBoard3').css("display", 'block');
+      $(".infoType").removeClass("selectedBtn");
+      infoBtn[2].classList.add("selectedBtn");
+      setInfoTypeNone();
+
+      TweenMax.killAll();
+      deletePin();
+      stopTravel();
+      isPantheon = true;
+    }
+
+    function offPantheon() {
+      $('#country2').css("display", 'block');
+      $('#infoBoard3').css("display", 'none');
+      $(".infoType").removeClass("selectedBtn");
+      infoBtn[0].classList.add("selectedBtn");
+      setInfoTypeText();
+
+      TweenMax.killAll();
+      deletePin();
+      // stopTravel();
+      isPantheon = false;
+    }
+
 
     console.log(pantheon);
     let infoBoardContent3 = document.getElementsByClassName('infoBoardContent3');
@@ -1022,15 +1119,6 @@
     const path3 = '</a>';
     let url;
     let name;
-
-    let d = pantheon[0];
-    document.getElementById("country3").innerHTML = d.country;
-    for (let i = 0; d['name'].length > i; i++){
-      url = d['url'][i];
-      name = d['name'][i];
-      infoBoardContent3[i].innerHTML = path1 + url + path2 + name + path3;
-    }
-
 
 
     /*
@@ -1092,7 +1180,7 @@
 
     /* click land */
     function onLandMouseClick() {
-      if (isFinishStartTween){
+      if (isFinishStartTween) {
         if (!dragFlag) {
           if (isLand) {
             if (!isFirstClick) {
@@ -1107,15 +1195,34 @@
             deletePin();
             tooltip.css({opacity: 0.0});
 
+
             if (typeof res !== 'undefined') {
               $('#country').empty().append(countryName);
               displayVisualInfo(res, wbLength);
               displayTextInfo(countryName, res);  // テキストでの結果表示
+              displayPantheon(countryName);
 
               let location = countrynameToLatlon(countryName);
               latitude = location.latitude;
               longitude = location.longitude;
               moveCamera(latitude, longitude);
+
+
+              // // pantheon mode
+              // let pIndex = -1;
+              // for (let i = 0; pantheon.length > i; i++) {
+              //   if (pantheon[i]['country'] === countryName) {
+              //     pIndex = i;
+              //   }
+              // }
+              // let d = pantheon[pIndex];
+              // document.getElementById("country3").innerHTML = d.country;
+              // for (let i = 0; d['name'].length > i; i++) {
+              //   url = d['url'][i];
+              //   name = d['name'][i];
+              //   infoBoardContent3[i].innerHTML = path1 + url + path2 + name + path3;
+              // }
+
 
             } else {
               /* visual info */
@@ -1160,6 +1267,7 @@
         }
       }
     }
+
 
     function calcWbInfo(countryName) {
       for (let i = 0; wbLength > i; i++) {
@@ -1533,7 +1641,7 @@
     // travel ranking country
     */
     travelRanking = function (index = 0) {
-      stopTravelRanking();  // clear previous travel
+      stopTravel();  // clear previous travel
       let i = index;
       travelSetInterval = setInterval(function () {
         console.log(i);
@@ -1552,8 +1660,8 @@
         clickHistRankingDisplayScore(countryName);
         i++;
         travelIndex = i;  // val for continue
-        // if (i > wbLength - 1) {
-        if (i > 3 - 1) {
+        if (i > wbLength - 1) {
+        // if (i > 3 - 1) {
           console.log('clearInterval', i);
           clearInterval(travelSetInterval);
 
@@ -1594,8 +1702,37 @@
     };
 
 
-    stopTravelRanking = function () {
+    stopTravel = function () {
       clearInterval(travelSetInterval);
+    };
+
+
+    /*
+    // travel pantheon
+    */
+    travelPantheon = function (index = 0) {
+      stopTravel();  // clear previous travel
+      let i = index;
+      travelSetInterval = setInterval(function () {
+        console.log(i);
+        if (i > 0) {
+          pinList[i - 1].children[0].material.color.setHex(0xC9C7B7);
+          pinList[i - 1].children[1].material.color.setHex(0xC9C7B7);
+        }
+
+        let countryName = pantheon[i]['country'];
+        let res = countrynameToLatlon(countryName);
+        latitude = res.latitude;
+        longitude = res.longitude;
+        moveCamera(latitude, longitude);
+        displayPantheon(countryName);
+        i++;
+        travelIndex = i;  // val for continue
+        if (i > pantheon.length - 1) {
+          console.log('clearInterval', i);
+          clearInterval(travelSetInterval);
+        }
+      }, 7000);
     };
 
 

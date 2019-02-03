@@ -344,7 +344,7 @@ modal window(responsive)
   }
 
   #infoType li {
-    width: 298px;
+    width: 198px;
   }
 
   @media screen and (-webkit-min-device-pixel-ratio: 0) {
@@ -356,7 +356,7 @@ modal window(responsive)
 
     _::-webkit-full-page-media, _:future, :root #infoType li {
       border: 1px dotted #aaaaaa;
-      width: 297px;
+      width: 197px;
       height: 57px;
     }
   }
