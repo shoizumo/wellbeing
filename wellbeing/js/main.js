@@ -249,11 +249,12 @@
     fadeInfoBoardContent2 = function() {
       $('#country2').css({opacity: 0.0});
       $('.infoBoardContent2').css({opacity: 0.0});
+      fadeInfoBoardContent3();
     };
 
     fadeInfoBoardContent3 = function() {
       $('#country3').css({opacity: 0.0});
-      $('.infoBoardContent3').css({opacity: 0.0});
+      $('.infoBoardContent3').css({opacity: 0.0}).css("display", 'none');
     };
 
     returnSelectedWBtype = function() {
@@ -1061,6 +1062,7 @@
         TweenMax.to("#country3", 1.0, {
           opacity: 1.0,
           onComplete: function () {
+            $('.infoBoardContent3').css("display", 'block');
             TweenMax.to(".infoBoardContent3", 1.0, {
               opacity: 1.0,
             });
@@ -1078,6 +1080,11 @@
       if (event.keyCode === 32) {  // space
         console.log('space');
         onPantheon();
+        if (isTravelAuto) {
+          fadeInfoBoardContent3();
+          travelPantheon();
+        }
+
       }else if (event.keyCode === 27) {
         console.log('esc');
         offPantheon();
@@ -1206,22 +1213,6 @@
               latitude = location.latitude;
               longitude = location.longitude;
               moveCamera(latitude, longitude);
-
-
-              // // pantheon mode
-              // let pIndex = -1;
-              // for (let i = 0; pantheon.length > i; i++) {
-              //   if (pantheon[i]['country'] === countryName) {
-              //     pIndex = i;
-              //   }
-              // }
-              // let d = pantheon[pIndex];
-              // document.getElementById("country3").innerHTML = d.country;
-              // for (let i = 0; d['name'].length > i; i++) {
-              //   url = d['url'][i];
-              //   name = d['name'][i];
-              //   infoBoardContent3[i].innerHTML = path1 + url + path2 + name + path3;
-              // }
 
 
             } else {
@@ -1732,7 +1723,7 @@
           console.log('clearInterval', i);
           clearInterval(travelSetInterval);
         }
-      }, 7000);
+      }, 5000);
     };
 
 
