@@ -1077,17 +1077,22 @@
     isPantheon = false;
     window.addEventListener("keydown", function (event) {
       // console.log(event.keyCode, event.keyCode === 32);
-      if (event.keyCode === 32) {  // space
-        console.log('space');
-        onPantheon();
-        if (isTravelAuto) {
-          fadeInfoBoardContent3();
-          travelPantheon();
-        }
+      if (!isMoveCamera) {
+        if (event.keyCode === 32) {  // space
+          console.log('space');
+          onPantheon();
+          if (isTravelAuto) {
+            fadeInfoBoardContent3();
+            travelPantheon();
+          }
 
-      }else if (event.keyCode === 27) {
-        console.log('esc');
-        offPantheon();
+        } else if (event.keyCode === 27) {
+          console.log('esc');
+          offPantheon();
+          if (isTravelAuto) {
+            stopTravel();
+          }
+        }
       }
     }, false);
 
@@ -1103,6 +1108,9 @@
       deletePin();
       stopTravel();
       isPantheon = true;
+
+      $('#wbButton2').css("display", 'none');
+      $('#canvasWrapper').css("display", 'none');
     }
 
     function offPantheon() {
@@ -1114,8 +1122,10 @@
 
       TweenMax.killAll();
       deletePin();
-      // stopTravel();
       isPantheon = false;
+
+      $('#wbButton2').css("display", 'block');
+      $('#canvasWrapper').css("display", 'block');
     }
 
 
