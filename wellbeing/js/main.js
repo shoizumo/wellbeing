@@ -78,8 +78,6 @@
   const widthTablet = 680;
   const widthSP = 500;
 
-  console.log(wbLength, latLength, pantheonLength);
-
 
   /* marker pin */
   let pinList;
@@ -115,6 +113,7 @@
   let isInfoObject = false;
   let isFillHist = false;
   let infoObject;
+  let isSearching = false;
   let isFirstClick = true;
   let latitude;
   let longitude;
@@ -376,8 +375,6 @@
 
     /* drag object function */
     let draggableObject = document.getElementsByClassName("dragDrop");
-    console.log(draggableObject);
-
     let draggableObjectX;
     let draggableObjectY;
 
@@ -565,7 +562,6 @@
       dragEndPos.x = event.clientX;
       dragEndPos.y = event.clientY;
       let length = Math.pow((dragEndPos.x - dragStartPos.x), 2) + Math.pow((dragEndPos.y - dragStartPos.y), 2);
-      console.log(length);
       dragFlag = length > 100;
 
       if (dragFlag) {
@@ -594,7 +590,9 @@
             }
           }
         }
-        isTouchInfoObject = false;
+        if (!isSearching){
+          isTouchInfoObject = false;
+        }
       }
     }, false);
 
@@ -1176,9 +1174,9 @@
     }
 
 
-    console.log(wbData);
-    console.log(latlon);
-    console.log(pantheon);
+    console.log('well-being data', wbData);
+    console.log('latlon data', latlon);
+    console.log('pantheon data', pantheon);
     let infoBoardContent3 = document.getElementsByClassName('infoBoardContent3');
     const path1 = '<a href=http://pantheon.media.mit.edu/people/';
     const path2 = ' target="_blank"> - ';
@@ -1255,6 +1253,7 @@
               negative.cancel();
               gdp.cancel();
             }
+            console.log('click');
             clearInfo();
             let res = calcWbInfo(countryNameGlobal);
             infoBoard.css({opacity: 0.8});
@@ -1268,8 +1267,6 @@
             moveCamera(latitude, longitude);
 
             $('#country').empty().append(countryNameGlobal);
-            console.log(res);
-            console.log(countryNameGlobal);
             if (typeof res !== 'undefined') {
               displayVisualInfo(res, wbLength);
               displayTextInfo(countryNameGlobal, res);  // テキストでの結果表示
@@ -1333,12 +1330,17 @@
       infoObject[i].addEventListener('touchstart', touchInfoObject, false);
     }
 
+
     function onInfoObject() {
       isInfoObject = true;
+      console.log('onInfoObject', isInfoObject);
     }
 
     function outInfoObject() {
-      isInfoObject = false;
+      if (!isSearching){
+        isInfoObject = false;
+      }
+      console.log('outInfoObject', isInfoObject);
     }
 
     function touchInfoObject() {
@@ -1773,7 +1775,7 @@
 
 
     /*
-    serch country name
+    search country name
     */
     searchArray = [];
     for (let i = 0; i < latLength; i++) {
@@ -1799,6 +1801,15 @@
         moveCamera(res.latitude, res.longitude);
         clickHistRankingDisplayScore(countryNameGlobal);
       }
+      isSearching = false;
+      isInfoObject = false;
+      // console.log(isInfoObject);
+    });
+
+    selectorSearch.on("autocompleteopen", function () {
+      isSearching = true;
+      isInfoObject = true;
+      // console.log(isInfoObject);
     });
 
   }

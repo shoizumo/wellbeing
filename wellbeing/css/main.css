@@ -89,9 +89,9 @@ html, body {
 
 /* search */
 .ui-autocomplete {
-    max-height: 60%;
-    overflow-y: auto;
-    overflow-x: hidden;
+  max-height: 60%;
+  overflow-y: auto;
+  overflow-x: hidden;
 }
 
 
