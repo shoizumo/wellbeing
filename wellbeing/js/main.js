@@ -1225,12 +1225,8 @@
                       tooltip.css({opacity: 1.0});
                       isLand = true;
                       body.css('cursor', 'pointer');
-
-                      let res = calcWbInfo(countryNameGlobal);
-                      if (typeof res !== 'undefined') {
-                        tooltip.css({top: event.clientY * 0.97});
-                        tooltip.css({left: event.clientX * 1.03});
-                      }
+                      tooltip.css({top: event.clientY * 0.97});
+                      tooltip.css({left: event.clientX * 1.03});
                     }
                   }
                 }
