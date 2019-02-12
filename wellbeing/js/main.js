@@ -54,6 +54,8 @@
   let NegativeScoreArray = [];
 
   const wbLength = Object.keys(wbData).length;
+  const latLength = Object.keys(latlon).length;
+  const pantheonLength = Object.keys(pantheon).length;
   let meshList;
   let ladderMax, ladderMin;
   let positiveMax, positiveMin;
@@ -76,6 +78,7 @@
   const widthTablet = 680;
   const widthSP = 500;
 
+  console.log(wbLength, latLength, pantheonLength);
 
 
   /* marker pin */
@@ -105,7 +108,7 @@
 
 
   /* interactive land function */
-  let countryName = 0;
+  let countryNameGlobal = 0;
   let isClicked = false;
   let dragFlag = false;
   let isLand = false;
@@ -1069,6 +1072,46 @@
           }
         })
       }, 1000);
+    }
+
+    function displayVisulalNoInfo() {
+      setTimeout(() => {
+        t1.textContent = 'No data';
+        $('#LadderRanking').children()[0].appendChild(t1);
+        t2.textContent = 'No data';
+        $('#PositiveRanking').children()[0].appendChild(t2);
+        t3.textContent = 'No data';
+        $('#NegativeRanking').children()[0].appendChild(t3);
+        t4.textContent = 'No data';
+        $('#GDPRanking').children()[0].appendChild(t4);
+
+        $('#infoLadder').attr('opacity', 1.0);
+        $('#infoPositive').attr('opacity', 1.0);
+        $('#infoNegative').attr('opacity', 1.0);
+        $('#infoGDP').attr('opacity', 1.0);
+      }, 500);
+
+    }
+
+    function displayTextNoInfo() {
+      fadeInfoBoardContent2();
+      setTimeout(() => {
+        TweenMax.to("#country2", 1.0, {
+          opacity: 1.0,
+          onComplete: function () {
+            console.log('tween');
+            TweenMax.to(".infoBoardContent2", 1.0, {
+              opacity: 1.0,
+            });
+          }
+        })
+      }, 1000);
+
+      document.getElementById("country2").innerHTML = countryNameGlobal;
+      document.getElementById("Ladder2").innerHTML = 'No data';
+      document.getElementById("Positive2").innerHTML = '';
+      document.getElementById("Negative2").innerHTML = '';
+      document.getElementById("GDP2").innerHTML = '';
 
     }
 
@@ -1129,6 +1172,8 @@
     }
 
 
+    console.log(wbData);
+    console.log(latlon);
     console.log(pantheon);
     let infoBoardContent3 = document.getElementsByClassName('infoBoardContent3');
     const path1 = '<a href=http://pantheon.media.mit.edu/people/';
@@ -1173,13 +1218,13 @@
                   if (intersects[0].point !== null) {
                     if (intersects[0].object.name === "land") {
 
-                      countryName = intersects[0].object.userData.country;
-                      tooltip[0].innerText = countryName;
+                      countryNameGlobal = intersects[0].object.userData.country;
+                      tooltip[0].innerText = countryNameGlobal;
                       tooltip.css({opacity: 1.0});
                       isLand = true;
                       body.css('cursor', 'pointer');
 
-                      let res = calcWbInfo(countryName);
+                      let res = calcWbInfo(countryNameGlobal);
                       if (typeof res !== 'undefined') {
                         tooltip.css({top: event.clientY * 0.97});
                         tooltip.css({left: event.clientX * 1.03});
@@ -1207,62 +1252,32 @@
               gdp.cancel();
             }
             clearInfo();
-            let res = calcWbInfo(countryName);
+            let res = calcWbInfo(countryNameGlobal);
             infoBoard.css({opacity: 0.8});
             deletePin();
             tooltip.css({opacity: 0.0});
 
+            // well-beingデータがあってもなくても移動
+            let location = countrynameToLatlon(countryNameGlobal);
+            latitude = location.latitude;
+            longitude = location.longitude;
+            moveCamera(latitude, longitude);
 
+            $('#country').empty().append(countryNameGlobal);
             if (typeof res !== 'undefined') {
-              $('#country').empty().append(countryName);
               displayVisualInfo(res, wbLength);
-              displayTextInfo(countryName, res);  // テキストでの結果表示
-              displayPantheon(countryName);
+              displayTextInfo(countryNameGlobal, res);  // テキストでの結果表示
+              displayPantheon(countryNameGlobal);
 
-              let location = countrynameToLatlon(countryName);
-              latitude = location.latitude;
-              longitude = location.longitude;
-              moveCamera(latitude, longitude);
+              // let location = countrynameToLatlon(countryNameGlobal);
+              // latitude = location.latitude;
+              // longitude = location.longitude;
+              // moveCamera(latitude, longitude);
 
 
             } else {
-              /* visual info */
-              $('#country').empty().append(countryName);
-              setTimeout(() => {
-                t1.textContent = 'No data';
-                $('#LadderRanking').children()[0].appendChild(t1);
-                t2.textContent = 'No data';
-                $('#PositiveRanking').children()[0].appendChild(t2);
-                t3.textContent = 'No data';
-                $('#NegativeRanking').children()[0].appendChild(t3);
-                t4.textContent = 'No data';
-                $('#GDPRanking').children()[0].appendChild(t4);
-
-                $('#infoLadder').attr('opacity', 1.0);
-                $('#infoPositive').attr('opacity', 1.0);
-                $('#infoNegative').attr('opacity', 1.0);
-                $('#infoGDP').attr('opacity', 1.0);
-              }, 500);
-
-              /* text info */
-              fadeInfoBoardContent2();
-              setTimeout(() => {
-                TweenMax.to("#country2", 1.0, {
-                  opacity: 1.0,
-                  onComplete: function () {
-                    console.log('tween');
-                    TweenMax.to(".infoBoardContent2", 1.0, {
-                      opacity: 1.0,
-                    });
-                  }
-                })
-              }, 1000);
-
-              document.getElementById("country2").innerHTML = countryName;
-              document.getElementById("Ladder2").innerHTML = 'No data';
-              document.getElementById("Positive2").innerHTML = '';
-              document.getElementById("Negative2").innerHTML = '';
-              document.getElementById("GDP2").innerHTML = '';
+              displayVisulalNoInfo();
+              displayTextNoInfo();
             }
           }
         }
@@ -1300,7 +1315,7 @@
       let latitude;
       let longitude;
 
-      for (let i = 0; wbLength > i; i++) {
+      for (let i = 0; latLength > i; i++) {
         if (latlon[i].country === countryName) {
           latitude = latlon[i].latitude;
           longitude = latlon[i].longitude;
@@ -1384,6 +1399,7 @@
     canvasContext = histCanvas.getContext("2d");
     canvasContext.globalAlpha = 0.5;  // for safari(fillStyle alpha doesn't work)
 
+    console.log(LadderArray)
     drawHist = function (type, duration, drawType) {
       clearInterval(drawSetInterval);
       let data;
@@ -1508,8 +1524,13 @@
       infoBoard.css({opacity: 0.8});
 
       $('#country').empty().append(countryName);
-      displayVisualInfo(res, wbLength);
-      displayTextInfo(countryName, res);  // テキストでの結果表示
+      if (typeof res !== 'undefined') {
+        displayVisualInfo(res, wbLength);
+        displayTextInfo(countryName, res);  // テキストでの結果表示
+      } else {
+        displayVisulalNoInfo();
+        displayTextNoInfo();
+      }
     }
 
 
@@ -1756,7 +1777,7 @@
     serch country name
     */
     searchArray = [];
-    for (let i = 0; i < wbLength; i++) {
+    for (let i = 0; i < latLength; i++) {
       searchArray.push(latlon[i].country);
     }
     searchArray = searchArray.sort();
@@ -1770,11 +1791,14 @@
     });
 
     selectorSearch.on("autocompleteclose", function () {
-      let inputCountry = document.getElementById('country').textContent;
-      let res = countrynameToLatlon(inputCountry);
+      countryNameGlobal = document.getElementById('country').textContent;
+      let res = countrynameToLatlon(countryNameGlobal);
+      console.log(countryNameGlobal);
       if (typeof res.latitude !== 'undefined') {
+        console.log(res);
+        deletePin();
         moveCamera(res.latitude, res.longitude);
-        clickHistRankingDisplayScore(inputCountry);
+        clickHistRankingDisplayScore(countryNameGlobal);
       }
     });
 
