@@ -1052,12 +1052,16 @@
           pIndex = i;
         }
       }
-      let d = pantheon[pIndex];
-      document.getElementById("country3").innerHTML = d.country;
-      for (let i = 0; d['name'].length > i; i++) {
-        url = d['url'][i];
-        name = d['name'][i];
-        infoBoardContent3[i].innerHTML = path1 + url + path2 + name + path3;
+      document.getElementById("country3").innerHTML = countryName;
+      if(pIndex !== -1){
+        let d = pantheon[pIndex];
+        for (let i = 0; d['name'].length > i; i++) {
+          url = d['url'][i];
+          name = d['name'][i];
+          infoBoardContent3[i].innerHTML = path1 + url + path2 + name + path3;
+        }
+      }else{
+        infoBoardContent3[0].innerHTML = 'No data';
       }
 
       fadeInfoBoardContent3();
@@ -1264,21 +1268,17 @@
             moveCamera(latitude, longitude);
 
             $('#country').empty().append(countryNameGlobal);
+            console.log(res);
+            console.log(countryNameGlobal);
             if (typeof res !== 'undefined') {
               displayVisualInfo(res, wbLength);
               displayTextInfo(countryNameGlobal, res);  // テキストでの結果表示
-              displayPantheon(countryNameGlobal);
-
-              // let location = countrynameToLatlon(countryNameGlobal);
-              // latitude = location.latitude;
-              // longitude = location.longitude;
-              // moveCamera(latitude, longitude);
-
-
             } else {
               displayVisulalNoInfo();
               displayTextNoInfo();
             }
+            // display pantheon data / no data
+            displayPantheon(countryNameGlobal);
           }
         }
       }
@@ -1399,7 +1399,6 @@
     canvasContext = histCanvas.getContext("2d");
     canvasContext.globalAlpha = 0.5;  // for safari(fillStyle alpha doesn't work)
 
-    console.log(LadderArray)
     drawHist = function (type, duration, drawType) {
       clearInterval(drawSetInterval);
       let data;

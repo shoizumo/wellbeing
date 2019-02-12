@@ -43,10 +43,6 @@ infoBoard1(visual)
     outline: none;
 }
 
-#country{
-
-}
-
 #Ladder{
   grid-column: 1 / 2;
   grid-raw: 2 / 3;
