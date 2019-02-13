@@ -79,6 +79,13 @@
   const widthSP = 500;
 
 
+  /* pantheon data */
+  let PantheonArray = [];
+  let PantheonScoreArray = [];
+  let pantheonMax;
+  let pantheonMin;
+
+
   /* marker pin */
   let pinList;
   let pinRadius;
@@ -102,7 +109,7 @@
   let highlightSelectedBarList;
 
   const barColor = "rgb(200, 225, 225)";
-  const heightBarColor = "rgb(245, 70, 240)";
+  const highlightedBarColor = "rgb(245, 70, 240)";
 
 
   /* interactive land function */
@@ -141,7 +148,7 @@
   let drawHist;
   let drawHistDurationNomal = 2500;
   let drawHistDurationRedraw = 0;
-  let redrawHighlightSelectedBar;
+  let redrawHighlightedBar;
   let clickBtn;
   let travelRanking;
   let travelPantheon;
@@ -165,8 +172,6 @@
   /* Entry point */
   /////////////////
   window.addEventListener('load', () => {
-    // console.log(pantheon);
-
     /* menu */
     $('.navToggle').click(function () {
       $(this).toggleClass('active');
@@ -769,7 +774,7 @@
 
 
     /*
-    // setting well-being data
+    // setting well-being data, pantheon data
     */
     for (let i = 0; wbLength > i; i++) {
       let wb = wbData[i];
@@ -789,16 +794,25 @@
       GDPScoreArray.push(logGdp);
     }
 
+    for (let i = 0; pantheonLength > i; i++) {
+      let P = pantheon[i];
+      let p = {country: P.country, rank: P.rank, score: P.nPeople};
+
+      PantheonArray.push(p);
+      PantheonScoreArray.push(p);
+    }
 
     sortDesc(LadderArray, 'country');
     sortDesc(PositiveArray, 'country');
     sortDesc(NegativeArray, 'country');
     sortDesc(GDPArray, 'country');
+    sortDesc(PantheonArray, 'country');
 
     sortDesc(LadderScoreArray, 'rank');
     sortDesc(PositiveScoreArray, 'rank');
     sortDesc(NegativeScoreArray, 'rank');
     sortDesc(GDPScoreArray, 'rank');
+    sortDesc(PantheonScoreArray, 'rank');
 
     function sortDesc(array, type) {
       array.sort(function sortRank(a, b) {
@@ -822,6 +836,13 @@
     negativeMin = Math.min(NegativeScoreArray[wbLength - 1].score);
     gdpMax = Math.max(GDPScoreArray[0].score);
     gdpMin = Math.min(GDPScoreArray[wbLength - 1].score);
+
+    pantheonMax = Math.max(PantheonScoreArray[0].score);
+    pantheonMin = Math.min(PantheonScoreArray[pantheonLength - 1].score);
+
+    console.log('PantheonArray', PantheonArray);
+    console.log('PantheonScoreArray', PantheonScoreArray);
+    console.log('max min', pantheonMax, pantheonMin);
 
 
     /* make well-being button in order to show score */
@@ -1045,7 +1066,7 @@
 
     function displayPantheon(countryName) {
       let pIndex = -1;
-      for (let i = 0; pantheon.length > i; i++) {
+      for (let i = 0; pantheonLength > i; i++) {
         if (pantheon[i]['country'] === countryName) {
           pIndex = i;
         }
@@ -1153,12 +1174,14 @@
       deletePin();
       stopTravel();
       isPantheon = true;
+      drawHist('pantheon', drawHistDurationNomal, 'new');
 
       $('#wbButton2').css("display", 'none');
-      $('#canvasWrapper').css("display", 'none');
     }
 
     function offPantheon() {
+      let selectedType = returnSelectedWBtype();
+
       $('#country2').css("display", 'block');
       $('#infoBoard3').css("display", 'none');
       $(".infoType").removeClass("selectedBtn");
@@ -1168,9 +1191,9 @@
       TweenMax.killAll();
       deletePin();
       isPantheon = false;
+      drawHist(selectedType, drawHistDurationNomal, 'new');
 
       $('#wbButton2').css("display", 'block');
-      $('#canvasWrapper').css("display", 'block');
     }
 
 
@@ -1249,7 +1272,6 @@
               negative.cancel();
               gdp.cancel();
             }
-            console.log('click');
             clearInfo();
             let res = calcWbInfo(countryNameGlobal);
             infoBoard.css({opacity: 0.8});
@@ -1329,14 +1351,12 @@
 
     function onInfoObject() {
       isInfoObject = true;
-      console.log('onInfoObject', isInfoObject);
     }
 
     function outInfoObject() {
       if (!isSearching){
         isInfoObject = false;
       }
-      console.log('outInfoObject', isInfoObject);
     }
 
     function touchInfoObject() {
@@ -1398,6 +1418,19 @@
     canvasContext.globalAlpha = 0.5;  // for safari(fillStyle alpha doesn't work)
 
     drawHist = function (type, duration, drawType) {
+      let res;
+      if (isPantheon){
+        res = drawPantheonHist(duration, drawType);
+      }else{
+        res = drawWbHist(type, duration, drawType);
+      }
+      console.log(res.width, res.scoreMax);
+      return {width: res.width, histData: res.histData, scoreMax: res.scoreMax, scoreData: res.scoreData};
+    };
+
+    console.log('ladder', ladderMax, 'positive', positiveMax, 'negative', negativeMin, 'gdp', gdpMax, 'pantheon', pantheonMax);
+
+    function drawWbHist(type, duration, drawType) {
       clearInterval(drawSetInterval);
       let data;
       let scoreMax;
@@ -1420,6 +1453,17 @@
         scoreData = GDPScoreArray;
       }
 
+      let width = handleCanvas(data, duration, drawType, scoreMax);
+      return {width: width, histData: data, scoreMax: scoreMax, scoreData: scoreData};
+    }
+
+    function drawPantheonHist(duration, drawType) {
+      clearInterval(drawSetInterval);
+      let width = handleCanvas(PantheonArray, duration, drawType, pantheonMax);
+      return {width: width, histData: PantheonArray, scoreMax: pantheonMax, scoreData: PantheonScoreArray};
+    }
+
+    function handleCanvas(data, duration, drawType, scoreMax) {
       canvasContext.clearRect(0, 0, histCanvas.width, histCanvas.height);
       let numData = data.length;
       let width = histCanvas.width / numData;
@@ -1438,14 +1482,13 @@
 
           // 再描画時の関数
           if (drawType === 'redraw'){
-            redrawHighlightSelectedBar(highlightSelectedBarList, histData, scoreMax);
+            redrawHighlightedBar(highlightSelectedBarList, histData, scoreMax);
           }
         }
       }, duration / numData);
-
       isHistDisplay = true;
-      return {width: width, histData: data, scoreMax: scoreMax, scoreData: scoreData};
-    };
+      return width;
+    }
 
 
     /* mouse event histogram */
@@ -1528,6 +1571,7 @@
         displayVisulalNoInfo();
         displayTextNoInfo();
       }
+      displayPantheon(countryName);
     }
 
 
@@ -1543,17 +1587,17 @@
         }
       }
       // highlight color
-      canvasContext.fillStyle = heightBarColor;
+      canvasContext.fillStyle = highlightedBarColor;
       h = (data[index].score) / scoreMax * histCanvas.height;
       canvasContext.fillRect(barWidth * index, histCanvas.height - h, barWidth, h);
     }
 
-    redrawHighlightSelectedBar = function(indexList, data, scoreMax) {
+    redrawHighlightedBar = function(indexList, data, scoreMax) {
       let h;
       for (let i = 0; indexList.length > i; i++) {
-        console.log('redrawHighlightSelectedBar', i);
+        console.log('redrawHighlightedBar', i);
         // highlight color
-        canvasContext.fillStyle = heightBarColor;
+        canvasContext.fillStyle = highlightedBarColor;
         h = (data[indexList[i]].score) / scoreMax * histCanvas.height;
         canvasContext.fillRect(barWidth * indexList[i], histCanvas.height - h, barWidth, h);
       }
