@@ -823,6 +823,9 @@
       });
     }
 
+    sortDesc(pantheon, 'country');
+    console.log(pantheon);
+
 
     /* calc MaxMin */
     ladderMax = Math.max(LadderScoreArray[0].score);
@@ -1083,6 +1086,10 @@
         }
       }
       document.getElementById("country3").innerHTML = countryName;
+      let numPanheonPeople = 5;
+      for (let i = 0; numPanheonPeople > i; i++) {
+        infoBoardContent3[i].innerHTML = ''; // clear previous result
+      }
       if (pIndex !== -1) {
         let d = pantheon[pIndex];
         for (let i = 0; d['name'].length > i; i++) {
@@ -1135,7 +1142,6 @@
         TweenMax.to("#country2", 1.0, {
           opacity: 1.0,
           onComplete: function () {
-            console.log('tween');
             TweenMax.to(".infoBoardContent2", 1.0, {
               opacity: 1.0,
             });
@@ -1188,7 +1194,12 @@
       deletePin();
       stopTravel();
       isPantheon = true;
-      drawHist('pantheon', drawHistDurationNomal, 'new');
+
+      let res = drawHist('pantheon', drawHistDurationNomal, 'new');
+      barWidth = res.width;
+      histData = res.histData;
+      scoreMax = res.scoreMax;
+      histScoreData = res.scoreData;
 
       $('#wbButton2').css("display", 'none');
     }
@@ -1205,7 +1216,11 @@
       TweenMax.killAll();
       deletePin();
       isPantheon = false;
-      drawHist(selectedType, drawHistDurationNomal, 'new');
+      let res = drawHist(selectedType, drawHistDurationNomal, 'new');
+      barWidth = res.width;
+      histData = res.histData;
+      scoreMax = res.scoreMax;
+      histScoreData = res.scoreData;
 
       $('#wbButton2').css("display", 'block');
     }
@@ -1431,13 +1446,12 @@
       } else {
         res = drawWbHist(type, duration, drawType);
       }
-      console.log(res.width, res.scoreMax);
       return {width: res.width, histData: res.histData, scoreMax: res.scoreMax, scoreData: res.scoreData};
     };
 
-    console.log('ladder', ladderMax, 'positive', positiveMax, 'negative', negativeMin, 'gdp', gdpMax, 'pantheon', pantheonMax);
 
     function drawWbHist(type, duration, drawType) {
+      console.log('drawWbHist', type);
       clearInterval(drawSetInterval);
       let data;
       let scoreMax;
@@ -1465,6 +1479,7 @@
     }
 
     function drawPantheonHist(duration, drawType) {
+      console.log('drawPantheonHist');
       clearInterval(drawSetInterval);
       let width = handleCanvas(PantheonArray, duration, drawType, pantheonMax);
       return {width: width, histData: PantheonArray, scoreMax: pantheonMax, scoreData: PantheonScoreArray};
@@ -1473,8 +1488,10 @@
     function handleCanvas(data, duration, drawType, scoreMax) {
       canvasContext.clearRect(0, 0, histCanvas.width, histCanvas.height);
       let numData = data.length;
-      let width = histCanvas.width / numData;
+      let width = mathFloor(histCanvas.width / numData, 5);
+      console.log(histCanvas.width / numData, '->', width);
 
+      console.log(data);
       // draw histogram with loop rect
       let i = 0;
       // console.log(numData, data);
@@ -1482,6 +1499,7 @@
         canvasContext.fillStyle = barColor;
         let h = (data[i].score) / scoreMax * histCanvas.height;
         canvasContext.fillRect(width * i, histCanvas.height - h, width, h);
+        // console.log(i);
         i++;
 
         if (i > numData - 1) {
@@ -1497,6 +1515,10 @@
       return width;
     }
 
+    function mathFloor(value, base) {
+      let b = Math.pow(10, base);
+      return Math.floor(value * b) / b;
+    }
 
     /* mouse event histogram */
     let tooltipHist = $('#tooltipHist');
@@ -1512,7 +1534,6 @@
           let mouseX = Math.abs(event.clientX - rect.left);
           let index = Math.floor(mouseX / barWidth);
           let data = histData;
-          // console.log(data[index].country, data[index].rank);
 
           document.getElementById("canvasWrapper").classList.add("canvasWrapperPointer");
           mouseOnCountry = data[index]['country'];
@@ -1521,6 +1542,7 @@
 
           tooltipHist.css({top: event.clientY * 0.95});
           tooltipHist.css({left: event.clientX * 1.0 - tooltipHist.width() / 2 - 5});
+
         } else {
           document.getElementById("canvasWrapper").classList.remove("canvasWrapperPointer");
           tooltipHist.css({opacity: 0.0});
@@ -1535,7 +1557,6 @@
     }
 
     function clickHistRanking() {
-      console.log(isFillHist);
       if (!isTravelAuto) {
         if (isFillHist) {
           if (!isMoveCamera) {
