@@ -106,7 +106,7 @@
   let isHistDisplay = false;
   let mouseOnCountry;
   let travelIndex = 0;
-  let highlightSelectedBarList;
+  let highlightedBarList;
 
   const barColor = "rgb(200, 225, 225)";
   const highlightedBarColor = "rgb(245, 70, 240)";
@@ -150,7 +150,7 @@
   let drawHistDurationRedraw = 0;
   let redrawHighlightedBar;
   let clickBtn;
-  let travelRanking;
+  let travelWellbeing;
   let travelPantheon;
   let travelSetInterval;
   let stopTravel;
@@ -165,7 +165,6 @@
   let fadeInfoBoardContent3;
   let returnSelectedWBtype;
   let setSelectedWBButton;
-
 
 
   /////////////////
@@ -206,7 +205,7 @@
         $("#modalContentWrapper" + id.toString()).fadeIn(400);
         $("#modalOverlay, .modalClose").unbind()
             .click(function () {
-              $("#modalContentWrapper"  + id.toString() + ", #modalOverlay").fadeOut(400, function () {
+              $("#modalContentWrapper" + id.toString() + ", #modalOverlay").fadeOut(400, function () {
                 $("#modalOverlay").remove();
               });
             });
@@ -221,54 +220,54 @@
         $(".infoType").removeClass("selectedBtn");
         infoBtn[i].classList.add("selectedBtn");
         infoType = e.target.id.slice(4,);
-        if (infoType === 'Text'){
+        if (infoType === 'Text') {
           console.log('text');
           setInfoTypeText();
-        }else if (infoType === 'Visual'){
+        } else if (infoType === 'Visual') {
           console.log('visual');
           setInfoTypeVisual();
-        }else{
+        } else {
           console.log('none');
           setInfoTypeNone();
         }
       })
     }
 
-    setInfoTypeText = function() {
+    setInfoTypeText = function () {
       $('#infoBoard').css("display", 'none');
       $('.infoBoardContent2').css("display", 'block');
     };
 
-    setInfoTypeVisual = function() {
+    setInfoTypeVisual = function () {
       $('#infoBoard').css("display", 'grid');
       $('.infoBoardContent2').css("display", 'none');
     };
 
-    setInfoTypeNone = function() {
+    setInfoTypeNone = function () {
       $('#infoBoard').css("display", 'none');
       $('.infoBoardContent2').css("display", 'none');
     };
 
-    fadeInfoBoardContent1 = function() {
+    fadeInfoBoardContent1 = function () {
       $('#infoBoard').css({opacity: 0.0});
     };
 
-    fadeInfoBoardContent2 = function() {
+    fadeInfoBoardContent2 = function () {
       $('#country2').css({opacity: 0.0});
       $('.infoBoardContent2').css({opacity: 0.0});
       fadeInfoBoardContent3();
     };
 
-    fadeInfoBoardContent3 = function() {
+    fadeInfoBoardContent3 = function () {
       $('#country3').css({opacity: 0.0});
       $('.infoBoardContent3').css({opacity: 0.0}).css("display", 'none');
     };
 
-    returnSelectedWBtype = function() {
-      return $('#wbButton2').find('.selectedBtn').attr("id").slice(0,-1);
+    returnSelectedWBtype = function () {
+      return $('#wbButton2').find('.selectedBtn').attr("id").slice(0, -1);
     };
 
-    setSelectedWBButton = function(index) {
+    setSelectedWBButton = function (index) {
       $(".wbButton").removeClass("selectedBtn");
       document.getElementsByClassName('wbButton1')[index].classList.add("selectedBtn");
       document.getElementsByClassName('wbButton2')[index].classList.add("selectedBtn");
@@ -279,7 +278,7 @@
     travelModeSwitch = document.getElementById('travelModeSwitch-label');
     travelModeSwitch.addEventListener('click', () => {
       isTravelAuto = !isTravelAuto;
-      highlightSelectedBarList = [];  // reset
+      highlightedBarList = [];  // reset
 
       let selectedType = returnSelectedWBtype();
       console.log(selectedType);
@@ -297,17 +296,17 @@
       deletePin();
       stopTravel();
 
-      if (isTravelAuto){
+      if (isTravelAuto) {
         isMoveStop = true;
         controls.enableRotate = false;
-        if (!isPantheon){
-          travelRanking();
-        }else{
+        if (!isPantheon) {
+          travelWellbeing();
+        } else {
           travelPantheon();
         }
         stopMove.innerText = 'Stop';
         stopMove.setAttribute('style', 'opacity:1.0;');
-      }else{
+      } else {
         isMoveStop = false;
         controls.enableRotate = true;
         stopMove.setAttribute('style', 'opacity:0.0;');
@@ -316,14 +315,14 @@
 
     let stopMove = document.getElementById('stopMove');
     stopMove.addEventListener('click', () => {
-      if (isMoveStop){
+      if (isMoveStop) {
         stopMove.innerText = 'Play';
         stopTravel();
-      }else{
+      } else {
         stopMove.innerText = 'Stop';
-        if (!isPantheon){
-          travelRanking(travelIndex);
-        }else{
+        if (!isPantheon) {
+          travelWellbeing(travelIndex);
+        } else {
           travelPantheon(travelIndex);
         }
       }
@@ -432,7 +431,7 @@
 
     function dragMouseUp() {
       let drag = document.getElementsByClassName("drag")[0];
-      if (typeof drag !== 'undefined'){
+      if (typeof drag !== 'undefined') {
         document.body.removeEventListener("mousemove", dragMousemove, false);
         drag.removeEventListener("mouseup", dragMouseUp, false);
         document.body.removeEventListener("touchmove", dragMousemove, false);
@@ -572,7 +571,7 @@
       if (dragFlag) {
         if (isFinishStartTween) {
           if (!isTravelAuto) {
-            if (!isMoveCamera){
+            if (!isMoveCamera) {
               fadeInfoBoardContent2();
               TweenMax.killAll();
               deletePin();
@@ -595,7 +594,7 @@
             }
           }
         }
-        if (!isSearching){
+        if (!isSearching) {
           isTouchInfoObject = false;
         }
       }
@@ -645,7 +644,6 @@
   /* END Entry point */
 
 
-
   function loadShader() {
     SHADER_LOADER.load((data) => {
       const vsMain = data.myShaderMain.vertex;
@@ -657,9 +655,9 @@
   }
 
 
-
   /////////////////////////
   /* Initialize function */
+
   /////////////////////////
   function init(vsMain, fsMain, vsPost, fsPost) {
     stats = initStats();
@@ -772,7 +770,6 @@
     earth.position.z = initEarthPosition.z;
 
 
-
     /*
     // setting well-being data, pantheon data
     */
@@ -849,7 +846,7 @@
     wbButton = document.getElementsByClassName('wbButton');
     for (let i = 0, wbLen = wbButton.length; i < wbLen; i++) {
       wbButton[i].addEventListener('click', (e) => {
-        let type = e.target.id.slice(0,-1);
+        let type = e.target.id.slice(0, -1);
         clickBtn(type);
         let index;
         if (type === 'ladderBtn') {
@@ -880,13 +877,13 @@
             histScoreData = GDPScoreArray;
           }
           deletePin();
-          travelRanking();
+          travelWellbeing();
         }
       }, false);
     }
 
     clickBtn = function (type) {
-       highlightSelectedBarList = [];  // reset
+      highlightedBarList = [];  // reset
       let res = drawHist(type, drawHistDurationNomal, 'new');
       // console.log(res);
       barWidth = res.width;
@@ -894,7 +891,6 @@
       scoreMax = res.scoreMax;
       histScoreData = res.scoreData;
     };
-
 
 
     /*
@@ -927,6 +923,7 @@
       text.setAttributeNS(null, "id", "info" + type);
       return text;
     }
+
     t1 = createRankText('Ladder');
     t2 = createRankText('Positive');
     t3 = createRankText('Negative');
@@ -950,6 +947,7 @@
       text.setAttributeNS(null, "class", "info" + type);
       return text;
     }
+
     s1 = createScoreText('Ladder');
     s2 = createScoreText('Positive');
     s3 = createScoreText('Negative');
@@ -958,6 +956,7 @@
 
     /* display score result */
     let displayTween;
+
     function displayRanking(type, rank, num, duration, rankText, score, scoreText) {
       let id = '#' + type + 'Ranking';
       let svg = $(id).children().children()[2];
@@ -982,7 +981,7 @@
           });
     }
 
-    function putRankOrdinal(rank){
+    function putRankOrdinal(rank) {
       let ordinal;
       let rankStr = rank.toString();
       rankStr = rankStr.substring(rankStr.length - 1, rankStr.length);
@@ -1019,6 +1018,7 @@
 
 
     let positive, negative, gdp;
+
     function displayVisualInfo(wbData, wbLength) {
       new Promise((resolve) => {
         resolve(displayRanking('Ladder', wbData['lRank'], wbLength, 1.0, t1, wbData['ladder'], s1));
@@ -1057,29 +1057,42 @@
       }, 1000);
 
       document.getElementById("country2").innerHTML = countryName;
-      document.getElementById("Ladder2").innerHTML = 'L : ' + lRank + putRankOrdinal(lRank);
-      document.getElementById("Positive2").innerHTML = 'P : ' + pRank + putRankOrdinal(pRank);
-      document.getElementById("Negative2").innerHTML = 'N : ' + nRank + putRankOrdinal(nRank);
-      document.getElementById("GDP2").innerHTML = 'G : ' + gRank + putRankOrdinal(gRank);
+      document.getElementById("Ladder2").innerHTML = '- L : ' + lRank + putRankOrdinal(lRank);
+      document.getElementById("Positive2").innerHTML = '- P : ' + pRank + putRankOrdinal(pRank);
+      document.getElementById("Negative2").innerHTML = '- N : ' + nRank + putRankOrdinal(nRank);
+      document.getElementById("GDP2").innerHTML = '- G : ' + gRank + putRankOrdinal(gRank);
     }
 
 
+    const path1 = '<a href=http://pantheon.media.mit.edu/people/';
+    const path2 = ' target="_blank"> - ';
+    const path3 = '</a>';
+    const born = ' <span style="font-size: 12px;">born in</span> ';
+    const space = '<span style="font-size: 12px;"> </span>';
+
     function displayPantheon(countryName) {
+      let infoBoardContent3 = document.getElementsByClassName('infoBoardContent3');
       let pIndex = -1;
+      let url;
+      let name;
+      let occupation;
+      let year;
       for (let i = 0; pantheonLength > i; i++) {
         if (pantheon[i]['country'] === countryName) {
           pIndex = i;
         }
       }
       document.getElementById("country3").innerHTML = countryName;
-      if(pIndex !== -1){
+      if (pIndex !== -1) {
         let d = pantheon[pIndex];
         for (let i = 0; d['name'].length > i; i++) {
           url = d['url'][i];
           name = d['name'][i];
-          infoBoardContent3[i].innerHTML = path1 + url + path2 + name + path3;
+          occupation = d['occ'][i];
+          year = d['year'][i];
+          infoBoardContent3[i].innerHTML = path1 + url + path2 + name + ' <span style="color:#dae1f7; font-size: 16px;">(' + space + occupation + born + year + space + ')</span>' + path3;
         }
-      }else{
+      } else {
         infoBoardContent3[0].innerHTML = 'No data';
       }
 
@@ -1157,6 +1170,7 @@
           offPantheon();
           if (isTravelAuto) {
             stopTravel();
+            travelWellbeing();
           }
         }
       }
@@ -1200,12 +1214,6 @@
     console.log('well-being data', wbData);
     console.log('latlon data', latlon);
     console.log('pantheon data', pantheon);
-    let infoBoardContent3 = document.getElementsByClassName('infoBoardContent3');
-    const path1 = '<a href=http://pantheon.media.mit.edu/people/';
-    const path2 = ' target="_blank"> - ';
-    const path3 = '</a>';
-    let url;
-    let name;
 
 
     /*
@@ -1235,10 +1243,10 @@
         isLand = false;
         body.css('cursor', 'default');
 
-        if (isFinishStartTween){
-          if (!isTravelAuto){
+        if (isFinishStartTween) {
+          if (!isTravelAuto) {
             if (!isInfoObject) {
-              if (!isMoveCamera){
+              if (!isMoveCamera) {
                 if (intersects.length > 0) {
                   if (intersects[0].point !== null) {
                     if (intersects[0].object.name === "land") {
@@ -1354,7 +1362,7 @@
     }
 
     function outInfoObject() {
-      if (!isSearching){
+      if (!isSearching) {
         isInfoObject = false;
       }
     }
@@ -1398,7 +1406,6 @@
     }
 
 
-
     /*
     // ranking histogram
     */
@@ -1419,9 +1426,9 @@
 
     drawHist = function (type, duration, drawType) {
       let res;
-      if (isPantheon){
+      if (isPantheon) {
         res = drawPantheonHist(duration, drawType);
-      }else{
+      } else {
         res = drawWbHist(type, duration, drawType);
       }
       console.log(res.width, res.scoreMax);
@@ -1481,8 +1488,8 @@
           clearInterval(drawSetInterval);
 
           // 再描画時の関数
-          if (drawType === 'redraw'){
-            redrawHighlightedBar(highlightSelectedBarList, histData, scoreMax);
+          if (drawType === 'redraw') {
+            redrawHighlightedBar(highlightedBarList, histData, scoreMax);
           }
         }
       }, duration / numData);
@@ -1529,9 +1536,9 @@
 
     function clickHistRanking() {
       console.log(isFillHist);
-      if (!isTravelAuto){
+      if (!isTravelAuto) {
         if (isFillHist) {
-          if (!isMoveCamera){
+          if (!isMoveCamera) {
             console.log('click', mouseOnCountry);
 
             // after setting mouseOnCountry, this function can be used
@@ -1576,14 +1583,15 @@
 
 
     /* highlight selected country */
-    highlightSelectedBarList = [];
-    function highlightSelectedBar(countryName, data, scoreMax) {
+    highlightedBarList = [];
+
+    function highlightedBar(countryName, data, scoreMax) {
       let h;
       let index;
-      for (let i = 0; wbLength > i; i++) {
+      for (let i = 0; data.length > i; i++) {
         if (data[i].country === countryName) {
           index = i;
-          highlightSelectedBarList.push(i)
+          highlightedBarList.push(i)
         }
       }
       // highlight color
@@ -1592,10 +1600,9 @@
       canvasContext.fillRect(barWidth * index, histCanvas.height - h, barWidth, h);
     }
 
-    redrawHighlightedBar = function(indexList, data, scoreMax) {
+    redrawHighlightedBar = function (indexList, data, scoreMax) {
       let h;
       for (let i = 0; indexList.length > i; i++) {
-        console.log('redrawHighlightedBar', i);
         // highlight color
         canvasContext.fillStyle = highlightedBarColor;
         h = (data[indexList[i]].score) / scoreMax * histCanvas.height;
@@ -1604,11 +1611,11 @@
     };
 
 
-
     /*
     // move camera position function
     */
     /* move position in some separate times using quaternion */
+
     /* dring move, rotate is not enable */
     function moveCamera(latitude, longitude) {
       let targetPos = convertGeoCoords(latitude, longitude);
@@ -1638,7 +1645,7 @@
           createPoint(latitude, longitude);
           clearInterval(id);
           isMoveCamera = false;
-          if (!isTravelAuto){
+          if (!isTravelAuto) {
             controls.enableRotate = true;
           }
         }
@@ -1680,6 +1687,7 @@
     }
 
     pinList = [];
+
     function createPoint(latitude = 0, longitude = 0) {
       const pin = createPin();
       let latRad = latitude * (Math.PI / 180);
@@ -1699,22 +1707,20 @@
     };
 
 
-
     /*
     // travel ranking country
     */
-    travelRanking = function (index = 0) {
+    travelWellbeing = function (index = 0) {
       stopTravel();  // clear previous travel
       let i = index;
       travelSetInterval = setInterval(function () {
-        console.log(i);
         if (i > 0) {
           pinList[i - 1].children[0].material.color.setHex(0xC9C7B7);
           pinList[i - 1].children[1].material.color.setHex(0xC9C7B7);
         }
 
         let countryName = histScoreData[i].country;
-        highlightSelectedBar(countryName, histData, scoreMax);
+        highlightedBar(countryName, histData, scoreMax);
         let res = countrynameToLatlon(countryName);
         latitude = res.latitude;
         longitude = res.longitude;
@@ -1724,7 +1730,7 @@
         i++;
         travelIndex = i;  // val for continue
         if (i > wbLength - 1) {
-        // if (i > 3 - 1) {
+          // if (i > 3 - 1) {
           console.log('clearInterval', i);
           clearInterval(travelSetInterval);
 
@@ -1757,11 +1763,10 @@
             scoreMax = res.scoreMax;
             histScoreData = res.scoreData;
             deletePin();
-            travelRanking();
+            travelWellbeing();
           }, 5000);
-
         }
-      }, 3500);
+      }, 3140);  // 1800(=30m) / 143(Num of well-being data) / 4
     };
 
 
@@ -1777,13 +1782,14 @@
       stopTravel();  // clear previous travel
       let i = index;
       travelSetInterval = setInterval(function () {
-        console.log(i);
         if (i > 0) {
           pinList[i - 1].children[0].material.color.setHex(0xC9C7B7);
           pinList[i - 1].children[1].material.color.setHex(0xC9C7B7);
         }
 
-        let countryName = pantheon[i]['country'];
+        let countryName = PantheonScoreArray[i]['country'];
+        console.log(countryName);
+        highlightedBar(countryName, histData, scoreMax);
         let res = countrynameToLatlon(countryName);
         latitude = res.latitude;
         longitude = res.longitude;
@@ -1795,7 +1801,7 @@
           console.log('clearInterval', i);
           clearInterval(travelSetInterval);
         }
-      }, 5000);
+      }, 9250);  // 1800(=30m) / 194(Num of Pantheon data)
     };
 
 
@@ -1811,7 +1817,6 @@
       initPostprocessing(vsPost, fsPost);
       render();
     }
-
 
 
     /*
@@ -1853,10 +1858,12 @@
     });
 
   }
+
   /* END Initialize function */
 
   ////////////////////////
   /* Rendering function */
+
   ////////////////////////
   function render() {
     // controls.update();
@@ -1901,6 +1908,7 @@
 
   /////////////////////////////
   /* Postprocessing function */
+
   /////////////////////////////
   function initPostprocessing(vsPost, fsPost) {
     time = 0.0;
