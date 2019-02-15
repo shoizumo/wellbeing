@@ -42,39 +42,43 @@ vec4 stars(vec2 U) {
     vec4 O = vec4(-.3);
     for (float i=0.; i<119.; i++)
         O += flare (vec2((U - sr1(i)*R/R.y).x, (U - sr2(i)*R/R.y).y))
-            * r1(i+.2)
+            * r1(i+.2) /// 2.0
             * (1.+sin(time+r1(i+.3)*6.))*.1;
     return O;    // location, scale, time
 }
 
 // cloud function
-// Tweaked from http://glsl.heroku.com/e#4982.0
-float hash( float n ) {
-    return fract(sin(n)*43758.5453);
+vec3 permute(vec3 x) {
+    return mod(((x*34.0)+1.0)*x, 289.0);
 }
 
-float noise( in vec2 x ) {
-    vec2 p = floor(x);
-    vec2 f = fract(x);
-    f = f*f*(3.0-2.0*f);
-    float n = p.x + p.y*57.0;
-    float res = mix(mix(hash(n+0.0), hash(n+1.0),f.x), mix(hash(n+57.0), hash(n+58.0),f.x),f.y);
-    return res;
+float cloud(vec2 v) {
+    const vec4 C = vec4(0.211324865405187, 0.366025403784439,
+           -0.577350269189626, 0.024390243902439);
+    vec2 i  = floor(v + dot(v, C.yy) );
+    vec2 x0 = v -   i + dot(i, C.xx);
+    vec2 i1;
+    i1 = (x0.x > x0.y) ? vec2(1.0, 0.0) : vec2(0.0, 1.0);
+    vec4 x12 = x0.xyxy + C.xxzz;
+    x12.xy -= i1;
+    i = mod(i, 289.0);
+    vec3 p = permute( permute( i.y + vec3(0.0, i1.y, 1.0 ))
+    + i.x + vec3(0.0, i1.x, 1.0 ));
+    vec3 m = max(0.5 - vec3(dot(x0,x0), dot(x12.xy,x12.xy),
+    dot(x12.zw,x12.zw)), 0.0);
+    m = m*m ;
+    m = m*m ;
+    vec3 x = 2.0 * fract(p * C.www) - 1.0;
+    vec3 h = abs(x) - 0.5;
+    vec3 ox = floor(x + 0.5);
+    vec3 a0 = x - ox;
+    m *= 1.79284291400159 - 0.85373472095314 * ( a0*a0 + h*h );
+    vec3 g;
+    g.x  = a0.x  * x0.x  + h.x  * x0.y;
+    g.yz = a0.yz * x12.xz + h.yz * x12.yw;
+    return 130.0 * dot(m, g);
 }
 
-float noise2(vec2 p) {
-    float f = 0.0;
-    f += 0.50000*noise(p*10.0);
-    f += 0.25000*noise(p*20.0);
-    f += 0.12500*noise(p*40.0);
-    f += 0.06250*noise(p*80.0);
-    f *= f;
-    return f;
-}
-
-float rand(vec2 co) {
-    return fract(sin(dot(co.xy ,vec2(12.9898,78.233))) * 43758.5453);
-}
 
 
 void main( void ) {
@@ -84,30 +88,20 @@ void main( void ) {
     // bright star
     vec2 pos = gl_FragCoord.xy;
     vec4 starCol = stars(pos) / 2.0;
-//    vec4 starCol = stars(pos) / abs(sin(time));
 
     // cloud
     pos.x -= resolution.x * sin(time * .1) * 0.05;
     pos.y -= resolution.y * time * 0.01;
 
-    float f  = noise2(pos/resolution);
-    vec3 color = vec3(f*.15, f*.45, f)*.7;
-    color += starCol.rgb;
+    float f1  = cloud(pos/resolution) / 2.0;
+    float f2  = cloud(pos/resolution * vec2(2.0, 2.0)) / 4.0;
+    float f3  = cloud(pos/resolution * vec2(4.0, 4.0)) / 4.0;
+    f1 = f1 + f2;
 
-//    // small star
-//    vec2 P = gl_FragCoord.xy - resolution.xy;
-//    float dist = length(P) / resolution.y;
-////    vec2 coord = vec2(pow(dist, 0.1), atan(P.x, P.y) / (PI*2.0));
-//    vec2 coord = vec2(dist, atan(P.x, P.y) / (PI*2.0));
-//
-//    float a = pow((1.0-dist),20.0);
-//    float t = time*-.035;
-//    float r = coord.x - (t*0.0025);
-//    float c = fract(a+coord.y + 0.0*.543);
-//    vec2  p = vec2(r, c*.5)*5000.0;
-//    vec2 uv = fract(p)*2.0-1.0;
-//    float m = clamp((rand(floor(p))-.9)*10.0, 0.0, 1.0);
-//    color +=  clamp((1.0-length(uv*2.0))*m*dist, 0.0, 1.0);
+    vec3 blueCloud = vec3(f1*.15, f1*.45, f1)*.4;
+    vec3 greenCloud = vec3(f3*.45, f3, f3*.15)*.2;
+    vec3 color = blueCloud + greenCloud;
+    color += starCol.rgb;
 
 
     float mixRatio;
@@ -118,7 +112,7 @@ void main( void ) {
     }
 
     gl_FragColor = vec4(mix(destColor, vec4(color, 1.0), mixRatio));
-//    gl_FragColor = vec4(0.0, 0.0, 0.0, 0.0);
+//    gl_FragColor = vec4(color, 1.0);
 
 }
 
