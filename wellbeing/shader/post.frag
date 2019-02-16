@@ -85,25 +85,28 @@ void main( void ) {
 
     vec4 destColor = texture2D(texture, vUv);
 
-    // bright star
-    vec2 pos = gl_FragCoord.xy;
-    vec4 starCol = stars(pos) / 2.0;
-
     // cloud
-    pos.x -= resolution.x * sin(time * .1) * 0.05;
-    pos.y -= resolution.y * time * 0.01;
+    vec2 cloudPos = gl_FragCoord.xy;
+    cloudPos.x -= resolution.x * -time * .01;
+    cloudPos.y -= resolution.y * sin(time * .1) * 0.05;
 
-    float f1  = cloud(pos/resolution) / 2.0;
-    float f2  = cloud(pos/resolution * vec2(2.0, 2.0)) / 4.0;
-    float f3  = cloud(pos/resolution * vec2(4.0, 4.0)) / 4.0;
+    float f1  = cloud(cloudPos/resolution) / 2.0;
+    float f2  = cloud(cloudPos/resolution * vec2(2.0, 2.0)) / 4.0;
+    float f3  = cloud(cloudPos/resolution * vec2(4.0, 4.0)) / 4.0;
     f1 = f1 + f2;
 
-    vec3 blueCloud = vec3(f1*.15, f1*.45, f1)*.4;
-    vec3 greenCloud = vec3(f3*.45, f3, f3*.15)*.2;
+    vec3 blueCloud = vec3(f1*.15, f1*.45, f1)*.5;
+    vec3 greenCloud = vec3(f3*.45, f3, f3*.15)*.3;
     vec3 color = blueCloud + greenCloud;
+
+    // star
+    vec2 starPos = gl_FragCoord.xy;
+    starPos.x -= resolution.x * -time * .0005;
+    starPos.y -= resolution.y * -time * .0001;
+    vec4 starCol = stars(starPos) / 2.0;
+
+
     color += starCol.rgb;
-
-
     float mixRatio;
     if(destColor.b == 0.0){
         mixRatio = 0.5;

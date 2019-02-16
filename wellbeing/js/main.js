@@ -236,16 +236,22 @@
     setInfoTypeText = function () {
       $('#infoBoard').css("display", 'none');
       $('.infoBoardContent2').css("display", 'block');
+      $(".infoType").removeClass("selectedBtn");
+      infoBtn[0].classList.add("selectedBtn");
     };
 
     setInfoTypeVisual = function () {
       $('#infoBoard').css("display", 'grid');
       $('.infoBoardContent2').css("display", 'none');
+      $(".infoType").removeClass("selectedBtn");
+      infoBtn[1].classList.add("selectedBtn");
     };
 
     setInfoTypeNone = function () {
       $('#infoBoard').css("display", 'none');
       $('.infoBoardContent2').css("display", 'none');
+      $(".infoType").removeClass("selectedBtn");
+      infoBtn[2].classList.add("selectedBtn");
     };
 
     fadeInfoBoardContent1 = function () {
@@ -301,6 +307,7 @@
         controls.enableRotate = false;
         if (!isPantheon) {
           travelWellbeing();
+          setInfoTypeText();
         } else {
           travelPantheon();
         }
@@ -310,6 +317,11 @@
         isMoveStop = false;
         controls.enableRotate = true;
         stopMove.setAttribute('style', 'opacity:0.0;');
+        if (!isPantheon) {
+          setInfoTypeVisual();
+        } else {
+          setInfoTypeNone();
+        }
       }
     });
 
@@ -356,7 +368,8 @@
 
           setTimeout(() => {
             setSelectedWBButton(0);
-            infoBtn[0].classList.add("selectedBtn");
+            infoBtn[1].classList.add("selectedBtn"); // setInfoTypeVisual
+            setInfoTypeVisual();
 
           }, 400);
           setTimeout(() => {
