@@ -1,0 +1,88 @@
+@charset "UTF-8";
+
+/* rank histogram */
+/* for SP */
+#canvasWrapper {
+  position: fixed;
+  bottom: 0;
+  left: 50%;
+  margin-left: -160px;
+  width: 320px;
+  height: 90px;
+
+  @include media(w500_680) {
+    margin-left: -250px;
+    width: 500px;
+  }
+
+  @include media(w680_800) {
+    margin-left: -340px;
+    width: 680px;
+  }
+
+  @include media(w800_1000) {
+    margin-left: -400px;
+    width: 800px;
+  }
+
+  @include media(w1000_) {
+    margin-left: -450px;
+    width: 900px;
+  }
+}
+
+#histgram {
+  width: 320px;
+  height: 90px;
+
+  background-color: rgba(0, 0, 255, 0.0);
+  color: #ffffff;
+  text-align: center;
+  font-family: $font-main;
+  font-weight: 300;
+
+  @include media(w500_680) {
+    width: 500px;
+  }
+
+  @include media(w680_800) {
+    width: 680px;
+  }
+
+  @include media(w800_1000) {
+    width: 800px;
+  }
+
+  @include media(w1000_) {
+    width: 900px;
+  }
+}
+
+.canvasWrapperPointer {
+  cursor: pointer;
+}
+
+#tooltipHist {
+  position: absolute;
+  text-align: center;
+  font-size: 12px;
+  padding: 1px 5px 1px 5px;
+  color: #ffffff;
+  opacity: 0.0;
+  background-color: #646464;
+  border-radius: 5px;
+  font-family: $font-main;
+  font-weight: 300;
+
+  &:before {
+    content: "";
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    margin-left: -5px;
+    border: 5px solid transparent;
+    border-top: 5px solid #646464;
+  }
+}
+
+

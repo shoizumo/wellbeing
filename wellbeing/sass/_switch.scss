@@ -28,36 +28,37 @@
   width: 200%;
   margin-left: -100%;
   transition: margin 0.3s ease-in 0s;
+
+  &:before, &:after {
+    display: block;
+    float: left;
+    width: 50%;
+    height: 30px;
+    padding: 0;
+    line-height: 15px;
+    font-size: 14px;
+    color: #ffffff;
+    font-family: $font-main;
+    box-sizing: border-box;
+  }
+
+  &:before {
+    content: "Manual\A\00a0Travel";
+    white-space: pre;
+    padding-left: 10px;
+    background-color: #647d7d;
+    color: #ffffff;
+  }
+
+  &:after {
+    content: "Auto\00a0\ATravel";
+    padding-right: 18px;
+    background-color: #111111;
+    color: #ffffff;
+    text-align: right;
+  }
 }
 
-#travelModeSwitch-inner:before, #travelModeSwitch-inner:after {
-  display: block;
-  float: left;
-  width: 50%;
-  height: 30px;
-  padding: 0;
-  line-height: 15px;
-  font-size: 14px;
-  color: #ffffff;
-  font-family: 'Nunito', sans-serif;
-  box-sizing: border-box;
-}
-
-#travelModeSwitch-inner:before {
-  content: "Manual\A\00a0Travel";
-  white-space: pre;
-  padding-left: 10px;
-  background-color: #647d7d;
-  color: #ffffff;
-}
-
-#travelModeSwitch-inner:after {
-  content: "Auto\00a0\ATravel";
-  padding-right: 18px;
-  background-color: #111111;
-  color: #ffffff;
-  text-align: right;
-}
 
 #travelModeSwitch-switch {
   display: block;
@@ -81,11 +82,10 @@
   right: 0;
 }
 
-
 #stopMove {
   position: fixed;
   top: 40px;
-  left:5px;
+  left: 5px;
   width: 90px;
   height: 30px;
   line-height: 30px;
@@ -99,7 +99,7 @@
   cursor: pointer;
   border: 1px solid #ffffff;
   border-radius: 10px;
-  font-family: 'Nunito', sans-serif;
+  font-family: $font-main;
   font-weight: 300;
 }
 

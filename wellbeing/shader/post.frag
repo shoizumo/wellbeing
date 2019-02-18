@@ -109,7 +109,7 @@ void main( void ) {
     color += starCol.rgb;
     float mixRatio;
     if(destColor.b == 0.0){
-        mixRatio = 0.5;
+        mixRatio = 0.7;
     }else{
         mixRatio = 0.01;
     }

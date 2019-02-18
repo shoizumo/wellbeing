@@ -1,0 +1,88 @@
+$font-main: 'Nunito', sans-serif;
+
+$layer: (
+        dragDrop: 100,
+        menu: 10,
+        naviToggle: 5,
+        modalContent: 2,
+        modalOverlay: 1
+);
+
+@mixin z-index($key) {
+  z-index: map-get($layer, $key);
+}
+
+$breakpointsList: (
+        w_600: "screen and (min-width: 600px)",
+        w500_680: "screen and (min-width: 500px) and (max-width: 680px)", // tablet
+        w680_800: "screen and (min-width: 680px) and (max-width: 800px)", // PC(narrow)
+        w800_1000: "screen and (min-width: 800px) and (max-width: 1000px)", // PC(medium)
+        w1000_: "screen and (min-width: 1000px)", // PC(wide)
+);
+
+@mixin media($breakpoint) {
+  @media #{map-get($breakpointsList, $breakpoint)} {
+    @content;
+  }
+}
+
+/* modal */
+$buttonColor: #ffa443;
+
+$modalContentWidth: 600px;
+$modalTitleHeight: 50px;
+
+$numWbType: 4;
+$numInfoType: 3;
+
+/* infoBoard */
+$sColumnWidth: 80px;
+$mColumnWidth: 120px;
+$lColumnWidth: 150px;
+$xlColumnWidth: 200px;
+
+@mixin wellbeingTitle {
+  font-size: 0.69em;
+  grid-column: 1 / 2;
+  grid-raw: 1 / 2;
+  font-weight: 200;
+
+  @include media(w1000_) {
+    font-size: 1.05em;
+  }
+}
+
+@mixin wellbeingContent {
+  grid-raw: 2 / 3;
+  background-color: #444444;
+  display: grid;
+  grid-template-columns: $sColumnWidth;
+  grid-template-rows: 15px 80px;
+
+  @include media(w680_800) {
+    grid-template-columns: $mColumnWidth;
+  }
+
+  @include media(w800_1000) {
+    grid-template-columns: $lColumnWidth;
+  }
+
+  @include media(w1000_) {
+    grid-template-columns: $xlColumnWidth;
+    grid-template-rows: 20px 100px;
+  }
+}
+
+%infoTypeTextWrapper {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  margin-top: -20px;
+  margin-left: 20px;
+  color: #ffffff;
+  /*opacity: 0.0;*/
+  font-family: $font-main;
+  font-weight: 300;
+}
+
+

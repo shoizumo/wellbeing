@@ -1,0 +1,109 @@
+@charset "UTF-8";
+
+* {
+  margin: 0;
+  padding: 0;
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
+html, body {
+  overflow: hidden;
+}
+
+#webgl{
+  position:fixed;
+  top:0;
+  left:0;
+  width:100%;
+  height:100%;
+}
+
+.noDisplay{
+  opacity: 0;
+}
+
+.load {
+  position:absolute;
+  margin: 0 auto;
+  overflow: hidden;
+  top:0;
+  left:0;
+  float: left;
+  height: 100%;
+  width: 100%;
+  background-color: rgba(0, 0, 0, 0.9);
+}
+
+#startButton {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  margin-left:-80px;
+  color: #dddddd;
+  font-family: $font-main;
+  font-weight: 300;
+  cursor: pointer;
+}
+
+
+/* scroll text */
+/*.fadein span{*/
+  /*color: #ffffff;*/
+  /*opacity:0;*/
+  /*font-size: 1.5em;*/
+  /*font-family: 'Roboto', sans-serif;*/
+/*}*/
+
+/*.fadein{*/
+  /*position: absolute;*/
+  /*top: 30%;*/
+  /*right: 0;*/
+  /*bottom: 0;*/
+  /*left: 0;*/
+  /*margin: auto;*/
+  /*width: 50%;*/
+  /*!*height: 4.0rem;*!*/
+  /*text-align: center;*/
+/*}*/
+
+
+
+
+/* moueseover land */
+#tooltip {
+  position: fixed;
+  text-align: center;
+  padding : 0.1em 0.5em 0.1em 0.5em;
+  color: #ffffff;
+  opacity: 0.0;
+  background-color: #646464;
+  border-radius: 10px;
+  font-family: $font-main;
+  font-weight: 300;
+}
+
+
+/* search */
+.ui-autocomplete {
+  max-height: 60%;
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+
+
+.allButton{
+  opacity: 0.0;
+}
+
+
+
+/* drag & drop, to change position */
+.dragDrop {
+    cursor: move;
+    position: fixed;
+    @include z-index(dragDrop);
+}

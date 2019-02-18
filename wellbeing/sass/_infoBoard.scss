@@ -1,0 +1,211 @@
+@charset "UTF-8";
+
+/*
+infoBoard1(visual)
+*/
+/* For SP */
+#infoBoard {
+  /*display: grid;*/
+  grid-template-columns: $sColumnWidth $sColumnWidth $sColumnWidth $sColumnWidth;
+  grid-template-rows: 25px 95px;
+
+  position: fixed;
+  top: 0;
+  left: 50%;
+  margin-left: -$sColumnWidth * 2;
+
+  width: $sColumnWidth * 4;
+  height: 120px;
+
+  opacity: 0.0;
+  color: #ffffff;
+  text-align: center;
+
+  font-family: $font-main;
+  font-weight: 300;
+
+  display: none;
+
+  @include media(w680_800) {
+    grid-template-columns: $mColumnWidth $mColumnWidth $mColumnWidth $mColumnWidth;
+    margin-left: -$mColumnWidth * 2;
+    width: $mColumnWidth * 4;
+  }
+
+  @include media(w800_1000) {
+    grid-template-columns: $lColumnWidth $lColumnWidth $lColumnWidth $lColumnWidth;
+    margin-left: -$lColumnWidth * 2;
+    width: $lColumnWidth * 4;
+  }
+
+  @include media(w1000_) {
+    grid-template-columns: $xlColumnWidth $xlColumnWidth $xlColumnWidth $xlColumnWidth;
+    grid-template-rows: 30px 120px;
+    margin-left: -$xlColumnWidth * 2;
+    width: $xlColumnWidth * 4;
+    height: 150px;
+  }
+
+}
+
+#country {
+  grid-column: 1 / 5;
+  grid-raw: 1 / 2;
+  background-color: #333333;
+  font-size: 1.3em;
+  font-weight: 400;
+
+  cursor: text;
+  -webkit-user-select: text;
+  user-select: text;
+
+  &:focus {
+    outline: none;
+  }
+
+  @include media(w1000_) {
+    font-size: 1.5em;
+  }
+}
+
+#Ladder {
+  grid-column: 1 / 2;
+  @include wellbeingContent;
+}
+
+#LadderTitle {
+  @include wellbeingTitle;
+}
+
+#LadderRanking {
+  grid-column: 1 / 2;
+  grid-raw: 2 / 3;
+}
+
+#Positive {
+  grid-column: 2 / 3;
+  @include wellbeingContent;
+}
+
+#PositiveTitle {
+  @include wellbeingTitle;
+}
+
+#PositiveRanking {
+  grid-column: 1 / 2;
+  grid-raw: 2 / 3;
+}
+
+#Negative {
+  grid-column: 3 / 4;
+  @include wellbeingContent;
+}
+
+#NegativeTitle {
+  @include wellbeingTitle;
+}
+
+#NegativeRanking {
+  grid-column: 1 / 2;
+  grid-raw: 2 / 3;
+}
+
+#GDP {
+  grid-column: 4 / 5;
+  @include wellbeingContent;
+}
+
+#GDPTitle {
+  @include wellbeingTitle;
+}
+
+#GDPRanking {
+  grid-column: 1 / 2;
+  grid-raw: 2 / 3;
+}
+
+/*
+infoBoardSVG(responsive)
+*/
+/* for SP */
+.infoContentsSVG {
+  width: $sColumnWidth;
+  height: 80px;
+
+  @include media(w680_800) {
+    width: $mColumnWidth;
+  }
+
+  @include media(w800_1000) {
+    width: $lColumnWidth;
+  }
+
+  @include media(w1000_) {
+    width: $xlColumnWidth;
+    height: 100px;
+  }
+}
+
+.infoContentsCircle1 {
+  r: 40px;
+
+  @include media(w1000_) {
+    r: 48px;
+  }
+}
+
+.infoContentsCircle2 {
+  r: 20px;
+
+  @include media(w1000_) {
+    r: 24px;
+  }
+}
+
+/*
+infoBoard2(text)
+*/
+
+#infoBoard2 {
+  @extend %infoTypeTextWrapper;
+}
+
+#country2 {
+  opacity: 0.0;
+  line-height: 25px;
+  font-size: 22px;
+}
+
+.infoBoardContent2 {
+  /*margin-left:5px;*/
+  opacity: 0.0;
+  line-height: 25px;
+  font-size: 20px;
+}
+
+/*
+infoBoard3(pantheon)
+*/
+#infoBoard3 {
+  @extend %infoTypeTextWrapper;
+  display: none;
+}
+
+#country3 {
+  /*opacity: 0.0;*/
+  line-height: 25px;
+  font-size: 22px;
+}
+
+.infoBoardContent3 a {
+  /*opacity: 0.0;*/
+  text-decoration: none;
+  color: #ffffff;
+  line-height: 30px;
+  font-size: 20px;
+
+  &:hover {
+    color: #aeccfc;
+  }
+}
+
