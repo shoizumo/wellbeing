@@ -109,7 +109,7 @@
   let highlightedBarList;
 
   const barColor = "rgb(200, 225, 225)";
-  const highlightedBarColor = "rgb(245, 70, 240)";
+  const highlightedBarColor = "rgb(241, 23, 53)";
 
 
   /* interactive land function */
@@ -836,8 +836,6 @@
       });
     }
 
-    sortDesc(pantheon, 'country');
-    console.log(pantheon);
 
 
     /* calc MaxMin */
@@ -1083,7 +1081,7 @@
     const path1 = '<a href=http://pantheon.media.mit.edu/people/';
     const path2 = ' target="_blank"> - ';
     const path3 = '</a>';
-    const born = ' <span style="font-size: 12px;">born in</span> ';
+    const born = '<span style="font-size: 12px;"> born in </span>';
     const space = '<span style="font-size: 12px;"> </span>';
 
     function displayPantheon(countryName) {
@@ -1242,6 +1240,7 @@
     console.log('well-being data', wbData);
     console.log('latlon data', latlon);
     console.log('pantheon data', pantheon);
+    console.log('well-being timeline',timeline);
 
 
     /*

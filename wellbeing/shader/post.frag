@@ -91,8 +91,8 @@ void main( void ) {
     cloudPos.y -= resolution.y * sin(time * .1) * 0.05;
 
     float f1  = cloud(cloudPos/resolution) / 2.0;
-    float f2  = cloud(cloudPos/resolution * vec2(2.0, 2.0)) / 4.0;
-    float f3  = cloud(cloudPos/resolution * vec2(4.0, 4.0)) / 4.0;
+    float f2  = cloud(cloudPos/resolution * vec2(2.0, 2.0)) / 2.0;
+    float f3  = cloud(cloudPos/resolution * vec2(4.0, 4.0)) / 2.0;
     f1 = f1 + f2;
 
     vec3 blueCloud = vec3(f1*.15, f1*.45, f1)*.5;
@@ -109,7 +109,7 @@ void main( void ) {
     color += starCol.rgb;
     float mixRatio;
     if(destColor.b == 0.0){
-        mixRatio = 0.7;
+        mixRatio = 0.5;
     }else{
         mixRatio = 0.01;
     }
