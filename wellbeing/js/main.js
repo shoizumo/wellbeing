@@ -156,6 +156,8 @@
   let stopTravel;
   let drawSetInterval;
   let deletePin;
+  let timelineSetInterval;
+  let deleteTimeline;
 
   let setInfoTypeText;
   let setInfoTypeVisual;
@@ -837,7 +839,6 @@
     }
 
 
-
     /* calc MaxMin */
     ladderMax = Math.max(LadderScoreArray[0].score);
     ladderMin = Math.min(LadderScoreArray[wbLength - 1].score);
@@ -850,10 +851,6 @@
 
     pantheonMax = Math.max(PantheonScoreArray[0].score);
     pantheonMin = Math.min(PantheonScoreArray[pantheonLength - 1].score);
-
-    console.log('PantheonArray', PantheonArray);
-    console.log('PantheonScoreArray', PantheonScoreArray);
-    console.log('max min', pantheonMax, pantheonMin);
 
 
     /* make well-being button in order to show score */
@@ -1237,10 +1234,192 @@
     }
 
 
-    console.log('well-being data', wbData);
-    console.log('latlon data', latlon);
-    console.log('pantheon data', pantheon);
-    console.log('well-being timeline',timeline);
+    /* timeline mode */
+    let timelineSVG = $('#infoBoardTimeline')[0].children[1];
+    const timelineDuration = 0.1;
+    const timelineOffset = 20;
+    const timelineYearList = [2005, 2006, 2007, 2008, 2009, 20010, 2011, 2012, 2013, 2014, 2015, 2016, 2017];
+
+    // let japan = timeline[63];
+    // console.log(japan);
+    // console.log(timeline);
+
+
+    function drawTimelinePath(startX, startY, endX, endY, svg) {
+      // create line
+      let line = svgLine(startX, startY, endX, endY, svg);
+
+      // line animation
+      TweenMax.fromTo(line, timelineDuration,
+          {attr: {x2: startX, y2: startY}},
+          {
+            attr: {x2: endX, y2: endY},
+            ease: CustomEase.create("custom", "M0,0,C-0.024,0.402,0.456,0.48,0.5,0.5,0.622,0.556,0.978,0.616,1,1"),
+            onComplete: function () {
+              svgMarker(endX, endY, svg)
+            }
+          });
+    }
+
+    function svgLine(startX, startY, endX, endY, svg) {
+      let line = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+      line.setAttribute('x1', startX);
+      line.setAttribute('y1', startY);
+      line.setAttribute('x2', endX);
+      line.setAttribute('y2', endY);
+      line.setAttribute("stroke", "#ffffff");
+      line.setAttribute("stroke-width", "2");
+      svg.appendChild(line);
+      return line;
+    }
+
+    function svgMarker(x, y, svg) {
+      let marker = document.createElementNS("http://www.w3.org/2000/svg", "circle");
+      marker.setAttribute("cx", x);
+      marker.setAttribute("cy", y);
+      marker.setAttribute("r", '4px');
+      marker.setAttribute("fill", "#ffffff");
+      svg.appendChild(marker);
+    }
+
+
+    document.addEventListener('click', () => {
+      let d = $('#infoBoardTimeline')[0].children[0].children;
+      console.log(d)
+    });
+
+    document.addEventListener('click', () => {
+      deleteTimeline();
+    });
+
+    window.addEventListener("keydown", function (event) {
+      if (!isMoveCamera) {
+        if (event.keyCode === 37) {
+          console.log('ladder');
+          drawTimelineLoop('ladder', 'Japan', timelineSVG, timelineOffset);
+        } else if (event.keyCode === 38) {
+          console.log('positive');
+          drawTimelineLoop('positive', 'Japan', timelineSVG, timelineOffset);
+        } else if (event.keyCode === 39) {
+          console.log('negative');
+          drawTimelineLoop('negative', 'Japan', timelineSVG, timelineOffset);
+        } else if (event.keyCode === 40) {
+          console.log('gdp');
+          drawTimelineLoop('gdp', 'Japan', timelineSVG, timelineOffset);
+        }
+      }
+    }, false);
+
+
+    deleteTimeline = function () {
+      let d = $('#infoBoardTimelineSvg')[0].children;
+      let l = d.length;
+      for (let i = 0; i < l; i++) {
+        d[0].remove();
+      }
+
+      d = $('#infoBoardTimelineScale')[0].children;
+      l = d.length;
+      for (let i = 0; i < l; i++) {
+        d[0].remove();
+      }
+
+      clearInterval(timelineSetInterval);
+    };
+
+
+    function drawTimelineLoop(type, countryName, svg, offset) {
+      let data;
+      for (let i = 0, l = timeline.length; i < l; i++) {
+        if (timeline[i]['country'] === countryName) {
+          data = timeline[i][type];
+        }
+      }
+      let rank = searchTimelineRank(type, countryName);
+      document.getElementById("country4").innerHTML = countryName + '(' + rank + ')';
+      TweenMax.killAll();
+      deleteTimeline();
+      let max, min;
+      if (type === 'ladder') {
+        max = ladderMax;
+        min = ladderMin;
+      } else if (type === 'positive') {
+        max = positiveMax;
+        min = positiveMin;
+      } else if (type === 'negative') {
+        // negativeは順位が逆
+        max = negativeMin;
+        min = negativeMax;
+      } else {
+        max = gdpMax;
+        min = gdpMin;
+      }
+      let timeLen = data.length;
+      let timelineWidth = svg.width.baseVal.value;
+      let timelineHeight = svg.height.baseVal.value;
+      let w = (timelineWidth - offset * 2) / (timeLen - 1);
+      let startX, startY, endX, endY;
+
+      max = max * 1.2;
+      min = min * 0.8;
+
+      // console.log(type, data, max, min)
+
+      let i = 0;
+      let isPathFirst = true;
+      timelineSetInterval = setInterval(function () {
+        addTimelineScale(timelineYearList, timelineOffset, i);
+
+        let h = (data[i] - min) / (max - min) * timelineHeight;
+        endX = w * i + offset;
+        endY = timelineHeight - h;
+        // データが有るときのみ描画、無いときはスキップして次の点と結ぶ
+        if (data[i] !== -999) {
+          // 1回目は点のみ
+          if (isPathFirst) {
+            svgMarker(endX, endY, svg);
+            startX = endX;
+            startY = endY;
+            isPathFirst = !isPathFirst;
+          } else {
+            drawTimelinePath(startX, startY, endX, endY, timelineSVG);
+            startX = endX;
+            startY = endY;
+          }
+        }
+        i++;
+        if (i > timeLen - 1) {
+          clearInterval(timelineSetInterval);
+        }
+      }, timelineDuration * 1500);
+    }
+
+
+    function addTimelineScale(yearList, offset, index) {
+      let timelineScaleArea = document.getElementById('infoBoardTimelineScale');
+      let width = (timelineScaleArea.width.baseVal.value - offset * 2) / (yearList.length - 1);
+      let px = '10px';
+
+      let textX = String(width * index + offset) + 'px';
+      let text = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+      text.setAttributeNS(null, "x", textX);
+      text.setAttributeNS(null, "y", '50%');
+      text.setAttributeNS(null, 'text-anchor', 'middle');
+      text.setAttributeNS(null, 'dominant-baseline', 'central');
+      text.setAttributeNS(null, "fill", "#ffffff");
+      text.setAttributeNS(null, "font-size", px);
+      text.textContent = String(yearList[index]);
+      timelineScaleArea.appendChild(text);
+    }
+
+    function searchTimelineRank(type, countryName) {
+      let res = calcWbInfo(countryName);
+      let rankKey = type.slice(0, 1) + 'Rank';
+      let rank =  res[rankKey];
+      let rankOrdinal = putRankOrdinal(rank)
+
+      return rank + rankOrdinal;
+    }
 
 
     /*

@@ -41,6 +41,72 @@ $mColumnWidth: 120px;
 $lColumnWidth: 150px;
 $xlColumnWidth: 200px;
 
+$sVisualBoardTextHeight: 25px;
+$sVisualBoardContentHeight: 95px;
+$lVisualBoardTextHeight: 30px;
+$lVisualBoardContentHeight: 120px;
+
+$timelineScaleHeight: 15px;
+
+@mixin wellbeingVisualBoard {
+  position: fixed;
+  top: 0;
+  left: 50%;
+
+  color: #ffffff;
+
+  font-family: $font-main;
+  font-weight: 300;
+  text-align: center;
+
+  display: grid;
+  grid-template-columns: $sColumnWidth $sColumnWidth $sColumnWidth $sColumnWidth;
+  grid-template-rows: $sVisualBoardTextHeight $sVisualBoardContentHeight;
+
+  margin-left: -$sColumnWidth * 2;
+
+  width: $sColumnWidth * 4;
+  height: 120px;
+
+  @include media(w680_800) {
+    grid-template-columns: $mColumnWidth $mColumnWidth $mColumnWidth $mColumnWidth;
+    margin-left: -$mColumnWidth * 2;
+    width: $mColumnWidth * 4;
+  }
+
+  @include media(w800_1000) {
+    grid-template-columns: $lColumnWidth $lColumnWidth $lColumnWidth $lColumnWidth;
+    margin-left: -$lColumnWidth * 2;
+    width: $lColumnWidth * 4;
+  }
+
+  @include media(w1000_) {
+    grid-template-columns: $xlColumnWidth $xlColumnWidth $xlColumnWidth $xlColumnWidth;
+    grid-template-rows: $lVisualBoardTextHeight $lVisualBoardContentHeight;
+    margin-left: -$xlColumnWidth * 2;
+    width: $xlColumnWidth * 4;
+    height: 150px;
+  }
+}
+
+@mixin wellbeingVisualBoardCountry {
+  background-color: #333333;
+  font-size: 1.3em;
+  font-weight: 400;
+
+  &:focus {
+    outline: none;
+  }
+
+  cursor: text;
+  -webkit-user-select: text;
+  user-select: text;
+
+  @include media(w1000_) {
+    font-size: 1.5em;
+  }
+}
+
 @mixin wellbeingTitle {
   font-size: 0.69em;
   grid-column: 1 / 2;

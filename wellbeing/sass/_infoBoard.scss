@@ -3,69 +3,15 @@
 /*
 infoBoard1(visual)
 */
-/* For SP */
 #infoBoard {
-  /*display: grid;*/
-  grid-template-columns: $sColumnWidth $sColumnWidth $sColumnWidth $sColumnWidth;
-  grid-template-rows: 25px 95px;
-
-  position: fixed;
-  top: 0;
-  left: 50%;
-  margin-left: -$sColumnWidth * 2;
-
-  width: $sColumnWidth * 4;
-  height: 120px;
-
+  @include wellbeingVisualBoard;
   opacity: 0.0;
-  color: #ffffff;
-  text-align: center;
-
-  font-family: $font-main;
-  font-weight: 300;
-
-  display: none;
-
-  @include media(w680_800) {
-    grid-template-columns: $mColumnWidth $mColumnWidth $mColumnWidth $mColumnWidth;
-    margin-left: -$mColumnWidth * 2;
-    width: $mColumnWidth * 4;
-  }
-
-  @include media(w800_1000) {
-    grid-template-columns: $lColumnWidth $lColumnWidth $lColumnWidth $lColumnWidth;
-    margin-left: -$lColumnWidth * 2;
-    width: $lColumnWidth * 4;
-  }
-
-  @include media(w1000_) {
-    grid-template-columns: $xlColumnWidth $xlColumnWidth $xlColumnWidth $xlColumnWidth;
-    grid-template-rows: 30px 120px;
-    margin-left: -$xlColumnWidth * 2;
-    width: $xlColumnWidth * 4;
-    height: 150px;
-  }
-
 }
 
 #country {
+  @include wellbeingVisualBoardCountry;
   grid-column: 1 / 5;
   grid-raw: 1 / 2;
-  background-color: #333333;
-  font-size: 1.3em;
-  font-weight: 400;
-
-  cursor: text;
-  -webkit-user-select: text;
-  user-select: text;
-
-  &:focus {
-    outline: none;
-  }
-
-  @include media(w1000_) {
-    font-size: 1.5em;
-  }
 }
 
 #Ladder {
@@ -124,10 +70,7 @@ infoBoard1(visual)
   grid-raw: 2 / 3;
 }
 
-/*
-infoBoardSVG(responsive)
-*/
-/* for SP */
+
 .infoContentsSVG {
   width: $sColumnWidth;
   height: 80px;
@@ -161,6 +104,79 @@ infoBoardSVG(responsive)
     r: 24px;
   }
 }
+
+/*
+timeline(visual)
+*/
+#infoBoardTimeline {
+  @include wellbeingVisualBoard;
+
+  grid-template-columns: $sColumnWidth * 4;
+  grid-template-rows: $sVisualBoardTextHeight ($sVisualBoardContentHeight - $timelineScaleHeight) $timelineScaleHeight;
+
+  @include media(w680_800) {
+    grid-template-columns: $mColumnWidth * 4;
+  }
+
+  @include media(w800_1000) {
+    grid-template-columns: $lColumnWidth * 4;
+  }
+
+  @include media(w1000_) {
+    grid-template-columns: $xlColumnWidth * 4;
+    grid-template-rows: $lVisualBoardTextHeight ($lVisualBoardContentHeight - $timelineScaleHeight) $timelineScaleHeight;
+  }
+}
+
+#country4 {
+  @include wellbeingVisualBoardCountry;
+  grid-raw: 1 / 2;
+}
+
+
+#infoBoardTimelineSvg {
+  grid-raw: 2 / 3;
+  width: $sColumnWidth * 4;
+  height: $sVisualBoardContentHeight - $timelineScaleHeight;
+
+  @include media(w680_800) {
+    width: $mColumnWidth * 4;
+  }
+
+  @include media(w800_1000) {
+    width: $lColumnWidth * 4;
+  }
+
+  @include media(w1000_) {
+    width: $xlColumnWidth * 4;
+    height: $lVisualBoardContentHeight - $timelineScaleHeight;
+  }
+
+  background-color: #444444;
+}
+
+
+#infoBoardTimelineScale {
+  grid-raw: 3 / 4;
+  width: $sColumnWidth * 4;
+  height: $timelineScaleHeight;
+
+  @include media(w680_800) {
+    width: $mColumnWidth * 4;
+  }
+
+  @include media(w800_1000) {
+    width: $lColumnWidth * 4;
+  }
+
+  @include media(w1000_) {
+    width: $xlColumnWidth * 4;
+  }
+
+  background-color: #444444;
+}
+
+
 
 /*
 infoBoard2(text)
