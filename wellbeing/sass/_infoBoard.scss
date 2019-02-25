@@ -5,6 +5,22 @@ infoBoard1(visual)
 */
 #infoBoard {
   @include wellbeingVisualBoard;
+  grid-template-columns: $sColumnWidth $sColumnWidth $sColumnWidth $sColumnWidth;
+  grid-template-rows: $sVisualBoardTextHeight $sVisualBoardContentHeight;
+
+  @include media(w680_800) {
+    grid-template-columns: $mColumnWidth $mColumnWidth $mColumnWidth $mColumnWidth;
+  }
+
+  @include media(w800_1000) {
+    grid-template-columns: $lColumnWidth $lColumnWidth $lColumnWidth $lColumnWidth;
+  }
+
+  @include media(w1000_) {
+    grid-template-columns: $xlColumnWidth $xlColumnWidth $xlColumnWidth $xlColumnWidth;
+    grid-template-rows: $lVisualBoardTextHeight $lVisualBoardContentHeight;
+
+  }
   opacity: 0.0;
 }
 
@@ -70,7 +86,6 @@ infoBoard1(visual)
   grid-raw: 2 / 3;
 }
 
-
 .infoContentsSVG {
   width: $sColumnWidth;
   height: 80px;
@@ -133,7 +148,6 @@ timeline(visual)
   grid-raw: 1 / 2;
 }
 
-
 #infoBoardTimelineSvg {
   grid-raw: 2 / 3;
   width: $sColumnWidth * 4;
@@ -155,7 +169,6 @@ timeline(visual)
   background-color: #444444;
 }
 
-
 #infoBoardTimelineScale {
   grid-raw: 3 / 4;
   width: $sColumnWidth * 4;
@@ -175,8 +188,6 @@ timeline(visual)
 
   background-color: #444444;
 }
-
-
 
 /*
 infoBoard2(text)

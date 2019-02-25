@@ -60,34 +60,28 @@ $timelineScaleHeight: 15px;
   text-align: center;
 
   display: grid;
-  grid-template-columns: $sColumnWidth $sColumnWidth $sColumnWidth $sColumnWidth;
-  grid-template-rows: $sVisualBoardTextHeight $sVisualBoardContentHeight;
 
   margin-left: -$sColumnWidth * 2;
-
   width: $sColumnWidth * 4;
   height: 120px;
 
   @include media(w680_800) {
-    grid-template-columns: $mColumnWidth $mColumnWidth $mColumnWidth $mColumnWidth;
-    margin-left: -$mColumnWidth * 2;
     width: $mColumnWidth * 4;
+    margin-left: -$mColumnWidth * 2;
   }
 
   @include media(w800_1000) {
-    grid-template-columns: $lColumnWidth $lColumnWidth $lColumnWidth $lColumnWidth;
-    margin-left: -$lColumnWidth * 2;
     width: $lColumnWidth * 4;
+    margin-left: -$lColumnWidth * 2;
   }
 
   @include media(w1000_) {
-    grid-template-columns: $xlColumnWidth $xlColumnWidth $xlColumnWidth $xlColumnWidth;
-    grid-template-rows: $lVisualBoardTextHeight $lVisualBoardContentHeight;
     margin-left: -$xlColumnWidth * 2;
     width: $xlColumnWidth * 4;
     height: 150px;
   }
 }
+
 
 @mixin wellbeingVisualBoardCountry {
   background-color: #333333;
