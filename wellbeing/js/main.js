@@ -73,10 +73,10 @@
   let isTouchInfoObject = false;
   let isSPBtnDisplay = true;
 
-  const widthWidePC = 1000;
-  const widthMediumPC = 800;
-  const widthTablet = 680;
-  const widthSP = 500;
+  const w1000 = 1000;
+  const w800 = 800;
+  const w680 = 680;
+  const w500 = 500;
 
 
   /* pantheon data */
@@ -101,7 +101,8 @@
   const timelineDuration = 0.07;
   const timelineOffset = 20;
   const timelineYearList = [2005, 2006, 2007, 2008, 2009, 20010, 2011, 2012, 2013, 2014, 2015, 2016, 2017];
-
+  let timelineWidth;
+  let timelineHeight;
 
   /* ranking histogram */
   let histCanvas;
@@ -121,6 +122,7 @@
 
   /* interactive land function */
   let countryNameGlobal = 0;
+  let countryNameDisplayed;
   let isClicked = false;
   let dragFlag = false;
   let isLand = false;
@@ -156,7 +158,7 @@
   let drawHistDurationNomal = 2500;
   let drawHistDurationRedraw = 0;
   let redrawHighlightedBar;
-  let clickBtn;
+  let clickBtnDrawHist;
   let travelWellbeing;
   let travelPantheon;
   let travelSetInterval;
@@ -178,6 +180,12 @@
 
   let returnSelectedWBtype;
   let setSelectedWBButton;
+
+  let tweenTextCountryW;
+  let tweenTextCountryP;
+  let tweenTextContentsW;
+  let tweenTextContentsP;
+  let killTweenTextAnimation;
 
 
   /////////////////
@@ -239,7 +247,7 @@
         } else if (infoType === 'Piechart') {
           console.log('piechart');
           setInfoTypePiechart();
-        } else if (infoType === 'Linechart ') {
+        } else if (infoType === 'Linechart') {
           console.log('linechart');
           setInfoTypeLinechart();
         } else {
@@ -348,7 +356,7 @@
           travelWellbeing();
           setInfoTypeText();
         } else {
-          //travelPantheon();
+          travelPantheon();
         }
         stopMove.innerText = 'Stop';
         stopMove.setAttribute('style', 'opacity:1.0;');
@@ -413,7 +421,7 @@
           }, 400);
           setTimeout(() => {
             // landBase.material.opacity = 1.0;
-            clickBtn('ladderBtn');
+            clickBtnDrawHist('ladderBtn');
             isFinishStartTween = true;
             controls.enableZoom = true;
           }, 500);
@@ -427,6 +435,15 @@
         }
       })
     });
+
+    killTweenTextAnimation = function () {
+      if (!isFirstClick) {
+        tweenTextCountryW.kill();
+        tweenTextContentsW.kill();
+        tweenTextCountryP.kill();
+        tweenTextContentsP.kill();
+      }
+    };
 
 
     /* drag object function */
@@ -527,6 +544,20 @@
     targetDOM = document.getElementById('webgl');
 
 
+    if (canvasWidth < w680) {
+      timelineWidth = 320;
+      timelineHeight = 100;
+    } else if (canvasWidth >= w680 && canvasWidth < w800) {
+      timelineWidth = 480;
+      timelineHeight = 100;
+    } else if (canvasWidth >= w800 && canvasWidth < w1000) {
+      timelineWidth = 600;
+      timelineHeight = 100;
+    } else {
+      timelineWidth = 800;
+      timelineHeight = 150;
+    }
+
     /* device check */
     userAgent = navigator.userAgent;
     if (userAgent.indexOf('iPhone') > 0 || userAgent.indexOf('Android') > 0 && userAgent.indexOf('Mobile') > 0) {
@@ -544,7 +575,7 @@
       canvasHeight = window.innerHeight;
 
       if (isFinishStartTween) {
-        if (canvasWidth < widthWidePC) {
+        if (canvasWidth < w1000) {
           svgRadius = 40;
           t1.setAttributeNS(null, "font-size", "22px");
           t2.setAttributeNS(null, "font-size", "22px");
@@ -568,14 +599,14 @@
         }
 
         let histCanvasWidth;
-        if (canvasWidth < widthSP) {
+        if (canvasWidth < w500) {
           histCanvasWidth = 320;
-        } else if (canvasWidth >= widthSP && canvasWidth < widthTablet) {
-          histCanvasWidth = widthSP;
-        } else if (canvasWidth >= widthTablet && canvasWidth < widthMediumPC) {
-          histCanvasWidth = widthTablet;
-        } else if (canvasWidth >= widthMediumPC && canvasWidth < widthWidePC) {
-          histCanvasWidth = widthMediumPC;
+        } else if (canvasWidth >= w500 && canvasWidth < w680) {
+          histCanvasWidth = w500;
+        } else if (canvasWidth >= w680 && canvasWidth < w800) {
+          histCanvasWidth = w680;
+        } else if (canvasWidth >= w800 && canvasWidth < w1000) {
+          histCanvasWidth = w800;
         } else {
           histCanvasWidth = 900;
         }
@@ -590,6 +621,20 @@
           histData = res.histData;
           scoreMax = res.scoreMax;
           histScoreData = res.scoreData;
+        }
+
+        if (canvasWidth < w680) {
+          timelineWidth = 320;
+          timelineHeight = 100;
+        } else if (canvasWidth >= w680 && canvasWidth < w800) {
+          timelineWidth = 480;
+          timelineHeight = 100;
+        } else if (canvasWidth >= w800 && canvasWidth < w1000) {
+          timelineWidth = 600;
+          timelineHeight = 100;
+        } else {
+          timelineWidth = 800;
+          timelineHeight = 150;
         }
       }
     }, false);
@@ -625,7 +670,7 @@
           if (!isTravelAuto) {
             if (!isMoveCamera) {
               fadeInfoBoardText();
-              TweenMax.killAll();
+              killTweenTextAnimation();
               deletePin();
             }
           }
@@ -641,7 +686,7 @@
           if (!isMoveCamera) {
             if (isLand) {
               fadeInfoBoardText();
-              TweenMax.killAll();
+              killTweenTextAnimation();
               deletePin();
             }
           }
@@ -894,8 +939,15 @@
     wbButton = document.getElementsByClassName('wbButton');
     for (let i = 0, wbLen = wbButton.length; i < wbLen; i++) {
       wbButton[i].addEventListener('click', (e) => {
+
+        /* delete infoBoard2 */
+        killTweenTextAnimation();
+        fadeInfoBoardText();
+        deletePin();
+
+
         let type = e.target.id.slice(0, -1);
-        clickBtn(type);
+        clickBtnDrawHist(type);
         let index;
         if (type === 'ladderBtn') {
           index = 0;
@@ -907,11 +959,6 @@
           index = 3;
         }
         setSelectedWBButton(index);
-
-        /* delete infoBoard2 */
-        TweenMax.killAll();
-        fadeInfoBoardText();
-        deletePin();
 
         /* travel type check */
         if (isTravelAuto) {
@@ -930,7 +977,7 @@
       }, false);
     }
 
-    clickBtn = function (type) {
+    clickBtnDrawHist = function (type) {
       highlightedBarList = [];  // reset
       let res = drawHist(type, drawHistDurationNomal, 'new');
       // console.log(res);
@@ -945,7 +992,7 @@
     // score ranking board
     */
     /* setting infoBoard circle size */
-    if (canvasWidth < widthWidePC) {
+    if (canvasWidth < w1000) {
       svgRadius = 40;
     } else {
       svgRadius = 48;
@@ -955,7 +1002,7 @@
     /* infoBoard text */
     function createRankText(type) {
       let px;
-      if (canvasWidth < widthWidePC) {
+      if (canvasWidth < w1000) {
         px = "22px";
       } else {
         px = "28px";
@@ -980,7 +1027,7 @@
 
     function createScoreText(type) {
       let px;
-      if (canvasWidth < widthWidePC) {
+      if (canvasWidth < w1000) {
         px = "12px";
       } else {
         px = "16px";
@@ -1003,7 +1050,56 @@
 
 
     /* display score result */
-    let displayTween;
+    function displayInfo(countryName) {
+      countryNameDisplayed = countryName;
+      if (!isFirstClick) {
+        TweenMax.killAll();
+        positive.cancel();
+        negative.cancel();
+        gdp.cancel();
+      }
+      clearInfo();
+      let res = calcWbInfo(countryName);
+      infoBoard.css({opacity: 0.8});
+      infoBoardTimeline.css({opacity: 0.8});
+      // deletePin();
+      tooltip.css({opacity: 0.0});
+
+
+      if (typeof res !== 'undefined') {
+        displayVisualInfo(res, wbLength);
+        displayTextInfo(countryName, res);  // テキストでの結果表示
+
+        if (!isPantheon) {
+          if ($('.infoType.selectedBtn')[0].id.slice(4,) === 'Linechart') {
+            let wellbeingType = $('.wbButton1.selectedBtn')[0].id.slice(0, -4);
+            displayTimeline(wellbeingType, countryName, timelineSVG, timelineOffset);
+          }
+        }
+      } else {
+        displayVisulalNoInfo();
+        displayTextNoInfo();
+        if (!isPantheon) {
+          if ($('.infoType.selectedBtn')[0].id.slice(4,) === 'Linechart') {
+            displayTimelineNoInfo();
+          }
+        }
+      }
+      // display pantheon data / no data
+      displayPantheon(countryName);
+
+      // well-beingデータがあってもなくても移動(念の為、データの有無を確認)
+      let location = countrynameToLatlon(countryName);
+      if (typeof location !== 'undefined') {
+        latitude = location.latitude;
+        longitude = location.longitude;
+        moveCamera(latitude, longitude);
+
+        $('#country').empty().append(countryName);
+        $('#country4').empty().append(countryName);
+      }
+    }
+
 
     function displayRanking(type, rank, num, duration, rankText, score, scoreText) {
       let id = '#' + type + 'Ranking';
@@ -1013,7 +1109,7 @@
       let scoreUnit = type === 'GDP' ? 'US$' : 'pt';
       rankOrdinal = putRankOrdinal(rank);
 
-      displayTween = TweenMax.fromTo(svg, duration,
+      TweenMax.fromTo(svg, duration,
           {attr: {r: 0}},
           {
             attr: {r: radius},
@@ -1094,10 +1190,10 @@
 
       fadeInfoBoardText();
       setTimeout(() => {
-        TweenMax.to("#country2", 1.0, {
+        tweenTextCountryW = TweenMax.to("#country2", 1.0, {
           opacity: 1.0,
           onComplete: function () {
-            TweenMax.to(".infoBoardContent2", 1.0, {
+            tweenTextContentsW = TweenMax.to(".infoBoardContent2", 1.0, {
               opacity: 1.0,
             });
           }
@@ -1111,56 +1207,6 @@
       document.getElementById("GDP2").innerHTML = '- G : ' + gRank + putRankOrdinal(gRank);
     }
 
-
-    const path1 = '<a href=http://pantheon.media.mit.edu/people/';
-    const path2 = ' target="_blank"> - ';
-    const path3 = '</a>';
-    const born = '<span style="font-size: 12px;"> born in </span>';
-    const space = '<span style="font-size: 12px;"> </span>';
-
-    function displayPantheon(countryName) {
-      let infoBoardContent3 = document.getElementsByClassName('infoBoardContent3');
-      let pIndex = -1;
-      let url;
-      let name;
-      let occupation;
-      let year;
-      for (let i = 0; pantheonLength > i; i++) {
-        if (pantheon[i]['country'] === countryName) {
-          pIndex = i;
-        }
-      }
-      document.getElementById("country3").innerHTML = countryName;
-      let numPanheonPeople = 5;
-      for (let i = 0; numPanheonPeople > i; i++) {
-        infoBoardContent3[i].innerHTML = ''; // clear previous result
-      }
-      if (pIndex !== -1) {
-        let d = pantheon[pIndex];
-        for (let i = 0; d['name'].length > i; i++) {
-          url = d['url'][i];
-          name = d['name'][i];
-          occupation = d['occ'][i];
-          year = d['year'][i];
-          infoBoardContent3[i].innerHTML = path1 + url + path2 + name + ' <span style="color:#dae1f7; font-size: 16px;">(' + space + occupation + born + year + space + ')</span>' + path3;
-        }
-      } else {
-        infoBoardContent3[0].innerHTML = 'No data';
-      }
-
-      fadeInfoBoardPantheon();
-      setTimeout(() => {
-        TweenMax.to("#country3", 1.0, {
-          opacity: 1.0,
-          onComplete: function () {
-            $('.infoBoardContent3').css("display", 'block');
-            TweenMax.to(".infoBoardContent3", 1.0, {
-              opacity: 1.0,
-            });
-          }
-        })
-      }, 1000);
-    }
 
     function displayVisulalNoInfo() {
       setTimeout(() => {
@@ -1183,10 +1229,10 @@
     function displayTextNoInfo() {
       fadeInfoBoardText();
       setTimeout(() => {
-        TweenMax.to("#country2", 1.0, {
+        tweenTextCountryW = TweenMax.to("#country2", 1.0, {
           opacity: 1.0,
           onComplete: function () {
-            TweenMax.to(".infoBoardContent2", 1.0, {
+            tweenTextContentsW = TweenMax.to(".infoBoardContent2", 1.0, {
               opacity: 1.0,
             });
           }
@@ -1202,84 +1248,8 @@
     }
 
 
-    /* pantheon mode */
-    isPantheon = false;
-    window.addEventListener("keydown", function (event) {
-      // console.log(event.keyCode, event.keyCode === 32);
-      if (!isMoveCamera) {
-        if (event.keyCode === 32) {  // space
-          console.log('space');
-          onPantheon();
-          if (isTravelAuto) {
-            fadeInfoBoardPantheon();
-            travelPantheon();
-          }
-
-        } else if (event.keyCode === 27) {
-          console.log('esc');
-          offPantheon();
-          if (isTravelAuto) {
-            stopTravel();
-            travelWellbeing();
-          }
-        }
-      }
-    }, false);
-
-
-    function onPantheon() {
-      // $('#country2').css("display", 'none');
-      $('#infoBoard3').css("display", 'block');
-      $(".infoType").removeClass("selectedBtn");
-      infoBtn[2].classList.add("selectedBtn");
-      setInfoTypeNone();
-
-      TweenMax.killAll();
-      deletePin();
-      stopTravel();
-      isPantheon = true;
-
-      let res = drawHist('pantheon', drawHistDurationNomal, 'new');
-      barWidth = res.width;
-      histData = res.histData;
-      scoreMax = res.scoreMax;
-      histScoreData = res.scoreData;
-
-      $('#wbButton2').css("display", 'none');
-    }
-
-    function offPantheon() {
-      let selectedType = returnSelectedWBtype();
-
-      // $('#country2').css("display", 'block');
-      $('#infoBoard3').css("display", 'none');
-      $(".infoType").removeClass("selectedBtn");
-
-      // もとに戻すときのinfoType設定
-      if (isTravelAuto) {
-        infoBtn[0].classList.add("selectedBtn");
-        setInfoTypeText();
-      }else{
-        infoBtn[2].classList.add("selectedBtn");
-        setInfoTypeLinechart();
-      }
-
-      TweenMax.killAll();
-      deletePin();
-      isPantheon = false;
-      let res = drawHist(selectedType, drawHistDurationNomal, 'new');
-      barWidth = res.width;
-      histData = res.histData;
-      scoreMax = res.scoreMax;
-      histScoreData = res.scoreData;
-
-      $('#wbButton2').css("display", 'block');
-    }
-
-
     /* timeline mode */
     function displayTimeline(type, countryName, svg, offset) {
-      TweenMax.killAll();
       deleteTimeline();
       let data;
       for (let i = 0, l = timeline.length; i < l; i++) {
@@ -1307,24 +1277,24 @@
         min = gdpMin;
       }
       let timeLen = data.length;
-      let timelineWidth = svg.width.baseVal.value;
-      let timelineHeight = svg.height.baseVal.value;
       let w = (timelineWidth - offset * 2) / (timeLen - 1);
       let startX, startY, endX, endY;
 
       max = max * 1.1;
-      min = min * 0.6;
+      min = min * 0.5;
 
-      // console.log(type, data, max, min)
 
       let i = 0;
       let isPathFirst = true;
       timelineSetInterval = setInterval(function () {
         addTimelineScale(timelineYearList, timelineOffset, i);
+        console.log(timelineWidth, timelineHeight);
 
         let h = (data[i] - min) / (max - min) * timelineHeight;
         endX = w * i + offset;
         endY = timelineHeight - h;
+
+        console.log(endX, endY);
         // データが有るときのみ描画、無いときはスキップして次の点と結ぶ
         if (data[i] !== -999) {
           // 1回目は点のみ
@@ -1428,7 +1398,6 @@
 
 
     function displayTimelineNoInfo() {
-      TweenMax.killAll();
       deleteTimeline();
 
       setTimeout(() => {
@@ -1442,6 +1411,132 @@
         text.textContent = 'No data';
         document.getElementById('infoBoardTimelineSvg').appendChild(text);
       }, 500);
+    }
+
+
+    /* pantheon mode */
+    isPantheon = false;
+    window.addEventListener("keydown", function (event) {
+      // console.log(event.keyCode, event.keyCode === 32);
+      if (!isMoveCamera) {
+        if (event.keyCode === 32) {  // space
+          console.log('space');
+          onPantheon();
+          if (isTravelAuto) {
+            fadeInfoBoardPantheon();
+            travelPantheon();
+          }
+
+        } else if (event.keyCode === 27) {
+          console.log('esc');
+          offPantheon();
+          if (isTravelAuto) {
+            stopTravel();
+            travelWellbeing();
+          }
+        }
+      }
+    }, false);
+
+
+    const path1 = '<a href=http://pantheon.media.mit.edu/people/';
+    const path2 = ' target="_blank"> - ';
+    const path3 = '</a>';
+    const born = '<span style="font-size: 12px;"> born in </span>';
+    const space = '<span style="font-size: 12px;"> </span>';
+
+    function displayPantheon(countryName) {
+      let infoBoardContent3 = document.getElementsByClassName('infoBoardContent3');
+      let pIndex = -1;
+      let url;
+      let name;
+      let occupation;
+      let year;
+      for (let i = 0; pantheonLength > i; i++) {
+        if (pantheon[i]['country'] === countryName) {
+          pIndex = i;
+        }
+      }
+      document.getElementById("country3").innerHTML = countryName;
+      let numPanheonPeople = 5;
+      for (let i = 0; numPanheonPeople > i; i++) {
+        infoBoardContent3[i].innerHTML = ''; // clear previous result
+      }
+      if (pIndex !== -1) {
+        let d = pantheon[pIndex];
+        for (let i = 0; d['name'].length > i; i++) {
+          url = d['url'][i];
+          name = d['name'][i];
+          occupation = d['occ'][i];
+          year = d['year'][i];
+          infoBoardContent3[i].innerHTML = path1 + url + path2 + name + ' <span style="color:#dae1f7; font-size: 16px;">(' + space + occupation + born + year + space + ')</span>' + path3;
+        }
+      } else {
+        infoBoardContent3[0].innerHTML = 'No data';
+      }
+
+      fadeInfoBoardPantheon();
+      setTimeout(() => {
+        tweenTextCountryP = TweenMax.to("#country3", 1.0, {
+          opacity: 1.0,
+          onComplete: function () {
+            $('.infoBoardContent3').css("display", 'block');
+            tweenTextContentsP = TweenMax.to(".infoBoardContent3", 1.0, {
+              opacity: 1.0,
+            });
+          }
+        })
+      }, 1000);
+    }
+
+
+    function onPantheon() {
+      // $('#country2').css("display", 'none');
+      $('#infoBoard3').css("display", 'block');
+      $(".infoType").removeClass("selectedBtn");
+      infoBtn[2].classList.add("selectedBtn");
+      setInfoTypeNone();
+
+      TweenMax.killAll();
+      deletePin();
+      stopTravel();
+      isPantheon = true;
+
+      let res = drawHist('pantheon', drawHistDurationNomal, 'new');
+      barWidth = res.width;
+      histData = res.histData;
+      scoreMax = res.scoreMax;
+      histScoreData = res.scoreData;
+
+      $('#wbButton2').css("display", 'none');
+    }
+
+    function offPantheon() {
+      let selectedType = returnSelectedWBtype();
+
+      // $('#country2').css("display", 'block');
+      $('#infoBoard3').css("display", 'none');
+      $(".infoType").removeClass("selectedBtn");
+
+      // もとに戻すときのinfoType設定
+      if (isTravelAuto) {
+        infoBtn[0].classList.add("selectedBtn");
+        setInfoTypeText();
+      } else {
+        infoBtn[2].classList.add("selectedBtn");
+        setInfoTypeLinechart();
+      }
+
+      TweenMax.killAll();
+      deletePin();
+      isPantheon = false;
+      let res = drawHist(selectedType, drawHistDurationNomal, 'new');
+      barWidth = res.width;
+      histData = res.histData;
+      scoreMax = res.scoreMax;
+      histScoreData = res.scoreData;
+
+      $('#wbButton2').css("display", 'block');
     }
 
 
@@ -1504,45 +1599,8 @@
       if (isFinishStartTween) {
         if (!dragFlag) {
           if (isLand) {
-            if (!isFirstClick) {
-              TweenMax.killAll();
-              positive.cancel();
-              negative.cancel();
-              gdp.cancel();
-            }
-            clearInfo();
-            let res = calcWbInfo(countryNameGlobal);
-            infoBoard.css({opacity: 0.8});
-            infoBoardTimeline.css({opacity: 0.8});
             deletePin();
-            tooltip.css({opacity: 0.0});
-
-            // well-beingデータがあってもなくても移動
-            let location = countrynameToLatlon(countryNameGlobal);
-            latitude = location.latitude;
-            longitude = location.longitude;
-            moveCamera(latitude, longitude);
-
-            $('#country').empty().append(countryNameGlobal);
-            $('#country4').empty().append(countryNameGlobal);
-
-            if (typeof res !== 'undefined') {
-              displayVisualInfo(res, wbLength);
-              displayTextInfo(countryNameGlobal, res);  // テキストでの結果表示
-
-              if ($('.infoType.selectedBtn')[0].id.slice(4,) === 'Linechart') {
-                let wellbeingType = $('.wbButton1.selectedBtn')[0].id.slice(0, -4);
-                displayTimeline(wellbeingType, countryNameGlobal, timelineSVG, timelineOffset);
-              }
-            } else {
-              displayVisulalNoInfo();
-              displayTextNoInfo();
-              if ($('.infoType.selectedBtn')[0].id.slice(4,) === 'Linechart') {
-                displayTimelineNoInfo();
-              }
-            }
-            // display pantheon data / no data
-            displayPantheon(countryNameGlobal);
+            displayInfo(countryNameGlobal);
           }
         }
       }
@@ -1650,14 +1708,14 @@
     /*
     // ranking histogram
     */
-    if (canvasWidth < widthSP) {
+    if (canvasWidth < w500) {
       histCanvas.width = 320;
-    } else if (canvasWidth >= widthSP && canvasWidth < widthTablet) {
-      histCanvas.width = widthSP;
-    } else if (canvasWidth >= widthTablet && canvasWidth < widthMediumPC) {
-      histCanvas.width = widthTablet;
-    } else if (canvasWidth >= widthMediumPC && canvasWidth < widthWidePC) {
-      histCanvas.width = widthMediumPC;
+    } else if (canvasWidth >= w500 && canvasWidth < w680) {
+      histCanvas.width = w500;
+    } else if (canvasWidth >= w680 && canvasWidth < w800) {
+      histCanvas.width = w680;
+    } else if (canvasWidth >= w800 && canvasWidth < w1000) {
+      histCanvas.width = w800;
     } else {
       histCanvas.width = 900;
     }
@@ -1666,11 +1724,22 @@
     canvasContext.globalAlpha = 0.5;  // for safari(fillStyle alpha doesn't work)
 
     drawHist = function (type, duration, drawType) {
+      /* drawType: new, redraw */
       let res;
       if (isPantheon) {
         res = drawPantheonHist(duration, drawType);
       } else {
         res = drawWbHist(type, duration, drawType);
+      }
+
+      // well-being typeが変わるとき(=draw hist時)にinfoも書き直す(time line->pie chartのときにtweenが無効になるため)
+      if (typeof countryNameDisplayed !== 'undefined') {
+        if (drawType === 'new') {
+          if (!isTravelAuto){
+            deletePin();
+            displayInfo(countryNameDisplayed);
+          }
+        }
       }
       return {width: res.width, histData: res.histData, scoreMax: res.scoreMax, scoreData: res.scoreData};
     };
@@ -1704,12 +1773,14 @@
       return {width: width, histData: data, scoreMax: scoreMax, scoreData: scoreData};
     }
 
+
     function drawPantheonHist(duration, drawType) {
-      console.log('drawPantheonHist');
+      // console.log('drawPantheonHist');
       clearInterval(drawSetInterval);
       let width = handleCanvas(PantheonArray, duration, drawType, pantheonMax);
       return {width: width, histData: PantheonArray, scoreMax: pantheonMax, scoreData: PantheonScoreArray};
     }
+
 
     function handleCanvas(data, duration, drawType, scoreMax) {
       canvasContext.clearRect(0, 0, histCanvas.width, histCanvas.height);
@@ -1743,6 +1814,7 @@
       let b = Math.pow(10, base);
       return Math.floor(value * b) / b;
     }
+
 
     /* mouse event histogram */
     let tooltipHist = $('#tooltipHist');
@@ -1785,50 +1857,11 @@
         if (isFillHist) {
           if (!isMoveCamera) {
             console.log('click', mouseOnCountry);
-
-            // after setting mouseOnCountry, this function can be used
-            if (typeof mouseOnCountry !== 'undefined') {
-              let res = countrynameToLatlon(mouseOnCountry);
-              latitude = res.latitude;
-              longitude = res.longitude;
-
-              deletePin();
-              moveCamera(latitude, longitude);
-              clickHistRankingDisplayScore(mouseOnCountry);
-            }
-            //tooltipHist.css({opacity: 0.0});
+            deletePin();
+            displayInfo(mouseOnCountry);
           }
         }
       }
-    }
-
-
-    /* show info */
-    function clickHistRankingDisplayScore(countryName) {
-      if (!isFirstClick) {
-        TweenMax.killAll();
-        positive.cancel();
-        negative.cancel();
-        gdp.cancel();
-      }
-      clearInfo();
-      let res = calcWbInfo(countryName);
-      infoBoard.css({opacity: 0.8});
-      infoBoardTimeline.css({opacity: 0.8});
-
-
-      $('#country').empty().append(countryName);
-      if (typeof res !== 'undefined') {
-        displayVisualInfo(res, wbLength);
-        displayTextInfo(countryName, res);  // テキストでの結果表示
-        let wellbeingType = $('.wbButton1.selectedBtn')[0].id.slice(0, -4);
-        displayTimeline(wellbeingType, countryName, timelineSVG, timelineOffset);
-      } else {
-        displayVisulalNoInfo();
-        displayTextNoInfo();
-        displayTimelineNoInfo();
-      }
-      displayPantheon(countryName);
     }
 
 
@@ -1971,12 +2004,7 @@
 
         let countryName = histScoreData[i].country;
         highlightedBar(countryName, histData, scoreMax);
-        let res = countrynameToLatlon(countryName);
-        latitude = res.latitude;
-        longitude = res.longitude;
-        moveCamera(latitude, longitude);
-        // createPoint(latitude, longitude);
-        clickHistRankingDisplayScore(countryName);
+        displayInfo(countryName);
         i++;
         travelIndex = i;  // val for continue
         if (i > wbLength - 1) {
@@ -2088,14 +2116,8 @@
 
     selectorSearch.on("autocompleteclose", function () {
       countryNameGlobal = document.getElementById('country').textContent;
-      let res = countrynameToLatlon(countryNameGlobal);
-      console.log(countryNameGlobal);
-      if (typeof res.latitude !== 'undefined') {
-        console.log(res);
-        deletePin();
-        moveCamera(res.latitude, res.longitude);
-        clickHistRankingDisplayScore(countryNameGlobal);
-      }
+      deletePin();
+      displayInfo(countryNameGlobal);
       isSearching = false;
       isInfoObject = false;
       // console.log(isInfoObject);
