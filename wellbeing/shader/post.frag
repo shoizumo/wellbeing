@@ -5,7 +5,6 @@ uniform vec2 resolution;
 uniform sampler2D texture;
 
 varying vec2 vUv;
-const float PI = 3.14159265358979323;
 
 
 // bright star function
@@ -79,6 +78,15 @@ float cloud(vec2 v) {
     return 130.0 * dot(m, g);
 }
 
+float rand (in vec2 uv) {
+    return fract(sin(dot(uv, vec2(12.4124, 48.4124))) * 48512.41241);
+}
+float noise (in vec2 uv) {
+    vec2 b = floor(uv);
+    const vec2 O = vec2(0., 1.);
+    return mix(mix(rand(b), rand(b+O.yx), .5), mix(rand(b+O), rand(b+O.yy), .5), .5);
+}
+
 
 
 void main( void ) {
@@ -106,7 +114,16 @@ void main( void ) {
     vec4 starCol = stars(starPos) / 2.0;
 
 
-    color += starCol.rgb;
+    vec2 uv = gl_FragCoord.xy/resolution.xy*vec2(100.0, 100.0);
+    float smallStarCol = 0.;
+    float fl, s;
+    for (int layer = 0; layer < 2; layer++) {
+        fl = float(layer);
+        s = (400.-fl*20.);
+        smallStarCol += step(.1, pow(noise(mod(vec2(uv.x*s, uv.y*s - time * 0.5 + fl * 100.), resolution.x)),18.)) * (fl/float(2));
+    }
+
+    color += starCol.rgb + smallStarCol;
     float mixRatio;
     if(destColor.b == 0.0){
         mixRatio = 0.5;
@@ -115,7 +132,7 @@ void main( void ) {
     }
 
     gl_FragColor = vec4(mix(destColor, vec4(color, 1.0), mixRatio));
-//    gl_FragColor = vec4(color, 1.0);
+//    gl_FragColor = vec4(vec3(smallStarCol), 1.0);
 
 }
 
