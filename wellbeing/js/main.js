@@ -155,7 +155,7 @@
 
   /* function */
   let drawHist;
-  let drawHistDurationNomal = 2500;
+  let drawHistDurationNomal = 1500;
   let drawHistDurationRedraw = 0;
   let redrawHighlightedBar;
   let clickBtnDrawHist;
@@ -546,16 +546,16 @@
 
     if (canvasWidth < w680) {
       timelineWidth = 320;
-      timelineHeight = 100;
+      timelineHeight = 80;
     } else if (canvasWidth >= w680 && canvasWidth < w800) {
       timelineWidth = 480;
-      timelineHeight = 100;
+      timelineHeight = 80;
     } else if (canvasWidth >= w800 && canvasWidth < w1000) {
       timelineWidth = 600;
-      timelineHeight = 100;
+      timelineHeight = 80;
     } else {
       timelineWidth = 800;
-      timelineHeight = 150;
+      timelineHeight = 105;
     }
 
     /* device check */
@@ -625,16 +625,16 @@
 
         if (canvasWidth < w680) {
           timelineWidth = 320;
-          timelineHeight = 100;
+          timelineHeight = 80;
         } else if (canvasWidth >= w680 && canvasWidth < w800) {
           timelineWidth = 480;
-          timelineHeight = 100;
+          timelineHeight = 80;
         } else if (canvasWidth >= w800 && canvasWidth < w1000) {
           timelineWidth = 600;
-          timelineHeight = 100;
+          timelineHeight = 80;
         } else {
           timelineWidth = 800;
-          timelineHeight = 150;
+          timelineHeight = 105;
         }
       }
     }, false);
@@ -945,9 +945,7 @@
         fadeInfoBoardText();
         deletePin();
 
-
         let type = e.target.id.slice(0, -1);
-        clickBtnDrawHist(type);
         let index;
         if (type === 'ladderBtn') {
           index = 0;
@@ -959,6 +957,7 @@
           index = 3;
         }
         setSelectedWBButton(index);
+        clickBtnDrawHist(type);
 
         /* travel type check */
         if (isTravelAuto) {
@@ -1073,6 +1072,7 @@
         if (!isPantheon) {
           if ($('.infoType.selectedBtn')[0].id.slice(4,) === 'Linechart') {
             let wellbeingType = $('.wbButton1.selectedBtn')[0].id.slice(0, -4);
+            console.log(wellbeingType);
             displayTimeline(wellbeingType, countryName, timelineSVG, timelineOffset);
           }
         }
@@ -1288,13 +1288,11 @@
       let isPathFirst = true;
       timelineSetInterval = setInterval(function () {
         addTimelineScale(timelineYearList, timelineOffset, i);
-        console.log(timelineWidth, timelineHeight);
 
         let h = (data[i] - min) / (max - min) * timelineHeight;
         endX = w * i + offset;
         endY = timelineHeight - h;
 
-        console.log(endX, endY);
         // データが有るときのみ描画、無いときはスキップして次の点と結ぶ
         if (data[i] !== -999) {
           // 1回目は点のみ
@@ -2106,28 +2104,31 @@
     }
     searchArray = searchArray.sort();
 
-    let selectorSearch = $("#country");
-    selectorSearch.autocomplete({
-      source: searchArray,
-      autoFocus: false, //defo:false
-      delay: 300,
-      minLength: 1
-    });
+    let selectorSearchID = ["#country", "#country4"];
+    for (let i = 0, l = selectorSearchID.length; i < l; i++) {
+      let selectorSearch = $(selectorSearchID[i]);
+      selectorSearch.autocomplete({
+        source: searchArray,
+        autoFocus: false, //defo:false
+        delay: 300,
+        minLength: 1
+      });
 
-    selectorSearch.on("autocompleteclose", function () {
-      countryNameGlobal = document.getElementById('country').textContent;
-      deletePin();
-      displayInfo(countryNameGlobal);
-      isSearching = false;
-      isInfoObject = false;
-      // console.log(isInfoObject);
-    });
+      selectorSearch.on("autocompleteclose", function () {
+        countryNameGlobal = $(selectorSearchID[i])[0].innerHTML;
+        deletePin();
+        displayInfo(countryNameGlobal);
+        isSearching = false;
+        isInfoObject = false;
+        // console.log(isInfoObject);
+      });
 
-    selectorSearch.on("autocompleteopen", function () {
-      isSearching = true;
-      isInfoObject = true;
-      // console.log(isInfoObject);
-    });
+      selectorSearch.on("autocompleteopen", function () {
+        isSearching = true;
+        isInfoObject = true;
+        // console.log(isInfoObject);
+      });
+    }
 
   }
 

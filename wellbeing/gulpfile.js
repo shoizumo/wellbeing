@@ -15,7 +15,7 @@ gulp.task('default', function () {
         // Sassのコンパイルエラーを表示(これがないと自動的に止まってしまう)
         .pipe(sass().on('error', sass.logError))
         // cssフォルダー以下に保存
-        .pipe(sourcemaps.write())
+        // .pipe(sourcemaps.write())
         .pipe(gulp.dest('css'))
   });
 });
