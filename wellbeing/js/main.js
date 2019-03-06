@@ -1733,7 +1733,7 @@
       // well-being typeが変わるとき(=draw hist時)にinfoも書き直す(time line->pie chartのときにtweenが無効になるため)
       if (typeof countryNameDisplayed !== 'undefined') {
         if (drawType === 'new') {
-          if (!isTravelAuto){
+          if (!isTravelAuto) {
             deletePin();
             displayInfo(countryNameDisplayed);
           }
@@ -1976,6 +1976,7 @@
 
       pin.position.copy(convertGeoCoords(latitude, longitude));
       pin.rotation.set(0.0, -lonRad, latRad - Math.PI * 0.5);
+      pin.name = 'pin';
       pinList.push(pin);
       earth.add(pin);
     }
@@ -2055,13 +2056,23 @@
     // travel pantheon
     */
     travelPantheon = function (index = 0) {
+      let start = performance.now();
       stopTravel();  // clear previous travel
       let i = index;
-      travelSetInterval = setInterval(function () {
+      let numPinList = 0;
+      let isClear = false;
+
+      function travel() {
         if (i > 0) {
-          pinList[i - 1].children[0].material.color.setHex(0xC9C7B7);
-          pinList[i - 1].children[1].material.color.setHex(0xC9C7B7);
+          if (numPinList === pinList.length) {
+            isClear = true;
+          }
+          let pins = pinList[pinList.length - 1].children;
+          pins[0].material.color.setHex(0xC9C7B7);
+          pins[1].material.color.setHex(0xC9C7B7);
+          numPinList = pinList.length;
         }
+
 
         let countryName = PantheonScoreArray[i]['country'];
         console.log(countryName);
@@ -2072,12 +2083,24 @@
         moveCamera(latitude, longitude);
         displayPantheon(countryName);
         i++;
+
+        if (isClear){
+          for (let i = 0, l = pinList.length; l > i; i++) {
+            let pins = pinList[i].children;
+            pins[0].material.color.setHex(0xC9C7B7);
+            pins[1].material.color.setHex(0xC9C7B7);
+          }
+        }
         travelIndex = i;  // val for continue
         if (i > pantheon.length - 1) {
           console.log('clearInterval', i);
           clearInterval(travelSetInterval);
         }
-      }, 9250);  // 1800(=30m) / 194(Num of Pantheon data)
+        travelSetInterval = setTimeout(travel, 9250);  // 1800(=30m) / 194(Num of Pantheon data)
+      }
+
+      // travel();
+      travelSetInterval = setTimeout(travel, 3000);  // 1800(=30m) / 194(Num of Pantheon data)
     };
 
 
