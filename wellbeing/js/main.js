@@ -1090,7 +1090,7 @@
 
       // well-beingデータがあってもなくても移動(念の為、データの有無を確認)
       let location = countrynameToLatlon(countryName);
-      if (typeof location !== 'undefined') {
+      if (typeof location.latitude !== 'undefined') {
         latitude = location.latitude;
         longitude = location.longitude;
         moveCamera(latitude, longitude);
@@ -2140,6 +2140,9 @@
       selectorSearch.on("autocompleteclose", function () {
         countryNameGlobal = $(selectorSearchID[i])[0].innerHTML;
         deletePin();
+
+        console.log(countryNameGlobal);
+
         displayInfo(countryNameGlobal);
         isSearching = false;
         isInfoObject = false;
