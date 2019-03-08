@@ -869,6 +869,9 @@
     earth.position.z = initEarthPosition.z;
 
 
+
+
+
     ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     // クラス用の設定
     /*
@@ -931,14 +934,11 @@
     class histCanvas {
       constructor() {
         this.histArea = document.querySelector("#histgram");
-        this.context = this.histArea.getContext("2d");
-        this.setCanvasSize();
-        this.context.globalAlpha = 0.5;  // for safari(fillStyle alpha doesn't work)
-
-
-        this.tooltipHist = $('#tooltipHist');
-        this.mouseOnCountry = '';
         this.histArea.addEventListener('mousemove', this.getCanvasColor.bind(this), false);
+        this.setCanvasSize();
+
+        this.context = this.histArea.getContext("2d");
+        this.context.globalAlpha = 0.5;  // for safari(fillStyle alpha doesn't work)
       }
 
       setCanvasSize() {
@@ -946,6 +946,7 @@
         const w800 = 800;
         const w680 = 680;
         const w500 = 500;
+
 
         if (canvasWidth < w500) {
           this.histArea.width = 320;
@@ -961,6 +962,8 @@
         this.histArea.height = 90;
       }
 
+
+      /* get canvas color */
       getCanvasColor(event) {
         let eventLocation = this.getEventLocation(this.histArea, event);
         // let context = this.getContext('2d');
@@ -991,6 +994,7 @@
         }
         return undefined;
       }
+
     }
 
 
@@ -1003,11 +1007,6 @@
 
         this.canvas = new histCanvas();
         this.highlightedBarList = [];
-
-        this.canvas.histArea.addEventListener('mousemove', this.onHistRanking.bind(this), false);
-        this.canvas.histArea.addEventListener('mouseout', this.outHistRanking.bind(this), false);
-        this.canvas.histArea.addEventListener('click', this.clickHistRanking.bind(this), false);
-
       }
 
       get max() {
@@ -1044,6 +1043,7 @@
         let i = 0;
         // console.log(numData, data);
         drawSetInterval = setInterval(() => {
+          console.log(this.type, width, i);
           this.fillBar(width, i, histArea);
           i++;
 
@@ -1077,7 +1077,7 @@
         return Math.floor(value * b) / b;
       }
 
-      redrawHighlightedBar(indexList, data) {
+      redrawHighlightedBar = function (indexList, data) {
         let h;
         for (let i = 0; indexList.length > i; i++) {
           // highlight color
@@ -1086,62 +1086,7 @@
           h = (data[indexList[i]].score) / max * canvas.histArea.height;
           canvasContext.fillRect(this.histWidth * indexList[i], canvas.histArea.height - h, this.histWidth, h);
         }
-      }
-
-      onHistRanking(event) {
-        if (this.getSelectedTypeFromButton() === this.type) {
-          // console.log('onHist', isFillHist);
-          if (isHistDisplay) {
-            if (isFillHist) {
-              let rect = event.target.getBoundingClientRect();
-              let mouseX = Math.abs(event.clientX - rect.left);
-              let index = Math.floor(mouseX / this.histWidth);
-
-              document.getElementById("canvasWrapper").classList.add("canvasWrapperPointer");
-              // console.log(index);
-              this.canvas.mouseOnCountry = this.data[index]['country'];
-              this.canvas.tooltipHist[0].innerText = this.canvas.mouseOnCountry;
-              this.canvas.tooltipHist.css({opacity: 1.0});
-
-              this.canvas.tooltipHist.css({top: event.clientY * 0.95});
-              this.canvas.tooltipHist.css({left: event.clientX * 1.0 - this.canvas.tooltipHist.width() / 2 - 5});
-
-            } else {
-              document.getElementById("canvasWrapper").classList.remove("canvasWrapperPointer");
-              this.canvas.tooltipHist.css({opacity: 0.0});
-              this.canvas.tooltipHist.css({top: 0});
-              this.canvas.tooltipHist.css({left: 0});
-            }
-          }
-        }
-      }
-
-      outHistRanking() {
-        this.canvas.tooltipHist.css({opacity: 0.0});
-      }
-
-      clickHistRanking() {
-        if (this.getSelectedTypeFromButton() === this.type) {
-          if (!isTravelAuto) {
-            if (isFillHist) {
-              if (!isMoveCamera) {
-                console.log('click', this.canvas.mouseOnCountry, this.type);
-                deletePin();
-                displayInfo(this.canvas.mouseOnCountry);
-                console.log('conducted', this.type);
-              }
-            }
-          }
-        }
-      }
-
-      getSelectedTypeFromButton() {
-        let type = $('.wbButton1.selectedBtn')[0].id.slice(0, -4)
-        if (typeof type === 'undefined') {
-          type = 'pantheon'
-        }
-        return type
-      }
+      };
     }
 
 
@@ -1173,6 +1118,8 @@
     ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
+
+
     /* make well-being button in order to show score */
     wbButton = document.getElementsByClassName('wbButton');
     for (let i = 0, wbLen = wbButton.length; i < wbLen; i++) {
@@ -1183,7 +1130,7 @@
         fadeInfoBoardText();
         deletePin();
 
-        const wbType = {'ladderBtn': 0, 'positiveBtn': 1, 'negativeBtn': 2, 'gdpBtn': 3};
+        const wbType = {'ladderBtn': 0, 'positiveBtn': 1, 'negativeBtn':2, 'gdpBtn':3};
         const type = e.target.id.slice(0, -1);
         const index = wbType[type];
         // if (type === 'ladderBtn') {
@@ -2013,95 +1960,95 @@
     }
 
 
-    // function drawPantheonHist(duration, drawType) {
-    //   // console.log('drawPantheonHist');
-    //   clearInterval(drawSetInterval);
-    //   let width = handleCanvas(PantheonArray, duration, drawType, pantheonData.max);
-    //   return {width: width, histData: PantheonArray, scoreMax: pantheonData.max, scoreData: PantheonScoreArray};
-    // }
-    //
-    //
-    // function handleCanvas(data, duration, drawType, scoreMax) {
-    //   canvasContext.clearRect(0, 0, histCanvas.width, histCanvas.height);
-    //   let numData = data.length;
-    //   let width = mathFloor(histCanvas.width / numData, 5);
-    //
-    //   // draw histogram with loop rect
-    //   let i = 0;
-    //   // console.log(numData, data);
-    //   drawSetInterval = setInterval(function () {
-    //     canvasContext.fillStyle = barColor;
-    //     let h = (data[i].score) / scoreMax * histCanvas.height;
-    //     canvasContext.fillRect(width * i, histCanvas.height - h, width, h);
-    //     // console.log(i);
-    //     i++;
-    //
-    //     if (i > numData - 1) {
-    //       clearInterval(drawSetInterval);
-    //
-    //       // 再描画時の関数
-    //       if (drawType === 'redraw') {
-    //         redrawHighlightedBar(highlightedBarList, histData, scoreMax);
-    //       }
-    //     }
-    //   }, duration / numData);
-    //   isHistDisplay = true;
-    //   return width;
-    // }
-    //
-    // function mathFloor(value, base) {
-    //   let b = Math.pow(10, base);
-    //   return Math.floor(value * b) / b;
-    // }
+    function drawPantheonHist(duration, drawType) {
+      // console.log('drawPantheonHist');
+      clearInterval(drawSetInterval);
+      let width = handleCanvas(PantheonArray, duration, drawType, pantheonData.max);
+      return {width: width, histData: PantheonArray, scoreMax: pantheonData.max, scoreData: PantheonScoreArray};
+    }
+
+
+    function handleCanvas(data, duration, drawType, scoreMax) {
+      canvasContext.clearRect(0, 0, histCanvas.width, histCanvas.height);
+      let numData = data.length;
+      let width = mathFloor(histCanvas.width / numData, 5);
+
+      // draw histogram with loop rect
+      let i = 0;
+      // console.log(numData, data);
+      drawSetInterval = setInterval(function () {
+        canvasContext.fillStyle = barColor;
+        let h = (data[i].score) / scoreMax * histCanvas.height;
+        canvasContext.fillRect(width * i, histCanvas.height - h, width, h);
+        // console.log(i);
+        i++;
+
+        if (i > numData - 1) {
+          clearInterval(drawSetInterval);
+
+          // 再描画時の関数
+          if (drawType === 'redraw') {
+            redrawHighlightedBar(highlightedBarList, histData, scoreMax);
+          }
+        }
+      }, duration / numData);
+      isHistDisplay = true;
+      return width;
+    }
+
+    function mathFloor(value, base) {
+      let b = Math.pow(10, base);
+      return Math.floor(value * b) / b;
+    }
 
 
     /* mouse event histogram */
-    // let tooltipHist = $('#tooltipHist');
-    // histCanvas.addEventListener('mousemove', onHistRanking, false);
-    // histCanvas.addEventListener('mouseout', outHistRanking, false);
-    // histCanvas.addEventListener('click', clickHistRanking, false);
-    //
-    // function onHistRanking(event) {
-    //   // console.log('onHist', isFillHist);
-    //   if (isHistDisplay) {
-    //     if (isFillHist) {
-    //       let rect = event.target.getBoundingClientRect();
-    //       let mouseX = Math.abs(event.clientX - rect.left);
-    //       let index = Math.floor(mouseX / barWidth);
-    //       let data = histData;
-    //
-    //       document.getElementById("canvasWrapper").classList.add("canvasWrapperPointer");
-    //       mouseOnCountry = data[index]['country'];
-    //       tooltipHist[0].innerText = mouseOnCountry;
-    //       tooltipHist.css({opacity: 1.0});
-    //
-    //       tooltipHist.css({top: event.clientY * 0.95});
-    //       tooltipHist.css({left: event.clientX * 1.0 - tooltipHist.width() / 2 - 5});
-    //
-    //     } else {
-    //       document.getElementById("canvasWrapper").classList.remove("canvasWrapperPointer");
-    //       tooltipHist.css({opacity: 0.0});
-    //       tooltipHist.css({top: 0});
-    //       tooltipHist.css({left: 0});
-    //     }
-    //   }
-    // }
-    //
-    // function outHistRanking() {
-    //   tooltipHist.css({opacity: 0.0});
-    // }
-    //
-    // function clickHistRanking() {
-    //   if (!isTravelAuto) {
-    //     if (isFillHist) {
-    //       if (!isMoveCamera) {
-    //         console.log('click', mouseOnCountry);
-    //         deletePin();
-    //         displayInfo(mouseOnCountry);
-    //       }
-    //     }
-    //   }
-    // }
+    let tooltipHist = $('#tooltipHist');
+    histCanvas.addEventListener('mousemove', onHistRanking, false);
+    histCanvas.addEventListener('mouseout', outHistRanking, false);
+    histCanvas.addEventListener('click', clickHistRanking, false);
+
+    function onHistRanking(event) {
+      // console.log('onHist', isFillHist);
+      if (isHistDisplay) {
+        if (isFillHist) {
+          let rect = event.target.getBoundingClientRect();
+          let mouseX = Math.abs(event.clientX - rect.left);
+          let index = Math.floor(mouseX / barWidth);
+          let data = histData;
+
+          document.getElementById("canvasWrapper").classList.add("canvasWrapperPointer");
+          mouseOnCountry = data[index]['country'];
+          tooltipHist[0].innerText = mouseOnCountry;
+          tooltipHist.css({opacity: 1.0});
+
+          tooltipHist.css({top: event.clientY * 0.95});
+          tooltipHist.css({left: event.clientX * 1.0 - tooltipHist.width() / 2 - 5});
+
+        } else {
+          document.getElementById("canvasWrapper").classList.remove("canvasWrapperPointer");
+          tooltipHist.css({opacity: 0.0});
+          tooltipHist.css({top: 0});
+          tooltipHist.css({left: 0});
+        }
+      }
+    }
+
+    function outHistRanking() {
+      tooltipHist.css({opacity: 0.0});
+    }
+
+    function clickHistRanking() {
+      if (!isTravelAuto) {
+        if (isFillHist) {
+          if (!isMoveCamera) {
+            console.log('click', mouseOnCountry);
+            deletePin();
+            displayInfo(mouseOnCountry);
+          }
+        }
+      }
+    }
 
 
     /* highlight selected country */
