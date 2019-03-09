@@ -85,6 +85,7 @@
        this.gdpTween = '';
 
        this.data = wbData;
+       this.numData = Object.keys(this.data).length;
      }
 
 
@@ -92,9 +93,9 @@
        countryNameDisplayed = countryName;
        if (!isFirstClick) {
          TweenMax.killAll();
-         // positive.cancel();
-         // negative.cancel();
-         // gdp.cancel();
+         this.positiveTween.cancel();
+         this.negativeTween.cancel();
+         this.gdpTween.cancel();
        }
        this.clearInfo();
        let res = this.calcWbInfo(countryName);
@@ -104,7 +105,7 @@
 
 
        if (typeof res !== 'undefined') {
-         this.displayVisualInfo(res, wbLength);
+         this.displayVisualInfo(res, this.numData);
          this.displayTextInfo(countryName, res);  // テキストでの結果表示
 
          if (!isPantheon) {
@@ -141,9 +142,9 @@
 
 
      calcWbInfo(countryName) {
-       for (let i = 0, l = Object.keys(this.data).length; l > i; i++) {
+       for (let i = 0; this.numData > i; i++) {
          if (this.data[i].country === countryName) {
-           return Data[i];
+           return this.data[i];
          }
        }
      }
@@ -237,17 +238,24 @@
 
 
 
-     displayVisualInfo(wbData, wbLength) {
+     displayVisualInfo(countryWbData, wbLength) {
        new Promise((resolve) => {
-         resolve(displayRanking('Ladder', wbData['lRank'], wbLength, 1.0, t1, wbData['ladder'], s1));
+         resolve(this.displayRanking('Ladder', countryWbData['lRank'], wbLength, 1.0, t1, countryWbData['ladder'], s1));
+         console.log('ladder finissh');
        }).then(() => {
-         this.positiveTween = createPromise('Positive', wbData['pRank'], wbLength, 1.0, t2, 500, wbData['positive'], s2);
+         console.log('positive start');
+         this.positiveTween = this.createPromise('Positive', countryWbData['pRank'], wbLength, 1.0, t2, 500, countryWbData['positive'], s2);
+         console.log('positive finish');
          return this.positiveTween.promise;
        }).then(() => {
-         this.negativeTween = createPromise('Negative', wbData['nRank'], wbLength, 1.0, t3, 500, wbData['negative'], s3);
+         console.log('negative start');
+         this.negativeTween = this.createPromise('Negative', countryWbData['nRank'], wbLength, 1.0, t3, 500, countryWbData['negative'], s3);
+         console.log('negative finish');
          return this.negativeTween.promise;
        }).then(() => {
-         this.gdpTween = createPromise('GDP', wbData['gRank'], wbLength, 1.0, t4, 500, wbData['gdp'], s4);
+         console.log('gdp start');
+         this.gdpTween = this.createPromise('GDP', countryWbData['gRank'], wbLength, 1.0, t4, 500, countryWbData['gdp'], s4);
+         console.log('gdp finish');
          isFirstClick = false;
          return this.gdpTween.promise;
        }).catch(() => {
@@ -257,11 +265,11 @@
 
 
 
-     displayTextInfo(countryName) {
-       let lRank = this.data['lRank'];
-       let pRank = this.data['pRank'];
-       let nRank = this.data['nRank'];
-       let gRank = this.data['gRank'];
+     displayTextInfo(countryName, countryWbData) {
+       let lRank = countryWbData['lRank'];
+       let pRank = countryWbData['pRank'];
+       let nRank = countryWbData['nRank'];
+       let gRank = countryWbData['gRank'];
 
        fadeInfoBoardText();
        setTimeout(() => {
@@ -364,7 +372,7 @@
 
        let i = 0;
        let isPathFirst = true;
-       timelineSetInterval = setInterval(function () {
+       timelineSetInterval = setInterval(() => {
          this.addTimelineScale(timelineYearList, timelineOffset, i);
 
          let h = (data[i] - min) / (max - min) * timelineHeight;
@@ -375,7 +383,7 @@
          if (data[i] !== -999) {
            // 1回目は点のみ
            if (isPathFirst) {
-             svgMarker(endX, endY, svg);
+             this.svgMarker(endX, endY, svg);
              startX = endX;
              startY = endY;
              isPathFirst = !isPathFirst;
@@ -405,10 +413,10 @@
            {
              attr: {x2: endX, y2: endY},
              ease: CustomEase.create("custom", "M0,0,C-0.024,0.402,0.456,0.48,0.5,0.5,0.622,0.556,0.978,0.616,1,1"),
-             onComplete: function () {
+             onComplete: () => {
                this.svgMarker(endX, endY, svg)
              }
-           });
+           })
      }
 
 
@@ -436,7 +444,7 @@
 
 
      searchTimelineRank(type, countryName, Data) {
-       let res = calcWbInfo(countryName);
+       let res = this.calcWbInfo(countryName);
        let rankKey = type.slice(0, 1) + 'Rank';
        let rank = res[rankKey];
        let rankOrdinal = this.putRankOrdinal(rank);
