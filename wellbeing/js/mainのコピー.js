@@ -20,7 +20,7 @@
   let PantheonScoreArray = [];
 
 
-  for (let i = 0, l=Object.keys(wbData).length; l > i; i++) {
+  for (let i = 0, l = Object.keys(wbData).length; l > i; i++) {
     let wb = wbData[i];
     let ladder = {country: wb.country, rank: wb.lRank, score: wb.ladder};
     let positive = {country: wb.country, rank: wb.pRank, score: wb.positive};
@@ -38,7 +38,7 @@
     GDPScoreArray.push(logGdp);
   }
 
-  for (let i = 0, l=Object.keys(pantheon).length; l > i; i++) {
+  for (let i = 0, l = Object.keys(pantheon).length; l > i; i++) {
     let P = pantheon[i];
     let p = {country: P.country, rank: P.rank, score: P.nPeople};
 
@@ -79,8 +79,7 @@
       this.histArea = document.querySelector("#histgram");
       this.context = this.histArea.getContext("2d");
       this.setCanvasSize();
-      this.context.globalAlpha = 0.5;  // for safari(fillStyle alpha doesn't work)
-
+      this.context.globalAlpha = 1.0;  // for safari(fillStyle alpha doesn't work)
 
       this.tooltipHist = $('#tooltipHist');
       this.mouseOnCountry = '';
@@ -93,7 +92,7 @@
       const w680 = 680;
       const w500 = 500;
 
-      let canvasWidth  = window.innerWidth;
+      let canvasWidth = window.innerWidth;
       if (canvasWidth < w500) {
         this.histArea.width = 320;
       } else if (canvasWidth >= w500 && canvasWidth < w680) {
@@ -138,6 +137,19 @@
       }
       return undefined;
     }
+
+    setAlpha(alpha){
+      this.globalAlpha = alpha;
+    }
+
+
+    setNomalColor() {
+      this.context.fillStyle = "rgb(100, 100, 100)";
+    }
+
+    setHighlightColor() {
+      this.context.fillStyle = "rgb(150, 50, 50)";
+    }
   }
 
 
@@ -165,11 +177,17 @@
       return Math.min(this.scoreData[this.scoreData.length - 1].score);
     }
 
+    resetHighlightedBarList() {
+      highlightedBarList = [];
+    }
+
     drawHist(duration, drawType) {
+      this.resetHighlightedBarList();
+
       /* drawType: new, redraw */
       console.log('drawWbHist', this.type);
       clearInterval(drawSetInterval);
-      this.handleCanvas(this.data, duration, drawType, this.canvas.histArea);
+      this.histLoop(this.data, duration, drawType, this.canvas.histArea);
 
       // well-being typeが変わるとき(=draw hist時)にinfoも書き直す(time line->pie chartのときにtweenが無効になるため)
       if (typeof countryNameDisplayed !== 'undefined') {
@@ -182,7 +200,7 @@
       }
     };
 
-    handleCanvas(data, duration, drawType, histArea) {
+    histLoop(data, duration, drawType, histArea) {
       this.canvas.context.clearRect(0, 0, histArea.width, histArea.height);
       let numData = data.length;
       let width = this.histWidth;
@@ -207,7 +225,8 @@
     }
 
     fillBar(width, i, histArea) {
-      this.canvas.context.fillStyle = barColor;
+      this.canvas.setNomalColor();
+      // this.canvas.setAlpha(0.5);
       let max = this.type === 'negative' ? this.min : this.max;
       let h = (this.data[i].score) / max * histArea.height;
       this.canvas.context.fillRect(width * i, histArea.height - h, width, h);
@@ -228,12 +247,29 @@
       let h;
       for (let i = 0; indexList.length > i; i++) {
         // highlight color
-        canvasContext.fillStyle = highlightedBarColor;
+        this.canvas.setHighlightColor();
         let max = this.type === 'negative' ? this.min : this.max;
         h = (data[indexList[i]].score) / max * canvas.histArea.height;
-        canvasContext.fillRect(this.histWidth * indexList[i], canvas.histArea.height - h, this.histWidth, h);
+        this.canvas.context.fillRect(this.histWidth * indexList[i], canvas.histArea.height - h, this.histWidth, h);
       }
     }
+
+    highlightBar(countryName) {
+      let h;
+      let index;
+      for (let i = 0, l = this.data.length; l > i; i++) {
+        if (this.data[i].country === countryName) {
+          index = i;
+          this.highlightedBarList.push(i)
+        }
+      }
+      // highlight color
+      this.canvas.setHighlightColor();
+      let max = this.type === 'negative' ? this.min : this.max;
+      h = (this.data[index].score) / max * this.canvas.histArea.height;
+      this.canvas.context.fillRect(this.histWidth * index, this.canvas.histArea.height - h, this.histWidth, h);
+    }
+
 
     onHistRanking(event) {
       if (this.getSelectedTypeFromButton() === this.type) {
@@ -289,6 +325,7 @@
       }
       return type
     }
+
   }
 
 
@@ -298,7 +335,7 @@
   const gdpData = new Data(GDPArray, GDPScoreArray, 'gdp');
   const pantheonData = new Data(PantheonArray, PantheonScoreArray, 'pantheon');
 
-  const dataList = {ladderData, positiveData, negativeData, gdpData, pantheonData};
+  const dataList = {ladderData, positiveData, negativeData, gdpData, pantheonData};
 
 
   ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -403,8 +440,8 @@
   let travelIndex = 0;
   let highlightedBarList;
 
-  const barColor = "rgb(200, 225, 225)";
-  const highlightedBarColor = "rgb(241, 23, 53)";
+  // const barColor = "rgb(0, 2, 255)";
+  // const highlightedBarColor = "rgb(241, 23, 53)";
 
 
   /* interactive land function */
@@ -620,11 +657,13 @@
     travelModeSwitch = document.getElementById('travelModeSwitch-label');
     travelModeSwitch.addEventListener('click', () => {
       isTravelAuto = !isTravelAuto;
-      highlightedBarList = [];  // reset
+      // highlightedBarList = [];  // reset
 
+      // canvasContext.globalAlpha = 0.5;
       let selectedType = returnSelectedWBtype();
       console.log(selectedType);
-      canvasContext.globalAlpha = 0.5;
+      dataList[selectedType].drawHist(2000, 'new');
+
       // let res = drawHist(selectedType, drawHistDurationNomal, 'new');
       // barWidth = res.width;
       // histData = res.histData;
@@ -710,7 +749,10 @@
           }, 400);
           setTimeout(() => {
             // landBase.material.opacity = 1.0;
-            clickBtnDrawHist('ladderBtn');
+            // clickBtnDrawHist('ladderBtn');
+            dataList['ladderData'].drawHist(2000, 'new');
+
+
             isFinishStartTween = true;
             controls.enableZoom = true;
           }, 500);
@@ -902,14 +944,18 @@
 
         if (histCanvas.width !== histCanvasWidth) {
           histCanvas.width = histCanvasWidth;
-          let selectedType = returnSelectedWBtype();
-          canvasContext.globalAlpha = 0.5;
-          let res = drawHist(selectedType, drawHistDurationRedraw, 'redraw');
+          // let selectedType = returnSelectedWBtype();
+          // canvasContext.globalAlpha = 0.5;
+          // let res = drawHist(selectedType, drawHistDurationRedraw, 'redraw');
+          //
+          // barWidth = res.width;
+          // histData = res.histData;
+          // scoreMax = res.scoreMax;
+          // histScoreData = res.scoreData;
 
-          barWidth = res.width;
-          histData = res.histData;
-          scoreMax = res.scoreMax;
-          histScoreData = res.scoreData;
+          let selectedType = returnSelectedWBtype();
+          console.log(selectedType);
+          dataList[selectedType].drawHist(2000, 'new');
         }
 
         if (canvasWidth < w680) {
@@ -1156,292 +1202,6 @@
     earth.position.z = initEarthPosition.z;
 
 
-    // ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    // // クラス用の設定
-    // /*
-    // // setting well-being data, pantheon data
-    // */
-    // for (let i = 0; wbLength > i; i++) {
-    //   let wb = wbData[i];
-    //   let ladder = {country: wb.country, rank: wb.lRank, score: wb.ladder};
-    //   let positive = {country: wb.country, rank: wb.pRank, score: wb.positive};
-    //   let negative = {country: wb.country, rank: wb.nRank, score: wb.negative};
-    //   let logGdp = {country: wb.country, rank: wb.gRank, score: wb.logGdp};
-    //
-    //   LadderArray.push(ladder);
-    //   PositiveArray.push(positive);
-    //   NegativeArray.push(negative);
-    //   GDPArray.push(logGdp);
-    //
-    //   LadderScoreArray.push(ladder);
-    //   PositiveScoreArray.push(positive);
-    //   NegativeScoreArray.push(negative);
-    //   GDPScoreArray.push(logGdp);
-    // }
-    //
-    // for (let i = 0; pantheonLength > i; i++) {
-    //   let P = pantheon[i];
-    //   let p = {country: P.country, rank: P.rank, score: P.nPeople};
-    //
-    //   PantheonArray.push(p);
-    //   PantheonScoreArray.push(p);
-    // }
-    //
-    // sortDesc(LadderArray, 'country');
-    // sortDesc(PositiveArray, 'country');
-    // sortDesc(NegativeArray, 'country');
-    // sortDesc(GDPArray, 'country');
-    // sortDesc(PantheonArray, 'country');
-    //
-    // sortDesc(LadderScoreArray, 'rank');
-    // sortDesc(PositiveScoreArray, 'rank');
-    // sortDesc(NegativeScoreArray, 'rank');
-    // sortDesc(GDPScoreArray, 'rank');
-    // sortDesc(PantheonScoreArray, 'rank');
-    //
-    // function sortDesc(array, type) {
-    //   array.sort(function sortRank(a, b) {
-    //     if (a[type] < b[type]) {
-    //       return -1;
-    //     }
-    //     else if (a[type] > b[type]) {
-    //       return 1;
-    //     }
-    //     return 0;
-    //   });
-    // }
-    //
-    //
-    // ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    //
-    // // Data canvas //
-    // class histCanvas {
-    //   constructor() {
-    //     this.histArea = document.querySelector("#histgram");
-    //     this.context = this.histArea.getContext("2d");
-    //     this.setCanvasSize();
-    //     this.context.globalAlpha = 0.5;  // for safari(fillStyle alpha doesn't work)
-    //
-    //
-    //     this.tooltipHist = $('#tooltipHist');
-    //     this.mouseOnCountry = '';
-    //     this.histArea.addEventListener('mousemove', this.getCanvasColor.bind(this), false);
-    //   }
-    //
-    //   setCanvasSize() {
-    //     const w1000 = 1000;
-    //     const w800 = 800;
-    //     const w680 = 680;
-    //     const w500 = 500;
-    //
-    //     if (canvasWidth < w500) {
-    //       this.histArea.width = 320;
-    //     } else if (canvasWidth >= w500 && canvasWidth < w680) {
-    //       this.histArea.width = w500;
-    //     } else if (canvasWidth >= w680 && canvasWidth < w800) {
-    //       this.histArea.width = w680;
-    //     } else if (canvasWidth >= w800 && canvasWidth < w1000) {
-    //       this.histArea.width = w800;
-    //     } else {
-    //       this.histArea.width = 900;
-    //     }
-    //     this.histArea.height = 90;
-    //   }
-    //
-    //   getCanvasColor(event) {
-    //     let eventLocation = this.getEventLocation(this.histArea, event);
-    //     // let context = this.getContext('2d');
-    //     let pixelData = this.context.getImageData(eventLocation.x, eventLocation.y, 1, 1).data;
-    //
-    //     // if nofill, isInfoObject = false
-    //     isInfoObject = (pixelData[0] > 0);
-    //     isFillHist = (pixelData[0] > 0);
-    //   }
-    //
-    //   getEventLocation(element, event) {
-    //     let pos = this.getElementPosition(element);
-    //     return {
-    //       x: (event.pageX - pos.x),
-    //       y: (event.pageY - pos.y)
-    //     };
-    //   }
-    //
-    //
-    //   getElementPosition(obj) {
-    //     let curleft = 0, curtop = 0;
-    //     if (obj.offsetParent) {
-    //       do {
-    //         curleft += obj.offsetLeft;
-    //         curtop += obj.offsetTop;
-    //       } while (obj = obj.offsetParent);
-    //       return {x: curleft, y: curtop};
-    //     }
-    //     return undefined;
-    //   }
-    // }
-    //
-    //
-    // // Data class //
-    // class Data {
-    //   constructor(dataArray, scoreArray, type) {
-    //     this.data = dataArray;
-    //     this.scoreData = scoreArray;
-    //     this.type = type;
-    //
-    //     this.canvas = new histCanvas();
-    //     this.highlightedBarList = [];
-    //
-    //     this.canvas.histArea.addEventListener('mousemove', this.onHistRanking.bind(this), false);
-    //     this.canvas.histArea.addEventListener('mouseout', this.outHistRanking.bind(this), false);
-    //     this.canvas.histArea.addEventListener('click', this.clickHistRanking.bind(this), false);
-    //
-    //   }
-    //
-    //   get max() {
-    //     return Math.max(this.scoreData[0].score);
-    //   }
-    //
-    //   get min() {
-    //     return Math.min(this.scoreData[this.scoreData.length - 1].score);
-    //   }
-    //
-    //   drawHist(duration, drawType) {
-    //     /* drawType: new, redraw */
-    //     console.log('drawWbHist', this.type);
-    //     clearInterval(drawSetInterval);
-    //     this.handleCanvas(this.data, duration, drawType, this.canvas.histArea);
-    //
-    //     // well-being typeが変わるとき(=draw hist時)にinfoも書き直す(time line->pie chartのときにtweenが無効になるため)
-    //     if (typeof countryNameDisplayed !== 'undefined') {
-    //       if (drawType === 'new') {
-    //         if (!isTravelAuto) {
-    //           deletePin();
-    //           displayInfo(countryNameDisplayed);
-    //         }
-    //       }
-    //     }
-    //   };
-    //
-    //   handleCanvas(data, duration, drawType, histArea) {
-    //     this.canvas.context.clearRect(0, 0, histArea.width, histArea.height);
-    //     let numData = data.length;
-    //     let width = this.histWidth;
-    //
-    //     // draw histogram with loop rect
-    //     let i = 0;
-    //     // console.log(numData, data);
-    //     drawSetInterval = setInterval(() => {
-    //       this.fillBar(width, i, histArea);
-    //       i++;
-    //
-    //       if (i > numData - 1) {
-    //         clearInterval(drawSetInterval);
-    //         this.highlightRedrawHist(drawType)
-    //       }
-    //     }, duration / numData);
-    //     isHistDisplay = true;
-    //   }
-    //
-    //   get histWidth() {
-    //     return this.mathFloor(this.canvas.histArea.width / this.data.length, 5);
-    //   }
-    //
-    //   fillBar(width, i, histArea) {
-    //     this.canvas.context.fillStyle = barColor;
-    //     let max = this.type === 'negative' ? this.min : this.max;
-    //     let h = (this.data[i].score) / max * histArea.height;
-    //     this.canvas.context.fillRect(width * i, histArea.height - h, width, h);
-    //   }
-    //
-    //   highlightRedrawHist(drawType) {
-    //     if (drawType === 'redraw') {
-    //       this.redrawHighlightedBar(this.highlightedBarList, this.data);
-    //     }
-    //   }
-    //
-    //   mathFloor(value, base) {
-    //     let b = Math.pow(10, base);
-    //     return Math.floor(value * b) / b;
-    //   }
-    //
-    //   redrawHighlightedBar(indexList, data) {
-    //     let h;
-    //     for (let i = 0; indexList.length > i; i++) {
-    //       // highlight color
-    //       canvasContext.fillStyle = highlightedBarColor;
-    //       let max = this.type === 'negative' ? this.min : this.max;
-    //       h = (data[indexList[i]].score) / max * canvas.histArea.height;
-    //       canvasContext.fillRect(this.histWidth * indexList[i], canvas.histArea.height - h, this.histWidth, h);
-    //     }
-    //   }
-    //
-    //   onHistRanking(event) {
-    //     if (this.getSelectedTypeFromButton() === this.type) {
-    //       // console.log('onHist', isFillHist);
-    //       if (isHistDisplay) {
-    //         if (isFillHist) {
-    //           let rect = event.target.getBoundingClientRect();
-    //           let mouseX = Math.abs(event.clientX - rect.left);
-    //           let index = Math.floor(mouseX / this.histWidth);
-    //
-    //           document.getElementById("canvasWrapper").classList.add("canvasWrapperPointer");
-    //           // console.log(index);
-    //           this.canvas.mouseOnCountry = this.data[index]['country'];
-    //           this.canvas.tooltipHist[0].innerText = this.canvas.mouseOnCountry;
-    //           this.canvas.tooltipHist.css({opacity: 1.0});
-    //
-    //           this.canvas.tooltipHist.css({top: event.clientY * 0.95});
-    //           this.canvas.tooltipHist.css({left: event.clientX * 1.0 - this.canvas.tooltipHist.width() / 2 - 5});
-    //
-    //         } else {
-    //           document.getElementById("canvasWrapper").classList.remove("canvasWrapperPointer");
-    //           this.canvas.tooltipHist.css({opacity: 0.0});
-    //           this.canvas.tooltipHist.css({top: 0});
-    //           this.canvas.tooltipHist.css({left: 0});
-    //         }
-    //       }
-    //     }
-    //   }
-    //
-    //   outHistRanking() {
-    //     this.canvas.tooltipHist.css({opacity: 0.0});
-    //   }
-    //
-    //   clickHistRanking() {
-    //     if (this.getSelectedTypeFromButton() === this.type) {
-    //       if (!isTravelAuto) {
-    //         if (isFillHist) {
-    //           if (!isMoveCamera) {
-    //             console.log('click', this.canvas.mouseOnCountry, this.type);
-    //             deletePin();
-    //             displayInfo(this.canvas.mouseOnCountry);
-    //             console.log('conducted', this.type);
-    //           }
-    //         }
-    //       }
-    //     }
-    //   }
-    //
-    //   getSelectedTypeFromButton() {
-    //     let type = $('.wbButton1.selectedBtn')[0].id.slice(0, -4)
-    //     if (typeof type === 'undefined') {
-    //       type = 'pantheon'
-    //     }
-    //     return type
-    //   }
-    // }
-    //
-    //
-    // const ladderData = new Data(LadderArray, LadderScoreArray, 'ladder');
-    // const positiveData = new Data(PositiveArray, PositiveScoreArray, 'positive');
-    // const negativeData = new Data(NegativeArray, NegativeScoreArray, 'negative');
-    // const gdpData = new Data(GDPArray, GDPScoreArray, 'gdp');
-    // const pantheonData = new Data(PantheonArray, PantheonScoreArray, 'pantheon');
-    //
-    // const dataList = [ladderData, positiveData, negativeData, gdpData, pantheonData];
-    //
-    //
-    // ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
     /* make well-being button in order to show score */
@@ -1454,20 +1214,10 @@
         fadeInfoBoardText();
         deletePin();
 
-        // const wbType = {'ladderBtn': 0, 'positiveBtn': 1, 'negativeBtn': 2, 'gdpBtn': 3};
+        const wbType = {'ladderData': 0, 'positiveData': 1, 'negativeData': 2, 'gdpData': 3};
         const type = e.target.id.slice(0, -4) + 'Data';
-        // const index = wbType[type];
-        // if (type === 'ladderBtn') {
-        //   index = 0;
-        // } else if (type === 'positiveBtn') {
-        //   index = 1;
-        // } else if (type === 'negativeBtn') {
-        //   index = 2;
-        // } else {
-        //   index = 3;
-        // }
+        const index = wbType[type];
         setSelectedWBButton(index);
-        // clickBtnDrawHist(type);
         dataList[type].drawHist(2000, 'new');
 
         /* travel type check */
@@ -1488,13 +1238,13 @@
     }
 
     clickBtnDrawHist = function (type) {
-      highlightedBarList = [];  // reset
-      let res = drawHist(type, drawHistDurationNomal, 'new');
-      // console.log(res);
-      barWidth = res.width;
-      histData = res.histData;
-      scoreMax = res.scoreMax;
-      histScoreData = res.scoreData;
+      // highlightedBarList = [];  // reset
+      // let res = drawHist(type, drawHistDurationNomal, 'new');
+      // // console.log(res);
+      // barWidth = res.width;
+      // histData = res.histData;
+      // scoreMax = res.scoreMax;
+      // histScoreData = res.scoreData;
     };
 
 
@@ -2011,17 +1761,19 @@
       stopTravel();
       isPantheon = true;
 
-      let res = drawHist('pantheon', drawHistDurationNomal, 'new');
-      barWidth = res.width;
-      histData = res.histData;
-      scoreMax = res.scoreMax;
-      histScoreData = res.scoreData;
+      // let res = drawHist('pantheon', drawHistDurationNomal, 'new');
+      // barWidth = res.width;
+      // histData = res.histData;
+      // scoreMax = res.scoreMax;
+      // histScoreData = res.scoreData;
+
+      dataList['pantheonData'].drawHist(2000, 'new');
 
       $('#wbButton2').css("display", 'none');
     }
 
     function offPantheon() {
-      let selectedType = returnSelectedWBtype();
+      // let selectedType = returnSelectedWBtype();
 
       // $('#country2').css("display", 'block');
       $('#infoBoard3').css("display", 'none');
@@ -2039,11 +1791,15 @@
       TweenMax.killAll();
       deletePin();
       isPantheon = false;
-      let res = drawHist(selectedType, drawHistDurationNomal, 'new');
-      barWidth = res.width;
-      histData = res.histData;
-      scoreMax = res.scoreMax;
-      histScoreData = res.scoreData;
+      // let res = drawHist(selectedType, drawHistDurationNomal, 'new');
+      // barWidth = res.width;
+      // histData = res.histData;
+      // scoreMax = res.scoreMax;
+      // histScoreData = res.scoreData;
+
+      let selectedType = returnSelectedWBtype();
+      console.log(selectedType);
+      dataList[selectedType].drawHist(2000, 'new');
 
       $('#wbButton2').css("display", 'block');
     }
@@ -2223,32 +1979,32 @@
 
 
     /* highlight selected country */
-    highlightedBarList = [];
-
-    function highlightedBar(countryName, data, scoreMax) {
-      let h;
-      let index;
-      for (let i = 0; data.length > i; i++) {
-        if (data[i].country === countryName) {
-          index = i;
-          highlightedBarList.push(i)
-        }
-      }
-      // highlight color
-      canvasContext.fillStyle = highlightedBarColor;
-      h = (data[index].score) / scoreMax * histCanvas.height;
-      canvasContext.fillRect(barWidth * index, histCanvas.height - h, barWidth, h);
-    }
-
-    redrawHighlightedBar = function (indexList, data, scoreMax) {
-      let h;
-      for (let i = 0; indexList.length > i; i++) {
-        // highlight color
-        canvasContext.fillStyle = highlightedBarColor;
-        h = (data[indexList[i]].score) / scoreMax * histCanvas.height;
-        canvasContext.fillRect(barWidth * indexList[i], histCanvas.height - h, barWidth, h);
-      }
-    };
+    // highlightedBarList = [];
+    //
+    // function highlightedBar(countryName, data, scoreMax) {
+    //   let h;
+    //   let index;
+    //   for (let i = 0; data.length > i; i++) {
+    //     if (data[i].country === countryName) {
+    //       index = i;
+    //       highlightedBarList.push(i)
+    //     }
+    //   }
+    //   // highlight color
+    //   canvasContext.fillStyle = highlightedBarColor;
+    //   h = (data[index].score) / scoreMax * histCanvas.height;
+    //   canvasContext.fillRect(barWidth * index, histCanvas.height - h, barWidth, h);
+    // }
+    //
+    // redrawHighlightedBar = function (indexList, data, scoreMax) {
+    //   let h;
+    //   for (let i = 0; indexList.length > i; i++) {
+    //     // highlight color
+    //     canvasContext.fillStyle = highlightedBarColor;
+    //     h = (data[indexList[i]].score) / scoreMax * histCanvas.height;
+    //     canvasContext.fillRect(barWidth * indexList[i], histCanvas.height - h, barWidth, h);
+    //   }
+    // };
 
 
     /*
@@ -2360,8 +2116,10 @@
           pinList[i - 1].children[1].material.color.setHex(0xC9C7B7);
         }
 
-        let countryName = histScoreData[i].country;
-        highlightedBar(countryName, histData, scoreMax);
+        let selectedType = returnSelectedWBtype();
+        let data = dataList[selectedType];
+        let countryName = data.data[i].country;
+        data.highlightBar(countryName);
         displayInfo(countryName);
         i++;
         travelIndex = i;  // val for continue
@@ -2374,30 +2132,38 @@
           setTimeout(() => {
             let selectedType = returnSelectedWBtype();
             let nextType;
-            let btnIndex;
-            if (selectedType === 'ladderBtn') {
-              nextType = 'positiveBtn';
-              btnIndex = 1;
-            } else if (selectedType === 'positiveBtn') {
-              nextType = 'negativeBtn';
-              btnIndex = 2;
-            } else if (selectedType === 'negativeBtn') {
-              nextType = 'gdpBtn';
-              btnIndex = 3;
-            } else {
-              nextType = 'ladderButton';
-              btnIndex = 0;
-            }
+            // let btnIndex;
+            // if (selectedType === 'ladderBtn') {
+            //   nextType = 'positiveBtn';
+            //   btnIndex = 1;
+            // } else if (selectedType === 'positiveBtn') {
+            //   nextType = 'negativeBtn';
+            //   btnIndex = 2;
+            // } else if (selectedType === 'negativeBtn') {
+            //   nextType = 'gdpBtn';
+            //   btnIndex = 3;
+            // } else {
+            //   nextType = 'ladderButton';
+            //   btnIndex = 0;
+            // }
+            //
+            // setSelectedWBButton(btnIndex);
+            // console.log('next travel', nextType);
 
-            setSelectedWBButton(btnIndex);
-            console.log('next travel', nextType);
+            const wbType = {'ladderData': 1, 'positiveData': 2, 'negativeData': 3, 'gdpData': 0};
+            const type = e.target.id.slice(0, -4) + 'Data';
+            const nextIndex = wbType[type];
+            setSelectedWBButton(nextIndex);
+            dataList[type].drawHist(2000, 'new');
 
             fadeInfoBoardVisual();
             fadeInfoBoardText();
-            let res = drawHist(nextType, drawHistDurationNomal, 'new');
-            histData = res.histData;
-            scoreMax = res.scoreMax;
-            histScoreData = res.scoreData;
+
+
+            // let res = drawHist(nextType, drawHistDurationNomal, 'new');
+            // histData = res.histData;
+            // scoreMax = res.scoreMax;
+            // histScoreData = res.scoreData;
             deletePin();
             travelWellbeing();
           }, 5000);
