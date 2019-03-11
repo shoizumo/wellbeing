@@ -74,617 +74,683 @@
   ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
-
   ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
-   class InfoBord {
-     constructor(wbData) {
-       this.positiveTween = '';
-       this.negativeTween = '';
-       this.gdpTween = '';
+  class InfoBord {
+    constructor(wbData) {
+      this.positiveTween = '';
+      this.negativeTween = '';
+      this.gdpTween = '';
 
-       this.data = wbData;
-       this.numData = Object.keys(this.data).length;
-     }
+      this.data = wbData;
+      this.numData = Object.keys(this.data).length;
 
+      // this.windowWidth = windowWidth;
 
-     displayInfo(countryName) {
-       countryNameDisplayed = countryName;
-       if (!isFirstClick) {
-         TweenMax.killAll();
-         this.positiveTween.cancel();
-         this.negativeTween.cancel();
-         this.gdpTween.cancel();
-       }
-       this.clearInfo();
-       let res = this.calcWbInfo(countryName);
-       $('#infoBoard').css({opacity: 0.8});
-       $('#infoBoardTimeline').css({opacity: 0.8});
-       $('#tooltip').css({opacity: 0.0});
 
+      const t1 = this.createRankText('Ladder');
+      const t2 = this.createRankText('Positive');
+      const t3 = this.createRankText('Negative');
+      const t4 = this.createRankText('GDP');
 
-       if (typeof res !== 'undefined') {
-         this.displayVisualInfo(res, this.numData);
-         this.displayTextInfo(countryName, res);  // テキストでの結果表示
+      const s1 = this.createScoreText('Ladder');
+      const s2 = this.createScoreText('Positive');
+      const s3 = this.createScoreText('Negative');
+      const s4 = this.createScoreText('GDP');
 
-         if (!isPantheon) {
-           if ($('.infoType.selectedBtn')[0].id.slice(4,) === 'Linechart') {
-             let wellbeingType = $('.wbButton1.selectedBtn')[0].id.slice(0, -4);
-             console.log(wellbeingType);
-             this.displayTimeline(wellbeingType, countryName, timelineSVG, timelineOffset);
-           }
-         }
-       } else {
-         this.displayVisulalNoInfo();
-         this.displayTextNoInfo();
-         if (!isPantheon) {
-           if ($('.infoType.selectedBtn')[0].id.slice(4,) === 'Linechart') {
-             this.displayTimelineNoInfo();
-           }
-         }
-       }
-       // display pantheon data / no data
-       this.displayPantheon(countryName);
+      this.svgRankText = {t1, t2, t3, t4};
+      this.svgScoreText = {s1, s2, s3, s4};
 
-       // well-beingデータがあってもなくても移動(念の為、データの有無を確認)
-       let location = countrynameToLatlon(countryName);
-       if (typeof location.latitude !== 'undefined') {
-         latitude = location.latitude;
-         longitude = location.longitude;
-         moveCamera(latitude, longitude);
 
-         $('#country').empty().append(countryName);
-         $('#country4').empty().append(countryName);
-       }
-     }
+      this.w1000 = 1000;
 
-
-
-     calcWbInfo(countryName) {
-       for (let i = 0; this.numData > i; i++) {
-         if (this.data[i].country === countryName) {
-           return this.data[i];
-         }
-       }
-     }
-
-
-
-     clearInfo() {
-       // let l = $('#LadderRanking').children().children()[2];
-       // let p = $('#PositiveRanking').children().children()[2];
-       // let n = $('#NegativeRanking').children().children()[2];
-       // let g = $('#GDPRanking').children().children()[2];
-       //
-       // $(l).attr('r', 0.0);
-       // $(p).attr('r', 0.0);
-       // $(n).attr('r', 0.0);
-       // $(g).attr('r', 0.0);
-
-       $($('#LadderRanking').children().children()[2]).attr('r', 0.0);
-       $($('#PositiveRanking').children().children()[2]).attr('r', 0.0);
-       $($('#NegativeRanking').children().children()[2]).attr('r', 0.0);
-       $($('#GDPRanking').children().children()[2]).attr('r', 0.0);
-
-       $('.infoLadder').attr('opacity', 0.0);
-       $('.infoPositive').attr('opacity', 0.0);
-       $('.infoNegative').attr('opacity', 0.0);
-       $('.infoGDP').attr('opacity', 0.0);
-     }
-
-
-     displayRanking(type, rank, num, duration, rankText, score, scoreText) {
-       let id = '#' + type + 'Ranking';
-       let svg = $(id).children().children()[2];
-       let radius = (num - rank + 1) / num * svgRadius; // responsive
-       let rankOrdinal;
-       let scoreUnit = type === 'GDP' ? 'US$' : 'pt';
-       rankOrdinal = this.putRankOrdinal(rank);
-
-       TweenMax.fromTo(svg, duration,
-           {attr: {r: 0}},
-           {
-             attr: {r: radius},
-             ease: Power1.easeInOut,
-             onComplete: function () {
-               rankText.innerHTML = String(rank) + "<tspan font-size='12px'>" + rankOrdinal + "</tspan>";
-               $(id).children()[0].appendChild(rankText);
-               scoreText.textContent = '(' + String(score.toFixed(1)) + scoreUnit + ')';
-               $(id).children()[0].appendChild(scoreText);
-
-               $('.info' + type).attr('opacity', 1.0);
-             }
-           });
-     }
-
-
-     putRankOrdinal(rank) {
-       let ordinal;
-       let rankStr = rank.toString();
-       rankStr = rankStr.substring(rankStr.length - 1, rankStr.length);
-       if (rankStr === '1') {
-         ordinal = 'st'
-       } else if (rankStr === '2') {
-         ordinal = 'nd'
-       } else if (rankStr === '3') {
-         ordinal = 'rd'
-       } else {
-         ordinal = 'th'
-       }
-       return ordinal;
-     }
-
-
-     /* display each rank type */
-
-     createPromise(type, rank, num, svgDuration, text, nextStartDuration, score, scoreText) {
-       let promise;
-       let timeout;
-       promise = new Promise((resolve) => {
-         timeout = setTimeout(() => {
-           resolve(this.displayRanking(type, rank, num, svgDuration, text, score, scoreText));
-         }, nextStartDuration)
-       });
-       return {
-         promise: promise,
-         cancel: function () {
-           clearTimeout(timeout);
-           isClicked = false;
-         }
-       };
-     }
-
-
-
-
-     displayVisualInfo(countryWbData, wbLength) {
-       new Promise((resolve) => {
-         resolve(this.displayRanking('Ladder', countryWbData['lRank'], wbLength, 1.0, t1, countryWbData['ladder'], s1));
-         console.log('ladder finissh');
-       }).then(() => {
-         console.log('positive start');
-         this.positiveTween = this.createPromise('Positive', countryWbData['pRank'], wbLength, 1.0, t2, 500, countryWbData['positive'], s2);
-         console.log('positive finish');
-         return this.positiveTween.promise;
-       }).then(() => {
-         console.log('negative start');
-         this.negativeTween = this.createPromise('Negative', countryWbData['nRank'], wbLength, 1.0, t3, 500, countryWbData['negative'], s3);
-         console.log('negative finish');
-         return this.negativeTween.promise;
-       }).then(() => {
-         console.log('gdp start');
-         this.gdpTween = this.createPromise('GDP', countryWbData['gRank'], wbLength, 1.0, t4, 500, countryWbData['gdp'], s4);
-         console.log('gdp finish');
-         isFirstClick = false;
-         return this.gdpTween.promise;
-       }).catch(() => {
-         console.error('Something wrong!')
-       });
-     }
-
-
-
-     displayTextInfo(countryName, countryWbData) {
-       let lRank = countryWbData['lRank'];
-       let pRank = countryWbData['pRank'];
-       let nRank = countryWbData['nRank'];
-       let gRank = countryWbData['gRank'];
-
-       fadeInfoBoardText();
-       setTimeout(() => {
-         tweenTextCountryW = TweenMax.to("#country2", 1.0, {
-           opacity: 1.0,
-           onComplete: function () {
-             tweenTextContentsW = TweenMax.to(".infoBoardContent2", 1.0, {
-               opacity: 1.0,
-             });
-           }
-         })
-       }, 1000);
-
-       document.getElementById("country2").innerHTML = countryName;
-       document.getElementById("Ladder2").innerHTML = '- L : ' + lRank + this.putRankOrdinal(lRank);
-       document.getElementById("Positive2").innerHTML = '- P : ' + pRank + this.putRankOrdinal(pRank);
-       document.getElementById("Negative2").innerHTML = '- N : ' + nRank + this.putRankOrdinal(nRank);
-       document.getElementById("GDP2").innerHTML = '- G : ' + gRank + this.putRankOrdinal(gRank);
-     }
-
-
-
-     displayVisulalNoInfo() {
-       setTimeout(() => {
-         t1.textContent = 'No data';
-         $('#LadderRanking').children()[0].appendChild(t1);
-         t2.textContent = 'No data';
-         $('#PositiveRanking').children()[0].appendChild(t2);
-         t3.textContent = 'No data';
-         $('#NegativeRanking').children()[0].appendChild(t3);
-         t4.textContent = 'No data';
-         $('#GDPRanking').children()[0].appendChild(t4);
-
-         $('#infoLadder').attr('opacity', 1.0);
-         $('#infoPositive').attr('opacity', 1.0);
-         $('#infoNegative').attr('opacity', 1.0);
-         $('#infoGDP').attr('opacity', 1.0);
-       }, 500);
-     }
-
-
-     displayTextNoInfo() {
-       fadeInfoBoardText();
-       setTimeout(() => {
-         tweenTextCountryW = TweenMax.to("#country2", 1.0, {
-           opacity: 1.0,
-           onComplete: function () {
-             tweenTextContentsW = TweenMax.to(".infoBoardContent2", 1.0, {
-               opacity: 1.0,
-             });
-           }
-         })
-       }, 1000);
-
-       document.getElementById("country2").innerHTML = countryNameGlobal;
-       document.getElementById("Ladder2").innerHTML = 'No data';
-       document.getElementById("Positive2").innerHTML = '';
-       document.getElementById("Negative2").innerHTML = '';
-       document.getElementById("GDP2").innerHTML = '';
-
-     }
-
-
-     /* timeline mode */
-
-     displayTimeline(type, countryName, svg, offset) {
-       this.deleteTimeline();
-       let data;
-       for (let i = 0, l = timeline.length; i < l; i++) {
-         if (timeline[i]['country'] === countryName) {
-           data = timeline[i][type];
-         }
-       }
-       let rank = this.searchTimelineRank(type, countryName);
-       const spanSize = '<span style="font-size: 18px;">';
-       const spanWeight = '<span style="font-weight: 200;">';
-       document.getElementById("country4").innerHTML = countryName + spanWeight + ' ( ' + rank.rank + spanSize + rank.rankOrdinal + '</span>' + ' ) ' + '</span>';
-       let max, min;
-       if (type === 'ladder') {
-         max = ladderData.max;
-         min = ladderData.min;
-       } else if (type === 'positive') {
-         max = positiveData.max;
-         min = positiveData.min;
-       } else if (type === 'negative') {
-         // negativeは順位が逆
-         max = negativeData.min;
-         min = negativeData.max;
-       } else {
-         max = gdpData.max;
-         min = gdpData.min;
-       }
-       let timeLen = data.length;
-       let w = (timelineWidth - offset * 2) / (timeLen - 1);
-       let startX, startY, endX, endY;
-
-       max = max * 1.1;
-       min = min * 0.5;
-
-
-       let i = 0;
-       let isPathFirst = true;
-       timelineSetInterval = setInterval(() => {
-         this.addTimelineScale(timelineYearList, timelineOffset, i);
-
-         let h = (data[i] - min) / (max - min) * timelineHeight;
-         endX = w * i + offset;
-         endY = timelineHeight - h;
-
-         // データが有るときのみ描画、無いときはスキップして次の点と結ぶ
-         if (data[i] !== -999) {
-           // 1回目は点のみ
-           if (isPathFirst) {
-             this.svgMarker(endX, endY, svg);
-             startX = endX;
-             startY = endY;
-             isPathFirst = !isPathFirst;
-           } else {
-             this.drawTimelinePath(startX, startY, endX, endY, timelineSVG);
-             startX = endX;
-             startY = endY;
-           }
-         }
-         i++;
-         if (i > timeLen - 1) {
-
-           clearInterval(timelineSetInterval);
-         }
-       }, timelineDuration * 1500);
-     }
-
-
-
-     drawTimelinePath(startX, startY, endX, endY, svg) {
-       // create line
-       let line = this.svgLine(startX, startY, endX, endY, svg);
-
-       // line animation
-       TweenMax.fromTo(line, timelineDuration,
-           {attr: {x2: startX, y2: startY}},
-           {
-             attr: {x2: endX, y2: endY},
-             ease: CustomEase.create("custom", "M0,0,C-0.024,0.402,0.456,0.48,0.5,0.5,0.622,0.556,0.978,0.616,1,1"),
-             onComplete: () => {
-               this.svgMarker(endX, endY, svg)
-             }
-           })
-     }
-
-
-     svgLine(startX, startY, endX, endY, svg) {
-       let line = document.createElementNS('http://www.w3.org/2000/svg', 'line');
-       line.setAttribute('x1', startX);
-       line.setAttribute('y1', startY);
-       line.setAttribute('x2', endX);
-       line.setAttribute('y2', endY);
-       line.setAttribute("stroke", "#ffffff");
-       line.setAttribute("stroke-width", "2");
-       svg.appendChild(line);
-       return line;
-     }
-
-
-     svgMarker(x, y, svg) {
-       let marker = document.createElementNS("http://www.w3.org/2000/svg", "circle");
-       marker.setAttribute("cx", x);
-       marker.setAttribute("cy", y);
-       marker.setAttribute("r", '4px');
-       marker.setAttribute("fill", "#ffffff");
-       svg.appendChild(marker);
-     }
-
-
-     searchTimelineRank(type, countryName, Data) {
-       let res = this.calcWbInfo(countryName);
-       let rankKey = type.slice(0, 1) + 'Rank';
-       let rank = res[rankKey];
-       let rankOrdinal = this.putRankOrdinal(rank);
-
-       return {rank: rank, rankOrdinal: rankOrdinal};
-     }
-
-
-     addTimelineScale(yearList, offset, index) {
-       let timelineScaleArea = document.getElementById('infoBoardTimelineScale');
-       let width = (timelineScaleArea.width.baseVal.value - offset * 2) / (yearList.length - 1);
-       let px = '10px';
-
-       let textX = String(width * index + offset) + 'px';
-       let text = document.createElementNS('http://www.w3.org/2000/svg', 'text');
-       text.setAttributeNS(null, "x", textX);
-       text.setAttributeNS(null, "y", '50%');
-       text.setAttributeNS(null, 'text-anchor', 'middle');
-       text.setAttributeNS(null, 'dominant-baseline', 'central');
-       text.setAttributeNS(null, "fill", "#ffffff");
-       text.setAttributeNS(null, "font-size", px);
-       text.textContent = String(yearList[index]);
-       timelineScaleArea.appendChild(text);
-     }
-
-
-     deleteTimeline() {
-       let d = $('#infoBoardTimelineSvg')[0].children;
-       let l = d.length;
-       for (let i = 0; i < l; i++) {
-         d[0].remove();
-       }
-
-       d = $('#infoBoardTimelineScale')[0].children;
-       l = d.length;
-       for (let i = 0; i < l; i++) {
-         d[0].remove();
-       }
-       clearInterval(timelineSetInterval);
-     }
-
-
-
-     displayTimelineNoInfo() {
-       this.deleteTimeline();
-
-       setTimeout(() => {
-         let text = document.createElementNS('http://www.w3.org/2000/svg', 'text');
-         text.setAttributeNS(null, "x", '50%');
-         text.setAttributeNS(null, "y", '50%');
-         text.setAttributeNS(null, 'text-anchor', 'middle');
-         text.setAttributeNS(null, 'dominant-baseline', 'central');
-         text.setAttributeNS(null, "fill", "#ffffff");
-         text.setAttributeNS(null, "font-size", '25px');
-         text.textContent = 'No data';
-         document.getElementById('infoBoardTimelineSvg').appendChild(text);
-       }, 500);
-     }
-
-
-
-
-     displayPantheon(countryName) {
-       let infoBoardContent3 = document.getElementsByClassName('infoBoardContent3');
-       let pIndex = -1;
-       let url;
-       let name;
-       let occupation;
-       let year;
-       const path1 = '<a href=http://pantheon.media.mit.edu/people/';
-       const path2 = ' target="_blank"> - ';
-       const path3 = '</a>';
-       const born = '<span style="font-size: 12px;"> born in </span>';
-       const space = '<span style="font-size: 12px;"> </span>';
-
-       for (let i = 0; pantheonLength > i; i++) {
-         if (pantheon[i]['country'] === countryName) {
-           pIndex = i;
-         }
-       }
-       document.getElementById("country3").innerHTML = countryName;
-       let numPanheonPeople = 5;
-       for (let i = 0; numPanheonPeople > i; i++) {
-         infoBoardContent3[i].innerHTML = ''; // clear previous result
-       }
-       if (pIndex !== -1) {
-         let d = pantheon[pIndex];
-         for (let i = 0; d['name'].length > i; i++) {
-           url = d['url'][i];
-           name = d['name'][i];
-           occupation = d['occ'][i];
-           year = d['year'][i];
-           infoBoardContent3[i].innerHTML = path1 + url + path2 + name + ' <span style="color:#dae1f7; font-size: 16px;">(' + space + occupation + born + year + space + ')</span>' + path3;
-         }
-       } else {
-         infoBoardContent3[0].innerHTML = 'No data';
-       }
-
-       fadeInfoBoardPantheon();
-       setTimeout(() => {
-         tweenTextCountryP = TweenMax.to("#country3", 1.0, {
-           opacity: 1.0,
-           onComplete: function () {
-             $('.infoBoardContent3').css("display", 'block');
-             tweenTextContentsP = TweenMax.to(".infoBoardContent3", 1.0, {
-               opacity: 1.0,
-             });
-           }
-         })
-       }, 1000);
-     }
-
-   }
-
-   const infoBordObj = new InfoBord(wbData);
-
-
-
-
-
-    /////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-
-
-    function countrynameToLatlon(countryName) {
-      let latitude;
-      let longitude;
-
-      for (let i = 0; latLength > i; i++) {
-        if (latlon[i].country === countryName) {
-          latitude = latlon[i].latitude;
-          longitude = latlon[i].longitude;
-        }
-      }
-      return {latitude: latitude, longitude: longitude};
     }
 
-    /* dring move, rotate is not enable */
-    function moveCamera(latitude, longitude) {
-      let targetPos = convertGeoCoords(latitude, longitude);
-      let targetVec = targetPos.sub(center);
-      let prevVec = camera.position.sub(center);
 
-      let crossVec = prevVec.clone().cross(targetVec).normalize();
-      let angle = prevVec.angleTo(targetVec);
+    get windowWidth() {
+      return window.innerWidth;
+    }
 
-      let q = new THREE.Quaternion();
-      let step = 100;
-      let stepAngle = angle / step;
-      let count = 0;
-      let moveCameraQuaternion = function (stepAngle) {
-        q.setFromAxisAngle(crossVec, stepAngle);
-        camera.position.applyQuaternion(q);
-        camera.lookAt(0.0, 0.0, 0.0);
-        count++
-      };
+    get width() {
+      if (this.windowWidth < 680) {
+        return 320;
+      } else if (this.windowWidth >= 680 && this.windowWidth < 800) {
+        return 480;
+      } else if (this.windowWidth >= 800 && this.windowWidth < 1000) {
+        return 600;
+      } else {
+        return 800;
+      }
+    }
 
-      let id = setInterval(function () {
-        earth.rotation.y = 0;
-        isMoveCamera = true;
-        controls.enableRotate = false;
-        moveCameraQuaternion(stepAngle);
-        if (count > step - 1) {
-          createPoint(latitude, longitude);
-          clearInterval(id);
-          isMoveCamera = false;
-          if (!isTravelAuto) {
-            controls.enableRotate = true;
+    get height() {
+      return this.windowWidth < 1000 ? 80 : 105;
+    }
+
+
+    radius() {
+      return this.windowWidth < this.w1000 ? 40 : 48;
+    }
+
+
+    createRankText(type) {
+      let px;
+      if (this.windowWidth < this.w1000) {
+        px = "22px";
+      } else {
+        px = "28px";
+      }
+      let text = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+      text.setAttributeNS(null, "x", '50%');
+      text.setAttributeNS(null, "y", '50%');
+      text.setAttributeNS(null, 'text-anchor', 'middle');
+      text.setAttributeNS(null, 'dominant-baseline', 'central');
+      text.setAttributeNS(null, "fill", "#ffffff");
+      text.setAttributeNS(null, "font-size", px);
+      text.setAttributeNS(null, "class", "info" + type);
+      text.setAttributeNS(null, "id", "info" + type);
+      return text;
+    }
+
+    createScoreText(type) {
+      let px;
+      if (this.windowWidth < this.w1000) {
+        px = "12px";
+      } else {
+        px = "16px";
+      }
+      let text = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+      text.setAttributeNS(null, "x", '50%');
+      text.setAttributeNS(null, "y", '70%');
+      text.setAttributeNS(null, 'text-anchor', 'middle');
+      text.setAttributeNS(null, 'dominant-baseline', 'central');
+      text.setAttributeNS(null, "fill", "#eeeeee");
+      text.setAttributeNS(null, "font-size", px);
+      text.setAttributeNS(null, "class", "info" + type);
+      return text;
+    }
+
+    displayInfo(countryName) {
+      countryNameDisplayed = countryName;
+      if (!isFirstClick) {
+        TweenMax.killAll();
+        this.positiveTween.cancel();
+        this.negativeTween.cancel();
+        this.gdpTween.cancel();
+      }
+      this.clearInfo();
+      let res = this.calcWbInfo(countryName);
+      $('#infoBoard').css({opacity: 0.8});
+      $('#infoBoardTimeline').css({opacity: 0.8});
+      $('#tooltip').css({opacity: 0.0});
+
+
+      if (typeof res !== 'undefined') {
+        this.displayVisualInfo(res, this.numData);
+        this.displayTextInfo(countryName, res);  // テキストでの結果表示
+
+        if (!isPantheon) {
+          if ($('.infoType.selectedBtn')[0].id.slice(4,) === 'Linechart') {
+            let wellbeingType = $('.wbButton1.selectedBtn')[0].id.slice(0, -4);
+            console.log(wellbeingType);
+            this.displayTimeline(wellbeingType, countryName, timelineSVG, timelineOffset);
           }
         }
-      }, 1000 / step);
-    }
-
-
-    function convertGeoCoords(latitude, longitude, radius = 1.0) {
-      let latRad = latitude * (Math.PI / 180);
-      let lonRad = -longitude * (Math.PI / 180);
-
-      let x = Math.cos(latRad) * Math.cos(lonRad) * radius;
-      let y = Math.sin(latRad) * radius;
-      let z = Math.cos(latRad) * Math.sin(lonRad) * radius;
-      return new THREE.Vector3(x, y, z);
-    }
-
-
-    /* marker pin */
-    let pinList;
-    let pinRadius;
-    let pinSphereRadius;
-    let pinHeight;
-    let pinMaterial;
-    let pinConeGeometry;
-    let pinSphereGeometry;
-
-    pinRadius = 0.0025;
-    pinSphereRadius = 0.01;
-    pinHeight = 0.025;
-    pinConeGeometry = new THREE.ConeBufferGeometry(pinRadius, pinHeight, 16, 1, true);
-    pinSphereGeometry = new THREE.SphereBufferGeometry(pinSphereRadius, 60, 60);
-
-    function createPin() {
-      pinMaterial = new THREE.MeshPhongMaterial({color: 0xf15b47});
-      let cone = new THREE.Mesh(pinConeGeometry, pinMaterial);
-      cone.position.y = pinHeight * 0.5;
-      cone.rotation.x = Math.PI;
-
-      let sphere = new THREE.Mesh(pinSphereGeometry, pinMaterial);
-      sphere.position.y = pinHeight * 0.95 + pinSphereRadius;
-
-      let group = new THREE.Group();
-      group.add(cone);
-      group.add(sphere);
-      return group;
-    }
-
-    pinList = [];
-
-    function createPoint(latitude = 0, longitude = 0) {
-      const pin = createPin();
-      let latRad = latitude * (Math.PI / 180);
-      let lonRad = -longitude * (Math.PI / 180);
-
-      pin.position.copy(convertGeoCoords(latitude, longitude));
-      pin.rotation.set(0.0, -lonRad, latRad - Math.PI * 0.5);
-      pin.name = 'pin';
-      pinList.push(pin);
-      earth.add(pin);
-    }
-
-    function deletePin() {
-      for (let i = 0, l = pinList.length; l > i; i++) {
-        earth.remove(pinList[i]);
+      } else {
+        this.displayVisulalNoInfo();
+        this.displayTextNoInfo();
+        if (!isPantheon) {
+          if ($('.infoType.selectedBtn')[0].id.slice(4,) === 'Linechart') {
+            this.displayTimelineNoInfo();
+          }
+        }
       }
-      pinList = [];
+      // display pantheon data / no data
+      this.displayPantheon(countryName);
+
+      // well-beingデータがあってもなくても移動(念の為、データの有無を確認)
+      let location = countrynameToLatlon(countryName);
+      if (typeof location.latitude !== 'undefined') {
+        latitude = location.latitude;
+        longitude = location.longitude;
+        moveCamera(latitude, longitude);
+
+        $('#country').empty().append(countryName);
+        $('#country4').empty().append(countryName);
+      }
     }
 
 
+    calcWbInfo(countryName) {
+      for (let i = 0; this.numData > i; i++) {
+        if (this.data[i].country === countryName) {
+          return this.data[i];
+        }
+      }
+    }
 
-    ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+    clearInfo() {
+      $($('#LadderRanking').children().children()[2]).attr('r', 0.0);
+      $($('#PositiveRanking').children().children()[2]).attr('r', 0.0);
+      $($('#NegativeRanking').children().children()[2]).attr('r', 0.0);
+      $($('#GDPRanking').children().children()[2]).attr('r', 0.0);
+
+      $('.infoLadder').attr('opacity', 0.0);
+      $('.infoPositive').attr('opacity', 0.0);
+      $('.infoNegative').attr('opacity', 0.0);
+      $('.infoGDP').attr('opacity', 0.0);
+    }
+
+
+    displayRanking(type, rank, num, duration, rankText, score, scoreText) {
+      let id = '#' + type + 'Ranking';
+      let svg = $(id).children().children()[2];
+      let radius = (num - rank + 1) / num * this.radius(); // responsive
+      let rankOrdinal;
+      let scoreUnit = type === 'GDP' ? 'US$' : 'pt';
+      rankOrdinal = this.putRankOrdinal(rank);
+
+      TweenMax.fromTo(svg, duration,
+          {attr: {r: 0}},
+          {
+            attr: {r: radius},
+            ease: Power1.easeInOut,
+            onComplete: function () {
+              rankText.innerHTML = String(rank) + "<tspan font-size='12px'>" + rankOrdinal + "</tspan>";
+              $(id).children()[0].appendChild(rankText);
+              scoreText.textContent = '(' + String(score.toFixed(1)) + scoreUnit + ')';
+              $(id).children()[0].appendChild(scoreText);
+
+              $('.info' + type).attr('opacity', 1.0);
+            }
+          });
+    }
+
+
+    putRankOrdinal(rank) {
+      let ordinal;
+      let rankStr = rank.toString();
+      rankStr = rankStr.substring(rankStr.length - 1, rankStr.length);
+      if (rankStr === '1') {
+        ordinal = 'st'
+      } else if (rankStr === '2') {
+        ordinal = 'nd'
+      } else if (rankStr === '3') {
+        ordinal = 'rd'
+      } else {
+        ordinal = 'th'
+      }
+      return ordinal;
+    }
+
+
+    /* display each rank type */
+
+    createPromise(type, rank, num, svgDuration, text, nextStartDuration, score, scoreText) {
+      let promise;
+      let timeout;
+      promise = new Promise((resolve) => {
+        timeout = setTimeout(() => {
+          resolve(this.displayRanking(type, rank, num, svgDuration, text, score, scoreText));
+        }, nextStartDuration)
+      });
+      return {
+        promise: promise,
+        cancel: function () {
+          clearTimeout(timeout);
+          isClicked = false;
+        }
+      };
+    }
+
+
+    displayVisualInfo(countryWbData, wbLength) {
+      this.attrTextFontsize();
+      this.attrScoreFontsize();
+      new Promise((resolve) => {
+        resolve(this.displayRanking('Ladder', countryWbData['lRank'], wbLength, 1.0, this.svgRankText.t1, countryWbData['ladder'], this.svgScoreText.s1));
+      }).then(() => {
+        this.positiveTween = this.createPromise('Positive', countryWbData['pRank'], wbLength, 1.0, this.svgRankText.t2, 500, countryWbData['positive'], this.svgScoreText.s2);
+        return this.positiveTween.promise;
+      }).then(() => {
+        this.negativeTween = this.createPromise('Negative', countryWbData['nRank'], wbLength, 1.0, this.svgRankText.t3, 500, countryWbData['negative'], this.svgScoreText.s3);
+        return this.negativeTween.promise;
+      }).then(() => {
+        this.gdpTween = this.createPromise('GDP', countryWbData['gRank'], wbLength, 1.0, this.svgRankText.t4, 500, countryWbData['gdp'], this.svgScoreText.s4);
+        isFirstClick = false;
+        return this.gdpTween.promise;
+      }).catch(() => {
+        console.error('Something wrong!')
+      });
+    }
+
+    displayVisulalNoInfo() {
+      this.attrTextFontsize();
+      this.attrScoreFontsize();
+      setTimeout(() => {
+        this.svgRankText.t1.textContent = 'No data';
+        $('#LadderRanking').children()[0].appendChild(this.svgRankText.t1);
+        this.svgRankText.t2.textContent = 'No data';
+        $('#PositiveRanking').children()[0].appendChild(this.svgRankText.t2);
+        this.svgRankText.t3.textContent = 'No data';
+        $('#NegativeRanking').children()[0].appendChild(this.svgRankText.t3);
+        this.svgRankText.t4.textContent = 'No data';
+        $('#GDPRanking').children()[0].appendChild(this.svgRankText.t4);
+
+        $('#infoLadder').attr('opacity', 1.0);
+        $('#infoPositive').attr('opacity', 1.0);
+        $('#infoNegative').attr('opacity', 1.0);
+        $('#infoGDP').attr('opacity', 1.0);
+      }, 500);
+    }
+
+    attrTextFontsize() {
+      const size = this.windowWidth < 1000 ? '22px' : '28px';
+      this.svgRankText.t1.setAttributeNS(null, "font-size", size);
+      this.svgRankText.t2.setAttributeNS(null, "font-size", size);
+      this.svgRankText.t3.setAttributeNS(null, "font-size", size);
+      this.svgRankText.t4.setAttributeNS(null, "font-size", size);
+    }
+
+    attrScoreFontsize() {
+      const size = this.windowWidth < 1000 ? '12px' : '16px';
+      this.svgScoreText.s1.setAttributeNS(null, "font-size", size);
+      this.svgScoreText.s2.setAttributeNS(null, "font-size", size);
+      this.svgScoreText.s3.setAttributeNS(null, "font-size", size);
+      this.svgScoreText.s4.setAttributeNS(null, "font-size", size);
+    }
+
+
+    displayTextInfo(countryName, countryWbData) {
+      let lRank = countryWbData['lRank'];
+      let pRank = countryWbData['pRank'];
+      let nRank = countryWbData['nRank'];
+      let gRank = countryWbData['gRank'];
+
+      fadeInfoBoardText();
+      setTimeout(() => {
+        tweenTextCountryW = TweenMax.to("#country2", 1.0, {
+          opacity: 1.0,
+          onComplete: function () {
+            tweenTextContentsW = TweenMax.to(".infoBoardContent2", 1.0, {
+              opacity: 1.0,
+            });
+          }
+        })
+      }, 1000);
+
+      document.getElementById("country2").innerHTML = countryName;
+      document.getElementById("Ladder2").innerHTML = '- L : ' + lRank + this.putRankOrdinal(lRank);
+      document.getElementById("Positive2").innerHTML = '- P : ' + pRank + this.putRankOrdinal(pRank);
+      document.getElementById("Negative2").innerHTML = '- N : ' + nRank + this.putRankOrdinal(nRank);
+      document.getElementById("GDP2").innerHTML = '- G : ' + gRank + this.putRankOrdinal(gRank);
+    }
+
+    displayTextNoInfo() {
+      fadeInfoBoardText();
+      setTimeout(() => {
+        tweenTextCountryW = TweenMax.to("#country2", 1.0, {
+          opacity: 1.0,
+          onComplete: function () {
+            tweenTextContentsW = TweenMax.to(".infoBoardContent2", 1.0, {
+              opacity: 1.0,
+            });
+          }
+        })
+      }, 1000);
+
+      document.getElementById("country2").innerHTML = countryNameGlobal;
+      document.getElementById("Ladder2").innerHTML = 'No data';
+      document.getElementById("Positive2").innerHTML = '';
+      document.getElementById("Negative2").innerHTML = '';
+      document.getElementById("GDP2").innerHTML = '';
+
+    }
+
+
+    /* timeline mode */
+    displayTimeline(type, countryName, svg, offset) {
+      this.deleteTimeline();
+      let data;
+      for (let i = 0, l = timeline.length; i < l; i++) {
+        if (timeline[i]['country'] === countryName) {
+          data = timeline[i][type];
+        }
+      }
+      let rank = this.searchTimelineRank(type, countryName);
+      const spanSize = '<span style="font-size: 18px;">';
+      const spanWeight = '<span style="font-weight: 200;">';
+      document.getElementById("country4").innerHTML = countryName + spanWeight + ' ( ' + rank.rank + spanSize + rank.rankOrdinal + '</span>' + ' ) ' + '</span>';
+      let max, min;
+      if (type === 'ladder') {
+        max = ladderData.max;
+        min = ladderData.min;
+      } else if (type === 'positive') {
+        max = positiveData.max;
+        min = positiveData.min;
+      } else if (type === 'negative') {
+        // negativeは順位が逆
+        max = negativeData.min;
+        min = negativeData.max;
+      } else {
+        max = gdpData.max;
+        min = gdpData.min;
+      }
+      let timeLen = data.length;
+      let w = (this.width - offset * 2) / (timeLen - 1);
+      let startX, startY, endX, endY;
+
+      max = max * 1.1;
+      min = min * 0.5;
+
+
+      let i = 0;
+      let isPathFirst = true;
+      timelineSetInterval = setInterval(() => {
+        this.addTimelineScale(timelineYearList, timelineOffset, i);
+
+        let h = (data[i] - min) / (max - min) * this.height;
+        endX = w * i + offset;
+        endY = this.height - h;
+
+        // データが有るときのみ描画、無いときはスキップして次の点と結ぶ
+        if (data[i] !== -999) {
+          // 1回目は点のみ
+          if (isPathFirst) {
+            this.svgMarker(endX, endY, svg);
+            startX = endX;
+            startY = endY;
+            isPathFirst = !isPathFirst;
+          } else {
+            this.drawTimelinePath(startX, startY, endX, endY, timelineSVG);
+            startX = endX;
+            startY = endY;
+          }
+        }
+        i++;
+        if (i > timeLen - 1) {
+
+          clearInterval(timelineSetInterval);
+        }
+      }, timelineDuration * 1500);
+    }
+
+
+    drawTimelinePath(startX, startY, endX, endY, svg) {
+      // create line
+      let line = this.svgLine(startX, startY, endX, endY, svg);
+
+      // line animation
+      TweenMax.fromTo(line, timelineDuration,
+          {attr: {x2: startX, y2: startY}},
+          {
+            attr: {x2: endX, y2: endY},
+            ease: CustomEase.create("custom", "M0,0,C-0.024,0.402,0.456,0.48,0.5,0.5,0.622,0.556,0.978,0.616,1,1"),
+            onComplete: () => {
+              this.svgMarker(endX, endY, svg)
+            }
+          })
+    }
+
+
+    svgLine(startX, startY, endX, endY, svg) {
+      let line = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+      line.setAttribute('x1', startX);
+      line.setAttribute('y1', startY);
+      line.setAttribute('x2', endX);
+      line.setAttribute('y2', endY);
+      line.setAttribute("stroke", "#ffffff");
+      line.setAttribute("stroke-width", "2");
+      svg.appendChild(line);
+      return line;
+    }
+
+
+    svgMarker(x, y, svg) {
+      let marker = document.createElementNS("http://www.w3.org/2000/svg", "circle");
+      marker.setAttribute("cx", x);
+      marker.setAttribute("cy", y);
+      marker.setAttribute("r", '4px');
+      marker.setAttribute("fill", "#ffffff");
+      svg.appendChild(marker);
+    }
+
+
+    searchTimelineRank(type, countryName, Data) {
+      let res = this.calcWbInfo(countryName);
+      let rankKey = type.slice(0, 1) + 'Rank';
+      let rank = res[rankKey];
+      let rankOrdinal = this.putRankOrdinal(rank);
+
+      return {rank: rank, rankOrdinal: rankOrdinal};
+    }
+
+
+    addTimelineScale(yearList, offset, index) {
+      let timelineScaleArea = document.getElementById('infoBoardTimelineScale');
+      let width = (timelineScaleArea.width.baseVal.value - offset * 2) / (yearList.length - 1);
+      let px = '10px';
+
+      let textX = String(width * index + offset) + 'px';
+      let text = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+      text.setAttributeNS(null, "x", textX);
+      text.setAttributeNS(null, "y", '50%');
+      text.setAttributeNS(null, 'text-anchor', 'middle');
+      text.setAttributeNS(null, 'dominant-baseline', 'central');
+      text.setAttributeNS(null, "fill", "#ffffff");
+      text.setAttributeNS(null, "font-size", px);
+      text.textContent = String(yearList[index]);
+      timelineScaleArea.appendChild(text);
+    }
+
+
+    deleteTimeline() {
+      let d = $('#infoBoardTimelineSvg')[0].children;
+      let l = d.length;
+      for (let i = 0; i < l; i++) {
+        d[0].remove();
+      }
+
+      d = $('#infoBoardTimelineScale')[0].children;
+      l = d.length;
+      for (let i = 0; i < l; i++) {
+        d[0].remove();
+      }
+      clearInterval(timelineSetInterval);
+    }
+
+
+    displayTimelineNoInfo() {
+      this.deleteTimeline();
+
+      setTimeout(() => {
+        let text = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+        text.setAttributeNS(null, "x", '50%');
+        text.setAttributeNS(null, "y", '50%');
+        text.setAttributeNS(null, 'text-anchor', 'middle');
+        text.setAttributeNS(null, 'dominant-baseline', 'central');
+        text.setAttributeNS(null, "fill", "#ffffff");
+        text.setAttributeNS(null, "font-size", '25px');
+        text.textContent = 'No data';
+        document.getElementById('infoBoardTimelineSvg').appendChild(text);
+      }, 500);
+    }
+
+
+    displayPantheon(countryName) {
+      let infoBoardContent3 = document.getElementsByClassName('infoBoardContent3');
+      let pIndex = -1;
+      let url;
+      let name;
+      let occupation;
+      let year;
+      const path1 = '<a href=http://pantheon.media.mit.edu/people/';
+      const path2 = ' target="_blank"> - ';
+      const path3 = '</a>';
+      const born = '<span style="font-size: 12px;"> born in </span>';
+      const space = '<span style="font-size: 12px;"> </span>';
+
+      for (let i = 0; pantheonLength > i; i++) {
+        if (pantheon[i]['country'] === countryName) {
+          pIndex = i;
+        }
+      }
+      document.getElementById("country3").innerHTML = countryName;
+      let numPanheonPeople = 5;
+      for (let i = 0; numPanheonPeople > i; i++) {
+        infoBoardContent3[i].innerHTML = ''; // clear previous result
+      }
+      if (pIndex !== -1) {
+        let d = pantheon[pIndex];
+        for (let i = 0; d['name'].length > i; i++) {
+          url = d['url'][i];
+          name = d['name'][i];
+          occupation = d['occ'][i];
+          year = d['year'][i];
+          infoBoardContent3[i].innerHTML = path1 + url + path2 + name + ' <span style="color:#dae1f7; font-size: 16px;">(' + space + occupation + born + year + space + ')</span>' + path3;
+        }
+      } else {
+        infoBoardContent3[0].innerHTML = 'No data';
+      }
+
+      fadeInfoBoardPantheon();
+      setTimeout(() => {
+        tweenTextCountryP = TweenMax.to("#country3", 1.0, {
+          opacity: 1.0,
+          onComplete: function () {
+            $('.infoBoardContent3').css("display", 'block');
+            tweenTextContentsP = TweenMax.to(".infoBoardContent3", 1.0, {
+              opacity: 1.0,
+            });
+          }
+        })
+      }, 1000);
+    }
+
+  }
+
+  const infoBordObj = new InfoBord(wbData);
+
+
+  /////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+  function countrynameToLatlon(countryName) {
+    let latitude;
+    let longitude;
+
+    for (let i = 0; latLength > i; i++) {
+      if (latlon[i].country === countryName) {
+        latitude = latlon[i].latitude;
+        longitude = latlon[i].longitude;
+      }
+    }
+    return {latitude: latitude, longitude: longitude};
+  }
+
+  /* dring move, rotate is not enable */
+  function moveCamera(latitude, longitude) {
+    let targetPos = convertGeoCoords(latitude, longitude);
+    let targetVec = targetPos.sub(center);
+    let prevVec = camera.position.sub(center);
+
+    let crossVec = prevVec.clone().cross(targetVec).normalize();
+    let angle = prevVec.angleTo(targetVec);
+
+    let q = new THREE.Quaternion();
+    let step = 100;
+    let stepAngle = angle / step;
+    let count = 0;
+    let moveCameraQuaternion = function (stepAngle) {
+      q.setFromAxisAngle(crossVec, stepAngle);
+      camera.position.applyQuaternion(q);
+      camera.lookAt(0.0, 0.0, 0.0);
+      count++
+    };
+
+    let id = setInterval(function () {
+      earth.rotation.y = 0;
+      isMoveCamera = true;
+      controls.enableRotate = false;
+      moveCameraQuaternion(stepAngle);
+      if (count > step - 1) {
+        createPoint(latitude, longitude);
+        clearInterval(id);
+        isMoveCamera = false;
+        if (!isTravelAuto) {
+          controls.enableRotate = true;
+        }
+      }
+    }, 1000 / step);
+  }
+
+
+  function convertGeoCoords(latitude, longitude, radius = 1.0) {
+    let latRad = latitude * (Math.PI / 180);
+    let lonRad = -longitude * (Math.PI / 180);
+
+    let x = Math.cos(latRad) * Math.cos(lonRad) * radius;
+    let y = Math.sin(latRad) * radius;
+    let z = Math.cos(latRad) * Math.sin(lonRad) * radius;
+    return new THREE.Vector3(x, y, z);
+  }
+
+
+  /* marker pin */
+  let pinList;
+  let pinRadius;
+  let pinSphereRadius;
+  let pinHeight;
+  let pinMaterial;
+  let pinConeGeometry;
+  let pinSphereGeometry;
+
+  pinRadius = 0.0025;
+  pinSphereRadius = 0.01;
+  pinHeight = 0.025;
+  pinConeGeometry = new THREE.ConeBufferGeometry(pinRadius, pinHeight, 16, 1, true);
+  pinSphereGeometry = new THREE.SphereBufferGeometry(pinSphereRadius, 60, 60);
+
+  function createPin() {
+    pinMaterial = new THREE.MeshPhongMaterial({color: 0xf15b47});
+    let cone = new THREE.Mesh(pinConeGeometry, pinMaterial);
+    cone.position.y = pinHeight * 0.5;
+    cone.rotation.x = Math.PI;
+
+    let sphere = new THREE.Mesh(pinSphereGeometry, pinMaterial);
+    sphere.position.y = pinHeight * 0.95 + pinSphereRadius;
+
+    let group = new THREE.Group();
+    group.add(cone);
+    group.add(sphere);
+    return group;
+  }
+
+  pinList = [];
+
+  function createPoint(latitude = 0, longitude = 0) {
+    const pin = createPin();
+    let latRad = latitude * (Math.PI / 180);
+    let lonRad = -longitude * (Math.PI / 180);
+
+    pin.position.copy(convertGeoCoords(latitude, longitude));
+    pin.rotation.set(0.0, -lonRad, latRad - Math.PI * 0.5);
+    pin.name = 'pin';
+    pinList.push(pin);
+    earth.add(pin);
+  }
+
+  function deletePin() {
+    for (let i = 0, l = pinList.length; l > i; i++) {
+      earth.remove(pinList[i]);
+    }
+    pinList = [];
+  }
+
+
+  ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
   // Data canvas //
@@ -692,33 +758,43 @@
     constructor() {
       this.histArea = document.querySelector("#histgram");
       this.context = this.histArea.getContext("2d");
-      this.setCanvasSize();
+      // this.setCanvasSize();
       this.context.globalAlpha = 1.0;  // for safari(fillStyle alpha doesn't work)
+
+      this.histArea.width = this.width;
+      this.histArea.height = this.height;
+      this.previousWidth = this.width;
 
       this.tooltipHist = $('#tooltipHist');
       this.mouseOnCountry = '';
       this.histArea.addEventListener('mousemove', this.getCanvasColor.bind(this), false);
     }
 
-    setCanvasSize() {
-      const w1000 = 1000;
-      const w800 = 800;
-      const w680 = 680;
-      const w500 = 500;
+    get windowWidth() {
+      return window.innerWidth;
+    }
 
-      let canvasWidth = window.innerWidth;
-      if (canvasWidth < w500) {
-        this.histArea.width = 320;
-      } else if (canvasWidth >= w500 && canvasWidth < w680) {
-        this.histArea.width = w500;
-      } else if (canvasWidth >= w680 && canvasWidth < w800) {
-        this.histArea.width = w680;
-      } else if (canvasWidth >= w800 && canvasWidth < w1000) {
-        this.histArea.width = w800;
+    get width() {
+      if (this.windowWidth < 500) {
+        return 320;
+      } else if (this.windowWidth >= 500 && this.windowWidth < 680) {
+        return 500;
+      } else if (this.windowWidth >= 680 && this.windowWidth < 800) {
+        return 680;
+      } else if (this.windowWidth >= 800 && this.windowWidth < 1000) {
+        return 800;
       } else {
-        this.histArea.width = 900;
+        return 900;
       }
-      this.histArea.height = 90;
+    }
+
+    get height() {
+      return 90;
+    }
+
+    set width(w) {
+      this.histArea.width = w;
+      this.previousWidth = w;
     }
 
     getCanvasColor(event) {
@@ -752,7 +828,7 @@
       return undefined;
     }
 
-    setAlpha(alpha){
+    setAlpha(alpha) {
       this.globalAlpha = alpha;
     }
 
@@ -765,6 +841,7 @@
       this.context.fillStyle = "rgb(150, 50, 50)";
     }
   }
+
 
 
   // Data class //
@@ -803,7 +880,7 @@
       /* drawType: new, redraw */
       console.log('drawWbHist', this.type);
       clearInterval(drawSetInterval);
-      this.histLoop(this.data, duration, drawType, this.canvas.histArea);
+      this.histLoop(this.data, duration, drawType);
 
       // well-being typeが変わるとき(=draw hist時)にinfoも書き直す(time line->pie chartのときにtweenが無効になるため)
       if (typeof countryNameDisplayed !== 'undefined') {
@@ -816,8 +893,9 @@
       }
     };
 
-    histLoop(data, duration, drawType, histArea) {
-      this.canvas.context.clearRect(0, 0, histArea.width, histArea.height);
+    histLoop(data, duration, drawType) {
+      console.log(this.type);
+      this.canvas.context.clearRect(0, 0, 9000, this.canvas.height);
       let numData = data.length;
       let width = this.histWidth;
 
@@ -825,7 +903,7 @@
       let i = 0;
       // console.log(numData, data);
       drawSetInterval = setInterval(() => {
-        this.fillBar(width, i, histArea);
+        this.fillBar(width, i);
         i++;
 
         if (i > numData - 1) {
@@ -837,15 +915,15 @@
     }
 
     get histWidth() {
-      return this.mathFloor(this.canvas.histArea.width / this.data.length, 5);
+      return this.mathFloor(this.canvas.width / this.data.length, 5);
     }
 
-    fillBar(width, i, histArea) {
+    fillBar(width, i) {
       this.canvas.setNomalColor();
       // this.canvas.setAlpha(0.5);
       let max = this.type === 'negative' ? this.min : this.max;
-      let h = (this.data[i].score) / max * histArea.height;
-      this.canvas.context.fillRect(width * i, histArea.height - h, width, h);
+      let h = (this.data[i].score) / max * this.canvas.height;
+      this.canvas.context.fillRect(width * i, this.canvas.height - h, width, h);
     }
 
     highlightRedrawHist(drawType) {
@@ -865,8 +943,8 @@
         // highlight color
         this.canvas.setHighlightColor();
         let max = this.type === 'negative' ? this.min : this.max;
-        h = (data[indexList[i]].score) / max * canvas.histArea.height;
-        this.canvas.context.fillRect(this.histWidth * indexList[i], canvas.histArea.height - h, this.histWidth, h);
+        h = (data[indexList[i]].score) / max * this.canvas.height;
+        this.canvas.context.fillRect(this.histWidth * indexList[i], this.canvas.height - h, this.histWidth, h);
       }
     }
 
@@ -882,8 +960,8 @@
       // highlight color
       this.canvas.setHighlightColor();
       let max = this.type === 'negative' ? this.min : this.max;
-      h = (this.data[index].score) / max * this.canvas.histArea.height;
-      this.canvas.context.fillRect(this.histWidth * index, this.canvas.histArea.height - h, this.histWidth, h);
+      h = (this.data[index].score) / max * this.canvas.height;
+      this.canvas.context.fillRect(this.histWidth * index, this.canvas.height - h, this.histWidth, h);
     }
 
 
@@ -1007,10 +1085,10 @@
   const latLength = Object.keys(latlon).length;
   const pantheonLength = Object.keys(pantheon).length;
   let meshList;
-  let t1, t2, t3, t4;
-  let s1, s2, s3, s4;
+  // let t1, t2, t3, t4;
+  // let s1, s2, s3, s4;
   let wbButton;
-  let svgRadius;
+  // let svgRadius;
   let searchArray;
   let travelModeSwitch;
   let isTravelAuto = false;
@@ -1026,17 +1104,6 @@
 
 
   /* pantheon data */
-
-
-  /* marker pin */
-  // let pinList;
-  // let pinRadius;
-  // let pinSphereRadius;
-  // let pinHeight;
-  // let pinMaterial;
-  // let pinConeGeometry;
-  // let pinSphereGeometry;
-
 
   /* timeline mode */
   const timelineSVG = $('#infoBoardTimeline')[0].children[1];
@@ -1366,7 +1433,6 @@
           }, 400);
           setTimeout(() => {
             // landBase.material.opacity = 1.0;
-            // clickBtnDrawHist('ladderBtn');
             dataList['ladderData'].drawHist(2000, 'new');
 
 
@@ -1492,20 +1558,6 @@
     targetDOM = document.getElementById('webgl');
 
 
-    if (canvasWidth < w680) {
-      timelineWidth = 320;
-      timelineHeight = 80;
-    } else if (canvasWidth >= w680 && canvasWidth < w800) {
-      timelineWidth = 480;
-      timelineHeight = 80;
-    } else if (canvasWidth >= w800 && canvasWidth < w1000) {
-      timelineWidth = 600;
-      timelineHeight = 80;
-    } else {
-      timelineWidth = 800;
-      timelineHeight = 105;
-    }
-
     /* device check */
     userAgent = navigator.userAgent;
     if (userAgent.indexOf('iPhone') > 0 || userAgent.indexOf('Android') > 0 && userAgent.indexOf('Mobile') > 0) {
@@ -1523,62 +1575,14 @@
       canvasHeight = window.innerHeight;
 
       if (isFinishStartTween) {
-        if (canvasWidth < w1000) {
-          svgRadius = 40;
-          t1.setAttributeNS(null, "font-size", "22px");
-          t2.setAttributeNS(null, "font-size", "22px");
-          t3.setAttributeNS(null, "font-size", "22px");
-          t4.setAttributeNS(null, "font-size", "22px");
-          s1.setAttributeNS(null, "font-size", "12px");
-          s2.setAttributeNS(null, "font-size", "12px");
-          s3.setAttributeNS(null, "font-size", "12px");
-          s4.setAttributeNS(null, "font-size", "12px");
-
-        } else {
-          svgRadius = 48;
-          t1.setAttributeNS(null, "font-size", "28px");
-          t2.setAttributeNS(null, "font-size", "28px");
-          t3.setAttributeNS(null, "font-size", "28px");
-          t4.setAttributeNS(null, "font-size", "28px");
-          s1.setAttributeNS(null, "font-size", "16px");
-          s2.setAttributeNS(null, "font-size", "16px");
-          s3.setAttributeNS(null, "font-size", "16px");
-          s4.setAttributeNS(null, "font-size", "16px");
-        }
-
-        let histCanvasWidth;
-        if (canvasWidth < w500) {
-          histCanvasWidth = 320;
-        } else if (canvasWidth >= w500 && canvasWidth < w680) {
-          histCanvasWidth = w500;
-        } else if (canvasWidth >= w680 && canvasWidth < w800) {
-          histCanvasWidth = w680;
-        } else if (canvasWidth >= w800 && canvasWidth < w1000) {
-          histCanvasWidth = w800;
-        } else {
-          histCanvasWidth = 900;
-        }
-
-        if (histCanvas.width !== histCanvasWidth) {
-          histCanvas.width = histCanvasWidth;
+        let histWidth = $('#histgram').width();
+        if (dataList['ladderData'].canvas.previousWidth !== histWidth) {
+          // dataListのうち、1つだけ更新すればOK！？
+          dataList['ladderData'].canvas.width = histWidth;
 
           let selectedType = returnSelectedWBtype();
           console.log(selectedType);
           dataList[selectedType].drawHist(2000, 'new');
-        }
-
-        if (canvasWidth < w680) {
-          timelineWidth = 320;
-          timelineHeight = 80;
-        } else if (canvasWidth >= w680 && canvasWidth < w800) {
-          timelineWidth = 480;
-          timelineHeight = 80;
-        } else if (canvasWidth >= w800 && canvasWidth < w1000) {
-          timelineWidth = 600;
-          timelineHeight = 80;
-        } else {
-          timelineWidth = 800;
-          timelineHeight = 105;
         }
       }
     }, false);
@@ -1803,8 +1807,6 @@
     earth.position.z = initEarthPosition.z;
 
 
-
-
     /* make well-being button in order to show score */
     wbButton = document.getElementsByClassName('wbButton');
     for (let i = 0, wbLen = wbButton.length; i < wbLen; i++) {
@@ -1823,656 +1825,11 @@
 
         /* travel type check */
         if (isTravelAuto) {
-          // if (type === 'ladderBtn') {
-          //   histScoreData = LadderScoreArray;
-          // } else if (type === 'positiveBtn') {
-          //   histScoreData = PositiveScoreArray;
-          // } else if (type === 'negativeBtn') {
-          //   histScoreData = NegativeScoreArray;
-          // } else {
-          //   histScoreData = GDPScoreArray;
-          // }
           deletePin();
           travelWellbeing();
         }
       }, false);
     }
-
-    clickBtnDrawHist = function (type) {
-      // highlightedBarList = [];  // reset
-      // let res = drawHist(type, drawHistDurationNomal, 'new');
-      // // console.log(res);
-      // barWidth = res.width;
-      // histData = res.histData;
-      // scoreMax = res.scoreMax;
-      // histScoreData = res.scoreData;
-    };
-
-
-    /*
-    // score ranking board
-    */
-    /* setting infoBoard circle size */
-    if (canvasWidth < w1000) {
-      svgRadius = 40;
-    } else {
-      svgRadius = 48;
-    }
-
-
-    /* infoBoard text */
-    function createRankText(type) {
-      let px;
-      if (canvasWidth < w1000) {
-        px = "22px";
-      } else {
-        px = "28px";
-      }
-      let text = document.createElementNS('http://www.w3.org/2000/svg', 'text');
-      text.setAttributeNS(null, "x", '50%');
-      text.setAttributeNS(null, "y", '50%');
-      text.setAttributeNS(null, 'text-anchor', 'middle');
-      text.setAttributeNS(null, 'dominant-baseline', 'central');
-      text.setAttributeNS(null, "fill", "#ffffff");
-      text.setAttributeNS(null, "font-size", px);
-      text.setAttributeNS(null, "class", "info" + type);
-      text.setAttributeNS(null, "id", "info" + type);
-      return text;
-    }
-
-    t1 = createRankText('Ladder');
-    t2 = createRankText('Positive');
-    t3 = createRankText('Negative');
-    t4 = createRankText('GDP');
-
-
-    function createScoreText(type) {
-      let px;
-      if (canvasWidth < w1000) {
-        px = "12px";
-      } else {
-        px = "16px";
-      }
-      let text = document.createElementNS('http://www.w3.org/2000/svg', 'text');
-      text.setAttributeNS(null, "x", '50%');
-      text.setAttributeNS(null, "y", '70%');
-      text.setAttributeNS(null, 'text-anchor', 'middle');
-      text.setAttributeNS(null, 'dominant-baseline', 'central');
-      text.setAttributeNS(null, "fill", "#eeeeee");
-      text.setAttributeNS(null, "font-size", px);
-      text.setAttributeNS(null, "class", "info" + type);
-      return text;
-    }
-
-    s1 = createScoreText('Ladder');
-    s2 = createScoreText('Positive');
-    s3 = createScoreText('Negative');
-    s4 = createScoreText('GDP');
-
-
-
-
-
-  //
-  // ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-  //
-  //   /* display score result */
-  //   function displayInfo(countryName) {
-  //     countryNameDisplayed = countryName;
-  //     if (!isFirstClick) {
-  //       TweenMax.killAll();
-  //       positive.cancel();
-  //       negative.cancel();
-  //       gdp.cancel();
-  //     }
-  //     clearInfo();
-  //     let res = calcWbInfo(countryName);
-  //     infoBoard.css({opacity: 0.8});
-  //     infoBoardTimeline.css({opacity: 0.8});
-  //     // deletePin();
-  //     tooltip.css({opacity: 0.0});
-  //
-  //
-  //     if (typeof res !== 'undefined') {
-  //       displayVisualInfo(res, wbLength);
-  //       displayTextInfo(countryName, res);  // テキストでの結果表示
-  //
-  //       if (!isPantheon) {
-  //         if ($('.infoType.selectedBtn')[0].id.slice(4,) === 'Linechart') {
-  //           let wellbeingType = $('.wbButton1.selectedBtn')[0].id.slice(0, -4);
-  //           console.log(wellbeingType);
-  //           displayTimeline(wellbeingType, countryName, timelineSVG, timelineOffset);
-  //         }
-  //       }
-  //     } else {
-  //       displayVisulalNoInfo();
-  //       displayTextNoInfo();
-  //       if (!isPantheon) {
-  //         if ($('.infoType.selectedBtn')[0].id.slice(4,) === 'Linechart') {
-  //           displayTimelineNoInfo();
-  //         }
-  //       }
-  //     }
-  //     // display pantheon data / no data
-  //     displayPantheon(countryName);
-  //
-  //     // well-beingデータがあってもなくても移動(念の為、データの有無を確認)
-  //     let location = countrynameToLatlon(countryName);
-  //     if (typeof location.latitude !== 'undefined') {
-  //       latitude = location.latitude;
-  //       longitude = location.longitude;
-  //       moveCamera(latitude, longitude);
-  //
-  //       $('#country').empty().append(countryName);
-  //       $('#country4').empty().append(countryName);
-  //     }
-  //   }
-  //
-  //
-  //
-  //   function calcWbInfo(countryName) {
-  //     for (let i = 0; wbLength > i; i++) {
-  //       if (wbData[i].country === countryName) {
-  //         return wbData[i];
-  //       }
-  //     }
-  //   }
-  //
-  //
-  //   function clearInfo() {
-  //     let l = $('#LadderRanking').children().children()[2];
-  //     let p = $('#PositiveRanking').children().children()[2];
-  //     let n = $('#NegativeRanking').children().children()[2];
-  //     let g = $('#GDPRanking').children().children()[2];
-  //
-  //     $(l).attr('r', 0.0);
-  //     $(p).attr('r', 0.0);
-  //     $(n).attr('r', 0.0);
-  //     $(g).attr('r', 0.0);
-  //
-  //     $('.infoLadder').attr('opacity', 0.0);
-  //     $('.infoPositive').attr('opacity', 0.0);
-  //     $('.infoNegative').attr('opacity', 0.0);
-  //     $('.infoGDP').attr('opacity', 0.0);
-  //   }
-  //
-  //   function displayRanking(type, rank, num, duration, rankText, score, scoreText) {
-  //     let id = '#' + type + 'Ranking';
-  //     let svg = $(id).children().children()[2];
-  //     let radius = (num - rank + 1) / num * svgRadius; // responsive
-  //     let rankOrdinal;
-  //     let scoreUnit = type === 'GDP' ? 'US$' : 'pt';
-  //     rankOrdinal = putRankOrdinal(rank);
-  //
-  //     TweenMax.fromTo(svg, duration,
-  //         {attr: {r: 0}},
-  //         {
-  //           attr: {r: radius},
-  //           ease: Power1.easeInOut,
-  //           onComplete: function () {
-  //             rankText.innerHTML = String(rank) + "<tspan font-size='12px'>" + rankOrdinal + "</tspan>";
-  //             $(id).children()[0].appendChild(rankText);
-  //             scoreText.textContent = '(' + String(score.toFixed(1)) + scoreUnit + ')';
-  //             $(id).children()[0].appendChild(scoreText);
-  //
-  //             $('.info' + type).attr('opacity', 1.0);
-  //           }
-  //         });
-  //   }
-  //
-  //   function putRankOrdinal(rank) {
-  //     let ordinal;
-  //     let rankStr = rank.toString();
-  //     rankStr = rankStr.substring(rankStr.length - 1, rankStr.length);
-  //     if (rankStr === '1') {
-  //       ordinal = 'st'
-  //     } else if (rankStr === '2') {
-  //       ordinal = 'nd'
-  //     } else if (rankStr === '3') {
-  //       ordinal = 'rd'
-  //     } else {
-  //       ordinal = 'th'
-  //     }
-  //     return ordinal;
-  //   }
-  //
-  //
-  //   /* display each rank type */
-  //   function createPromise(type, rank, num, svgDuration, text, nextStartDuration, score, scoreText) {
-  //     let promise;
-  //     let timeout;
-  //     promise = new Promise((resolve) => {
-  //       timeout = setTimeout(() => {
-  //         resolve(displayRanking(type, rank, num, svgDuration, text, score, scoreText));
-  //       }, nextStartDuration)
-  //     });
-  //     return {
-  //       promise: promise,
-  //       cancel: function () {
-  //         clearTimeout(timeout);
-  //         isClicked = false;
-  //       }
-  //     };
-  //   }
-  //
-  //
-  //   let positive, negative, gdp;
-  //
-  //   function displayVisualInfo(wbData, wbLength) {
-  //     new Promise((resolve) => {
-  //       resolve(displayRanking('Ladder', wbData['lRank'], wbLength, 1.0, t1, wbData['ladder'], s1));
-  //     }).then(() => {
-  //       positive = createPromise('Positive', wbData['pRank'], wbLength, 1.0, t2, 500, wbData['positive'], s2);
-  //       return positive.promise;
-  //     }).then(() => {
-  //       negative = createPromise('Negative', wbData['nRank'], wbLength, 1.0, t3, 500, wbData['negative'], s3);
-  //       return negative.promise;
-  //     }).then(() => {
-  //       gdp = createPromise('GDP', wbData['gRank'], wbLength, 1.0, t4, 500, wbData['gdp'], s4);
-  //       isFirstClick = false;
-  //       return gdp.promise;
-  //     }).catch(() => {
-  //       console.error('Something wrong!')
-  //     });
-  //   }
-  //
-  //
-  //   function displayTextInfo(countryName, wbData) {
-  //     let lRank = wbData['lRank'];
-  //     let pRank = wbData['pRank'];
-  //     let nRank = wbData['nRank'];
-  //     let gRank = wbData['gRank'];
-  //
-  //     fadeInfoBoardText();
-  //     setTimeout(() => {
-  //       tweenTextCountryW = TweenMax.to("#country2", 1.0, {
-  //         opacity: 1.0,
-  //         onComplete: function () {
-  //           tweenTextContentsW = TweenMax.to(".infoBoardContent2", 1.0, {
-  //             opacity: 1.0,
-  //           });
-  //         }
-  //       })
-  //     }, 1000);
-  //
-  //     document.getElementById("country2").innerHTML = countryName;
-  //     document.getElementById("Ladder2").innerHTML = '- L : ' + lRank + putRankOrdinal(lRank);
-  //     document.getElementById("Positive2").innerHTML = '- P : ' + pRank + putRankOrdinal(pRank);
-  //     document.getElementById("Negative2").innerHTML = '- N : ' + nRank + putRankOrdinal(nRank);
-  //     document.getElementById("GDP2").innerHTML = '- G : ' + gRank + putRankOrdinal(gRank);
-  //   }
-  //
-  //
-  //   function displayVisulalNoInfo() {
-  //     setTimeout(() => {
-  //       t1.textContent = 'No data';
-  //       $('#LadderRanking').children()[0].appendChild(t1);
-  //       t2.textContent = 'No data';
-  //       $('#PositiveRanking').children()[0].appendChild(t2);
-  //       t3.textContent = 'No data';
-  //       $('#NegativeRanking').children()[0].appendChild(t3);
-  //       t4.textContent = 'No data';
-  //       $('#GDPRanking').children()[0].appendChild(t4);
-  //
-  //       $('#infoLadder').attr('opacity', 1.0);
-  //       $('#infoPositive').attr('opacity', 1.0);
-  //       $('#infoNegative').attr('opacity', 1.0);
-  //       $('#infoGDP').attr('opacity', 1.0);
-  //     }, 500);
-  //   }
-  //
-  //   function displayTextNoInfo() {
-  //     fadeInfoBoardText();
-  //     setTimeout(() => {
-  //       tweenTextCountryW = TweenMax.to("#country2", 1.0, {
-  //         opacity: 1.0,
-  //         onComplete: function () {
-  //           tweenTextContentsW = TweenMax.to(".infoBoardContent2", 1.0, {
-  //             opacity: 1.0,
-  //           });
-  //         }
-  //       })
-  //     }, 1000);
-  //
-  //     document.getElementById("country2").innerHTML = countryNameGlobal;
-  //     document.getElementById("Ladder2").innerHTML = 'No data';
-  //     document.getElementById("Positive2").innerHTML = '';
-  //     document.getElementById("Negative2").innerHTML = '';
-  //     document.getElementById("GDP2").innerHTML = '';
-  //
-  //   }
-  //
-  //
-  //   /* timeline mode */
-  //   function displayTimeline(type, countryName, svg, offset) {
-  //     deleteTimeline();
-  //     let data;
-  //     for (let i = 0, l = timeline.length; i < l; i++) {
-  //       if (timeline[i]['country'] === countryName) {
-  //         data = timeline[i][type];
-  //       }
-  //     }
-  //     let rank = searchTimelineRank(type, countryName);
-  //     const spanSize = '<span style="font-size: 18px;">';
-  //     const spanWeight = '<span style="font-weight: 200;">';
-  //     document.getElementById("country4").innerHTML = countryName + spanWeight + ' ( ' + rank.rank + spanSize + rank.rankOrdinal + '</span>' + ' ) ' + '</span>';
-  //     let max, min;
-  //     if (type === 'ladder') {
-  //       max = ladderData.max;
-  //       min = ladderData.min;
-  //     } else if (type === 'positive') {
-  //       max = positiveData.max;
-  //       min = positiveData.min;
-  //     } else if (type === 'negative') {
-  //       // negativeは順位が逆
-  //       max = negativeData.min;
-  //       min = negativeData.max;
-  //     } else {
-  //       max = gdpData.max;
-  //       min = gdpData.min;
-  //     }
-  //     let timeLen = data.length;
-  //     let w = (timelineWidth - offset * 2) / (timeLen - 1);
-  //     let startX, startY, endX, endY;
-  //
-  //     max = max * 1.1;
-  //     min = min * 0.5;
-  //
-  //
-  //     let i = 0;
-  //     let isPathFirst = true;
-  //     timelineSetInterval = setInterval(function () {
-  //       addTimelineScale(timelineYearList, timelineOffset, i);
-  //
-  //       let h = (data[i] - min) / (max - min) * timelineHeight;
-  //       endX = w * i + offset;
-  //       endY = timelineHeight - h;
-  //
-  //       // データが有るときのみ描画、無いときはスキップして次の点と結ぶ
-  //       if (data[i] !== -999) {
-  //         // 1回目は点のみ
-  //         if (isPathFirst) {
-  //           svgMarker(endX, endY, svg);
-  //           startX = endX;
-  //           startY = endY;
-  //           isPathFirst = !isPathFirst;
-  //         } else {
-  //           drawTimelinePath(startX, startY, endX, endY, timelineSVG);
-  //           startX = endX;
-  //           startY = endY;
-  //         }
-  //       }
-  //       i++;
-  //       if (i > timeLen - 1) {
-  //
-  //         clearInterval(timelineSetInterval);
-  //       }
-  //     }, timelineDuration * 1500);
-  //   }
-  //
-  //
-  //   function drawTimelinePath(startX, startY, endX, endY, svg) {
-  //     // create line
-  //     let line = svgLine(startX, startY, endX, endY, svg);
-  //
-  //     // line animation
-  //     TweenMax.fromTo(line, timelineDuration,
-  //         {attr: {x2: startX, y2: startY}},
-  //         {
-  //           attr: {x2: endX, y2: endY},
-  //           ease: CustomEase.create("custom", "M0,0,C-0.024,0.402,0.456,0.48,0.5,0.5,0.622,0.556,0.978,0.616,1,1"),
-  //           onComplete: function () {
-  //             svgMarker(endX, endY, svg)
-  //           }
-  //         });
-  //   }
-  //
-  //   function svgLine(startX, startY, endX, endY, svg) {
-  //     let line = document.createElementNS('http://www.w3.org/2000/svg', 'line');
-  //     line.setAttribute('x1', startX);
-  //     line.setAttribute('y1', startY);
-  //     line.setAttribute('x2', endX);
-  //     line.setAttribute('y2', endY);
-  //     line.setAttribute("stroke", "#ffffff");
-  //     line.setAttribute("stroke-width", "2");
-  //     svg.appendChild(line);
-  //     return line;
-  //   }
-  //
-  //   function svgMarker(x, y, svg) {
-  //     let marker = document.createElementNS("http://www.w3.org/2000/svg", "circle");
-  //     marker.setAttribute("cx", x);
-  //     marker.setAttribute("cy", y);
-  //     marker.setAttribute("r", '4px');
-  //     marker.setAttribute("fill", "#ffffff");
-  //     svg.appendChild(marker);
-  //   }
-  //
-  //   function searchTimelineRank(type, countryName) {
-  //     let res = calcWbInfo(countryName);
-  //     let rankKey = type.slice(0, 1) + 'Rank';
-  //     let rank = res[rankKey];
-  //     let rankOrdinal = putRankOrdinal(rank);
-  //
-  //     return {rank: rank, rankOrdinal: rankOrdinal};
-  //   }
-  //
-  //   function addTimelineScale(yearList, offset, index) {
-  //     let timelineScaleArea = document.getElementById('infoBoardTimelineScale');
-  //     let width = (timelineScaleArea.width.baseVal.value - offset * 2) / (yearList.length - 1);
-  //     let px = '10px';
-  //
-  //     let textX = String(width * index + offset) + 'px';
-  //     let text = document.createElementNS('http://www.w3.org/2000/svg', 'text');
-  //     text.setAttributeNS(null, "x", textX);
-  //     text.setAttributeNS(null, "y", '50%');
-  //     text.setAttributeNS(null, 'text-anchor', 'middle');
-  //     text.setAttributeNS(null, 'dominant-baseline', 'central');
-  //     text.setAttributeNS(null, "fill", "#ffffff");
-  //     text.setAttributeNS(null, "font-size", px);
-  //     text.textContent = String(yearList[index]);
-  //     timelineScaleArea.appendChild(text);
-  //   }
-  //
-  //   deleteTimeline = function () {
-  //     let d = $('#infoBoardTimelineSvg')[0].children;
-  //     let l = d.length;
-  //     for (let i = 0; i < l; i++) {
-  //       d[0].remove();
-  //     }
-  //
-  //     d = $('#infoBoardTimelineScale')[0].children;
-  //     l = d.length;
-  //     for (let i = 0; i < l; i++) {
-  //       d[0].remove();
-  //     }
-  //     clearInterval(timelineSetInterval);
-  //   };
-  //
-  //
-  //   function displayTimelineNoInfo() {
-  //     deleteTimeline();
-  //
-  //     setTimeout(() => {
-  //       let text = document.createElementNS('http://www.w3.org/2000/svg', 'text');
-  //       text.setAttributeNS(null, "x", '50%');
-  //       text.setAttributeNS(null, "y", '50%');
-  //       text.setAttributeNS(null, 'text-anchor', 'middle');
-  //       text.setAttributeNS(null, 'dominant-baseline', 'central');
-  //       text.setAttributeNS(null, "fill", "#ffffff");
-  //       text.setAttributeNS(null, "font-size", '25px');
-  //       text.textContent = 'No data';
-  //       document.getElementById('infoBoardTimelineSvg').appendChild(text);
-  //     }, 500);
-  //   }
-  //
-  //
-  //
-  //
-  //
-  //   const path1 = '<a href=http://pantheon.media.mit.edu/people/';
-  //   const path2 = ' target="_blank"> - ';
-  //   const path3 = '</a>';
-  //   const born = '<span style="font-size: 12px;"> born in </span>';
-  //   const space = '<span style="font-size: 12px;"> </span>';
-  //
-  //   function displayPantheon(countryName) {
-  //     let infoBoardContent3 = document.getElementsByClassName('infoBoardContent3');
-  //     let pIndex = -1;
-  //     let url;
-  //     let name;
-  //     let occupation;
-  //     let year;
-  //     for (let i = 0; pantheonLength > i; i++) {
-  //       if (pantheon[i]['country'] === countryName) {
-  //         pIndex = i;
-  //       }
-  //     }
-  //     document.getElementById("country3").innerHTML = countryName;
-  //     let numPanheonPeople = 5;
-  //     for (let i = 0; numPanheonPeople > i; i++) {
-  //       infoBoardContent3[i].innerHTML = ''; // clear previous result
-  //     }
-  //     if (pIndex !== -1) {
-  //       let d = pantheon[pIndex];
-  //       for (let i = 0; d['name'].length > i; i++) {
-  //         url = d['url'][i];
-  //         name = d['name'][i];
-  //         occupation = d['occ'][i];
-  //         year = d['year'][i];
-  //         infoBoardContent3[i].innerHTML = path1 + url + path2 + name + ' <span style="color:#dae1f7; font-size: 16px;">(' + space + occupation + born + year + space + ')</span>' + path3;
-  //       }
-  //     } else {
-  //       infoBoardContent3[0].innerHTML = 'No data';
-  //     }
-  //
-  //     fadeInfoBoardPantheon();
-  //     setTimeout(() => {
-  //       tweenTextCountryP = TweenMax.to("#country3", 1.0, {
-  //         opacity: 1.0,
-  //         onComplete: function () {
-  //           $('.infoBoardContent3').css("display", 'block');
-  //           tweenTextContentsP = TweenMax.to(".infoBoardContent3", 1.0, {
-  //             opacity: 1.0,
-  //           });
-  //         }
-  //       })
-  //     }, 1000);
-  //   }
-  //
-  //   /////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-  //
-  //
-  //
-  //   function countrynameToLatlon(countryName) {
-  //     let latitude;
-  //     let longitude;
-  //
-  //     for (let i = 0; latLength > i; i++) {
-  //       if (latlon[i].country === countryName) {
-  //         latitude = latlon[i].latitude;
-  //         longitude = latlon[i].longitude;
-  //       }
-  //     }
-  //     return {latitude: latitude, longitude: longitude};
-  //   }
-  //
-  //   /* dring move, rotate is not enable */
-  //   function moveCamera(latitude, longitude) {
-  //     let targetPos = convertGeoCoords(latitude, longitude);
-  //     let targetVec = targetPos.sub(center);
-  //     let prevVec = camera.position.sub(center);
-  //
-  //     let crossVec = prevVec.clone().cross(targetVec).normalize();
-  //     let angle = prevVec.angleTo(targetVec);
-  //
-  //     let q = new THREE.Quaternion();
-  //     let step = 100;
-  //     let stepAngle = angle / step;
-  //     let count = 0;
-  //     let moveCameraQuaternion = function (stepAngle) {
-  //       q.setFromAxisAngle(crossVec, stepAngle);
-  //       camera.position.applyQuaternion(q);
-  //       camera.lookAt(0.0, 0.0, 0.0);
-  //       count++
-  //     };
-  //
-  //     let id = setInterval(function () {
-  //       earth.rotation.y = 0;
-  //       isMoveCamera = true;
-  //       controls.enableRotate = false;
-  //       moveCameraQuaternion(stepAngle);
-  //       if (count > step - 1) {
-  //         createPoint(latitude, longitude);
-  //         clearInterval(id);
-  //         isMoveCamera = false;
-  //         if (!isTravelAuto) {
-  //           controls.enableRotate = true;
-  //         }
-  //       }
-  //     }, 1000 / step);
-  //   }
-  //
-  //
-  //   function convertGeoCoords(latitude, longitude, radius = 1.0) {
-  //     let latRad = latitude * (Math.PI / 180);
-  //     let lonRad = -longitude * (Math.PI / 180);
-  //
-  //     let x = Math.cos(latRad) * Math.cos(lonRad) * radius;
-  //     let y = Math.sin(latRad) * radius;
-  //     let z = Math.cos(latRad) * Math.sin(lonRad) * radius;
-  //     return new THREE.Vector3(x, y, z);
-  //   }
-  //
-  //
-  //   /* marker pin */
-  //   pinRadius = 0.0025;
-  //   pinSphereRadius = 0.01;
-  //   pinHeight = 0.025;
-  //   pinConeGeometry = new THREE.ConeBufferGeometry(pinRadius, pinHeight, 16, 1, true);
-  //   pinSphereGeometry = new THREE.SphereBufferGeometry(pinSphereRadius, 60, 60);
-  //
-  //   function createPin() {
-  //     pinMaterial = new THREE.MeshPhongMaterial({color: 0xf15b47});
-  //     let cone = new THREE.Mesh(pinConeGeometry, pinMaterial);
-  //     cone.position.y = pinHeight * 0.5;
-  //     cone.rotation.x = Math.PI;
-  //
-  //     let sphere = new THREE.Mesh(pinSphereGeometry, pinMaterial);
-  //     sphere.position.y = pinHeight * 0.95 + pinSphereRadius;
-  //
-  //     let group = new THREE.Group();
-  //     group.add(cone);
-  //     group.add(sphere);
-  //     return group;
-  //   }
-  //
-  //   pinList = [];
-  //
-  //   function createPoint(latitude = 0, longitude = 0) {
-  //     const pin = createPin();
-  //     let latRad = latitude * (Math.PI / 180);
-  //     let lonRad = -longitude * (Math.PI / 180);
-  //
-  //     pin.position.copy(convertGeoCoords(latitude, longitude));
-  //     pin.rotation.set(0.0, -lonRad, latRad - Math.PI * 0.5);
-  //     pin.name = 'pin';
-  //     pinList.push(pin);
-  //     earth.add(pin);
-  //   }
-  //
-  //   deletePin = function () {
-  //     for (let i = 0, l = pinList.length; l > i; i++) {
-  //       earth.remove(pinList[i]);
-  //     }
-  //     pinList = [];
-  //   };
-  //
-  //
-  //
-  //
-  //
-  //   ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
     /* pantheon mode */
@@ -2500,8 +1857,6 @@
     }, false);
 
 
-
-
     function onPantheon() {
       // $('#country2').css("display", 'none');
       $('#infoBoard3').css("display", 'block');
@@ -2513,13 +1868,6 @@
       deletePin();
       stopTravel();
       isPantheon = true;
-
-      // let res = drawHist('pantheon', drawHistDurationNomal, 'new');
-      // barWidth = res.width;
-      // histData = res.histData;
-      // scoreMax = res.scoreMax;
-      // histScoreData = res.scoreData;
-
       dataList['pantheonData'].drawHist(2000, 'new');
 
       $('#wbButton2').css("display", 'none');
@@ -2544,11 +1892,6 @@
       TweenMax.killAll();
       deletePin();
       isPantheon = false;
-      // let res = drawHist(selectedType, drawHistDurationNomal, 'new');
-      // barWidth = res.width;
-      // histData = res.histData;
-      // scoreMax = res.scoreMax;
-      // histScoreData = res.scoreData;
 
       let selectedType = returnSelectedWBtype();
       console.log(selectedType);
@@ -2625,8 +1968,6 @@
     }
 
 
-
-
     /* detect whether onInfo or not */
     infoObject = document.getElementsByClassName('infoObject');
     for (let i = 0, l = infoObject.length; i < l; i++) {
@@ -2650,8 +1991,6 @@
       isTouchInfoObject = true;
     }
 
-    histCanvas = document.querySelector("#histgram");
-    histCanvas.addEventListener('mousemove', getCanvasColor, false);
 
     /* get canvas color */
     function getCanvasColor(event) {
@@ -2691,43 +2030,6 @@
     drawHist = function () {
       return {};
     };
-
-
-    /* highlight selected country */
-    // highlightedBarList = [];
-    //
-    // function highlightedBar(countryName, data, scoreMax) {
-    //   let h;
-    //   let index;
-    //   for (let i = 0; data.length > i; i++) {
-    //     if (data[i].country === countryName) {
-    //       index = i;
-    //       highlightedBarList.push(i)
-    //     }
-    //   }
-    //   // highlight color
-    //   canvasContext.fillStyle = highlightedBarColor;
-    //   h = (data[index].score) / scoreMax * histCanvas.height;
-    //   canvasContext.fillRect(barWidth * index, histCanvas.height - h, barWidth, h);
-    // }
-    //
-    // redrawHighlightedBar = function (indexList, data, scoreMax) {
-    //   let h;
-    //   for (let i = 0; indexList.length > i; i++) {
-    //     // highlight color
-    //     canvasContext.fillStyle = highlightedBarColor;
-    //     h = (data[indexList[i]].score) / scoreMax * histCanvas.height;
-    //     canvasContext.fillRect(barWidth * indexList[i], histCanvas.height - h, barWidth, h);
-    //   }
-    // };
-
-
-    /*
-    // move camera position function
-    */
-    /* move position in some separate times using quaternion */
-
-
 
 
     /*
@@ -2873,7 +2175,7 @@
 
         console.log(countryNameGlobal);
 
-        Infobord.displayInfo(countryNameGlobal);
+        infoBordObj.displayInfo(countryNameGlobal);
         isSearching = false;
         isInfoObject = false;
         // console.log(isInfoObject);
