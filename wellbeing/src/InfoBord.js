@@ -134,7 +134,7 @@ export class InfoBord {
     return text;
   }
 
-  displayInfo(countryName) {
+  displayInfo(countryName, earth, camera, controls) {
     this.countryNameDisplayed = countryName;
     if (!this.isFirstDisplay) {
       TweenMax.killAll();
@@ -180,7 +180,7 @@ export class InfoBord {
       let longitude = locationResult.longitude;
       // Location.moveCamera(latitude, longitude);
 
-       moveCamera(latitude, longitude);
+       this.location.moveCamera(latitude, longitude, earth, camera, controls);
 
       $('#country').empty().append(countryName);
       $('#country4').empty().append(countryName);
@@ -281,7 +281,7 @@ export class InfoBord {
       promise: promise,
       cancel: function () {
         clearTimeout(timeout);
-        isClicked = false;
+        // isClicked = false;
       }
     };
   }
@@ -339,7 +339,7 @@ export class InfoBord {
     setTimeout(() => {
       this.tweenWb1 = TweenMax.to("#country2", 1.0, {
         opacity: 1.0,
-        onComplete: function () {
+        onComplete: () => {
           this.tweenWb2 = TweenMax.to(".infoBoardContent2", 1.0, {
             opacity: 1.0,
           });
@@ -359,7 +359,7 @@ export class InfoBord {
     setTimeout(() => {
       this.tweenWb1 = TweenMax.to("#country2", 1.0, {
         opacity: 1.0,
-        onComplete: function () {
+        onComplete: () => {
           this.tweenWb2 = TweenMax.to(".infoBoardContent2", 1.0, {
             opacity: 1.0,
           });
@@ -586,7 +586,7 @@ export class InfoBord {
     setTimeout(() => {
       this.tweenP1 = TweenMax.to("#country3", 1.0, {
         opacity: 1.0,
-        onComplete: function () {
+        onComplete: () => {
           $('.infoBoardContent3').css("display", 'block');
           this.tweenP2 = TweenMax.to(".infoBoardContent3", 1.0, {
             opacity: 1.0,

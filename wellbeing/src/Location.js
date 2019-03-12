@@ -25,6 +25,8 @@ export class Location {
     this.pinSphereGeometry = new THREE.SphereBufferGeometry(this.pinSphereRadius, 60, 60);
 
     this.pinList = [];
+
+    this.isMoveCamera = false;
   }
 
 
@@ -100,24 +102,24 @@ export class Location {
       count++
     };
 
-    let id = setInterval(function () {
+    let id = setInterval(() => {
       earth.rotation.y = 0;
-      // isMoveCamera = true;
+      this.isMoveCamera = true;
       controls.enableRotate = false;
       moveCameraQuaternion(stepAngle);
       if (count > step - 1) {
-        this.createPin(latitude, longitude);
+        this.createPin(earth, latitude, longitude);
         clearInterval(id);
-        // isMoveCamera = false;
+        this.isMoveCamera = false;
         // if (!isTravelAuto) {
-        //   controls.enableRotate = true;
+          controls.enableRotate = true;
         // }
       }
     }, 1000 / step);
   }
 
 
-  static convertGeoCoords(latitude, longitude, radius = 1.0) {
+  convertGeoCoords(latitude, longitude, radius = 1.0) {
     let latRad = latitude * (Math.PI / 180);
     let lonRad = -longitude * (Math.PI / 180);
 
@@ -127,7 +129,7 @@ export class Location {
     return new THREE.Vector3(x, y, z);
   }
 
-  createPin(latitude = 0, longitude = 0) {
+  createPin(earth, latitude = 0, longitude = 0) {
     const pin = this.makePinObj();
     let latRad = latitude * (Math.PI / 180);
     let lonRad = -longitude * (Math.PI / 180);
@@ -136,7 +138,7 @@ export class Location {
     pin.rotation.set(0.0, -lonRad, latRad - Math.PI * 0.5);
     pin.name = 'pin';
     this.pinList.push(pin);
-    this.earth.add(pin);
+    earth.add(pin);
   }
 
   makePinObj() {
@@ -154,9 +156,9 @@ export class Location {
   }
 
 
-  deletePin() {
+  deletePin(earth) {
     for (let i = 0, l = this.pinList.length; l > i; i++) {
-      this.earth.remove(this.pinList[i]);
+      earth.remove(this.pinList[i]);
     }
     this.pinList = [];
   }

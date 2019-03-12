@@ -188,7 +188,7 @@ import {InfoBord} from './InfoBord';
   //   earth.add(pin);
   // }
   //
-  // function deletePin() {
+  // function deletePin(earth) {
   //   for (let i = 0, l = pinList.length; l > i; i++) {
   //     earth.remove(pinList[i]);
   //   }
@@ -380,8 +380,8 @@ import {InfoBord} from './InfoBord';
       if (typeof countryNameDisplayed !== 'undefined') {
         if (drawType === 'new') {
           if (!isTravelAuto) {
-            locationObj.deletePin();
-            this.infoBordObj.displayInfo(countryNameDisplayed);
+            locationObj.deletePin(earth);
+            // this.infoBordObj.displayInfo(countryNameDisplayed);
           }
         }
       }
@@ -495,13 +495,13 @@ import {InfoBord} from './InfoBord';
       if (this.getSelectedTypeFromButton() === this.type) {
         if (!isTravelAuto) {
           if (isFillHist) {
-            if (!isMoveCamera) {
+            // if (!isMoveCamera) {
               console.log('click', this.canvas.mouseOnCountry, this.type);
-              locationObj.deletePin();
+              locationObj.deletePin(earth);
               console.log(this.type);
               this.infoBordObj.displayInfo(this.canvas.mouseOnCountry);
               console.log('conducted', this.type);
-            }
+            // }
           }
         }
       }
@@ -581,7 +581,7 @@ import {InfoBord} from './InfoBord';
   /* interactive land function */
   let countryNameGlobal = 0;
   let countryNameDisplayed;
-  let isClicked = false;
+  // let isClicked = false;
   let dragFlag = false;
   let isLand = false;
   let isInfoObject = false;
@@ -592,7 +592,7 @@ import {InfoBord} from './InfoBord';
   let latitude;
   let longitude;
   let isFinishStartTween = false;
-  let isMoveCamera = false;
+  // let isMoveCamera = false;
   let isMoveStop = true;
 
 
@@ -785,7 +785,7 @@ import {InfoBord} from './InfoBord';
       infoBordObj.fadeInfoBoardText();
 
       TweenMax.killAll();
-      locationObj.deletePin();
+      locationObj.deletePin(earth);
       stopTravel();
 
       if (isTravelAuto) {
@@ -1010,10 +1010,10 @@ import {InfoBord} from './InfoBord';
       if (dragFlag) {
         if (isFinishStartTween) {
           if (!isTravelAuto) {
-            if (!isMoveCamera) {
+            if (!locationObj.isMoveCamera) {
               infoBordObj.fadeInfoBoardText();
               killTweenTextAnimation();
-              locationObj.deletePin();
+              locationObj.deletePin(earth);
             }
           }
         }
@@ -1025,11 +1025,11 @@ import {InfoBord} from './InfoBord';
     window.addEventListener("touchstart", function () {
       if (isFinishStartTween) {
         if (!isTravelAuto) {
-          if (!isMoveCamera) {
+          if (!locationObj.isMoveCamera) {
             if (isLand) {
               infoBordObj.fadeInfoBoardText();
               killTweenTextAnimation();
-              locationObj.deletePin();
+              locationObj.deletePin(earth);
             }
           }
         }
@@ -1128,12 +1128,12 @@ import {InfoBord} from './InfoBord';
 
     /* camera */
     camera = new THREE.PerspectiveCamera(60, canvasWidth / canvasHeight, 0.1, 5.0);
-    camera.name = 'camera';  // name for Location class
+    // camera.name = 'camera';  // name for Location class
     camera.position.z = initCameraPosition.z;
-    scene.add(camera);
+    // scene.add(camera);
 
     controls = new THREE.OrbitControls(camera, renderer.domElement);
-    controls.name = 'controls';  // name for Location class
+    // controls.name = 'controls';  // name for Location class
     controls.enablePan = false;
     controls.enableZoom = false;
     controls.minDistance = 2.0;
@@ -1141,7 +1141,7 @@ import {InfoBord} from './InfoBord';
     controls.rotateSpeed = 0.1;
     controls.enableDamping = true;
     controls.dampingFactor = 0.2;
-    scene.add(controls);
+    // scene.add(controls);
 
 
     /* light for marker Pin */
@@ -1175,7 +1175,7 @@ import {InfoBord} from './InfoBord';
       //wireframe: true,
     });
     earth = new THREE.Mesh(geometry, material);
-    earth.name = 'earth';  // name for Location class
+    // earth.name = 'earth';  // name for Location class
 
 
 
@@ -1216,9 +1216,9 @@ import {InfoBord} from './InfoBord';
     earth.position.y = initEarthPosition.y;
     earth.position.z = initEarthPosition.z;
 
-    console.log(scene.getObjectByName('earth', true));
-    console.log(scene.getObjectByName('camera', true));
-    console.log(scene.getObjectByName('controls', true));
+    // console.log(scene.getObjectByName('earth', true));
+    // console.log(scene.getObjectByName('camera', true));
+    // console.log(scene.getObjectByName('controls', true));
 
 
     /* make well-being button in order to show score */
@@ -1229,7 +1229,7 @@ import {InfoBord} from './InfoBord';
         /* delete infoBoard2 */
         killTweenTextAnimation();
         infoBordObj.fadeInfoBoardText();
-        locationObj.deletePin();
+        locationObj.deletePin(earth);
 
         const wbType = {'ladderData': 0, 'positiveData': 1, 'negativeData': 2, 'gdpData': 3};
         const type = e.target.id.slice(0, -4) + 'Data';
@@ -1239,7 +1239,7 @@ import {InfoBord} from './InfoBord';
 
         /* travel type check */
         if (isTravelAuto) {
-          locationObj.deletePin();
+          locationObj.deletePin(earth);
           travelWellbeing();
         }
       }, false);
@@ -1250,7 +1250,7 @@ import {InfoBord} from './InfoBord';
     isPantheon = false;
     window.addEventListener("keydown", function (event) {
       // console.log(event.keyCode, event.keyCode === 32);
-      if (!isMoveCamera) {
+      if (!locationObj.isMoveCamera) {
         if (event.keyCode === 32) {  // space
           console.log('space');
           onPantheon();
@@ -1279,7 +1279,7 @@ import {InfoBord} from './InfoBord';
       infoBordObj.setInfoTypeNone();
 
       TweenMax.killAll();
-      locationObj.deletePin();
+      locationObj.deletePin(earth);
       stopTravel();
       isPantheon = true;
       dataList['pantheonData'].drawHist(2000, 'new');
@@ -1304,7 +1304,7 @@ import {InfoBord} from './InfoBord';
       }
 
       TweenMax.killAll();
-      locationObj.deletePin();
+      locationObj.deletePin(earth);
       isPantheon = false;
 
       let selectedType = returnSelectedWBtype();
@@ -1346,7 +1346,7 @@ import {InfoBord} from './InfoBord';
         if (isFinishStartTween) {
           if (!isTravelAuto) {
             if (!isInfoObject) {
-              if (!isMoveCamera) {
+              if (!locationObj.isMoveCamera) {
                 if (intersects.length > 0) {
                   if (intersects[0].point !== null) {
                     if (intersects[0].object.name === "land") {
@@ -1374,8 +1374,8 @@ import {InfoBord} from './InfoBord';
       if (isFinishStartTween) {
         if (!dragFlag) {
           if (isLand) {
-            locationObj.deletePin();
-            infoBordObj.displayInfo(countryNameGlobal);
+            locationObj.deletePin(earth);
+            infoBordObj.displayInfo(countryNameGlobal, earth, camera, controls);
           }
         }
       }
@@ -1442,7 +1442,7 @@ import {InfoBord} from './InfoBord';
             infoBordObj.fadeInfoBoardVisual();
             infoBordObj.fadeInfoBoardText();
 
-            locationObj.deletePin();
+            locationObj.deletePin(earth);
             travelWellbeing();
           }, 5000);
         }
@@ -1546,11 +1546,11 @@ import {InfoBord} from './InfoBord';
 
       selectorSearch.on("autocompleteclose", function () {
         countryNameGlobal = $(selectorSearchID[i])[0].innerHTML;
-        locationObj.deletePin();
+        locationObj.deletePin(earth);
 
         console.log(countryNameGlobal);
 
-        infoBordObj.displayInfo(countryNameGlobal);
+        infoBordObj.displayInfo(countryNameGlobal, earth, camera, controls);
         isSearching = false;
         isInfoObject = false;
         // console.log(isInfoObject);
