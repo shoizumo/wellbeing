@@ -872,7 +872,7 @@ import {timeline} from './data/timeline';
     }
     searchArray = searchArray.sort();
 
-    let selectorSearchID = ["#country", "#country4"];
+    let selectorSearchID = ['#country', '#country2', '#country3', '#country4'];
     for (let i = 0, l = selectorSearchID.length; i < l; i++) {
       let selectorSearch = $(selectorSearchID[i]);
       selectorSearch.autocomplete({
