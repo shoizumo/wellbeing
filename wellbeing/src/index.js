@@ -6,267 +6,6 @@ import {Hist} from './Hist';
 
 (() => {
 
-  ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-  // Data canvas //
-  // class HistCanvas {
-  //   constructor() {
-  //     this.histArea = document.querySelector("#histgram");
-  //     this.context = this.histArea.getContext("2d");
-  //     // this.setCanvasSize();
-  //     this.context.globalAlpha = 1.0;  // for safari(fillStyle alpha doesn't work)
-  //
-  //     const histgram = $('#histgram');
-  //     this.histArea.width = histgram.width();
-  //     this.histArea.height = histgram.height();
-  //     this.previousWidth = histgram.width();
-  //
-  //     this.tooltipHist = $('#tooltipHist');
-  //     this.mouseOnCountry = '';
-  //     this.histArea.addEventListener('mousemove', this.getCanvasColor.bind(this), false);
-  //   }
-  //
-  //   get width() {
-  //     return this.histArea.width;
-  //   }
-  //
-  //   get height() {
-  //     return this.histArea.height;
-  //   }
-  //
-  //   set width(w) {
-  //     this.histArea.width = w;
-  //     this.previousWidth = w;
-  //   }
-  //
-  //   getCanvasColor(event) {
-  //     let eventLocation = this.getEventLocation(this.histArea, event);
-  //     // let context = this.getContext('2d');
-  //     let pixelData = this.context.getImageData(eventLocation.x, eventLocation.y, 1, 1).data;
-  //
-  //     // if nofill, isInfoObject = false
-  //     isInfoObject = (pixelData[0] > 0);
-  //     isFillHist = (pixelData[0] > 0);
-  //   }
-  //
-  //   getEventLocation(element, event) {
-  //     let pos = this.getElementPosition(element);
-  //     return {
-  //       x: (event.pageX - pos.x),
-  //       y: (event.pageY - pos.y)
-  //     };
-  //   }
-  //
-  //
-  //   getElementPosition(obj) {
-  //     let curleft = 0, curtop = 0;
-  //     if (obj.offsetParent) {
-  //       do {
-  //         curleft += obj.offsetLeft;
-  //         curtop += obj.offsetTop;
-  //       } while (obj = obj.offsetParent);
-  //       return {x: curleft, y: curtop};
-  //     }
-  //     return undefined;
-  //   }
-  //
-  //   // setAlpha(alpha) {
-  //   //   this.globalAlpha = alpha;
-  //   // }
-  //
-  //
-  //   setNomalColor() {
-  //     this.context.fillStyle = "rgb(100, 100, 100)";
-  //   }
-  //
-  //   setHighlightColor() {
-  //     this.context.fillStyle = "rgb(150, 50, 50)";
-  //   }
-  // }
-
-
-
-  // Hist class //
-  // class Hist {
-  //   constructor(dataArray, scoreArray, type, infoBordObj) {
-  //     this.data = dataArray;
-  //     this.scoreData = scoreArray;
-  //     this.type = type;
-  //
-  //     this.infoBord = infoBordObj;
-  //
-  //     this.canvas = new HistCanvas();
-  //     this.highlightedBarList = [];
-  //
-  //     this.canvas.histArea.addEventListener('mousemove', this.onHistRanking.bind(this), false);
-  //     this.canvas.histArea.addEventListener('mouseout', this.outHistRanking.bind(this), false);
-  //     this.canvas.histArea.addEventListener('click', this.clickHistRanking.bind(this), false);
-  //
-  //   }
-  //
-  //   get max() {
-  //     return this.scoreData[0].score;
-  //   }
-  //
-  //   get min() {
-  //     return this.scoreData[this.scoreData.length - 1].score;
-  //   }
-  //
-  //   resetHighlightedBarList() {
-  //     highlightedBarList = [];
-  //   }
-  //
-  //   drawHist(duration, drawType) {
-  //     this.resetHighlightedBarList();
-  //
-  //     /* drawType: new, redraw */
-  //     console.log('drawWbHist', this.type);
-  //     clearInterval(drawSetInterval);
-  //     this.histLoop(this.data, duration, drawType);
-  //
-  //     // well-being typeが変わるとき(=draw hist時)にinfoも書き直す(time line->pie chartのときにtweenが無効になるため)
-  //     if (typeof countryNameDisplayed !== 'undefined') {
-  //       if (drawType === 'new') {
-  //         if (!isTravelAuto) {
-  //           this.infoBord.location.deletePin();
-  //           // this.infoBord.displayInfo(countryNameDisplayed);
-  //         }
-  //       }
-  //     }
-  //   };
-  //
-  //   histLoop(data, duration, drawType) {
-  //     console.log(this.type);
-  //     this.canvas.context.clearRect(0, 0, 9000, this.canvas.height);
-  //     let numData = data.length;
-  //     let width = this.histWidth;
-  //
-  //     // draw histogram with loop rect
-  //     let i = 0;
-  //     // console.log(numData, data);
-  //     drawSetInterval = setInterval(() => {
-  //       this.fillBar(width, i);
-  //       i++;
-  //
-  //       if (i > numData - 1) {
-  //         clearInterval(drawSetInterval);
-  //         this.highlightRedrawHist(drawType)
-  //       }
-  //     }, duration / numData);
-  //     isHistDisplay = true;
-  //   }
-  //
-  //   get histWidth() {
-  //     return this.mathFloor(this.canvas.width / this.data.length, 5);
-  //   }
-  //
-  //   fillBar(width, i) {
-  //     this.canvas.setNomalColor();
-  //     // this.canvas.setAlpha(0.5);
-  //     let max = this.type === 'negative' ? this.min : this.max;
-  //     let h = (this.data[i].score) / max * this.canvas.height;
-  //     this.canvas.context.fillRect(width * i, this.canvas.height - h, width, h);
-  //   }
-  //
-  //   highlightRedrawHist(drawType) {
-  //     if (drawType === 'redraw') {
-  //       this.redrawHighlightedBar(this.highlightedBarList, this.data);
-  //     }
-  //   }
-  //
-  //   mathFloor(value, base) {
-  //     let b = Math.pow(10, base);
-  //     return Math.floor(value * b) / b;
-  //   }
-  //
-  //   redrawHighlightedBar(indexList, data) {
-  //     let h;
-  //     for (let i = 0; indexList.length > i; i++) {
-  //       // highlight color
-  //       this.canvas.setHighlightColor();
-  //       let max = this.type === 'negative' ? this.min : this.max;
-  //       h = (data[indexList[i]].score) / max * this.canvas.height;
-  //       this.canvas.context.fillRect(this.histWidth * indexList[i], this.canvas.height - h, this.histWidth, h);
-  //     }
-  //   }
-  //
-  //   highlightBar(countryName) {
-  //     let h;
-  //     let index;
-  //     for (let i = 0, l = this.data.length; l > i; i++) {
-  //       if (this.data[i].country === countryName) {
-  //         index = i;
-  //         this.highlightedBarList.push(i)
-  //       }
-  //     }
-  //     // highlight color
-  //     this.canvas.setHighlightColor();
-  //     let max = this.type === 'negative' ? this.min : this.max;
-  //     h = (this.data[index].score) / max * this.canvas.height;
-  //     this.canvas.context.fillRect(this.histWidth * index, this.canvas.height - h, this.histWidth, h);
-  //   }
-  //
-  //
-  //   onHistRanking(event) {
-  //     if (this.getSelectedTypeFromButton() === this.type) {
-  //       // console.log('onHist', isFillHist);
-  //       if (isHistDisplay) {
-  //         if (isFillHist) {
-  //           let rect = event.target.getBoundingClientRect();
-  //           let mouseX = Math.abs(event.clientX - rect.left);
-  //           let index = Math.floor(mouseX / this.histWidth);
-  //
-  //           document.getElementById("canvasWrapper").classList.add("canvasWrapperPointer");
-  //           // console.log(index);
-  //           this.canvas.mouseOnCountry = this.data[index]['country'];
-  //           this.canvas.tooltipHist[0].innerText = this.canvas.mouseOnCountry;
-  //           this.canvas.tooltipHist.css({opacity: 1.0});
-  //
-  //           this.canvas.tooltipHist.css({top: event.clientY * 0.95});
-  //           this.canvas.tooltipHist.css({left: event.clientX * 1.0 - this.canvas.tooltipHist.width() / 2 - 5});
-  //
-  //         } else {
-  //           document.getElementById("canvasWrapper").classList.remove("canvasWrapperPointer");
-  //           this.canvas.tooltipHist.css({opacity: 0.0});
-  //           this.canvas.tooltipHist.css({top: 0});
-  //           this.canvas.tooltipHist.css({left: 0});
-  //         }
-  //       }
-  //     }
-  //   }
-  //
-  //   outHistRanking() {
-  //     this.canvas.tooltipHist.css({opacity: 0.0});
-  //   }
-  //
-  //   clickHistRanking() {
-  //     if (this.getSelectedTypeFromButton() === this.type) {
-  //       if (!isTravelAuto) {
-  //         if (isFillHist) {
-  //           // if (!isMoveCamera) {
-  //             console.log('click', this.canvas.mouseOnCountry, this.type);
-  //             this.infoBord.location.deletePin();
-  //             console.log(this.type);
-  //             this.infoBord.displayInfo(this.canvas.mouseOnCountry);
-  //             console.log('conducted', this.type);
-  //           // }
-  //         }
-  //       }
-  //     }
-  //   }
-  //
-  //   getSelectedTypeFromButton() {
-  //     let type = $('.wbButton1.selectedBtn')[0].id.slice(0, -4)
-  //     if (typeof type === 'undefined') {
-  //       type = 'pantheon'
-  //     }
-  //     return type
-  //   }
-  //
-  // }
-
-  ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-
   ///////////////////////
   /* Declare variables */
   ///////////////////////
@@ -300,8 +39,6 @@ import {Hist} from './Hist';
   let userAgent;
 
 
-
-
   /* texture */
   let earthMap;
   let earthMapLoader;
@@ -320,24 +57,18 @@ import {Hist} from './Hist';
   let wbButton;
   let searchArray;
   let travelModeSwitch;
-  let isTravelAuto = false;
   let isTouchInfoObject = false;
   let isSPBtnDisplay = true;
 
 
   /* ranking histogram */
-  let isHistDisplay = false;
   let travelIndex = 0;
-  let highlightedBarList;
-
 
   /* interactive land function */
   let countryNameGlobal = 0;
-  let countryNameDisplayed;
   let dragFlag = false;
   let isLand = false;
   let isInfoObject = false;
-  let isFillHist = false;
   let infoObject;
   let isSearching = false;
   let latitude;
@@ -365,13 +96,16 @@ import {Hist} from './Hist';
   let travelPantheon;
   let travelSetInterval;
   let stopTravel;
-  let drawSetInterval;
 
 
   let returnSelectedWBtype;
   let setSelectedWBButton;
 
   let killTweenTextAnimation;
+
+
+  let drawHistDurationNomal = 1500;
+  let drawHistDurationRedraw = 0;
 
 
   /////////////////
@@ -392,7 +126,6 @@ import {Hist} from './Hist';
     if (userAgent.indexOf('iPhone') > 0 || userAgent.indexOf('Android') > 0 && userAgent.indexOf('Mobile') > 0) {
       isSP = true;
     }
-
 
 
     /* load earth texture */
@@ -504,8 +237,6 @@ import {Hist} from './Hist';
     // earth.name = 'earth';  // name for Location class
 
 
-
-
     /* earth outline object */
     geometry = new THREE.SphereGeometry(radius + 0.003, 120, 120);
     material = new THREE.MeshBasicMaterial({
@@ -546,20 +277,23 @@ import {Hist} from './Hist';
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
-      const datasetdObj = new Dataset(wbData, pantheon, timeline);
-      const locationObj = new Location(latlon, earth, controls, camera);
-      const infoBordObj = new InfoBord(datasetdObj, locationObj);
+    const datasetdObj = new Dataset(wbData, pantheon, timeline);
+    const locationObj = new Location(latlon, earth, controls, camera);
+    const infoBordObj = new InfoBord(datasetdObj, locationObj);
 
 
+    const ladderData = new Hist(datasetdObj.ladder, datasetdObj.ladderScore, 'ladder', infoBordObj);
+    const positiveData = new Hist(datasetdObj.positive, datasetdObj.positiveScore, 'positive', infoBordObj);
+    const negativeData = new Hist(datasetdObj.negative, datasetdObj.negativeScore, 'negative', infoBordObj);
+    const gdpData = new Hist(datasetdObj.gdp, datasetdObj.gdpScore, 'gdp', infoBordObj);
+    const pantheonData = new Hist(datasetdObj.pantheon, datasetdObj.pantheonScore, 'pantheon', infoBordObj);
 
-      const ladderData = new Hist(datasetdObj.ladder, datasetdObj.ladderScore, 'ladder', infoBordObj);
-      const positiveData = new Hist(datasetdObj.positive, datasetdObj.positiveScore, 'positive', infoBordObj);
-      const negativeData = new Hist(datasetdObj.negative, datasetdObj.negativeScore, 'negative', infoBordObj);
-      const gdpData = new Hist(datasetdObj.gdp, datasetdObj.gdpScore, 'gdp', infoBordObj);
-      const pantheonData = new Hist(datasetdObj.pantheon, datasetdObj.pantheonScore, 'pantheon', infoBordObj);
+    const dataList = {ladderData, positiveData, negativeData, gdpData, pantheonData};
 
-      const dataList = {ladderData, positiveData, negativeData, gdpData, pantheonData};
 
+    function checkIsTravelManual(){
+      return document.getElementById("travelModeSwitch-checkbox").checked;
+    }
 
 
     //////////////////////////////////////////////////////////////////////////
@@ -606,9 +340,6 @@ import {Hist} from './Hist';
     //////////////////////////////////////////////////////////////////////////
 
 
-
-
-
     //////////////////////////////////////////////////////////////////////////
     returnSelectedWBtype = function () {
       return $('#wbButton2').find('.selectedBtn').attr("id").slice(0, -4) + 'Data';
@@ -622,7 +353,6 @@ import {Hist} from './Hist';
     //////////////////////////////////////////////////////////////////////////
 
 
-
     //////////////////////////////////////////////////////////////////////////
     /* switch travel type button */
     travelModeSwitch = document.getElementById('travelModeSwitch-label');
@@ -634,12 +364,12 @@ import {Hist} from './Hist';
 
 
     travelModeSwitch.addEventListener('click', () => {
-      isTravelAuto = !isTravelAuto;
+      //isTravelAuto = checkIsTravelManual();
 
       // canvasContext.globalAlpha = 0.5;
       let selectedType = returnSelectedWBtype();
       console.log(selectedType);
-      dataList[selectedType].drawHist(2000, 'new');
+      dataList[selectedType].drawHist(drawHistDurationNomal, 'new');
 
       infoBordObj.fadeInfoBoardVisual();
       infoBordObj.fadeInfoBoardText();
@@ -648,7 +378,7 @@ import {Hist} from './Hist';
       locationObj.deletePin();
       stopTravel();
 
-      if (isTravelAuto) {
+      if (!checkIsTravelManual()) {
         isMoveStop = true;
         controls.enableRotate = false;
         if (!isPantheon) {
@@ -724,7 +454,7 @@ import {Hist} from './Hist';
           }, 400);
           setTimeout(() => {
             // landBase.material.opacity = 1.0;
-            dataList['ladderData'].drawHist(2000, 'new');
+            dataList['ladderData'].drawHist(drawHistDurationNomal, 'new');
 
 
             isFinishStartTween = true;
@@ -743,14 +473,17 @@ import {Hist} from './Hist';
     //////////////////////////////////////////////////////////////////////////
 
 
-
     //////////////////////////////////////////////////////////////////////////
     killTweenTextAnimation = function () {
       if (!infoBordObj.isFirstDisplay) {
         infoBordObj.tweenWb1.kill();
-        infoBordObj.tweenWb2.kill();
         infoBordObj.tweenP1.kill();
-        infoBordObj.tweenP2.kill();
+        if (infoBordObj.tweenWb2 !== ''){
+          infoBordObj.tweenWb2.kill();
+        }
+        if (infoBordObj.tweenP2 !== ''){
+          infoBordObj.tweenP2.kill();
+        }
       }
     };
     //////////////////////////////////////////////////////////////////////////
@@ -820,6 +553,7 @@ import {Hist} from './Hist';
         drag.classList.remove("drag");
       }
     }
+
     //////////////////////////////////////////////////////////////////////////
 
 
@@ -841,7 +575,7 @@ import {Hist} from './Hist';
 
           let selectedType = returnSelectedWBtype();
           console.log(selectedType);
-          dataList[selectedType].drawHist(2000, 'new');
+          dataList[selectedType].drawHist(drawHistDurationRedraw, 'redraw');
         }
       }
     }, false);
@@ -866,7 +600,7 @@ import {Hist} from './Hist';
 
       if (dragFlag) {
         if (isFinishStartTween) {
-          if (!isTravelAuto) {
+          if (checkIsTravelManual()) {
             if (!locationObj.isMoveCamera) {
               infoBordObj.fadeInfoBoardText();
               killTweenTextAnimation();
@@ -881,7 +615,7 @@ import {Hist} from './Hist';
     /* touch event for SP */
     window.addEventListener("touchstart", function () {
       if (isFinishStartTween) {
-        if (!isTravelAuto) {
+        if (checkIsTravelManual()) {
           if (!locationObj.isMoveCamera) {
             if (isLand) {
               infoBordObj.fadeInfoBoardText();
@@ -941,10 +675,10 @@ import {Hist} from './Hist';
         const type = e.target.id.slice(0, -4) + 'Data';
         const index = wbType[type];
         setSelectedWBButton(index);
-        dataList[type].drawHist(2000, 'new');
+        dataList[type].drawHist(drawHistDurationNomal, 'new');
 
         /* travel type check */
-        if (isTravelAuto) {
+        if (!checkIsTravelManual()) {
           locationObj.deletePin();
           travelWellbeing();
         }
@@ -960,7 +694,7 @@ import {Hist} from './Hist';
         if (event.keyCode === 32) {  // space
           console.log('space');
           onPantheon();
-          if (isTravelAuto) {
+          if (!checkIsTravelManual()) {
             infoBordObj.fadeInfoBoardPantheon();
             travelPantheon();
           }
@@ -968,7 +702,7 @@ import {Hist} from './Hist';
         } else if (event.keyCode === 27) {
           console.log('esc');
           offPantheon();
-          if (isTravelAuto) {
+          if (!checkIsTravelManual()) {
             stopTravel();
             travelWellbeing();
           }
@@ -988,7 +722,7 @@ import {Hist} from './Hist';
       locationObj.deletePin();
       stopTravel();
       isPantheon = true;
-      dataList['pantheonData'].drawHist(2000, 'new');
+      dataList['pantheonData'].drawHist(drawHistDurationNomal, 'new');
 
       $('#wbButton2').css("display", 'none');
     }
@@ -1001,7 +735,7 @@ import {Hist} from './Hist';
       $(".infoType").removeClass("selectedBtn");
 
       // もとに戻すときのinfoType設定
-      if (isTravelAuto) {
+      if (!checkIsTravelManual()) {
         infoBordObj.infoBtn[0].classList.add("selectedBtn");
         infoBordObj.setInfoTypeText();
       } else {
@@ -1015,7 +749,7 @@ import {Hist} from './Hist';
 
       let selectedType = returnSelectedWBtype();
       console.log(selectedType);
-      dataList[selectedType].drawHist(2000, 'new');
+      dataList[selectedType].drawHist(drawHistDurationNomal, 'new');
 
       $('#wbButton2').css("display", 'block');
     }
@@ -1050,7 +784,7 @@ import {Hist} from './Hist';
         body.css('cursor', 'default');
 
         if (isFinishStartTween) {
-          if (!isTravelAuto) {
+          if (checkIsTravelManual()) {
             if (!isInfoObject) {
               if (!locationObj.isMoveCamera) {
                 if (intersects.length > 0) {
@@ -1112,7 +846,6 @@ import {Hist} from './Hist';
     }
 
 
-
     /*
     // travel ranking country
     */
@@ -1143,7 +876,7 @@ import {Hist} from './Hist';
             const type = e.target.id.slice(0, -4) + 'Data';
             const nextIndex = wbType[type];
             setSelectedWBButton(nextIndex);
-            dataList[type].drawHist(2000, 'new');
+            dataList[type].drawHist(drawHistDurationNomal, 'new');
 
             infoBordObj.fadeInfoBoardVisual();
             infoBordObj.fadeInfoBoardText();

@@ -43,11 +43,13 @@ export class Hist {
     this.histLoop(this.data, duration, drawType);
 
     // well-being typeが変わるとき(=draw hist時)にinfoも書き直す(time line->pie chartのときにtweenが無効になるため)
-    if (typeof this.infoBord.countryNameDisplayed !== 'undefined') {
-      if (drawType === 'new') {
-        if (this.checkIsTravelManual()) {
-          this.infoBord.location.deletePin();
-          // this.infoBord.displayInfo(countryNameDisplayed);
+    if (!this.infoBord.isFirstDisplay){
+      if (typeof this.infoBord.countryNameDisplayed !== 'undefined') {
+        if (drawType === 'new') {
+          if (this.checkIsTravelManual()) {
+            this.infoBord.location.deletePin();
+            this.infoBord.displayInfo(this.infoBord.countryNameDisplayed);
+          }
         }
       }
     }

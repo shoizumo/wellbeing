@@ -132,7 +132,7 @@ export class InfoBord {
     return text;
   }
 
-  displayInfo(countryName, earth, camera, controls) {
+  displayInfo(countryName) {
     this.countryNameDisplayed = countryName;
     if (!this.isFirstDisplay) {
       TweenMax.killAll();
@@ -161,7 +161,7 @@ export class InfoBord {
       }
     } else {
       this.displayVisulalNoInfo();
-      this.displayTextNoInfo();
+      this.displayTextNoInfo(countryName);
       if (!this.isPantheon) {
         if ($('.infoType.selectedBtn')[0].id.slice(4,) === 'Linechart') {
           this.displayTimelineNoInfo();
@@ -352,7 +352,7 @@ export class InfoBord {
     document.getElementById("GDP2").innerHTML = '- G : ' + gRank + this.putRankOrdinal(gRank);
   }
 
-  displayTextNoInfo() {
+  displayTextNoInfo(countryName) {
     this.fadeInfoBoardText();
     setTimeout(() => {
       this.tweenWb1 = TweenMax.to("#country2", 1.0, {
@@ -365,7 +365,7 @@ export class InfoBord {
       })
     }, 1000);
 
-    document.getElementById("country2").innerHTML = countryNameGlobal;
+    document.getElementById("country2").innerHTML = countryName;
     document.getElementById("Ladder2").innerHTML = 'No data';
     document.getElementById("Positive2").innerHTML = '';
     document.getElementById("Negative2").innerHTML = '';
@@ -482,7 +482,7 @@ export class InfoBord {
   }
 
 
-  searchTimelineRank(type, countryName, Data) {
+  searchTimelineRank(type, countryName) {
     let res = this.calcWbInfo(countryName);
     let rankKey = type.slice(0, 1) + 'Rank';
     let rank = res[rankKey];
