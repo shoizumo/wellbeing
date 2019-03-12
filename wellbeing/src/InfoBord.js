@@ -8,6 +8,7 @@ export class InfoBord {
 
 
     this.countryNameDisplayed = '';
+    this._countryNameOnLand = '';
     this.isFirstDisplay = true;
 
 
@@ -89,6 +90,13 @@ export class InfoBord {
     return this.windowWidth < 1000 ? 80 : 105;
   }
 
+  get countryNameOnLand(){
+    return this._countryNameOnLand;
+  }
+
+  set countryNameOnLand(name){
+    this._countryNameOnLand = name;
+  }
 
   radius() {
     return this.windowWidth < this.w1000 ? 40 : 48;

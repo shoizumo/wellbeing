@@ -72,7 +72,6 @@ import {timeline} from './data/timeline';
   let travelIndex = 0;
 
   /* interactive land function */
-  let countryNameGlobal = 0;
   let dragFlag = false;
   let isLand = false;
   let isInfoObject = false;
@@ -109,7 +108,6 @@ import {timeline} from './data/timeline';
 
   let returnSelectedWBtype;
   let setSelectedWBButton;
-
   let killTweenTextAnimation;
 
 
@@ -298,7 +296,6 @@ import {timeline} from './data/timeline';
     const pantheonData = new Hist(datasetdObj.pantheon, datasetdObj.pantheonScore, 'pantheon', infoBordObj);
 
     const dataList = {ladderData, positiveData, negativeData, gdpData, pantheonData};
-
 
     function checkIsTravelManual(){
       return document.getElementById("travelModeSwitch-checkbox").checked;
@@ -689,8 +686,8 @@ import {timeline} from './data/timeline';
                   if (intersects[0].point !== null) {
                     if (intersects[0].object.name === "land") {
 
-                      countryNameGlobal = intersects[0].object.userData.country;
-                      tooltip[0].innerText = countryNameGlobal;
+                      infoBordObj.countryNameOnLand = intersects[0].object.userData.country;
+                      tooltip[0].innerText = infoBordObj.countryNameOnLand;
                       tooltip.css({opacity: 1.0});
                       isLand = true;
                       body.css('cursor', 'pointer');
@@ -713,7 +710,7 @@ import {timeline} from './data/timeline';
         if (!dragFlag) {
           if (isLand) {
             locationObj.deletePin();
-            infoBordObj.displayInfo(countryNameGlobal);
+            infoBordObj.displayInfo(infoBordObj.countryNameOnLand);
           }
         }
       }
@@ -886,12 +883,10 @@ import {timeline} from './data/timeline';
       });
 
       selectorSearch.on("autocompleteclose", function () {
-        countryNameGlobal = $(selectorSearchID[i])[0].innerHTML;
+        infoBordObj.countryNameOnLand = $(selectorSearchID[i])[0].innerHTML;
         locationObj.deletePin();
 
-        console.log(countryNameGlobal);
-
-        infoBordObj.displayInfo(countryNameGlobal);
+        infoBordObj.displayInfo(infoBordObj.countryNameOnLand);
         isSearching = false;
         isInfoObject = false;
         // console.log(isInfoObject);
