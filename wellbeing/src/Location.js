@@ -13,7 +13,6 @@ export class Location {
 
 
     this.center = new THREE.Vector3(0, 0, 0);
-    this.pinMaterial = new THREE.MeshPhongMaterial({color: 0xf15b47});
     this.pinConeGeometry = new THREE.ConeBufferGeometry(pinRadius, this.pinHeight, 16, 1, true);
     this.pinSphereGeometry = new THREE.SphereBufferGeometry(this.pinSphereRadius, 60, 60);
 
@@ -96,11 +95,12 @@ export class Location {
   }
 
   makePinObj() {
-    let cone = new THREE.Mesh(this.pinConeGeometry, this.pinMaterial);
+    const pinMaterial = new THREE.MeshPhongMaterial({color: 0xf15b47});  // あとで色を変えることがあるから、毎回設定
+    let cone = new THREE.Mesh(this.pinConeGeometry, pinMaterial);
     cone.position.y = this.pinHeight * 0.5;
     cone.rotation.x = Math.PI;
 
-    let sphere = new THREE.Mesh(this.pinSphereGeometry, this.pinMaterial);
+    let sphere = new THREE.Mesh(this.pinSphereGeometry, pinMaterial);
     sphere.position.y = this.pinHeight * 0.95 + this.pinSphereRadius;
 
     let group = new THREE.Group();

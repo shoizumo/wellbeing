@@ -15,8 +15,6 @@ export class Hist {
     this.canvas.histArea.addEventListener('mouseout', this.outHistRanking.bind(this), false);
     this.canvas.histArea.addEventListener('click', this.clickHistRanking.bind(this), false);
 
-    this.highlightedBarList = [];
-
     this.isHistDisplay = false;
     this.drawSetInterval = '';
 
@@ -35,9 +33,12 @@ export class Hist {
   }
 
   drawHist(duration, drawType) {
-    this.resetHighlightedBarList();
-
     /* drawType: new, redraw */
+
+    if (drawType === 'new'){
+      this.resetHighlightedBarList();
+    }
+
     console.log('drawWbHist', this.type);
     clearInterval(this.drawSetInterval);
     this.histLoop(this.data, duration, drawType);
@@ -54,11 +55,6 @@ export class Hist {
       }
     }
   };
-
-
-  // drawHistNoDisplay(duration, drawType) {
-  //   drawHist(duration, drawType)
-  // };
 
   histLoop(data, duration, drawType) {
     console.log(this.type);
