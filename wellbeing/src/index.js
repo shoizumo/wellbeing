@@ -356,20 +356,13 @@ import {Hist} from './Hist';
     //////////////////////////////////////////////////////////////////////////
     /* switch travel type button */
     travelModeSwitch = document.getElementById('travelModeSwitch-label');
-
-    $('#travelModeSwitch-inner::before').attr('class', 'selectedSwitch');
-
-    console.log($('#travelModeSwitch-checkbox'));
-    console.log($('.selectedSwitch'));
-
-
     travelModeSwitch.addEventListener('click', () => {
       //isTravelAuto = checkIsTravelManual();
 
       // canvasContext.globalAlpha = 0.5;
       let selectedType = returnSelectedWBtype();
       console.log(selectedType);
-      dataList[selectedType].drawHist(drawHistDurationNomal, 'new');
+      dataList[selectedType].drawHist(drawHistDurationNomal, 'redraw');
 
       infoBordObj.fadeInfoBoardVisual();
       infoBordObj.fadeInfoBoardText();
@@ -378,7 +371,9 @@ import {Hist} from './Hist';
       locationObj.deletePin();
       stopTravel();
 
-      if (!checkIsTravelManual()) {
+      // この処理終了後に、checkedの値が変わるため、変更前の値に基づいて分岐
+      if (checkIsTravelManual()) {
+        // -> AutoModeになったとき
         isMoveStop = true;
         controls.enableRotate = false;
         if (!isPantheon) {
@@ -390,6 +385,7 @@ import {Hist} from './Hist';
         stopMove.innerText = 'Stop';
         stopMove.setAttribute('style', 'opacity:1.0;');
       } else {
+        // -> ManualModeになったとき
         isMoveStop = false;
         controls.enableRotate = true;
         stopMove.setAttribute('style', 'opacity:0.0;');

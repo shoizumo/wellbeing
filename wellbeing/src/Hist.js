@@ -55,6 +55,11 @@ export class Hist {
     }
   };
 
+
+  // drawHistNoDisplay(duration, drawType) {
+  //   drawHist(duration, drawType)
+  // };
+
   histLoop(data, duration, drawType) {
     console.log(this.type);
     this.canvas.context.clearRect(0, 0, 9000, this.canvas.height);
