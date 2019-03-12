@@ -1,12 +1,5 @@
-// 特別3dオブジェクトは初期化に使わず
-// scene.getObjectByName( "objectName", true )
-// などで、その都度取得する感じにする？
-
-
-
 export class Location {
   constructor(latlon, earthObj, controlsObj, cameraObj) {
-  // constructor(latlon) {
     this.data = latlon;
     this.numData = Object.keys(latlon).length;
 
@@ -72,9 +65,9 @@ export class Location {
         this.createPin(latitude, longitude);
         clearInterval(id);
         this.isMoveCamera = false;
-        // if (!isTravelAuto) {
+        if (this.checkIsTravelManual()) {
           this.controls.enableRotate = true;
-        // }
+        }
       }
     }, 1000 / step);
   }
@@ -122,6 +115,10 @@ export class Location {
       this.earth.remove(this.pinList[i]);
     }
     this.pinList = [];
+  }
+
+  checkIsTravelManual(){
+    return document.getElementById("travelModeSwitch-checkbox").checked;
   }
 
 

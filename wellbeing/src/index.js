@@ -1,267 +1,268 @@
 import {Dataset} from './Dataset';
 import {Location} from './Location';
 import {InfoBord} from './InfoBord';
+import {Hist} from './Hist';
 
 
 (() => {
 
   ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
   // Data canvas //
-  class HistCanvas {
-    constructor() {
-      this.histArea = document.querySelector("#histgram");
-      this.context = this.histArea.getContext("2d");
-      // this.setCanvasSize();
-      this.context.globalAlpha = 1.0;  // for safari(fillStyle alpha doesn't work)
-
-      const histgram = $('#histgram');
-      this.histArea.width = histgram.width();
-      this.histArea.height = histgram.height();
-      this.previousWidth = histgram.width();
-
-      this.tooltipHist = $('#tooltipHist');
-      this.mouseOnCountry = '';
-      this.histArea.addEventListener('mousemove', this.getCanvasColor.bind(this), false);
-    }
-
-    get width() {
-      return this.histArea.width;
-    }
-
-    get height() {
-      return this.histArea.height;
-    }
-
-    set width(w) {
-      this.histArea.width = w;
-      this.previousWidth = w;
-    }
-
-    getCanvasColor(event) {
-      let eventLocation = this.getEventLocation(this.histArea, event);
-      // let context = this.getContext('2d');
-      let pixelData = this.context.getImageData(eventLocation.x, eventLocation.y, 1, 1).data;
-
-      // if nofill, isInfoObject = false
-      isInfoObject = (pixelData[0] > 0);
-      isFillHist = (pixelData[0] > 0);
-    }
-
-    getEventLocation(element, event) {
-      let pos = this.getElementPosition(element);
-      return {
-        x: (event.pageX - pos.x),
-        y: (event.pageY - pos.y)
-      };
-    }
-
-
-    getElementPosition(obj) {
-      let curleft = 0, curtop = 0;
-      if (obj.offsetParent) {
-        do {
-          curleft += obj.offsetLeft;
-          curtop += obj.offsetTop;
-        } while (obj = obj.offsetParent);
-        return {x: curleft, y: curtop};
-      }
-      return undefined;
-    }
-
-    // setAlpha(alpha) {
-    //   this.globalAlpha = alpha;
-    // }
-
-
-    setNomalColor() {
-      this.context.fillStyle = "rgb(100, 100, 100)";
-    }
-
-    setHighlightColor() {
-      this.context.fillStyle = "rgb(150, 50, 50)";
-    }
-  }
+  // class HistCanvas {
+  //   constructor() {
+  //     this.histArea = document.querySelector("#histgram");
+  //     this.context = this.histArea.getContext("2d");
+  //     // this.setCanvasSize();
+  //     this.context.globalAlpha = 1.0;  // for safari(fillStyle alpha doesn't work)
+  //
+  //     const histgram = $('#histgram');
+  //     this.histArea.width = histgram.width();
+  //     this.histArea.height = histgram.height();
+  //     this.previousWidth = histgram.width();
+  //
+  //     this.tooltipHist = $('#tooltipHist');
+  //     this.mouseOnCountry = '';
+  //     this.histArea.addEventListener('mousemove', this.getCanvasColor.bind(this), false);
+  //   }
+  //
+  //   get width() {
+  //     return this.histArea.width;
+  //   }
+  //
+  //   get height() {
+  //     return this.histArea.height;
+  //   }
+  //
+  //   set width(w) {
+  //     this.histArea.width = w;
+  //     this.previousWidth = w;
+  //   }
+  //
+  //   getCanvasColor(event) {
+  //     let eventLocation = this.getEventLocation(this.histArea, event);
+  //     // let context = this.getContext('2d');
+  //     let pixelData = this.context.getImageData(eventLocation.x, eventLocation.y, 1, 1).data;
+  //
+  //     // if nofill, isInfoObject = false
+  //     isInfoObject = (pixelData[0] > 0);
+  //     isFillHist = (pixelData[0] > 0);
+  //   }
+  //
+  //   getEventLocation(element, event) {
+  //     let pos = this.getElementPosition(element);
+  //     return {
+  //       x: (event.pageX - pos.x),
+  //       y: (event.pageY - pos.y)
+  //     };
+  //   }
+  //
+  //
+  //   getElementPosition(obj) {
+  //     let curleft = 0, curtop = 0;
+  //     if (obj.offsetParent) {
+  //       do {
+  //         curleft += obj.offsetLeft;
+  //         curtop += obj.offsetTop;
+  //       } while (obj = obj.offsetParent);
+  //       return {x: curleft, y: curtop};
+  //     }
+  //     return undefined;
+  //   }
+  //
+  //   // setAlpha(alpha) {
+  //   //   this.globalAlpha = alpha;
+  //   // }
+  //
+  //
+  //   setNomalColor() {
+  //     this.context.fillStyle = "rgb(100, 100, 100)";
+  //   }
+  //
+  //   setHighlightColor() {
+  //     this.context.fillStyle = "rgb(150, 50, 50)";
+  //   }
+  // }
 
 
 
   // Hist class //
-  class Hist {
-    constructor(dataArray, scoreArray, type, infoBordObj) {
-      this.data = dataArray;
-      this.scoreData = scoreArray;
-      this.type = type;
-
-      this.infoBord = infoBordObj;
-
-      this.canvas = new HistCanvas();
-      this.highlightedBarList = [];
-
-      this.canvas.histArea.addEventListener('mousemove', this.onHistRanking.bind(this), false);
-      this.canvas.histArea.addEventListener('mouseout', this.outHistRanking.bind(this), false);
-      this.canvas.histArea.addEventListener('click', this.clickHistRanking.bind(this), false);
-
-    }
-
-    get max() {
-      return this.scoreData[0].score;
-    }
-
-    get min() {
-      return this.scoreData[this.scoreData.length - 1].score;
-    }
-
-    resetHighlightedBarList() {
-      highlightedBarList = [];
-    }
-
-    drawHist(duration, drawType) {
-      this.resetHighlightedBarList();
-
-      /* drawType: new, redraw */
-      console.log('drawWbHist', this.type);
-      clearInterval(drawSetInterval);
-      this.histLoop(this.data, duration, drawType);
-
-      // well-being typeが変わるとき(=draw hist時)にinfoも書き直す(time line->pie chartのときにtweenが無効になるため)
-      if (typeof countryNameDisplayed !== 'undefined') {
-        if (drawType === 'new') {
-          if (!isTravelAuto) {
-            this.infoBord.location.deletePin();
-            // this.infoBord.displayInfo(countryNameDisplayed);
-          }
-        }
-      }
-    };
-
-    histLoop(data, duration, drawType) {
-      console.log(this.type);
-      this.canvas.context.clearRect(0, 0, 9000, this.canvas.height);
-      let numData = data.length;
-      let width = this.histWidth;
-
-      // draw histogram with loop rect
-      let i = 0;
-      // console.log(numData, data);
-      drawSetInterval = setInterval(() => {
-        this.fillBar(width, i);
-        i++;
-
-        if (i > numData - 1) {
-          clearInterval(drawSetInterval);
-          this.highlightRedrawHist(drawType)
-        }
-      }, duration / numData);
-      isHistDisplay = true;
-    }
-
-    get histWidth() {
-      return this.mathFloor(this.canvas.width / this.data.length, 5);
-    }
-
-    fillBar(width, i) {
-      this.canvas.setNomalColor();
-      // this.canvas.setAlpha(0.5);
-      let max = this.type === 'negative' ? this.min : this.max;
-      let h = (this.data[i].score) / max * this.canvas.height;
-      this.canvas.context.fillRect(width * i, this.canvas.height - h, width, h);
-    }
-
-    highlightRedrawHist(drawType) {
-      if (drawType === 'redraw') {
-        this.redrawHighlightedBar(this.highlightedBarList, this.data);
-      }
-    }
-
-    mathFloor(value, base) {
-      let b = Math.pow(10, base);
-      return Math.floor(value * b) / b;
-    }
-
-    redrawHighlightedBar(indexList, data) {
-      let h;
-      for (let i = 0; indexList.length > i; i++) {
-        // highlight color
-        this.canvas.setHighlightColor();
-        let max = this.type === 'negative' ? this.min : this.max;
-        h = (data[indexList[i]].score) / max * this.canvas.height;
-        this.canvas.context.fillRect(this.histWidth * indexList[i], this.canvas.height - h, this.histWidth, h);
-      }
-    }
-
-    highlightBar(countryName) {
-      let h;
-      let index;
-      for (let i = 0, l = this.data.length; l > i; i++) {
-        if (this.data[i].country === countryName) {
-          index = i;
-          this.highlightedBarList.push(i)
-        }
-      }
-      // highlight color
-      this.canvas.setHighlightColor();
-      let max = this.type === 'negative' ? this.min : this.max;
-      h = (this.data[index].score) / max * this.canvas.height;
-      this.canvas.context.fillRect(this.histWidth * index, this.canvas.height - h, this.histWidth, h);
-    }
-
-
-    onHistRanking(event) {
-      if (this.getSelectedTypeFromButton() === this.type) {
-        // console.log('onHist', isFillHist);
-        if (isHistDisplay) {
-          if (isFillHist) {
-            let rect = event.target.getBoundingClientRect();
-            let mouseX = Math.abs(event.clientX - rect.left);
-            let index = Math.floor(mouseX / this.histWidth);
-
-            document.getElementById("canvasWrapper").classList.add("canvasWrapperPointer");
-            // console.log(index);
-            this.canvas.mouseOnCountry = this.data[index]['country'];
-            this.canvas.tooltipHist[0].innerText = this.canvas.mouseOnCountry;
-            this.canvas.tooltipHist.css({opacity: 1.0});
-
-            this.canvas.tooltipHist.css({top: event.clientY * 0.95});
-            this.canvas.tooltipHist.css({left: event.clientX * 1.0 - this.canvas.tooltipHist.width() / 2 - 5});
-
-          } else {
-            document.getElementById("canvasWrapper").classList.remove("canvasWrapperPointer");
-            this.canvas.tooltipHist.css({opacity: 0.0});
-            this.canvas.tooltipHist.css({top: 0});
-            this.canvas.tooltipHist.css({left: 0});
-          }
-        }
-      }
-    }
-
-    outHistRanking() {
-      this.canvas.tooltipHist.css({opacity: 0.0});
-    }
-
-    clickHistRanking() {
-      if (this.getSelectedTypeFromButton() === this.type) {
-        if (!isTravelAuto) {
-          if (isFillHist) {
-            // if (!isMoveCamera) {
-              console.log('click', this.canvas.mouseOnCountry, this.type);
-              this.infoBord.location.deletePin();
-              console.log(this.type);
-              this.infoBord.displayInfo(this.canvas.mouseOnCountry);
-              console.log('conducted', this.type);
-            // }
-          }
-        }
-      }
-    }
-
-    getSelectedTypeFromButton() {
-      let type = $('.wbButton1.selectedBtn')[0].id.slice(0, -4)
-      if (typeof type === 'undefined') {
-        type = 'pantheon'
-      }
-      return type
-    }
-
-  }
+  // class Hist {
+  //   constructor(dataArray, scoreArray, type, infoBordObj) {
+  //     this.data = dataArray;
+  //     this.scoreData = scoreArray;
+  //     this.type = type;
+  //
+  //     this.infoBord = infoBordObj;
+  //
+  //     this.canvas = new HistCanvas();
+  //     this.highlightedBarList = [];
+  //
+  //     this.canvas.histArea.addEventListener('mousemove', this.onHistRanking.bind(this), false);
+  //     this.canvas.histArea.addEventListener('mouseout', this.outHistRanking.bind(this), false);
+  //     this.canvas.histArea.addEventListener('click', this.clickHistRanking.bind(this), false);
+  //
+  //   }
+  //
+  //   get max() {
+  //     return this.scoreData[0].score;
+  //   }
+  //
+  //   get min() {
+  //     return this.scoreData[this.scoreData.length - 1].score;
+  //   }
+  //
+  //   resetHighlightedBarList() {
+  //     highlightedBarList = [];
+  //   }
+  //
+  //   drawHist(duration, drawType) {
+  //     this.resetHighlightedBarList();
+  //
+  //     /* drawType: new, redraw */
+  //     console.log('drawWbHist', this.type);
+  //     clearInterval(drawSetInterval);
+  //     this.histLoop(this.data, duration, drawType);
+  //
+  //     // well-being typeが変わるとき(=draw hist時)にinfoも書き直す(time line->pie chartのときにtweenが無効になるため)
+  //     if (typeof countryNameDisplayed !== 'undefined') {
+  //       if (drawType === 'new') {
+  //         if (!isTravelAuto) {
+  //           this.infoBord.location.deletePin();
+  //           // this.infoBord.displayInfo(countryNameDisplayed);
+  //         }
+  //       }
+  //     }
+  //   };
+  //
+  //   histLoop(data, duration, drawType) {
+  //     console.log(this.type);
+  //     this.canvas.context.clearRect(0, 0, 9000, this.canvas.height);
+  //     let numData = data.length;
+  //     let width = this.histWidth;
+  //
+  //     // draw histogram with loop rect
+  //     let i = 0;
+  //     // console.log(numData, data);
+  //     drawSetInterval = setInterval(() => {
+  //       this.fillBar(width, i);
+  //       i++;
+  //
+  //       if (i > numData - 1) {
+  //         clearInterval(drawSetInterval);
+  //         this.highlightRedrawHist(drawType)
+  //       }
+  //     }, duration / numData);
+  //     isHistDisplay = true;
+  //   }
+  //
+  //   get histWidth() {
+  //     return this.mathFloor(this.canvas.width / this.data.length, 5);
+  //   }
+  //
+  //   fillBar(width, i) {
+  //     this.canvas.setNomalColor();
+  //     // this.canvas.setAlpha(0.5);
+  //     let max = this.type === 'negative' ? this.min : this.max;
+  //     let h = (this.data[i].score) / max * this.canvas.height;
+  //     this.canvas.context.fillRect(width * i, this.canvas.height - h, width, h);
+  //   }
+  //
+  //   highlightRedrawHist(drawType) {
+  //     if (drawType === 'redraw') {
+  //       this.redrawHighlightedBar(this.highlightedBarList, this.data);
+  //     }
+  //   }
+  //
+  //   mathFloor(value, base) {
+  //     let b = Math.pow(10, base);
+  //     return Math.floor(value * b) / b;
+  //   }
+  //
+  //   redrawHighlightedBar(indexList, data) {
+  //     let h;
+  //     for (let i = 0; indexList.length > i; i++) {
+  //       // highlight color
+  //       this.canvas.setHighlightColor();
+  //       let max = this.type === 'negative' ? this.min : this.max;
+  //       h = (data[indexList[i]].score) / max * this.canvas.height;
+  //       this.canvas.context.fillRect(this.histWidth * indexList[i], this.canvas.height - h, this.histWidth, h);
+  //     }
+  //   }
+  //
+  //   highlightBar(countryName) {
+  //     let h;
+  //     let index;
+  //     for (let i = 0, l = this.data.length; l > i; i++) {
+  //       if (this.data[i].country === countryName) {
+  //         index = i;
+  //         this.highlightedBarList.push(i)
+  //       }
+  //     }
+  //     // highlight color
+  //     this.canvas.setHighlightColor();
+  //     let max = this.type === 'negative' ? this.min : this.max;
+  //     h = (this.data[index].score) / max * this.canvas.height;
+  //     this.canvas.context.fillRect(this.histWidth * index, this.canvas.height - h, this.histWidth, h);
+  //   }
+  //
+  //
+  //   onHistRanking(event) {
+  //     if (this.getSelectedTypeFromButton() === this.type) {
+  //       // console.log('onHist', isFillHist);
+  //       if (isHistDisplay) {
+  //         if (isFillHist) {
+  //           let rect = event.target.getBoundingClientRect();
+  //           let mouseX = Math.abs(event.clientX - rect.left);
+  //           let index = Math.floor(mouseX / this.histWidth);
+  //
+  //           document.getElementById("canvasWrapper").classList.add("canvasWrapperPointer");
+  //           // console.log(index);
+  //           this.canvas.mouseOnCountry = this.data[index]['country'];
+  //           this.canvas.tooltipHist[0].innerText = this.canvas.mouseOnCountry;
+  //           this.canvas.tooltipHist.css({opacity: 1.0});
+  //
+  //           this.canvas.tooltipHist.css({top: event.clientY * 0.95});
+  //           this.canvas.tooltipHist.css({left: event.clientX * 1.0 - this.canvas.tooltipHist.width() / 2 - 5});
+  //
+  //         } else {
+  //           document.getElementById("canvasWrapper").classList.remove("canvasWrapperPointer");
+  //           this.canvas.tooltipHist.css({opacity: 0.0});
+  //           this.canvas.tooltipHist.css({top: 0});
+  //           this.canvas.tooltipHist.css({left: 0});
+  //         }
+  //       }
+  //     }
+  //   }
+  //
+  //   outHistRanking() {
+  //     this.canvas.tooltipHist.css({opacity: 0.0});
+  //   }
+  //
+  //   clickHistRanking() {
+  //     if (this.getSelectedTypeFromButton() === this.type) {
+  //       if (!isTravelAuto) {
+  //         if (isFillHist) {
+  //           // if (!isMoveCamera) {
+  //             console.log('click', this.canvas.mouseOnCountry, this.type);
+  //             this.infoBord.location.deletePin();
+  //             console.log(this.type);
+  //             this.infoBord.displayInfo(this.canvas.mouseOnCountry);
+  //             console.log('conducted', this.type);
+  //           // }
+  //         }
+  //       }
+  //     }
+  //   }
+  //
+  //   getSelectedTypeFromButton() {
+  //     let type = $('.wbButton1.selectedBtn')[0].id.slice(0, -4)
+  //     if (typeof type === 'undefined') {
+  //       type = 'pantheon'
+  //     }
+  //     return type
+  //   }
+  //
+  // }
 
   ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -625,6 +626,13 @@ import {InfoBord} from './InfoBord';
     //////////////////////////////////////////////////////////////////////////
     /* switch travel type button */
     travelModeSwitch = document.getElementById('travelModeSwitch-label');
+
+    $('#travelModeSwitch-inner::before').attr('class', 'selectedSwitch');
+
+    console.log($('#travelModeSwitch-checkbox'));
+    console.log($('.selectedSwitch'));
+
+
     travelModeSwitch.addEventListener('click', () => {
       isTravelAuto = !isTravelAuto;
 
@@ -680,6 +688,7 @@ import {InfoBord} from './InfoBord';
     }, false);
     //////////////////////////////////////////////////////////////////////////
 
+    console.log(travelModeSwitch);
 
 
     //////////////////////////////////////////////////////////////////////////
