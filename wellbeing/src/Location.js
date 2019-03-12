@@ -5,14 +5,14 @@
 
 
 export class Location {
-  // constructor(latlon, earthObj, controlsObj, cameraObj) {
-  constructor(latlon) {
+  constructor(latlon, earthObj, controlsObj, cameraObj) {
+  // constructor(latlon) {
     this.data = latlon;
     this.numData = Object.keys(latlon).length;
 
-    // this.earth = earthObj;
-    // this.controls = controlsObj;
-    // this.camera = cameraObj;
+    this.earth = earthObj;
+    this.controls = controlsObj;
+    this.camera = cameraObj;
 
     const pinRadius = 0.0025;
     this.pinSphereRadius = 0.01;
@@ -43,50 +43,11 @@ export class Location {
     return {latitude: latitude, longitude: longitude};
   }
 
-  // static moveCamera(latitude, longitude) {
-  //   let targetPos = Location.convertGeoCoords(latitude, longitude);
-  //   let targetVec = targetPos.sub(this.center);
-  //   let prevVec = camera.position.sub(this.center);
-  //
-  //   let crossVec = prevVec.clone().cross(targetVec).normalize();
-  //   let angle = prevVec.angleTo(targetVec);
-  //
-  //   let q = new THREE.Quaternion();
-  //   let step = 100;
-  //   let stepAngle = angle / step;
-  //   let count = 0;
-  //   let moveCameraQuaternion = function (stepAngle) {
-  //     q.setFromAxisAngle(crossVec, stepAngle);
-  //     camera.position.applyQuaternion(q);
-  //     camera.lookAt(0.0, 0.0, 0.0);
-  //     count++
-  //   };
-  //
-  //   let id = setInterval(function () {
-  //     earth.rotation.y = 0;
-  //     // isMoveCamera = true;
-  //     controls.enableRotate = false;
-  //     moveCameraQuaternion(stepAngle);
-  //     if (count > step - 1) {
-  //       this.createPin(latitude, longitude);
-  //       clearInterval(id);
-  //       // isMoveCamera = false;
-  //       // if (!isTravelAuto) {
-  //       //   this.controls.enableRotate = true;
-  //       // }
-  //     }
-  //   }, 1000 / step);
-  // }
 
-
-  moveCamera(latitude, longitude, earth, camera, controls) {
-    // const earth
-    // const camera
-    // const controls
-
+  moveCamera(latitude, longitude) {
     let targetPos = this.convertGeoCoords(latitude, longitude);
     let targetVec = targetPos.sub(this.center);
-    let prevVec = camera.position.sub(this.center);
+    let prevVec = this.camera.position.sub(this.center);
 
     let crossVec = prevVec.clone().cross(targetVec).normalize();
     let angle = prevVec.angleTo(targetVec);
@@ -95,24 +56,24 @@ export class Location {
     let step = 100;
     let stepAngle = angle / step;
     let count = 0;
-    let moveCameraQuaternion = function (stepAngle) {
+    let moveCameraQuaternion = (stepAngle) => {
       q.setFromAxisAngle(crossVec, stepAngle);
-      camera.position.applyQuaternion(q);
-      camera.lookAt(0.0, 0.0, 0.0);
+      this.camera.position.applyQuaternion(q);
+      this.camera.lookAt(0.0, 0.0, 0.0);
       count++
     };
 
     let id = setInterval(() => {
-      earth.rotation.y = 0;
+      this.earth.rotation.y = 0;
       this.isMoveCamera = true;
-      controls.enableRotate = false;
+      this.controls.enableRotate = false;
       moveCameraQuaternion(stepAngle);
       if (count > step - 1) {
-        this.createPin(earth, latitude, longitude);
+        this.createPin(latitude, longitude);
         clearInterval(id);
         this.isMoveCamera = false;
         // if (!isTravelAuto) {
-          controls.enableRotate = true;
+          this.controls.enableRotate = true;
         // }
       }
     }, 1000 / step);
@@ -129,7 +90,7 @@ export class Location {
     return new THREE.Vector3(x, y, z);
   }
 
-  createPin(earth, latitude = 0, longitude = 0) {
+  createPin(latitude = 0, longitude = 0) {
     const pin = this.makePinObj();
     let latRad = latitude * (Math.PI / 180);
     let lonRad = -longitude * (Math.PI / 180);
@@ -138,7 +99,7 @@ export class Location {
     pin.rotation.set(0.0, -lonRad, latRad - Math.PI * 0.5);
     pin.name = 'pin';
     this.pinList.push(pin);
-    earth.add(pin);
+    this.earth.add(pin);
   }
 
   makePinObj() {
@@ -156,9 +117,9 @@ export class Location {
   }
 
 
-  deletePin(earth) {
+  deletePin() {
     for (let i = 0, l = this.pinList.length; l > i; i++) {
-      earth.remove(this.pinList[i]);
+      this.earth.remove(this.pinList[i]);
     }
     this.pinList = [];
   }

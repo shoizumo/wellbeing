@@ -1,5 +1,3 @@
-import {Location} from './Location';
-
 export class InfoBord {
   constructor(datasetObj, locationObj) {
     this.dataset = datasetObj;
@@ -56,16 +54,16 @@ export class InfoBord {
         let infoType = e.target.id.slice(4,);
         if (infoType === 'Text') {
           console.log('text');
-          InfoBoard.setInfoTypeText();
+          this.setInfoTypeText();
         } else if (infoType === 'Piechart') {
           console.log('piechart');
-          InfoBoard.setInfoTypePiechart();
+          this.setInfoTypePiechart();
         } else if (infoType === 'Linechart') {
           console.log('linechart');
-          InfoBoard.setInfoTypeLinechart();
+          this.setInfoTypeLinechart();
         } else {
           console.log('none');
-          InfoBoard.setInfoTypeNone();
+          this.setInfoTypeNone();
         }
       })
     }
@@ -180,7 +178,7 @@ export class InfoBord {
       let longitude = locationResult.longitude;
       // Location.moveCamera(latitude, longitude);
 
-       this.location.moveCamera(latitude, longitude, earth, camera, controls);
+       this.location.moveCamera(latitude, longitude);
 
       $('#country').empty().append(countryName);
       $('#country4').empty().append(countryName);

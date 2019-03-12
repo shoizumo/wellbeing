@@ -5,261 +5,7 @@ import {InfoBord} from './InfoBord';
 
 (() => {
 
-
-
   ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-  // クラス用の設定
-  /*
-  // setting well-being data, pantheon data
-  */
-
-  // let GDPArray = [];
-  // let LadderArray = [];
-  // let PositiveArray = [];
-  // let NegativeArray = [];
-  // let GDPScoreArray = [];
-  // let LadderScoreArray = [];
-  // let PositiveScoreArray = [];
-  // let NegativeScoreArray = [];
-  //
-  // let PantheonArray = [];
-  // let PantheonScoreArray = [];
-  //
-  //
-  // for (let i = 0, l = Object.keys(wbData).length; l > i; i++) {
-  //   let wb = wbData[i];
-  //   let ladder = {country: wb.country, rank: wb.lRank, score: wb.ladder};
-  //   let positive = {country: wb.country, rank: wb.pRank, score: wb.positive};
-  //   let negative = {country: wb.country, rank: wb.nRank, score: wb.negative};
-  //   let logGdp = {country: wb.country, rank: wb.gRank, score: wb.logGdp};
-  //
-  //   LadderArray.push(ladder);
-  //   PositiveArray.push(positive);
-  //   NegativeArray.push(negative);
-  //   GDPArray.push(logGdp);
-  //
-  //   LadderScoreArray.push(ladder);
-  //   PositiveScoreArray.push(positive);
-  //   NegativeScoreArray.push(negative);
-  //   GDPScoreArray.push(logGdp);
-  // }
-  //
-  // for (let i = 0, l = Object.keys(pantheon).length; l > i; i++) {
-  //   let P = pantheon[i];
-  //   let p = {country: P.country, rank: P.rank, score: P.nPeople};
-  //
-  //   PantheonArray.push(p);
-  //   PantheonScoreArray.push(p);
-  // }
-  //
-  // sortDesc(LadderArray, 'country');
-  // sortDesc(PositiveArray, 'country');
-  // sortDesc(NegativeArray, 'country');
-  // sortDesc(GDPArray, 'country');
-  // sortDesc(PantheonArray, 'country');
-  //
-  // sortDesc(LadderScoreArray, 'rank');
-  // sortDesc(PositiveScoreArray, 'rank');
-  // sortDesc(NegativeScoreArray, 'rank');
-  // sortDesc(GDPScoreArray, 'rank');
-  // sortDesc(PantheonScoreArray, 'rank');
-  //
-  // function sortDesc(array, type) {
-  //   array.sort(function sortRank(a, b) {
-  //     if (a[type] < b[type]) {
-  //       return -1;
-  //     }
-  //     else if (a[type] > b[type]) {
-  //       return 1;
-  //     }
-  //     return 0;
-  //   });
-  // }
-
-
-  ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-
-  /////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-
-  // function countrynameToLatlon(countryName) {
-  //   let latitude;
-  //   let longitude;
-  //
-  //   for (let i = 0; latLength > i; i++) {
-  //     if (latlon[i].country === countryName) {
-  //       latitude = latlon[i].latitude;
-  //       longitude = latlon[i].longitude;
-  //     }
-  //   }
-  //   return {latitude: latitude, longitude: longitude};
-  // }
-  //
-  // /* dring move, rotate is not enable */
-  // function moveCamera(latitude, longitude) {
-  //   let targetPos = convertGeoCoords(latitude, longitude);
-  //   let targetVec = targetPos.sub(center);
-  //   let prevVec = camera.position.sub(center);
-  //
-  //   let crossVec = prevVec.clone().cross(targetVec).normalize();
-  //   let angle = prevVec.angleTo(targetVec);
-  //
-  //   let q = new THREE.Quaternion();
-  //   let step = 100;
-  //   let stepAngle = angle / step;
-  //   let count = 0;
-  //   let moveCameraQuaternion = function (stepAngle) {
-  //     q.setFromAxisAngle(crossVec, stepAngle);
-  //     camera.position.applyQuaternion(q);
-  //     camera.lookAt(0.0, 0.0, 0.0);
-  //     count++
-  //   };
-  //
-  //   let id = setInterval(function () {
-  //     earth.rotation.y = 0;
-  //     isMoveCamera = true;
-  //     controls.enableRotate = false;
-  //     moveCameraQuaternion(stepAngle);
-  //     if (count > step - 1) {
-  //       createPoint(latitude, longitude);
-  //       clearInterval(id);
-  //       isMoveCamera = false;
-  //       if (!isTravelAuto) {
-  //         controls.enableRotate = true;
-  //       }
-  //     }
-  //   }, 1000 / step);
-  // }
-  //
-  //
-  // function convertGeoCoords(latitude, longitude, radius = 1.0) {
-  //   let latRad = latitude * (Math.PI / 180);
-  //   let lonRad = -longitude * (Math.PI / 180);
-  //
-  //   let x = Math.cos(latRad) * Math.cos(lonRad) * radius;
-  //   let y = Math.sin(latRad) * radius;
-  //   let z = Math.cos(latRad) * Math.sin(lonRad) * radius;
-  //   return new THREE.Vector3(x, y, z);
-  // }
-  //
-  //
-  // /* marker pin */
-  // let pinList;
-  // let pinRadius;
-  // let pinSphereRadius;
-  // let pinHeight;
-  // let pinMaterial;
-  // let pinConeGeometry;
-  // let pinSphereGeometry;
-  //
-  // pinRadius = 0.0025;
-  // pinSphereRadius = 0.01;
-  // pinHeight = 0.025;
-  // pinConeGeometry = new THREE.ConeBufferGeometry(pinRadius, pinHeight, 16, 1, true);
-  // pinSphereGeometry = new THREE.SphereBufferGeometry(pinSphereRadius, 60, 60);
-  //
-  // function createPin() {
-  //   pinMaterial = new THREE.MeshPhongMaterial({color: 0xf15b47});
-  //   let cone = new THREE.Mesh(pinConeGeometry, pinMaterial);
-  //   cone.position.y = pinHeight * 0.5;
-  //   cone.rotation.x = Math.PI;
-  //
-  //   let sphere = new THREE.Mesh(pinSphereGeometry, pinMaterial);
-  //   sphere.position.y = pinHeight * 0.95 + pinSphereRadius;
-  //
-  //   let group = new THREE.Group();
-  //   group.add(cone);
-  //   group.add(sphere);
-  //   return group;
-  // }
-  //
-  // pinList = [];
-  //
-  // function createPoint(latitude = 0, longitude = 0) {
-  //   const pin = createPin();
-  //   let latRad = latitude * (Math.PI / 180);
-  //   let lonRad = -longitude * (Math.PI / 180);
-  //
-  //   pin.position.copy(convertGeoCoords(latitude, longitude));
-  //   pin.rotation.set(0.0, -lonRad, latRad - Math.PI * 0.5);
-  //   pin.name = 'pin';
-  //   pinList.push(pin);
-  //   earth.add(pin);
-  // }
-  //
-  // function deletePin(earth) {
-  //   for (let i = 0, l = pinList.length; l > i; i++) {
-  //     earth.remove(pinList[i]);
-  //   }
-  //   pinList = [];
-  // }
-
-  /* three objects */
-  let scene;
-  let camera;
-  let controls;
-  let ambientLight;
-  let directionalLight1;
-  let directionalLight2;
-  let renderer;
-  let geometry;
-  let material;
-  let earth;
-  let earthOutline;
-  let radius = 0.994;
-  let axesHelper;
-  const RENDERER_PARAM = {
-    clearColor: 0x000000
-  };
-
-
-
-  // function moveCamera(latitude, longitude) {
-  //   let targetPos = Location.convertGeoCoords(latitude, longitude);
-  //   let targetVec = targetPos.sub(this.center);
-  //   let prevVec = camera.position.sub(this.center);
-  //
-  //   let crossVec = prevVec.clone().cross(targetVec).normalize();
-  //   let angle = prevVec.angleTo(targetVec);
-  //
-  //   let q = new THREE.Quaternion();
-  //   let step = 100;
-  //   let stepAngle = angle / step;
-  //   let count = 0;
-  //   let moveCameraQuaternion = function (stepAngle) {
-  //     q.setFromAxisAngle(crossVec, stepAngle);
-  //     camera.position.applyQuaternion(q);
-  //     camera.lookAt(0.0, 0.0, 0.0);
-  //     count++
-  //   };
-  //
-  //   let id = setInterval(function () {
-  //     earth.rotation.y = 0;
-  //     // isMoveCamera = true;
-  //     controls.enableRotate = false;
-  //     moveCameraQuaternion(stepAngle);
-  //     if (count > step - 1) {
-  //       this.createPin(latitude, longitude);
-  //       clearInterval(id);
-  //       // isMoveCamera = false;
-  //       // if (!isTravelAuto) {
-  //       //   this.controls.enableRotate = true;
-  //       // }
-  //     }
-  //   }, 1000 / step);
-  // }
-
-  const datasetdObj = new Dataset(wbData, pantheon, timeline);
-  // const locationObj = new Location(latlon, earth, controls, camera);
-  const locationObj = new Location(latlon);
-
-  const infoBordObj = new InfoBord(datasetdObj, locationObj);
-
-
-  ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-
   // Data canvas //
   class HistCanvas {
     constructor() {
@@ -340,12 +86,12 @@ import {InfoBord} from './InfoBord';
 
   // Hist class //
   class Hist {
-    constructor(dataArray, scoreArray, type) {
+    constructor(dataArray, scoreArray, type, infoBordObj) {
       this.data = dataArray;
       this.scoreData = scoreArray;
       this.type = type;
 
-      this.infoBordObj = infoBordObj;
+      this.infoBord = infoBordObj;
 
       this.canvas = new HistCanvas();
       this.highlightedBarList = [];
@@ -380,8 +126,8 @@ import {InfoBord} from './InfoBord';
       if (typeof countryNameDisplayed !== 'undefined') {
         if (drawType === 'new') {
           if (!isTravelAuto) {
-            locationObj.deletePin(earth);
-            // this.infoBordObj.displayInfo(countryNameDisplayed);
+            this.infoBord.location.deletePin();
+            // this.infoBord.displayInfo(countryNameDisplayed);
           }
         }
       }
@@ -497,9 +243,9 @@ import {InfoBord} from './InfoBord';
           if (isFillHist) {
             // if (!isMoveCamera) {
               console.log('click', this.canvas.mouseOnCountry, this.type);
-              locationObj.deletePin(earth);
+              this.infoBord.location.deletePin();
               console.log(this.type);
-              this.infoBordObj.displayInfo(this.canvas.mouseOnCountry);
+              this.infoBord.displayInfo(this.canvas.mouseOnCountry);
               console.log('conducted', this.type);
             // }
           }
@@ -517,22 +263,31 @@ import {InfoBord} from './InfoBord';
 
   }
 
-
-  const ladderData = new Hist(datasetdObj.ladder, datasetdObj.ladderScore, 'ladder', infoBordObj);
-  const positiveData = new Hist(datasetdObj.positive, datasetdObj.positiveScore, 'positive', infoBordObj);
-  const negativeData = new Hist(datasetdObj.negative, datasetdObj.negativeScore, 'negative', infoBordObj);
-  const gdpData = new Hist(datasetdObj.gdp, datasetdObj.gdpScore, 'gdp', infoBordObj);
-  const pantheonData = new Hist(datasetdObj.pantheon, datasetdObj.pantheonScore, 'pantheon', infoBordObj);
-
-  const dataList = {ladderData, positiveData, negativeData, gdpData, pantheonData};
-
-
   ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
   ///////////////////////
   /* Declare variables */
   ///////////////////////
+
+  /* three objects */
+  let scene;
+  let camera;
+  let controls;
+  let ambientLight;
+  let directionalLight1;
+  let directionalLight2;
+  let renderer;
+  let geometry;
+  let material;
+  let earth;
+  let earthOutline;
+  let radius = 0.994;
+  let axesHelper;
+  const RENDERER_PARAM = {
+    clearColor: 0x000000
+  };
+
 
   /* global */
   let canvasWidth = null;
@@ -560,14 +315,11 @@ import {InfoBord} from './InfoBord';
 
   const wbLength = Object.keys(wbData).length;
   const latLength = Object.keys(latlon).length;
-  const pantheonLength = Object.keys(pantheon).length;
   let meshList;
   let wbButton;
   let searchArray;
   let travelModeSwitch;
   let isTravelAuto = false;
-  let infoType;
-  let infoBtn;
   let isTouchInfoObject = false;
   let isSPBtnDisplay = true;
 
@@ -581,25 +333,21 @@ import {InfoBord} from './InfoBord';
   /* interactive land function */
   let countryNameGlobal = 0;
   let countryNameDisplayed;
-  // let isClicked = false;
   let dragFlag = false;
   let isLand = false;
   let isInfoObject = false;
   let isFillHist = false;
   let infoObject;
   let isSearching = false;
-  let isFirstClick = true;
   let latitude;
   let longitude;
   let isFinishStartTween = false;
-  // let isMoveCamera = false;
   let isMoveStop = true;
 
 
   /* init tween */
   let initEarthPosition = new THREE.Vector3(0.0, -1.1, 1.0);
   let initCameraPosition = new THREE.Vector3(0.0, 0.0, 2.0);
-  // let center = new THREE.Vector3(0, 0, 0);
 
 
   /* rendering */
@@ -617,16 +365,11 @@ import {InfoBord} from './InfoBord';
   let travelSetInterval;
   let stopTravel;
   let drawSetInterval;
-  let timelineSetInterval;
 
 
   let returnSelectedWBtype;
   let setSelectedWBButton;
 
-  // let tweenTextCountryW;
-  // let tweenTextCountryP;
-  // let tweenTextContentsW;
-  // let tweenTextContentsP;
   let killTweenTextAnimation;
 
 
@@ -634,323 +377,6 @@ import {InfoBord} from './InfoBord';
   /* Entry point */
   /////////////////
   window.addEventListener('load', () => {
-
-
-    /* menu */
-    $('.navToggle').click(function () {
-      $(this).toggleClass('active');
-
-      if ($(this).hasClass('active')) {
-        $('.globalMenu').addClass('active');
-      } else {
-        $('.globalMenu').removeClass('active');
-      }
-    });
-
-    // if content is clicked, close menu.
-    $('.globalMenu').click(function () {
-      $('.navToggle').removeClass('active');
-      $('.globalMenu').removeClass('active');
-    });
-
-
-    /* modal window */
-    let menuSetting = document.getElementsByClassName('menu');
-    for (let i = 0, l = menuSetting.length; i < l; i++) {
-      menuSetting[i].addEventListener('click', (e) => {
-        let id = e.target.id.slice(4,);
-        $(this).blur();
-        if ($("#modalOverlay")[0]) {
-          return false;
-        }
-        $("body").append('<div id="modalOverlay"></div>');
-        $("#modalOverlay").fadeIn(400);
-
-        // contentごとに書き換え
-        $("#modalContentWrapper" + id.toString()).fadeIn(400);
-        $("#modalOverlay, .modalClose").unbind()
-            .click(function () {
-              $("#modalContentWrapper" + id.toString() + ", #modalOverlay").fadeOut(400, function () {
-                $("#modalOverlay").remove();
-              });
-            });
-      }, false);
-    }
-
-
-    /* setting info type */
-    // infoBtn = document.getElementsByClassName('infoType');
-    // for (let i = 0, l = infoBtn.length; i < l; i++) {
-    //   infoBtn[i].addEventListener('click', (e) => {
-    //     $(".infoType").removeClass("selectedBtn");
-    //     infoBtn[i].classList.add("selectedBtn");
-    //     infoType = e.target.id.slice(4,);
-    //     if (infoType === 'Text') {
-    //       console.log('text');
-    //       InfoBoard.setInfoTypeText();
-    //     } else if (infoType === 'Piechart') {
-    //       console.log('piechart');
-    //       InfoBoard.setInfoTypePiechart();
-    //     } else if (infoType === 'Linechart') {
-    //       console.log('linechart');
-    //       InfoBoard.setInfoTypeLinechart();
-    //     } else {
-    //       console.log('none');
-    //       InfoBoard.setInfoTypeNone();
-    //     }
-    //   })
-    // }
-
-    // InfoBord.setInfoTypeText = function () {
-    //   $('#infoBoard').css("display", 'none');
-    //   $('#infoBoard2').css("display", 'block');
-    //   $('#infoBoardTimeline').css("display", 'none');
-    //
-    //   $(".infoType").removeClass("selectedBtn");
-    //   infoBtn[0].classList.add("selectedBtn");
-    // };
-    //
-    // InfoBord.setInfoTypePiechart = function () {
-    //   $('#infoBoard').css("display", 'grid');
-    //   $('#infoBoard2').css("display", 'none');
-    //   $('#infoBoardTimeline').css("display", 'none');
-    //
-    //   $(".infoType").removeClass("selectedBtn");
-    //   infoBtn[1].classList.add("selectedBtn");
-    // };
-    //
-    // InfoBord.setInfoTypeLinechart = function () {
-    //   $('#infoBoard').css("display", 'none');
-    //   $('#infoBoard2').css("display", 'none');
-    //   $('#infoBoardTimeline').css("display", 'grid');
-    //
-    //
-    //   $(".infoType").removeClass("selectedBtn");
-    //   infoBtn[2].classList.add("selectedBtn");
-    // };
-    //
-    // InfoBord.setInfoTypeNone = function () {
-    //   $('#infoBoard').css("display", 'none');
-    //   $('#infoBoard2').css("display", 'none');
-    //   $('#infoBoardTimeline').css("display", 'none');
-    //
-    //   $(".infoType").removeClass("selectedBtn");
-    //   // infoBtn[2].classList.add("selectedBtn");
-    // };
-    //
-    //
-    // InfoBord.fadeInfoBoardVisual = function () {
-    //   $('#infoBoard').css({opacity: 0.0});
-    //   InfoBord.fadeInfoBoardLinechart();
-    // };
-    //
-    // InfoBord.fadeInfoBoardText = function () {
-    //   $('#country2').css({opacity: 0.0});
-    //   $('.infoBoardContent2').css({opacity: 0.0});
-    //   InfoBord.fadeInfoBoardPantheon();
-    // };
-    //
-    // InfoBord.fadeInfoBoardPantheon = function () {
-    //   $('#country3').css({opacity: 0.0});
-    //   $('.infoBoardContent3').css({opacity: 0.0}).css("display", 'none');
-    // };
-    //
-    // InfoBord.fadeInfoBoardLinechart = function () {
-    //   $('#infoBoardTimeline').css({opacity: 0.0});
-    // };
-
-
-    returnSelectedWBtype = function () {
-      return $('#wbButton2').find('.selectedBtn').attr("id").slice(0, -4) + 'Data';
-    };
-
-    setSelectedWBButton = function (index) {
-      $(".wbButton").removeClass("selectedBtn");
-      document.getElementsByClassName('wbButton1')[index].classList.add("selectedBtn");
-      document.getElementsByClassName('wbButton2')[index].classList.add("selectedBtn");
-    };
-
-
-    /* switch travel type button */
-    travelModeSwitch = document.getElementById('travelModeSwitch-label');
-    travelModeSwitch.addEventListener('click', () => {
-      isTravelAuto = !isTravelAuto;
-
-      // canvasContext.globalAlpha = 0.5;
-      let selectedType = returnSelectedWBtype();
-      console.log(selectedType);
-      dataList[selectedType].drawHist(2000, 'new');
-
-      infoBordObj.fadeInfoBoardVisual();
-      infoBordObj.fadeInfoBoardText();
-
-      TweenMax.killAll();
-      locationObj.deletePin(earth);
-      stopTravel();
-
-      if (isTravelAuto) {
-        isMoveStop = true;
-        controls.enableRotate = false;
-        if (!isPantheon) {
-          travelWellbeing();
-          infoBordObj.setInfoTypeText();
-        } else {
-          travelPantheon();
-        }
-        stopMove.innerText = 'Stop';
-        stopMove.setAttribute('style', 'opacity:1.0;');
-      } else {
-        isMoveStop = false;
-        controls.enableRotate = true;
-        stopMove.setAttribute('style', 'opacity:0.0;');
-        if (!isPantheon) {
-          infoBordObj.setInfoTypeLinechart();
-        } else {
-          infoBordObj.setInfoTypeNone();
-        }
-      }
-    });
-
-    let stopMove = document.getElementById('stopMove');
-    stopMove.addEventListener('click', () => {
-      if (isMoveStop) {
-        stopMove.innerText = 'Play';
-        stopTravel();
-      } else {
-        stopMove.innerText = 'Stop';
-        if (!isPantheon) {
-          travelWellbeing(travelIndex);
-        } else {
-          travelPantheon(travelIndex);
-        }
-      }
-      isMoveStop = !isMoveStop;
-    }, false);
-
-
-    /* start button */
-    let startButton = document.getElementById('startButton');
-    startButton.addEventListener('click', () => {
-      let duration = 5.0;
-      // let ease = Back.easeOut.config(1);
-      let ease = CustomEase.create("custom", "M0,0 C0.404,0.594 0.339,0.958 0.594,1.032 0.754,1.078 0.838,1 1,1");
-
-      TweenMax.to(earth.position, duration, {
-        y: 0.0,
-        z: 0.0,
-        ease: ease
-      });
-
-      /* show button & land*/
-      TweenMax.to(camera.position, duration, {
-        z: 2.5,
-        ease: ease,
-        onComplete: function () {
-          $('.allButton').css('opacity', '1');
-
-          document.addEventListener('touchmove', function (e) {
-            e.preventDefault();
-          }, {passive: false});
-
-          setTimeout(() => {
-            setSelectedWBButton(0);
-            infoBordObj.infoBtn[2].classList.add("selectedBtn"); // infoBordObj.setInfoTypeLinechart
-            infoBordObj.setInfoTypeLinechart();
-
-          }, 400);
-          setTimeout(() => {
-            // landBase.material.opacity = 1.0;
-            dataList['ladderData'].drawHist(2000, 'new');
-
-
-            isFinishStartTween = true;
-            controls.enableZoom = true;
-          }, 500);
-        }
-      });
-
-      TweenMax.to(".load", duration - 3.0, {
-        opacity: 0.0,
-        onComplete: function () {
-          $('.load').remove();
-        }
-      })
-    });
-
-    killTweenTextAnimation = function () {
-      if (!infoBordObj.isFirstDisplay) {
-        infoBordObj.tweenWb1.kill();
-        infoBordObj.tweenWb2.kill();
-        infoBordObj.tweenP1.kill();
-        infoBordObj.tweenP2.kill();
-      }
-    };
-
-
-    /* drag object function */
-    let draggableObject = document.getElementsByClassName("dragDrop");
-    let draggableObjectX;
-    let draggableObjectY;
-
-    for (let i = 0; i < draggableObject.length; i++) {
-      draggableObject[i].addEventListener("mousedown", dragMousedown, false);
-      draggableObject[i].addEventListener("touchstart", dragMousedown, false);
-    }
-
-    function dragMousedown(e) {
-      let event;
-      this.classList.add("drag");
-
-      // mouse & touch event
-      if (e.type === "mousedown") {
-        event = e;
-      } else {
-        event = e.changedTouches[0];
-      }
-      draggableObjectX = event.pageX - this.offsetLeft;
-      draggableObjectY = event.pageY - this.offsetTop;
-
-      document.body.addEventListener("mousemove", dragMousemove, false);
-      document.body.addEventListener("touchmove", dragMousemove, false);
-    }
-
-
-    function dragMousemove(e) {
-      let drag = document.getElementsByClassName("drag")[0];
-      let event;
-
-      // mouse & touch event
-      if (e.type === "mousemove") {
-        event = e;
-      } else {
-        event = e.changedTouches[0];
-      }
-
-      // prevent flick
-      e.preventDefault();
-
-      drag.style.left = event.pageX - draggableObjectX + "px";
-      drag.style.top = event.pageY - draggableObjectY + "px";
-
-      drag.addEventListener("mouseup", dragMouseUp, false);
-      document.body.addEventListener("mouseleave", dragMouseUp, false);
-      drag.addEventListener("touchend", dragMouseUp, false);
-      document.body.addEventListener("touchleave", dragMouseUp, false);
-
-    }
-
-    function dragMouseUp() {
-      let drag = document.getElementsByClassName("drag")[0];
-      if (typeof drag !== 'undefined') {
-        document.body.removeEventListener("mousemove", dragMousemove, false);
-        drag.removeEventListener("mouseup", dragMouseUp, false);
-        document.body.removeEventListener("touchmove", dragMousemove, false);
-        drag.removeEventListener("touchend", dragMouseUp, false);
-
-        drag.classList.remove("drag");
-      }
-    }
-
 
     /*
     // initial setting
@@ -966,107 +392,6 @@ import {InfoBord} from './InfoBord';
       isSP = true;
     }
 
-
-    /* window size setting */
-    window.addEventListener('resize', () => {
-      renderer.setPixelRatio(devicePixelRatio);
-      renderer.setSize(window.innerWidth, window.innerHeight);
-      camera.aspect = window.innerWidth / window.innerHeight;
-      camera.updateProjectionMatrix();
-      canvasWidth = window.innerWidth;
-      canvasHeight = window.innerHeight;
-
-      if (isFinishStartTween) {
-        let histWidth = $('#histgram').width();
-        if (dataList['ladderData'].canvas.previousWidth !== histWidth) {
-          // dataListのうち、1つだけ更新すればOK！？
-          dataList['ladderData'].canvas.width = histWidth;
-
-          let selectedType = returnSelectedWBtype();
-          console.log(selectedType);
-          dataList[selectedType].drawHist(2000, 'new');
-        }
-      }
-    }, false);
-
-
-    /* detect mouse drag(distinguish mouse “click” and “drag”) */
-    let dragStartPos = new THREE.Vector2();
-    let dragEndPos = new THREE.Vector2();
-
-    window.addEventListener("mousedown", function (event) {
-      dragFlag = false;
-      dragStartPos.x = event.clientX;
-      dragStartPos.y = event.clientY;
-    }, false);
-
-
-    window.addEventListener("mouseup", function (event) {
-      dragEndPos.x = event.clientX;
-      dragEndPos.y = event.clientY;
-      let length = Math.pow((dragEndPos.x - dragStartPos.x), 2) + Math.pow((dragEndPos.y - dragStartPos.y), 2);
-      dragFlag = length > 100;
-
-      if (dragFlag) {
-        if (isFinishStartTween) {
-          if (!isTravelAuto) {
-            if (!locationObj.isMoveCamera) {
-              infoBordObj.fadeInfoBoardText();
-              killTweenTextAnimation();
-              locationObj.deletePin(earth);
-            }
-          }
-        }
-      }
-    }, false);
-
-
-    /* touch event for SP */
-    window.addEventListener("touchstart", function () {
-      if (isFinishStartTween) {
-        if (!isTravelAuto) {
-          if (!locationObj.isMoveCamera) {
-            if (isLand) {
-              infoBordObj.fadeInfoBoardText();
-              killTweenTextAnimation();
-              locationObj.deletePin(earth);
-            }
-          }
-        }
-        if (!isSearching) {
-          isTouchInfoObject = false;
-        }
-      }
-    }, false);
-
-
-    /* double tap event for SP */
-    let tapCount = 0;
-    window.addEventListener("touchstart", function () {
-      // single tap
-      if (!tapCount) {
-        ++tapCount;
-
-        setTimeout(function () {
-          tapCount = 0;
-        }, 350);
-
-        // double tap
-      } else {
-        if (isSPBtnDisplay) {
-          $('#travelModeSwitch').css({'display': 'none'});
-          $('#stopMove').css({'display': 'none'});
-          $('.navToggle').css({'display': 'none'});
-        } else {
-          $('#travelModeSwitch').css({'display': 'block'});
-          $('#stopMove').css({'display': 'block'});
-          $('.navToggle').css({'display': 'block'});
-        }
-        isSPBtnDisplay = !isSPBtnDisplay;
-        e.preventDefault();
-        tapCount = 0;
-      }
-    });
 
 
     /* load earth texture */
@@ -1216,9 +541,381 @@ import {InfoBord} from './InfoBord';
     earth.position.y = initEarthPosition.y;
     earth.position.z = initEarthPosition.z;
 
-    // console.log(scene.getObjectByName('earth', true));
-    // console.log(scene.getObjectByName('camera', true));
-    // console.log(scene.getObjectByName('controls', true));
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+      const datasetdObj = new Dataset(wbData, pantheon, timeline);
+      const locationObj = new Location(latlon, earth, controls, camera);
+      const infoBordObj = new InfoBord(datasetdObj, locationObj);
+
+
+
+      const ladderData = new Hist(datasetdObj.ladder, datasetdObj.ladderScore, 'ladder', infoBordObj);
+      const positiveData = new Hist(datasetdObj.positive, datasetdObj.positiveScore, 'positive', infoBordObj);
+      const negativeData = new Hist(datasetdObj.negative, datasetdObj.negativeScore, 'negative', infoBordObj);
+      const gdpData = new Hist(datasetdObj.gdp, datasetdObj.gdpScore, 'gdp', infoBordObj);
+      const pantheonData = new Hist(datasetdObj.pantheon, datasetdObj.pantheonScore, 'pantheon', infoBordObj);
+
+      const dataList = {ladderData, positiveData, negativeData, gdpData, pantheonData};
+
+
+
+    //////////////////////////////////////////////////////////////////////////
+    /* menu */
+    $('.navToggle').click(function () {
+      $(this).toggleClass('active');
+
+      if ($(this).hasClass('active')) {
+        $('.globalMenu').addClass('active');
+      } else {
+        $('.globalMenu').removeClass('active');
+      }
+    });
+
+    // if content is clicked, close menu.
+    $('.globalMenu').click(function () {
+      $('.navToggle').removeClass('active');
+      $('.globalMenu').removeClass('active');
+    });
+
+
+    /* modal window */
+    let menuSetting = document.getElementsByClassName('menu');
+    for (let i = 0, l = menuSetting.length; i < l; i++) {
+      menuSetting[i].addEventListener('click', (e) => {
+        let id = e.target.id.slice(4,);
+        $(this).blur();
+        if ($("#modalOverlay")[0]) {
+          return false;
+        }
+        $("body").append('<div id="modalOverlay"></div>');
+        $("#modalOverlay").fadeIn(400);
+
+        // contentごとに書き換え
+        $("#modalContentWrapper" + id.toString()).fadeIn(400);
+        $("#modalOverlay, .modalClose").unbind()
+            .click(function () {
+              $("#modalContentWrapper" + id.toString() + ", #modalOverlay").fadeOut(400, function () {
+                $("#modalOverlay").remove();
+              });
+            });
+      }, false);
+    }
+    //////////////////////////////////////////////////////////////////////////
+
+
+
+
+
+    //////////////////////////////////////////////////////////////////////////
+    returnSelectedWBtype = function () {
+      return $('#wbButton2').find('.selectedBtn').attr("id").slice(0, -4) + 'Data';
+    };
+
+    setSelectedWBButton = function (index) {
+      $(".wbButton").removeClass("selectedBtn");
+      document.getElementsByClassName('wbButton1')[index].classList.add("selectedBtn");
+      document.getElementsByClassName('wbButton2')[index].classList.add("selectedBtn");
+    };
+    //////////////////////////////////////////////////////////////////////////
+
+
+
+    //////////////////////////////////////////////////////////////////////////
+    /* switch travel type button */
+    travelModeSwitch = document.getElementById('travelModeSwitch-label');
+    travelModeSwitch.addEventListener('click', () => {
+      isTravelAuto = !isTravelAuto;
+
+      // canvasContext.globalAlpha = 0.5;
+      let selectedType = returnSelectedWBtype();
+      console.log(selectedType);
+      dataList[selectedType].drawHist(2000, 'new');
+
+      infoBordObj.fadeInfoBoardVisual();
+      infoBordObj.fadeInfoBoardText();
+
+      TweenMax.killAll();
+      locationObj.deletePin();
+      stopTravel();
+
+      if (isTravelAuto) {
+        isMoveStop = true;
+        controls.enableRotate = false;
+        if (!isPantheon) {
+          travelWellbeing();
+          infoBordObj.setInfoTypeText();
+        } else {
+          travelPantheon();
+        }
+        stopMove.innerText = 'Stop';
+        stopMove.setAttribute('style', 'opacity:1.0;');
+      } else {
+        isMoveStop = false;
+        controls.enableRotate = true;
+        stopMove.setAttribute('style', 'opacity:0.0;');
+        if (!isPantheon) {
+          infoBordObj.setInfoTypeLinechart();
+        } else {
+          infoBordObj.setInfoTypeNone();
+        }
+      }
+    });
+
+    let stopMove = document.getElementById('stopMove');
+    stopMove.addEventListener('click', () => {
+      if (isMoveStop) {
+        stopMove.innerText = 'Play';
+        stopTravel();
+      } else {
+        stopMove.innerText = 'Stop';
+        if (!isPantheon) {
+          travelWellbeing(travelIndex);
+        } else {
+          travelPantheon(travelIndex);
+        }
+      }
+      isMoveStop = !isMoveStop;
+    }, false);
+    //////////////////////////////////////////////////////////////////////////
+
+
+
+    //////////////////////////////////////////////////////////////////////////
+    /* start button */
+    let startButton = document.getElementById('startButton');
+    startButton.addEventListener('click', () => {
+      let duration = 5.0;
+      // let ease = Back.easeOut.config(1);
+      let ease = CustomEase.create("custom", "M0,0 C0.404,0.594 0.339,0.958 0.594,1.032 0.754,1.078 0.838,1 1,1");
+
+      TweenMax.to(earth.position, duration, {
+        y: 0.0,
+        z: 0.0,
+        ease: ease
+      });
+
+      /* show button & land*/
+      TweenMax.to(camera.position, duration, {
+        z: 2.5,
+        ease: ease,
+        onComplete: function () {
+          $('.allButton').css('opacity', '1');
+
+          document.addEventListener('touchmove', function (e) {
+            e.preventDefault();
+          }, {passive: false});
+
+          setTimeout(() => {
+            setSelectedWBButton(0);
+            infoBordObj.infoBtn[2].classList.add("selectedBtn"); // infoBordObj.setInfoTypeLinechart
+            infoBordObj.setInfoTypeLinechart();
+
+          }, 400);
+          setTimeout(() => {
+            // landBase.material.opacity = 1.0;
+            dataList['ladderData'].drawHist(2000, 'new');
+
+
+            isFinishStartTween = true;
+            controls.enableZoom = true;
+          }, 500);
+        }
+      });
+
+      TweenMax.to(".load", duration - 3.0, {
+        opacity: 0.0,
+        onComplete: function () {
+          $('.load').remove();
+        }
+      })
+    });
+    //////////////////////////////////////////////////////////////////////////
+
+
+
+    //////////////////////////////////////////////////////////////////////////
+    killTweenTextAnimation = function () {
+      if (!infoBordObj.isFirstDisplay) {
+        infoBordObj.tweenWb1.kill();
+        infoBordObj.tweenWb2.kill();
+        infoBordObj.tweenP1.kill();
+        infoBordObj.tweenP2.kill();
+      }
+    };
+    //////////////////////////////////////////////////////////////////////////
+
+
+    //////////////////////////////////////////////////////////////////////////
+    /* drag object function */
+    let draggableObject = document.getElementsByClassName("dragDrop");
+    let draggableObjectX;
+    let draggableObjectY;
+
+    for (let i = 0; i < draggableObject.length; i++) {
+      draggableObject[i].addEventListener("mousedown", dragMousedown, false);
+      draggableObject[i].addEventListener("touchstart", dragMousedown, false);
+    }
+
+    function dragMousedown(e) {
+      let event;
+      this.classList.add("drag");
+
+      // mouse & touch event
+      if (e.type === "mousedown") {
+        event = e;
+      } else {
+        event = e.changedTouches[0];
+      }
+      draggableObjectX = event.pageX - this.offsetLeft;
+      draggableObjectY = event.pageY - this.offsetTop;
+
+      document.body.addEventListener("mousemove", dragMousemove, false);
+      document.body.addEventListener("touchmove", dragMousemove, false);
+    }
+
+
+    function dragMousemove(e) {
+      let drag = document.getElementsByClassName("drag")[0];
+      let event;
+
+      // mouse & touch event
+      if (e.type === "mousemove") {
+        event = e;
+      } else {
+        event = e.changedTouches[0];
+      }
+
+      // prevent flick
+      e.preventDefault();
+
+      drag.style.left = event.pageX - draggableObjectX + "px";
+      drag.style.top = event.pageY - draggableObjectY + "px";
+
+      drag.addEventListener("mouseup", dragMouseUp, false);
+      document.body.addEventListener("mouseleave", dragMouseUp, false);
+      drag.addEventListener("touchend", dragMouseUp, false);
+      document.body.addEventListener("touchleave", dragMouseUp, false);
+
+    }
+
+    function dragMouseUp() {
+      let drag = document.getElementsByClassName("drag")[0];
+      if (typeof drag !== 'undefined') {
+        document.body.removeEventListener("mousemove", dragMousemove, false);
+        drag.removeEventListener("mouseup", dragMouseUp, false);
+        document.body.removeEventListener("touchmove", dragMousemove, false);
+        drag.removeEventListener("touchend", dragMouseUp, false);
+
+        drag.classList.remove("drag");
+      }
+    }
+    //////////////////////////////////////////////////////////////////////////
+
+
+    //////////////////////////////////////////////////////////////////////////
+    /* window size setting */
+    window.addEventListener('resize', () => {
+      renderer.setPixelRatio(devicePixelRatio);
+      renderer.setSize(window.innerWidth, window.innerHeight);
+      camera.aspect = window.innerWidth / window.innerHeight;
+      camera.updateProjectionMatrix();
+      canvasWidth = window.innerWidth;
+      canvasHeight = window.innerHeight;
+
+      if (isFinishStartTween) {
+        let histWidth = $('#histgram').width();
+        if (dataList['ladderData'].canvas.previousWidth !== histWidth) {
+          // dataListのうち、1つだけ更新すればOK！？
+          dataList['ladderData'].canvas.width = histWidth;
+
+          let selectedType = returnSelectedWBtype();
+          console.log(selectedType);
+          dataList[selectedType].drawHist(2000, 'new');
+        }
+      }
+    }, false);
+
+
+    /* detect mouse drag(distinguish mouse “click” and “drag”) */
+    let dragStartPos = new THREE.Vector2();
+    let dragEndPos = new THREE.Vector2();
+
+    window.addEventListener("mousedown", function (event) {
+      dragFlag = false;
+      dragStartPos.x = event.clientX;
+      dragStartPos.y = event.clientY;
+    }, false);
+
+
+    window.addEventListener("mouseup", function (event) {
+      dragEndPos.x = event.clientX;
+      dragEndPos.y = event.clientY;
+      let length = Math.pow((dragEndPos.x - dragStartPos.x), 2) + Math.pow((dragEndPos.y - dragStartPos.y), 2);
+      dragFlag = length > 100;
+
+      if (dragFlag) {
+        if (isFinishStartTween) {
+          if (!isTravelAuto) {
+            if (!locationObj.isMoveCamera) {
+              infoBordObj.fadeInfoBoardText();
+              killTweenTextAnimation();
+              locationObj.deletePin();
+            }
+          }
+        }
+      }
+    }, false);
+
+
+    /* touch event for SP */
+    window.addEventListener("touchstart", function () {
+      if (isFinishStartTween) {
+        if (!isTravelAuto) {
+          if (!locationObj.isMoveCamera) {
+            if (isLand) {
+              infoBordObj.fadeInfoBoardText();
+              killTweenTextAnimation();
+              locationObj.deletePin();
+            }
+          }
+        }
+        if (!isSearching) {
+          isTouchInfoObject = false;
+        }
+      }
+    }, false);
+
+
+    /* double tap event for SP */
+    let tapCount = 0;
+    window.addEventListener("touchstart", function () {
+      // single tap
+      if (!tapCount) {
+        ++tapCount;
+
+        setTimeout(function () {
+          tapCount = 0;
+        }, 350);
+
+        // double tap
+      } else {
+        if (isSPBtnDisplay) {
+          $('#travelModeSwitch').css({'display': 'none'});
+          $('#stopMove').css({'display': 'none'});
+          $('.navToggle').css({'display': 'none'});
+        } else {
+          $('#travelModeSwitch').css({'display': 'block'});
+          $('#stopMove').css({'display': 'block'});
+          $('.navToggle').css({'display': 'block'});
+        }
+        isSPBtnDisplay = !isSPBtnDisplay;
+        e.preventDefault();
+        tapCount = 0;
+      }
+    });
+    //////////////////////////////////////////////////////////////////////////
 
 
     /* make well-being button in order to show score */
@@ -1229,7 +926,7 @@ import {InfoBord} from './InfoBord';
         /* delete infoBoard2 */
         killTweenTextAnimation();
         infoBordObj.fadeInfoBoardText();
-        locationObj.deletePin(earth);
+        locationObj.deletePin();
 
         const wbType = {'ladderData': 0, 'positiveData': 1, 'negativeData': 2, 'gdpData': 3};
         const type = e.target.id.slice(0, -4) + 'Data';
@@ -1239,7 +936,7 @@ import {InfoBord} from './InfoBord';
 
         /* travel type check */
         if (isTravelAuto) {
-          locationObj.deletePin(earth);
+          locationObj.deletePin();
           travelWellbeing();
         }
       }, false);
@@ -1279,7 +976,7 @@ import {InfoBord} from './InfoBord';
       infoBordObj.setInfoTypeNone();
 
       TweenMax.killAll();
-      locationObj.deletePin(earth);
+      locationObj.deletePin();
       stopTravel();
       isPantheon = true;
       dataList['pantheonData'].drawHist(2000, 'new');
@@ -1304,7 +1001,7 @@ import {InfoBord} from './InfoBord';
       }
 
       TweenMax.killAll();
-      locationObj.deletePin(earth);
+      locationObj.deletePin();
       isPantheon = false;
 
       let selectedType = returnSelectedWBtype();
@@ -1374,7 +1071,7 @@ import {InfoBord} from './InfoBord';
       if (isFinishStartTween) {
         if (!dragFlag) {
           if (isLand) {
-            locationObj.deletePin(earth);
+            locationObj.deletePin();
             infoBordObj.displayInfo(countryNameGlobal, earth, camera, controls);
           }
         }
@@ -1415,8 +1112,8 @@ import {InfoBord} from './InfoBord';
       let i = index;
       travelSetInterval = setInterval(function () {
         if (i > 0) {
-          pinList[i - 1].children[0].material.color.setHex(0xC9C7B7);
-          pinList[i - 1].children[1].material.color.setHex(0xC9C7B7);
+          locationObj.pinList[i - 1].children[0].material.color.setHex(0xC9C7B7);
+          locationObj.pinList[i - 1].children[1].material.color.setHex(0xC9C7B7);
         }
 
         let selectedType = returnSelectedWBtype();
@@ -1442,7 +1139,7 @@ import {InfoBord} from './InfoBord';
             infoBordObj.fadeInfoBoardVisual();
             infoBordObj.fadeInfoBoardText();
 
-            locationObj.deletePin(earth);
+            locationObj.deletePin();
             travelWellbeing();
           }, 5000);
         }
@@ -1466,13 +1163,13 @@ import {InfoBord} from './InfoBord';
 
       function travel() {
         if (i > 0) {
-          if (numPinList === pinList.length) {
+          if (numPinList === locationObj.pinList.length) {
             isClear = true;
           }
-          let pins = pinList[pinList.length - 1].children;
+          let pins = locationObj.pinList[locationObj.pinList.length - 1].children;
           pins[0].material.color.setHex(0xC9C7B7);
           pins[1].material.color.setHex(0xC9C7B7);
-          numPinList = pinList.length;
+          numPinList = locationObj.pinList.length;
         }
 
 
@@ -1492,8 +1189,8 @@ import {InfoBord} from './InfoBord';
         i++;
 
         if (isClear) {
-          for (let i = 0, l = pinList.length; l > i; i++) {
-            let pins = pinList[i].children;
+          for (let i = 0, l = locationObj.pinList.length; l > i; i++) {
+            let pins = locationObj.pinList[i].children;
             pins[0].material.color.setHex(0xC9C7B7);
             pins[1].material.color.setHex(0xC9C7B7);
           }
@@ -1546,7 +1243,7 @@ import {InfoBord} from './InfoBord';
 
       selectorSearch.on("autocompleteclose", function () {
         countryNameGlobal = $(selectorSearchID[i])[0].innerHTML;
-        locationObj.deletePin(earth);
+        locationObj.deletePin();
 
         console.log(countryNameGlobal);
 
