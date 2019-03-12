@@ -2,6 +2,14 @@ import {Dataset} from './Dataset';
 import {Location} from './Location';
 import {InfoBord} from './InfoBord';
 import {Hist} from './Hist';
+import {Menu} from './Menu';
+
+
+import {country_data} from './data/country_data';
+import {latlon} from './data/lat_lon';
+import {wbData} from './data/wellbeing_data';
+import {pantheon} from './data/pantheon';
+import {timeline} from './data/timeline';
 
 
 (() => {
@@ -23,7 +31,6 @@ import {Hist} from './Hist';
   let earth;
   let earthOutline;
   let radius = 0.994;
-  let axesHelper;
   const RENDERER_PARAM = {
     clearColor: 0x000000
   };
@@ -87,7 +94,9 @@ import {Hist} from './Hist';
   let speed = 3.141592 * 2 / 90 / 60 / 60;  // 1round/90m
   let postprocessing = {};
   // temp val
-  let stats;
+  // let stats;
+  // let axesHelper;
+
 
   let isPantheon;
 
@@ -158,18 +167,18 @@ import {Hist} from './Hist';
 
   /////////////////////////
   function init(vsMain, fsMain, vsPost, fsPost) {
-    stats = initStats();
-
-    function initStats() {
-      let stats = new Stats();
-      stats.setMode(0); // 0: fps, 1: ms
-      // Align top-left
-      stats.domElement.style.position = 'absolute';
-      stats.domElement.style.left = '0px';
-      stats.domElement.style.top = '200px';
-      document.getElementById("Stats-output").appendChild(stats.domElement);
-      return stats;
-    }
+    // stats = initStats();
+    //
+    // function initStats() {
+    //   let stats = new Stats();
+    //   stats.setMode(0); // 0: fps, 1: ms
+    //   // Align top-left
+    //   stats.domElement.style.position = 'absolute';
+    //   stats.domElement.style.left = '0px';
+    //   stats.domElement.style.top = '200px';
+    //   document.getElementById("Stats-output").appendChild(stats.domElement);
+    //   return stats;
+    // }
 
 
     /*
@@ -297,47 +306,10 @@ import {Hist} from './Hist';
 
 
     //////////////////////////////////////////////////////////////////////////
-    /* menu */
-    $('.navToggle').click(function () {
-      $(this).toggleClass('active');
-
-      if ($(this).hasClass('active')) {
-        $('.globalMenu').addClass('active');
-      } else {
-        $('.globalMenu').removeClass('active');
-      }
-    });
-
-    // if content is clicked, close menu.
-    $('.globalMenu').click(function () {
-      $('.navToggle').removeClass('active');
-      $('.globalMenu').removeClass('active');
-    });
-
-
-    /* modal window */
-    let menuSetting = document.getElementsByClassName('menu');
-    for (let i = 0, l = menuSetting.length; i < l; i++) {
-      menuSetting[i].addEventListener('click', (e) => {
-        let id = e.target.id.slice(4,);
-        $(this).blur();
-        if ($("#modalOverlay")[0]) {
-          return false;
-        }
-        $("body").append('<div id="modalOverlay"></div>');
-        $("#modalOverlay").fadeIn(400);
-
-        // contentごとに書き換え
-        $("#modalContentWrapper" + id.toString()).fadeIn(400);
-        $("#modalOverlay, .modalClose").unbind()
-            .click(function () {
-              $("#modalContentWrapper" + id.toString() + ", #modalOverlay").fadeOut(400, function () {
-                $("#modalOverlay").remove();
-              });
-            });
-      }, false);
-    }
+    // /* menu */
     //////////////////////////////////////////////////////////////////////////
+    Menu.initMenu();
+    Menu.initModal();
 
 
     //////////////////////////////////////////////////////////////////////////
@@ -414,8 +386,6 @@ import {Hist} from './Hist';
     }, false);
     //////////////////////////////////////////////////////////////////////////
 
-    console.log(travelModeSwitch);
-
 
     //////////////////////////////////////////////////////////////////////////
     /* start button */
@@ -482,74 +452,6 @@ import {Hist} from './Hist';
         }
       }
     };
-    //////////////////////////////////////////////////////////////////////////
-
-
-    //////////////////////////////////////////////////////////////////////////
-    /* drag object function */
-    let draggableObject = document.getElementsByClassName("dragDrop");
-    let draggableObjectX;
-    let draggableObjectY;
-
-    for (let i = 0; i < draggableObject.length; i++) {
-      draggableObject[i].addEventListener("mousedown", dragMousedown, false);
-      draggableObject[i].addEventListener("touchstart", dragMousedown, false);
-    }
-
-    function dragMousedown(e) {
-      let event;
-      this.classList.add("drag");
-
-      // mouse & touch event
-      if (e.type === "mousedown") {
-        event = e;
-      } else {
-        event = e.changedTouches[0];
-      }
-      draggableObjectX = event.pageX - this.offsetLeft;
-      draggableObjectY = event.pageY - this.offsetTop;
-
-      document.body.addEventListener("mousemove", dragMousemove, false);
-      document.body.addEventListener("touchmove", dragMousemove, false);
-    }
-
-
-    function dragMousemove(e) {
-      let drag = document.getElementsByClassName("drag")[0];
-      let event;
-
-      // mouse & touch event
-      if (e.type === "mousemove") {
-        event = e;
-      } else {
-        event = e.changedTouches[0];
-      }
-
-      // prevent flick
-      e.preventDefault();
-
-      drag.style.left = event.pageX - draggableObjectX + "px";
-      drag.style.top = event.pageY - draggableObjectY + "px";
-
-      drag.addEventListener("mouseup", dragMouseUp, false);
-      document.body.addEventListener("mouseleave", dragMouseUp, false);
-      drag.addEventListener("touchend", dragMouseUp, false);
-      document.body.addEventListener("touchleave", dragMouseUp, false);
-
-    }
-
-    function dragMouseUp() {
-      let drag = document.getElementsByClassName("drag")[0];
-      if (typeof drag !== 'undefined') {
-        document.body.removeEventListener("mousemove", dragMousemove, false);
-        drag.removeEventListener("mouseup", dragMouseUp, false);
-        document.body.removeEventListener("touchmove", dragMousemove, false);
-        drag.removeEventListener("touchend", dragMouseUp, false);
-
-        drag.classList.remove("drag");
-      }
-    }
-
     //////////////////////////////////////////////////////////////////////////
 
 
@@ -811,7 +713,7 @@ import {Hist} from './Hist';
         if (!dragFlag) {
           if (isLand) {
             locationObj.deletePin();
-            infoBordObj.displayInfo(countryNameGlobal, earth, camera, controls);
+            infoBordObj.displayInfo(countryNameGlobal);
           }
         }
       }
@@ -841,6 +743,9 @@ import {Hist} from './Hist';
       isTouchInfoObject = true;
     }
 
+
+
+    ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     /*
     // travel ranking country
@@ -945,10 +850,11 @@ import {Hist} from './Hist';
       travelSetInterval = setTimeout(travel, 3000);  // 1800(=30m) / 194(Num of Pantheon data)
     };
 
+    ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     // helper
-    axesHelper = new THREE.AxesHelper(5.0);
-    scene.add(axesHelper);
+    // axesHelper = new THREE.AxesHelper(5.0);
+    // scene.add(axesHelper);
 
 
     /* conduct rendering */
@@ -985,7 +891,7 @@ import {Hist} from './Hist';
 
         console.log(countryNameGlobal);
 
-        infoBordObj.displayInfo(countryNameGlobal, earth, camera, controls);
+        infoBordObj.displayInfo(countryNameGlobal);
         isSearching = false;
         isInfoObject = false;
         // console.log(isInfoObject);
@@ -1008,7 +914,7 @@ import {Hist} from './Hist';
   ////////////////////////
   function render() {
     // controls.update();
-    stats.update();
+    // stats.update();
     frame++;
     earth.rotation.y += speed;
 
@@ -1033,7 +939,7 @@ import {Hist} from './Hist';
 
   /* Rendering function for SP */
   function spRender() {
-    stats.update();
+    // stats.update();
     frame++;
     earth.rotation.y += speed;
 
