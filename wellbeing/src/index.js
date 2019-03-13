@@ -623,7 +623,7 @@ import {timeline} from './data/timeline';
       }, false);
     }
 
-    
+
     // function clearDrawHist(){
     //   const wbType = ['ladderData', 'positiveData', 'negativeData', 'gdpData'];
     //   for (let i = 0, wbLen = wbButton.length; i < wbLen; i++) {

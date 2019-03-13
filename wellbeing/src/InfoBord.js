@@ -189,7 +189,7 @@ export class InfoBord {
        this.location.moveCamera(latitude, longitude);
 
       $('#country').empty().append(countryName);
-      $('#country4').empty().append(countryName);
+      // $('#country4').empty().append(countryName);
     }
   }
 
@@ -358,6 +358,12 @@ export class InfoBord {
     document.getElementById("Positive2").innerHTML = '- P : ' + pRank + this.putRankOrdinal(pRank);
     document.getElementById("Negative2").innerHTML = '- N : ' + nRank + this.putRankOrdinal(nRank);
     document.getElementById("GDP2").innerHTML = '- G : ' + gRank + this.putRankOrdinal(gRank);
+
+    // small text for pantheon
+    document.getElementById("Ladder2s").innerHTML = '- L : ' + lRank + this.putRankOrdinal(lRank);
+    document.getElementById("Positive2s").innerHTML = '- P : ' + pRank + this.putRankOrdinal(pRank);
+    document.getElementById("Negative2s").innerHTML = '- N : ' + nRank + this.putRankOrdinal(nRank);
+    document.getElementById("GDP2s").innerHTML = '- G : ' + gRank + this.putRankOrdinal(gRank);
   }
 
   displayTextNoInfo(countryName) {
@@ -379,6 +385,11 @@ export class InfoBord {
     document.getElementById("Negative2").innerHTML = '';
     document.getElementById("GDP2").innerHTML = '';
 
+    // small text for pantheon
+    document.getElementById("Ladder2s").innerHTML = 'No data';
+    document.getElementById("Positive2s").innerHTML = '';
+    document.getElementById("Negative2s").innerHTML = '';
+    document.getElementById("GDP2s").innerHTML = '';
   }
 
 
@@ -394,7 +405,7 @@ export class InfoBord {
     let rank = this.searchTimelineRank(type, countryName);
     const spanSize = '<span style="font-size: 18px;">';
     const spanWeight = '<span style="font-weight: 200;">';
-    document.getElementById("country4").innerHTML = countryName + spanWeight + ' ( ' + rank.rank + spanSize + rank.rankOrdinal + '</span>' + ' ) ' + '</span>';
+    document.getElementById("country4").innerHTML = countryName + spanWeight + ' ( ' + type.slice(0, 1).toUpperCase() + ':' + rank.rank + spanSize + rank.rankOrdinal + '</span>' + ' ) ' + '</span>';
     let max, min;
     if (type === 'ladder') {
       max = this.dataset.ladderMax;
@@ -608,6 +619,8 @@ export class InfoBord {
     $('#infoBoard2').css("display", 'block');
     $('#infoBoardTimeline').css("display", 'none');
 
+    $('#infoBoard2s').css("display", 'none');
+
     $(".infoType").removeClass("selectedBtn");
     this.infoBtn[0].classList.add("selectedBtn");
   };
@@ -616,6 +629,8 @@ export class InfoBord {
     $('#infoBoard').css("display", 'grid');
     $('#infoBoard2').css("display", 'none');
     $('#infoBoardTimeline').css("display", 'none');
+
+    $('#infoBoard2s').css("display", 'none');
 
     $(".infoType").removeClass("selectedBtn");
     this.infoBtn[1].classList.add("selectedBtn");
@@ -626,6 +641,7 @@ export class InfoBord {
     $('#infoBoard2').css("display", 'none');
     $('#infoBoardTimeline').css("display", 'grid');
 
+    $('#infoBoard2s').css("display", 'none');
 
     $(".infoType").removeClass("selectedBtn");
     this.infoBtn[2].classList.add("selectedBtn");
@@ -635,6 +651,8 @@ export class InfoBord {
     $('#infoBoard').css("display", 'none');
     $('#infoBoard2').css("display", 'none');
     $('#infoBoardTimeline').css("display", 'none');
+
+    $('#infoBoard2s').css("display", 'block');
 
     $(".infoType").removeClass("selectedBtn");
   };
@@ -651,14 +669,15 @@ export class InfoBord {
     this.fadeInfoBoardPantheon();
   };
 
+  fadeInfoBoardLinechart() {
+    $('#infoBoardTimeline').css({opacity: 0.0});
+  };
+
   fadeInfoBoardPantheon() {
     $('#country3').css({opacity: 0.0});
     $('.infoBoardContent3').css({opacity: 0.0}).css("display", 'none');
   };
 
-  fadeInfoBoardLinechart() {
-    $('#infoBoardTimeline').css({opacity: 0.0});
-  };
 
 }
 

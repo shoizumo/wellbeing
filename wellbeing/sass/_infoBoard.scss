@@ -210,6 +210,28 @@ infoBoard2(text)
 }
 
 /*
+infoBoard2(text small for pantheon)
+*/
+
+#infoBoard2s {
+  display: none;
+  position: fixed;
+  top: 70%;
+  /*left: 100px;*/
+  padding-left: 5px;
+  font-family: $font-main;
+  font-weight: 400;
+  color: #ffffff;
+
+  list-style: none;
+
+  li {
+    padding-left: 5px;
+    padding-right: 5px;
+  }
+}
+
+/*
 infoBoard3(pantheon)
 */
 #infoBoard3 {
