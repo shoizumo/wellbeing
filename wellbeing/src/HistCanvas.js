@@ -15,6 +15,8 @@ export class HistCanvas {
     this.histArea.addEventListener('mousemove', this.getCanvasColor.bind(this), false);
 
     this.isFillHist = false;
+
+    this.drawSetInterval = '';
   }
 
   get width() {

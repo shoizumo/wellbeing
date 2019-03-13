@@ -1,14 +1,13 @@
-import {HistCanvas} from './HistCanvas';
-
 export class Hist {
-  constructor(dataArray, scoreArray, type, infoBordObj) {
+  constructor(dataArray, scoreArray, type, infoBordObj, histCanvas) {
     this.data = dataArray;
     this.scoreData = scoreArray;
     this.type = type;
 
     this.infoBord = infoBordObj;
 
-    this.canvas = new HistCanvas();
+    // this.canvas = new HistCanvas();
+    this.canvas = histCanvas;
     this.highlightedBarList = [];
 
     this.canvas.histArea.addEventListener('mousemove', this.onHistRanking.bind(this), false);
@@ -16,7 +15,7 @@ export class Hist {
     this.canvas.histArea.addEventListener('click', this.clickHistRanking.bind(this), false);
 
     this.isHistDisplay = false;
-    this.drawSetInterval = '';
+    this.canvas.drawSetInterval = '';
 
   }
 
@@ -38,9 +37,7 @@ export class Hist {
     if (drawType !== 'redraw'){
       this.resetHighlightedBarList();
     }
-
-    console.log('drawWbHist', this.type);
-    clearInterval(this.drawSetInterval);
+    clearInterval(this.canvas.drawSetInterval);
     this.histLoop(this.data, duration, drawType);
 
     // well-being typeが変わるとき(=draw hist時)にinfoも書き直す(time line->pie chartのときにtweenが無効になるため)
@@ -58,19 +55,20 @@ export class Hist {
 
   histLoop(data, duration, drawType) {
     console.log(this.type);
-    this.canvas.context.clearRect(0, 0, 9000, this.canvas.height);
+    this.canvas.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
+    // this.clearCanvas();
     let numData = data.length;
     let width = this.histWidth;
 
     // draw histogram with loop rect
     let i = 0;
     // console.log(numData, data);
-    this.drawSetInterval = setInterval(() => {
+    this.canvas.drawSetInterval = setInterval(() => {
       this.fillBar(width, i);
       i++;
 
       if (i > numData - 1) {
-        clearInterval(this.drawSetInterval);
+        clearInterval(this.canvas.drawSetInterval);
         this.highlightRedrawHist(drawType)
       }
     }, duration / numData);

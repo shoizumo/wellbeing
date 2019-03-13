@@ -1,6 +1,7 @@
 import {Dataset} from './Dataset';
 import {Location} from './Location';
 import {InfoBord} from './InfoBord';
+import {HistCanvas} from './HistCanvas';
 import {Hist} from './Hist';
 import {Menu} from './Menu';
 
@@ -288,13 +289,14 @@ import {timeline} from './data/timeline';
     const datasetdObj = new Dataset(wbData, pantheon, timeline);
     const locationObj = new Location(latlon, earth, controls, camera);
     const infoBordObj = new InfoBord(datasetdObj, locationObj);
+    const histCanvas = new HistCanvas();
 
 
-    const ladderData = new Hist(datasetdObj.ladder, datasetdObj.ladderScore, 'ladder', infoBordObj);
-    const positiveData = new Hist(datasetdObj.positive, datasetdObj.positiveScore, 'positive', infoBordObj);
-    const negativeData = new Hist(datasetdObj.negative, datasetdObj.negativeScore, 'negative', infoBordObj);
-    const gdpData = new Hist(datasetdObj.gdp, datasetdObj.gdpScore, 'gdp', infoBordObj);
-    const pantheonData = new Hist(datasetdObj.pantheon, datasetdObj.pantheonScore, 'pantheon', infoBordObj);
+    const ladderData = new Hist(datasetdObj.ladder, datasetdObj.ladderScore, 'ladder', infoBordObj, histCanvas);
+    const positiveData = new Hist(datasetdObj.positive, datasetdObj.positiveScore, 'positive', infoBordObj, histCanvas);
+    const negativeData = new Hist(datasetdObj.negative, datasetdObj.negativeScore, 'negative', infoBordObj, histCanvas);
+    const gdpData = new Hist(datasetdObj.gdp, datasetdObj.gdpScore, 'gdp', infoBordObj, histCanvas);
+    const pantheonData = new Hist(datasetdObj.pantheon, datasetdObj.pantheonScore, 'pantheon', infoBordObj, histCanvas);
 
     const dataList = {ladderData, positiveData, negativeData, gdpData, pantheonData};
 
@@ -605,6 +607,8 @@ import {timeline} from './data/timeline';
         infoBordObj.fadeInfoBoardText();
         locationObj.deletePin();
 
+        // clearDrawHist();
+
         const wbType = {'ladderData': 0, 'positiveData': 1, 'negativeData': 2, 'gdpData': 3};
         const type = e.target.id.slice(0, -4) + 'Data';
         const index = wbType[type];
@@ -618,6 +622,14 @@ import {timeline} from './data/timeline';
         }
       }, false);
     }
+
+    
+    // function clearDrawHist(){
+    //   const wbType = ['ladderData', 'positiveData', 'negativeData', 'gdpData'];
+    //   for (let i = 0, wbLen = wbButton.length; i < wbLen; i++) {
+    //     dataList[wbType[i]].clearCanvas();
+    //   }
+    // }
 
 
     /* pantheon mode */
