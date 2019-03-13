@@ -33,9 +33,9 @@ export class Hist {
   }
 
   drawHist(duration, drawType) {
-    /* drawType: new, redraw */
+    /* drawType: new, redraw, travel */
 
-    if (drawType === 'new'){
+    if (drawType !== 'redraw'){
       this.resetHighlightedBarList();
     }
 
@@ -47,10 +47,10 @@ export class Hist {
     if (!this.infoBord.isFirstDisplay){
       if (typeof this.infoBord.countryNameDisplayed !== 'undefined') {
         if (drawType === 'new') {
-          if (this.checkIsTravelManual()) {
+          // if (this.checkIsTravelManual()) {
             this.infoBord.location.deletePin();
             this.infoBord.displayInfo(this.infoBord.countryNameDisplayed);
-          }
+          // }
         }
       }
     }

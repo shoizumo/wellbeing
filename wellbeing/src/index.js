@@ -107,7 +107,8 @@ import {timeline} from './data/timeline';
 
 
   let returnSelectedWBtype;
-  let setSelectedWBButton;
+  let setSelectedDataTypeButton;
+  let setSelectedTravelModeButton;
   let killTweenTextAnimation;
 
 
@@ -297,7 +298,7 @@ import {timeline} from './data/timeline';
 
     const dataList = {ladderData, positiveData, negativeData, gdpData, pantheonData};
 
-    function checkIsTravelManual(){
+    function checkIsTravelManual() {
       return document.getElementById("travelModeSwitch-checkbox").checked;
     }
 
@@ -314,11 +315,45 @@ import {timeline} from './data/timeline';
       return $('#wbButton2').find('.selectedBtn').attr("id").slice(0, -4) + 'Data';
     };
 
-    setSelectedWBButton = function (index) {
+    setSelectedDataTypeButton = function (index) {
       $(".wbButton").removeClass("selectedBtn");
       document.getElementsByClassName('wbButton1')[index].classList.add("selectedBtn");
       document.getElementsByClassName('wbButton2')[index].classList.add("selectedBtn");
     };
+
+    setSelectedTravelModeButton = function () {
+      $(".travelMode").removeClass("selectedBtn");
+      if (checkIsTravelManual()) {
+        // -> AutoModeになったとき
+        setAutoModeTravel();
+      } else {
+        // -> ManualModeになったとき
+        setManualModeTravel();
+      }
+    };
+
+    function setManualModeTravel() {
+      $("#manualMode").addClass("selectedBtn");
+    }
+
+    function setAutoModeTravel() {
+      $("#autoMode").addClass("selectedBtn");
+    }
+
+
+    let travelModeBtn = document.getElementsByClassName('travelMode');
+    for (let i = 0, l = travelModeBtn.length; i < l; i++) {
+      travelModeBtn[i].addEventListener('click', (e) => {
+        $(".travelMode").removeClass("selectedBtn");
+        travelModeBtn[i].classList.add("selectedBtn");
+        changeTravelMode();
+
+        let mode = e.target.id.slice(0,6);
+        document.getElementById("travelModeSwitch-checkbox").checked = mode === 'manual';
+      })
+    }
+
+
     //////////////////////////////////////////////////////////////////////////
 
 
@@ -326,12 +361,15 @@ import {timeline} from './data/timeline';
     /* switch travel type button */
     travelModeSwitch = document.getElementById('travelModeSwitch-label');
     travelModeSwitch.addEventListener('click', () => {
-      //isTravelAuto = checkIsTravelManual();
+      changeTravelMode();
+    });
 
+    function changeTravelMode() {
+      setSelectedTravelModeButton();
       // canvasContext.globalAlpha = 0.5;
       let selectedType = returnSelectedWBtype();
       console.log(selectedType);
-      dataList[selectedType].drawHist(drawHistDurationNomal, 'redraw');
+      dataList[selectedType].drawHist(drawHistDurationNomal, 'travel');
 
       infoBordObj.fadeInfoBoardVisual();
       infoBordObj.fadeInfoBoardText();
@@ -364,7 +402,7 @@ import {timeline} from './data/timeline';
           infoBordObj.setInfoTypeNone();
         }
       }
-    });
+    }
 
     let stopMove = document.getElementById('stopMove');
     stopMove.addEventListener('click', () => {
@@ -410,9 +448,10 @@ import {timeline} from './data/timeline';
           }, {passive: false});
 
           setTimeout(() => {
-            setSelectedWBButton(0);
+            setSelectedDataTypeButton(0);
             infoBordObj.infoBtn[2].classList.add("selectedBtn"); // infoBordObj.setInfoTypeLinechart
             infoBordObj.setInfoTypeLinechart();
+            setManualModeTravel();
 
           }, 400);
           setTimeout(() => {
@@ -441,10 +480,10 @@ import {timeline} from './data/timeline';
       if (!infoBordObj.isFirstDisplay) {
         infoBordObj.tweenWb1.kill();
         infoBordObj.tweenP1.kill();
-        if (infoBordObj.tweenWb2 !== ''){
+        if (infoBordObj.tweenWb2 !== '') {
           infoBordObj.tweenWb2.kill();
         }
-        if (infoBordObj.tweenP2 !== ''){
+        if (infoBordObj.tweenP2 !== '') {
           infoBordObj.tweenP2.kill();
         }
       }
@@ -569,7 +608,7 @@ import {timeline} from './data/timeline';
         const wbType = {'ladderData': 0, 'positiveData': 1, 'negativeData': 2, 'gdpData': 3};
         const type = e.target.id.slice(0, -4) + 'Data';
         const index = wbType[type];
-        setSelectedWBButton(index);
+        setSelectedDataTypeButton(index);
         dataList[type].drawHist(drawHistDurationNomal, 'new');
 
         /* travel type check */
@@ -741,7 +780,6 @@ import {timeline} from './data/timeline';
     }
 
 
-
     ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     /*
@@ -773,7 +811,7 @@ import {timeline} from './data/timeline';
             const wbType = {'ladderData': 1, 'positiveData': 2, 'negativeData': 3, 'gdpData': 0};
             const type = e.target.id.slice(0, -4) + 'Data';
             const nextIndex = wbType[type];
-            setSelectedWBButton(nextIndex);
+            setSelectedDataTypeButton(nextIndex);
             dataList[type].drawHist(drawHistDurationNomal, 'new');
 
             infoBordObj.fadeInfoBoardVisual();

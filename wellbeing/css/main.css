@@ -52,6 +52,7 @@ html, body {
   margin-left: -80px;
   color: #dddddd;
   font-family: "Nunito", sans-serif;
+  font-size: 2.0em;
   font-weight: 300;
   cursor: pointer; }
 
@@ -277,8 +278,21 @@ modal window(responsive)
   background: #d7d7d7;
   grid-raw: 3 / 4; }
 
-#infoType {
+#travelMode {
   grid-raw: 4 / 5; }
+
+#travelMode li {
+  border: 1px dotted #aaaaaa;
+  width: 148px;
+  height: 58px; }
+
+#settingContentTitle3 {
+  /*border: 1px dotted #aaaaaa;*/
+  background: #d7d7d7;
+  grid-raw: 4 / 5; }
+
+#infoType {
+  grid-raw: 5 / 6; }
 
 #infoType li {
   border: 1px dotted #aaaaaa;
@@ -651,6 +665,8 @@ infoBoard3(pantheon)
     width: 600px; }
   #wbButton1 li {
     width: 148px; }
+  #travelMode li {
+    width: 298px; }
   #infoType li {
     width: 198px; } }
 
