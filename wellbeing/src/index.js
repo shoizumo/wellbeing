@@ -4,6 +4,7 @@ import {InfoBord} from './InfoBord';
 import {HistCanvas} from './HistCanvas';
 import {Hist} from './Hist';
 import {Menu} from './Menu';
+import {Audio} from './Audio';
 
 
 import {country_data} from './data/country_data';
@@ -342,7 +343,7 @@ import {timeline} from './data/timeline';
         travelModeBtn[i].classList.add("selectedBtn");
         changeTravelMode();
 
-        let mode = e.target.id.slice(0,6);
+        let mode = e.target.id.slice(0, 6);
         document.getElementById("travelModeSwitch-checkbox").checked = mode === 'manual';
       })
     }
@@ -387,7 +388,7 @@ import {timeline} from './data/timeline';
       }
     }
 
-    function clearSmallText(){
+    function clearSmallText() {
       document.getElementById("Ladder2s").innerHTML = '';
       document.getElementById("Positive2s").innerHTML = '';
       document.getElementById("Negative2s").innerHTML = '';
@@ -410,54 +411,63 @@ import {timeline} from './data/timeline';
 
     //////////////////////////////////////////////////////////////////////////
     /* start button */
-    let startButton = document.getElementById('startButton');
-    startButton.addEventListener('click', () => {
-      let duration = 5.0;
-      // let ease = Back.easeOut.config(1);
-      let ease = CustomEase.create("custom", "M0,0 C0.404,0.594 0.339,0.958 0.594,1.032 0.754,1.078 0.838,1 1,1");
+    let startButton = document.getElementsByClassName('startButton');
+    for (let i = 0, l = startButton.length; l > i; i++) {
+      startButton[i].addEventListener('click', function(){
 
-      TweenMax.to(earth.position, duration, {
-        y: 0.0,
-        z: 0.0,
-        ease: ease
-      });
+        let isSoundOn = this.id === 'soundOn';
+        const audioObj = new Audio(isSoundOn);
+        audioObj.play();
 
-      /* show button & land*/
-      TweenMax.to(camera.position, duration, {
-        z: 2.5,
-        ease: ease,
-        onComplete: function () {
-          $('.allButton').css('opacity', '1');
+        let duration = 5.0;
+        // let ease = Back.easeOut.config(1);
+        let ease = CustomEase.create("custom", "M0,0 C0.404,0.594 0.339,0.958 0.594,1.032 0.754,1.078 0.838,1 1,1");
 
-          document.addEventListener('touchmove', function (e) {
-            e.preventDefault();
-          }, {passive: false});
+        TweenMax.to(earth.position, duration, {
+          y: 0.0,
+          z: 0.0,
+          ease: ease
+        });
 
-          setTimeout(() => {
-            setSelectedDataTypeButton(0);
-            infoBordObj.infoBtn[2].classList.add("selectedBtn"); // infoBordObj.setInfoTypeLinechart
-            infoBordObj.setInfoTypeLinechart();
-            setManualModeTravel();
+        /* show button & land*/
+        TweenMax.to(camera.position, duration, {
+          z: 2.5,
+          ease: ease,
+          onComplete: function () {
+            $('.allButton').css('opacity', '1');
 
-          }, 400);
-          setTimeout(() => {
-            // landBase.material.opacity = 1.0;
-            dataList['ladderData'].drawHist(drawHistDurationNomal, 'new');
+            document.addEventListener('touchmove', function (e) {
+              e.preventDefault();
+            }, {passive: false});
+
+            setTimeout(() => {
+              setSelectedDataTypeButton(0);
+              infoBordObj.infoBtn[2].classList.add("selectedBtn"); // infoBordObj.setInfoTypeLinechart
+              infoBordObj.setInfoTypeLinechart();
+              setManualModeTravel();
+
+            }, 400);
+            setTimeout(() => {
+              // landBase.material.opacity = 1.0;
+              dataList['ladderData'].drawHist(drawHistDurationNomal, 'new');
 
 
-            isFinishStartTween = true;
-            controls.enableZoom = true;
-          }, 500);
-        }
-      });
+              isFinishStartTween = true;
+              controls.enableZoom = true;
+            }, 500);
+          }
+        });
 
-      TweenMax.to(".load", duration - 3.0, {
-        opacity: 0.0,
-        onComplete: function () {
-          $('.load').remove();
-        }
+        TweenMax.to(".load", duration - 3.0, {
+          opacity: 0.0,
+          onComplete: function () {
+            $('.load').remove();
+          }
+        })
       })
-    });
+    }
+
+
     //////////////////////////////////////////////////////////////////////////
 
 
@@ -493,9 +503,14 @@ import {timeline} from './data/timeline';
           // dataListのうち、1つだけ更新すればOK！？
           dataList['ladderData'].canvas.width = histWidth;
 
-          let selectedType = returnSelectedWBtype();
-          console.log(selectedType);
-          dataList[selectedType].drawHist(drawHistDurationRedraw, 'redraw');
+
+          if (infoBordObj.isPantheon){
+            dataList['pantheonData'].drawHist(drawHistDurationRedraw, 'redraw');
+          }else{
+            let selectedType = returnSelectedWBtype();
+            console.log(selectedType);
+            dataList[selectedType].drawHist(drawHistDurationRedraw, 'redraw');
+          }
         }
       }
     }, false);

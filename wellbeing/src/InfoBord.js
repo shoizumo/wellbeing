@@ -171,7 +171,7 @@ export class InfoBord {
       this.displayTextNoInfo(countryName);
       if (!this.isPantheon) {
         if ($('.infoType.selectedBtn')[0].id.slice(4,) === 'Linechart') {
-          this.displayTimelineNoInfo(countryName);
+          this.displayTimelineNoInfo();
         }
       }
     }
@@ -593,7 +593,7 @@ export class InfoBord {
         name = d['name'][i];
         occupation = d['occ'][i];
         year = d['year'][i];
-        infoBoardContent3[i].innerHTML = path1 + url + path2 + name + ' <span style="color:#dae1f7; font-size: 16px;">(' + space + occupation + born + year + space + ')</span>' + path3;
+        infoBoardContent3[i].innerHTML = path1 + url + path2 + name + ' <span style="color:#dae1f7; font-size: 15px;">(' + space + occupation + born + year + space + ')</span>' + path3;
       }
     } else {
       infoBoardContent3[0].innerHTML = 'No data';
