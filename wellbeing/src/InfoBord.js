@@ -647,7 +647,7 @@ export class InfoBord {
     this.infoBtn[2].classList.add("selectedBtn");
   };
 
-  setInfoTypeNone() {
+  setInfoTypePantheon() {
     $('#infoBoard').css("display", 'none');
     $('#infoBoard2').css("display", 'none');
     $('#infoBoardTimeline').css("display", 'none');

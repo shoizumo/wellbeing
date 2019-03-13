@@ -78,8 +78,6 @@ import {timeline} from './data/timeline';
   let isInfoObject = false;
   let infoObject;
   let isSearching = false;
-  let latitude;
-  let longitude;
   let isFinishStartTween = false;
   let isMoveStop = true;
 
@@ -369,7 +367,12 @@ import {timeline} from './data/timeline';
     function changeTravelMode() {
       setSelectedTravelModeButton();
       // canvasContext.globalAlpha = 0.5;
-      let selectedType = returnSelectedWBtype();
+      let selectedType;
+      if (infoBordObj.isPantheon){
+        selectedType = 'pantheonData';
+      }else{
+        selectedType = returnSelectedWBtype();
+      }
       console.log(selectedType);
       dataList[selectedType].drawHist(drawHistDurationNomal, 'travel');
 
@@ -401,7 +404,7 @@ import {timeline} from './data/timeline';
         if (!isPantheon) {
           infoBordObj.setInfoTypeLinechart();
         } else {
-          infoBordObj.setInfoTypeNone();
+          infoBordObj.setInfoTypePantheon();
         }
       }
     }
@@ -662,7 +665,7 @@ import {timeline} from './data/timeline';
       $('#infoBoard3').css("display", 'block');
       $(".infoType").removeClass("selectedBtn");
       infoBordObj.infoBtn[2].classList.add("selectedBtn");
-      infoBordObj.setInfoTypeNone();
+      infoBordObj.setInfoTypePantheon();
 
       TweenMax.killAll();
       locationObj.deletePin();
@@ -671,6 +674,8 @@ import {timeline} from './data/timeline';
       dataList['pantheonData'].drawHist(drawHistDurationNomal, 'new');
 
       $('#wbButton2').css("display", 'none');
+
+      infoBordObj.isPantheon = true;
     }
 
     function offPantheon() {
@@ -698,6 +703,8 @@ import {timeline} from './data/timeline';
       dataList[selectedType].drawHist(drawHistDurationNomal, 'new');
 
       $('#wbButton2').css("display", 'block');
+
+      infoBordObj.isPantheon = false;
     }
 
 
@@ -705,13 +712,10 @@ import {timeline} from './data/timeline';
     // interactive land object function
     */
     let tooltip = $('#tooltip');
-    // let infoBoard = $('#infoBoard');
-    // let infoBoardTimeline = $('#infoBoardTimeline');
     let body = $('body');
 
     window.addEventListener('mousemove', onLandMouseMove, false);
     window.addEventListener('click', onLandMouseClick, false);
-
 
     /* mouse over land */
     function onLandMouseMove(event) {
@@ -776,7 +780,6 @@ import {timeline} from './data/timeline';
       infoObject[i].addEventListener('touchstart', touchInfoObject, false);
     }
 
-
     function onInfoObject() {
       isInfoObject = true;
     }
@@ -790,7 +793,6 @@ import {timeline} from './data/timeline';
     function touchInfoObject() {
       isTouchInfoObject = true;
     }
-
 
     ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -863,19 +865,22 @@ import {timeline} from './data/timeline';
         }
 
 
-        let data = dataList['pantheon'];
+        let data = dataList['pantheonData'];
         let countryName = data.scoreData[i].country;
         data.highlightBar(countryName);
+        infoBordObj.displayInfo(countryName);
 
 
         // let countryName = PantheonScoreArray[i]['country'];
         // console.log(countryName);
         // highlightedBar(countryName, histData, scoreMax);
-        let res = countrynameToLatlon(countryName);
-        latitude = res.latitude;
-        longitude = res.longitude;
-        moveCamera(latitude, longitude);
-        displayPantheon(countryName);
+        // let res = countrynameToLatlon(countryName);
+        // latitude = res.latitude;
+        // longitude = res.longitude;
+        // moveCamera(latitude, longitude);
+        // displayPantheon(countryName);
+        //
+
         i++;
 
         if (isClear) {
