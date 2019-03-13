@@ -67,6 +67,7 @@ import {timeline} from './data/timeline';
   let travelModeSwitch;
   let isTouchInfoObject = false;
   let isSPBtnDisplay = true;
+  let infoObject;
 
 
   /* ranking histogram */
@@ -76,7 +77,6 @@ import {timeline} from './data/timeline';
   let dragFlag = false;
   let isLand = false;
   let isInfoObject = false;
-  let infoObject;
   let isSearching = false;
   let isFinishStartTween = false;
   let isMoveStop = true;
@@ -95,8 +95,6 @@ import {timeline} from './data/timeline';
   // let stats;
   // let axesHelper;
 
-
-  let isPantheon;
 
   /* function */
   let travelWellbeing;
@@ -194,9 +192,7 @@ import {timeline} from './data/timeline';
 
     /* camera */
     camera = new THREE.PerspectiveCamera(60, canvasWidth / canvasHeight, 0.1, 5.0);
-    // camera.name = 'camera';  // name for Location class
     camera.position.z = initCameraPosition.z;
-    // scene.add(camera);
 
     controls = new THREE.OrbitControls(camera, renderer.domElement);
     // controls.name = 'controls';  // name for Location class
@@ -207,8 +203,6 @@ import {timeline} from './data/timeline';
     controls.rotateSpeed = 0.1;
     controls.enableDamping = true;
     controls.dampingFactor = 0.2;
-    // scene.add(controls);
-
 
     /* light for marker Pin */
     ambientLight = new THREE.AmbientLight(0xffffff, 0.5);
@@ -364,49 +358,40 @@ import {timeline} from './data/timeline';
       changeTravelMode();
     });
 
+    // Auto Modeでは常にPantheon Mode
     function changeTravelMode() {
       setSelectedTravelModeButton();
-      // canvasContext.globalAlpha = 0.5;
-      let selectedType;
-      if (infoBordObj.isPantheon){
-        selectedType = 'pantheonData';
-      }else{
-        selectedType = returnSelectedWBtype();
-      }
-      console.log(selectedType);
-      dataList[selectedType].drawHist(drawHistDurationNomal, 'travel');
-
       infoBordObj.fadeInfoBoardVisual();
       infoBordObj.fadeInfoBoardText();
 
       TweenMax.killAll();
       locationObj.deletePin();
       stopTravel();
+      clearSmallText();
 
       // この処理終了後に、checkedの値が変わるため、変更前の値に基づいて分岐
       if (checkIsTravelManual()) {
         // -> AutoModeになったとき
+        onPantheon();
         isMoveStop = true;
         controls.enableRotate = false;
-        if (!isPantheon) {
-          travelWellbeing();
-          infoBordObj.setInfoTypeText();
-        } else {
-          travelPantheon();
-        }
+        travelPantheon();
         stopMove.innerText = 'Stop';
         stopMove.setAttribute('style', 'opacity:1.0;');
       } else {
         // -> ManualModeになったとき
+        offPantheon();
         isMoveStop = false;
         controls.enableRotate = true;
         stopMove.setAttribute('style', 'opacity:0.0;');
-        if (!isPantheon) {
-          infoBordObj.setInfoTypeLinechart();
-        } else {
-          infoBordObj.setInfoTypePantheon();
-        }
       }
+    }
+
+    function clearSmallText(){
+      document.getElementById("Ladder2s").innerHTML = '';
+      document.getElementById("Positive2s").innerHTML = '';
+      document.getElementById("Negative2s").innerHTML = '';
+      document.getElementById("GDP2s").innerHTML = '';
     }
 
     let stopMove = document.getElementById('stopMove');
@@ -416,11 +401,7 @@ import {timeline} from './data/timeline';
         stopTravel();
       } else {
         stopMove.innerText = 'Stop';
-        if (!isPantheon) {
-          travelWellbeing(travelIndex);
-        } else {
-          travelPantheon(travelIndex);
-        }
+        travelPantheon(travelIndex);
       }
       isMoveStop = !isMoveStop;
     }, false);
@@ -618,50 +599,16 @@ import {timeline} from './data/timeline';
         setSelectedDataTypeButton(index);
         dataList[type].drawHist(drawHistDurationNomal, 'new');
 
-        /* travel type check */
-        if (!checkIsTravelManual()) {
-          locationObj.deletePin();
-          travelWellbeing();
-        }
+        // /* travel type check */
+        // if (!checkIsTravelManual()) {
+        //   locationObj.deletePin();
+        //   travelWellbeing();
+        // }
       }, false);
     }
 
-
-    // function clearDrawHist(){
-    //   const wbType = ['ladderData', 'positiveData', 'negativeData', 'gdpData'];
-    //   for (let i = 0, wbLen = wbButton.length; i < wbLen; i++) {
-    //     dataList[wbType[i]].clearCanvas();
-    //   }
-    // }
-
-
-    /* pantheon mode */
-    isPantheon = false;
-    window.addEventListener("keydown", function (event) {
-      // console.log(event.keyCode, event.keyCode === 32);
-      if (!locationObj.isMoveCamera) {
-        if (event.keyCode === 32) {  // space
-          console.log('space');
-          onPantheon();
-          if (!checkIsTravelManual()) {
-            infoBordObj.fadeInfoBoardPantheon();
-            travelPantheon();
-          }
-
-        } else if (event.keyCode === 27) {
-          console.log('esc');
-          offPantheon();
-          if (!checkIsTravelManual()) {
-            stopTravel();
-            travelWellbeing();
-          }
-        }
-      }
-    }, false);
-
-
     function onPantheon() {
-      // $('#country2').css("display", 'none');
+      infoBordObj.isPantheon = true;
       $('#infoBoard3').css("display", 'block');
       $(".infoType").removeClass("selectedBtn");
       infoBordObj.infoBtn[2].classList.add("selectedBtn");
@@ -670,41 +617,27 @@ import {timeline} from './data/timeline';
       TweenMax.killAll();
       locationObj.deletePin();
       stopTravel();
-      isPantheon = true;
-      dataList['pantheonData'].drawHist(drawHistDurationNomal, 'new');
+      dataList['pantheonData'].drawHist(drawHistDurationNomal, 'travel');
 
       $('#wbButton2').css("display", 'none');
-
-      infoBordObj.isPantheon = true;
     }
 
     function offPantheon() {
-      // let selectedType = returnSelectedWBtype();
-
-      // $('#country2').css("display", 'block');
+      infoBordObj.isPantheon = false;
       $('#infoBoard3').css("display", 'none');
       $(".infoType").removeClass("selectedBtn");
-
-      // もとに戻すときのinfoType設定
-      if (!checkIsTravelManual()) {
-        infoBordObj.infoBtn[0].classList.add("selectedBtn");
-        infoBordObj.setInfoTypeText();
-      } else {
-        infoBordObj.infoBtn[2].classList.add("selectedBtn");
-        infoBordObj.setInfoTypeLinechart();
-      }
+      infoBordObj.infoBtn[2].classList.add("selectedBtn");
+      infoBordObj.setInfoTypeLinechart();
 
       TweenMax.killAll();
       locationObj.deletePin();
-      isPantheon = false;
 
       let selectedType = returnSelectedWBtype();
       console.log(selectedType);
-      dataList[selectedType].drawHist(drawHistDurationNomal, 'new');
+      dataList[selectedType].drawHist(drawHistDurationNomal, 'travel');
 
       $('#wbButton2').css("display", 'block');
 
-      infoBordObj.isPantheon = false;
     }
 
 
@@ -799,44 +732,44 @@ import {timeline} from './data/timeline';
     /*
     // travel ranking country
     */
-    travelWellbeing = function (index = 0) {
-      stopTravel();  // clear previous travel
-      let i = index;
-      travelSetInterval = setInterval(function () {
-        if (i > 0) {
-          locationObj.pinList[i - 1].children[0].material.color.setHex(0xC9C7B7);
-          locationObj.pinList[i - 1].children[1].material.color.setHex(0xC9C7B7);
-        }
-
-        let selectedType = returnSelectedWBtype();
-        let data = dataList[selectedType];
-        let countryName = data.scoreData[i].country;
-        data.highlightBar(countryName);
-        infoBordObj.displayInfo(countryName);
-        i++;
-        travelIndex = i;  // val for continue
-        if (i > wbLength - 1) {
-          // if (i > 3 - 1) {
-          console.log('clearInterval', i);
-          clearInterval(travelSetInterval);
-
-          // next travel
-          setTimeout(() => {
-            const wbType = {'ladderData': 1, 'positiveData': 2, 'negativeData': 3, 'gdpData': 0};
-            const type = e.target.id.slice(0, -4) + 'Data';
-            const nextIndex = wbType[type];
-            setSelectedDataTypeButton(nextIndex);
-            dataList[type].drawHist(drawHistDurationNomal, 'new');
-
-            infoBordObj.fadeInfoBoardVisual();
-            infoBordObj.fadeInfoBoardText();
-
-            locationObj.deletePin();
-            travelWellbeing();
-          }, 5000);
-        }
-      }, 3140);  // 1800(=30m) / 143(Num of well-being data) / 4
-    };
+    // travelWellbeing = function (index = 0) {
+    //   stopTravel();  // clear previous travel
+    //   let i = index;
+    //   travelSetInterval = setInterval(function () {
+    //     if (i > 0) {
+    //       locationObj.pinList[i - 1].children[0].material.color.setHex(0xC9C7B7);
+    //       locationObj.pinList[i - 1].children[1].material.color.setHex(0xC9C7B7);
+    //     }
+    //
+    //     let selectedType = returnSelectedWBtype();
+    //     let data = dataList[selectedType];
+    //     let countryName = data.scoreData[i].country;
+    //     data.highlightBar(countryName);
+    //     infoBordObj.displayInfo(countryName);
+    //     i++;
+    //     travelIndex = i;  // val for continue
+    //     if (i > wbLength - 1) {
+    //       // if (i > 3 - 1) {
+    //       console.log('clearInterval', i);
+    //       clearInterval(travelSetInterval);
+    //
+    //       // next travel
+    //       setTimeout(() => {
+    //         const wbType = {'ladderData': 1, 'positiveData': 2, 'negativeData': 3, 'gdpData': 0};
+    //         const type = e.target.id.slice(0, -4) + 'Data';
+    //         const nextIndex = wbType[type];
+    //         setSelectedDataTypeButton(nextIndex);
+    //         dataList[type].drawHist(drawHistDurationNomal, 'new');
+    //
+    //         infoBordObj.fadeInfoBoardVisual();
+    //         infoBordObj.fadeInfoBoardText();
+    //
+    //         locationObj.deletePin();
+    //         travelWellbeing();
+    //       }, 5000);
+    //     }
+    //   }, 3140);  // 1800(=30m) / 143(Num of well-being data) / 4
+    // };
 
 
     stopTravel = function () {
@@ -869,18 +802,6 @@ import {timeline} from './data/timeline';
         let countryName = data.scoreData[i].country;
         data.highlightBar(countryName);
         infoBordObj.displayInfo(countryName);
-
-
-        // let countryName = PantheonScoreArray[i]['country'];
-        // console.log(countryName);
-        // highlightedBar(countryName, histData, scoreMax);
-        // let res = countrynameToLatlon(countryName);
-        // latitude = res.latitude;
-        // longitude = res.longitude;
-        // moveCamera(latitude, longitude);
-        // displayPantheon(countryName);
-        //
-
         i++;
 
         if (isClear) {

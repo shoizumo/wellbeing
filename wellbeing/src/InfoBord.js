@@ -163,7 +163,6 @@ export class InfoBord {
       if (!this.isPantheon) {
         if ($('.infoType.selectedBtn')[0].id.slice(4,) === 'Linechart') {
           let wellbeingType = $('.wbButton1.selectedBtn')[0].id.slice(0, -4);
-          console.log(wellbeingType);
           this.displayTimeline(wellbeingType, countryName, this.timelineSVG, this.timelineOffset);
         }
       }
