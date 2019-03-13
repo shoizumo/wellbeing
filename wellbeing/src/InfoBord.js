@@ -171,7 +171,7 @@ export class InfoBord {
       this.displayTextNoInfo(countryName);
       if (!this.isPantheon) {
         if ($('.infoType.selectedBtn')[0].id.slice(4,) === 'Linechart') {
-          this.displayTimelineNoInfo();
+          this.displayTimelineNoInfo(countryName);
         }
       }
     }
@@ -187,7 +187,7 @@ export class InfoBord {
 
        this.location.moveCamera(latitude, longitude);
 
-      $('#country').empty().append(countryName);
+      // $('#country').empty().append(countryName);
       // $('#country4').empty().append(countryName);
     }
   }
@@ -544,8 +544,9 @@ export class InfoBord {
   }
 
 
-  displayTimelineNoInfo() {
+  displayTimelineNoInfo(countryName) {
     this.deleteTimeline();
+    document.getElementById("country4").innerHTML = countryName;
 
     setTimeout(() => {
       let text = document.createElementNS('http://www.w3.org/2000/svg', 'text');
