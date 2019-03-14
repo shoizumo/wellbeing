@@ -38,17 +38,66 @@ html, body {
   background-color: rgba(0, 0, 0, 0.9);
 }
 
-#startButton {
-  position: absolute;
+//#startButton {
+//  position: absolute;
+//  top: 50%;
+//  left: 50%;
+//  //margin-left:-80px;
+//  color: #dddddd;
+//  font-family: $font-main;
+//  font-size: 0.5em;
+//  font-weight: 300;
+//  cursor: pointer;
+//  list-style: none;
+//}
+
+$startWidth: 150px;
+
+#startButton{
+  position: fixed;
   top: 50%;
   left: 50%;
-  margin-left:-80px;
-  color: #dddddd;
+
+  color: #ffffff;
+
   font-family: $font-main;
-  font-size: 2.0em;
   font-weight: 300;
+  text-align: center;
+
+  display: grid;
+
+  margin-left: -$startWidth;
+  margin-top: -50px;
+  width: $startWidth;
+  height: 150px;
+}
+
+#soundSelect {
+  grid-column: 1 / 3;
+  grid-raw: 1 / 2;
+
+  width: $startWidth * 2;
+  height: 20px;
+}
+
+#soundOn {
+  grid-column: 1 / 2;
+  grid-raw: 2 / 3;
+
+  width: $startWidth;
+  height: 100px;
+
   cursor: pointer;
-  list-style: none;
+}
+
+#soundOff {
+  grid-column: 2 / 3;
+  grid-raw: 2 / 3;
+
+  width: $startWidth;
+  height: 100px;
+
+  cursor: pointer;
 }
 
 
