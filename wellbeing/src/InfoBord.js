@@ -160,20 +160,20 @@ export class InfoBord {
       this.displayVisualInfo(res, Object.keys(this.dataset.wbData).length);
       this.displayTextInfo(countryName, res);  // テキストでの結果表示
 
-      if (!this.isPantheon) {
-        if ($('.infoType.selectedBtn')[0].id.slice(4,) === 'Linechart') {
+      // if (!this.isPantheon) {
+      //   if ($('.infoType.selectedBtn')[0].id.slice(4,) === 'Linechart') {
           let wellbeingType = $('.wbButton1.selectedBtn')[0].id.slice(0, -4);
           this.displayTimeline(wellbeingType, countryName, this.timelineSVG, this.timelineOffset);
-        }
-      }
+      //   }
+      // }
     } else {
-      this.displayVisulalNoInfo();
+      this.displayVisulalNoInfo(countryName);
       this.displayTextNoInfo(countryName);
-      if (!this.isPantheon) {
-        if ($('.infoType.selectedBtn')[0].id.slice(4,) === 'Linechart') {
-          this.displayTimelineNoInfo();
-        }
-      }
+      // if (!this.isPantheon) {
+      //   if ($('.infoType.selectedBtn')[0].id.slice(4,) === 'Linechart') {
+          this.displayTimelineNoInfo(countryName);
+      //   }
+      // }
     }
     // display pantheon data / no data
     this.displayPantheon(countryName);
@@ -293,6 +293,7 @@ export class InfoBord {
 
 
   displayVisualInfo(countryWbData, wbLength) {
+    document.getElementById("country").innerHTML = countryWbData.country;
     this.attrTextFontsize();
     this.attrScoreFontsize();
     new Promise((resolve) => {
@@ -312,7 +313,7 @@ export class InfoBord {
     });
   }
 
-  displayVisulalNoInfo() {
+  displayVisulalNoInfo(countryName) {
     this.attrTextFontsize();
     this.attrScoreFontsize();
     setTimeout(() => {
@@ -325,6 +326,7 @@ export class InfoBord {
       this.svgRankText.t4.textContent = 'No data';
       $('#GDPRanking').children()[0].appendChild(this.svgRankText.t4);
 
+      document.getElementById("country").innerHTML = countryName;
       $('#infoLadder').attr('opacity', 1.0);
       $('#infoPositive').attr('opacity', 1.0);
       $('#infoNegative').attr('opacity', 1.0);
