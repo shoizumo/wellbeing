@@ -13,7 +13,6 @@ import {wbData} from './data/wellbeing_data';
 import {pantheon} from './data/pantheon';
 import {timeline} from './data/timeline';
 
-
 (() => {
 
   ///////////////////////
@@ -59,8 +58,6 @@ import {timeline} from './data/timeline';
 
 
   /* well-being data */
-
-  const wbLength = Object.keys(wbData).length;
   const latLength = Object.keys(latlon).length;
   let meshList;
   let wbButton;
@@ -791,7 +788,6 @@ import {timeline} from './data/timeline';
       clearInterval(travelSetInterval);
     };
 
-
     /*
     // travel pantheon
     */
@@ -831,11 +827,11 @@ import {timeline} from './data/timeline';
           console.log('clearInterval', i);
           clearInterval(travelSetInterval);
         }
-        travelSetInterval = setTimeout(travel, 9250);  // 1800(=30m) / 194(Num of Pantheon data)
+        travelSetInterval = setTimeout(travel, 6185);  // 1200(=20m) / 194(Num of Pantheon data)
       }
 
       // travel();
-      travelSetInterval = setTimeout(travel, 3000);  // 1800(=30m) / 194(Num of Pantheon data)
+      travelSetInterval = setTimeout(travel, 2000);  // 1800(=30m) / 194(Num of Pantheon data)
     };
 
     ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////

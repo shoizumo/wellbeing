@@ -41,7 +41,7 @@ export class InfoBord {
     this.timelineSVG = $('#infoBoardTimeline')[0].children[1];
     this.timelineDuration = 0.07;
     this.timelineOffset = 20;
-    this.timelineYearList = [2005, 2006, 2007, 2008, 2009, 20010, 2011, 2012, 2013, 2014, 2015, 2016, 2017];
+    this.timelineYearList = [2005, 2006, 2007, 2008, 2009, 20010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018];
     this.timelineOffset = 20;
 
     this.timelineSetInterval = '';
