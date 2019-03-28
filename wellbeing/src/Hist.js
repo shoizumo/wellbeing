@@ -130,11 +130,9 @@ export class Hist {
 
 
   highlightBarOnHist(index) {
-    // if (this.highlightBarOnHistIndex !== -1) {
-      if (this.highlightBarOnHistIndex !== index) {
-        this.returnHighlightBarOnHist();
-      }
-    // }
+    if (this.highlightBarOnHistIndex !== index) {
+      this.returnHighlightBarOnHist();
+    }
 
     this.canvas.highlightBarOnHistColor();
     let max = this.type === 'negative' ? this.min : this.max;
@@ -144,12 +142,20 @@ export class Hist {
   }
 
   returnHighlightBarOnHist() {
+
+    let prevIndex = this.highlightBarOnHistIndex;
     this.canvas.setNomalColor();
+
+    for(let i = 0, l = this.highlightedBarList.length; l > i; i++){
+      if(this.highlightedBarList[i] === prevIndex){
+        this.canvas.setHighlightColor();
+      }
+    }
     let max = this.type === 'negative' ? this.min : this.max;
-    let d = this.data[this.highlightBarOnHistIndex];
+    let d = this.data[prevIndex];
     if (typeof d !== 'undefined'){
       let h_ = (d.score) / max * this.canvas.height;
-      this.canvas.context.fillRect(this.histBarWidth * this.highlightBarOnHistIndex, this.canvas.height - h_, this.histBarWidth, h_);
+      this.canvas.context.fillRect(this.histBarWidth * prevIndex, this.canvas.height - h_, this.histBarWidth, h_);
     }
   }
 
@@ -190,18 +196,6 @@ export class Hist {
     this.canvas.tooltipHist.css({opacity: 0.0});
   }
 
-  // clickHistRanking() {
-  //   if (this.getSelectedTypeFromButton() === this.type) {
-  //     if (this.checkIsTravelManual()) {
-  //       if (this.canvas.isFillHist) {
-  //         // if (!isMoveCamera) {
-  //         this.infoBord.location.deletePin();
-  //         this.infoBord.displayInfo(this.canvas.mouseOnCountry);
-  //         // }
-  //       }
-  //     }
-  //   }
-  // }
 
   clickHistRanking() {
     if (this.getSelectedTypeFromButton() === this.type) {
