@@ -8,7 +8,7 @@
   },
   "scripts": {
     "start": "webpack-dev-server --open",
-    "build": "webpack --mode development --watch --config webpack.config.js",
+    "build": "webpack --mode development --devtool inline-source-map --watch --config webpack.config.js",
     "production": "webpack --mode production --watch --config webpack.config.js"
   },
   "keywords": [],

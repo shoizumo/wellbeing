@@ -32,7 +32,6 @@ export class Audio {
     gain = ctx.createGain();
     // GainNodeを、接続された音源を半分の音量に処理するよう設定する
     gain.gain.value = 0.3;
-    console.log(gain);
 
     // 音源を表すAudioNodeを、中間処理（音量調整処理）を表すAudioNodeに接続
     mediaElementSource.connect(gain);

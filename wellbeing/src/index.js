@@ -393,16 +393,20 @@ import {timeline} from './data/timeline';
     }
 
     let stopMove = document.getElementById('stopMove');
-    stopMove.addEventListener('click', () => {
+    stopMove.addEventListener('click', clickStopMoveBtn, false);
+
+    function clickStopMoveBtn() {
       if (isMoveStop) {
         stopMove.innerText = 'Play';
         stopTravel();
+        stopMove.style.backgroundColor = '#647d7d';
       } else {
         stopMove.innerText = 'Stop';
         travelPantheon(travelIndex);
+        stopMove.style.backgroundColor = '#111111';
       }
       isMoveStop = !isMoveStop;
-    }, false);
+    }
     //////////////////////////////////////////////////////////////////////////
 
 
@@ -808,7 +812,6 @@ import {timeline} from './data/timeline';
           numPinList = locationObj.pinList.length;
         }
 
-
         let data = dataList['pantheonData'];
         let countryName = data.scoreData[i].country;
         data.highlightBar(countryName);
@@ -827,12 +830,19 @@ import {timeline} from './data/timeline';
           console.log('clearInterval', i);
           clearInterval(travelSetInterval);
         }
+
+        console.log(data.isOnClickHist)
+        if (data.isOnClickHist){
+          clickStopMoveBtn()
+        }
+
         travelSetInterval = setTimeout(travel, 6185);  // 1200(=20m) / 194(Num of Pantheon data)
       }
 
-      // travel();
       travelSetInterval = setTimeout(travel, 2000);  // 1800(=30m) / 194(Num of Pantheon data)
     };
+
+    // clickStopMoveBtn();
 
     ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 

@@ -1,5 +1,6 @@
 module.exports = {
   // mode: 'development',//'production',//'development',
+  devtool: 'inline-source-map',
   entry: './src/index.js',
   output: {
     path: `${__dirname}/js`,

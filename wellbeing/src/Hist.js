@@ -17,7 +17,11 @@ export class Hist {
     this.isHistDisplay = false;
     this.canvas.drawSetInterval = '';
 
+    this.isOnClickHist = false;
+
+    this.highlightBarOnHistIndex = -1;
   }
+
 
   get max() {
     return this.scoreData[0].score;
@@ -57,7 +61,7 @@ export class Hist {
     this.canvas.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
     // this.clearCanvas();
     let numData = data.length;
-    let width = this.histWidth;
+    let width = this.histBarWidth;
 
     // draw histogram with loop rect
     let i = 0;
@@ -74,8 +78,8 @@ export class Hist {
     this.isHistDisplay = true;
   }
 
-  get histWidth() {
-    return this.mathFloor(this.canvas.width / this.data.length, 5);
+  get histBarWidth() {
+    return this.mathFloor(this.canvas.width / this.data.length, 15);
   }
 
   fillBar(width, i) {
@@ -104,7 +108,7 @@ export class Hist {
       this.canvas.setHighlightColor();
       let max = this.type === 'negative' ? this.min : this.max;
       h = (data[indexList[i]].score) / max * this.canvas.height;
-      this.canvas.context.fillRect(this.histWidth * indexList[i], this.canvas.height - h, this.histWidth, h);
+      this.canvas.context.fillRect(this.histBarWidth * indexList[i], this.canvas.height - h, this.histBarWidth, h);
     }
   }
 
@@ -121,7 +125,32 @@ export class Hist {
     this.canvas.setHighlightColor();
     let max = this.type === 'negative' ? this.min : this.max;
     h = (this.data[index].score) / max * this.canvas.height;
-    this.canvas.context.fillRect(this.histWidth * index, this.canvas.height - h, this.histWidth, h);
+    this.canvas.context.fillRect(this.histBarWidth * index, this.canvas.height - h, this.histBarWidth, h);
+  }
+
+
+  highlightBarOnHist(index) {
+    // if (this.highlightBarOnHistIndex !== -1) {
+      if (this.highlightBarOnHistIndex !== index) {
+        this.returnHighlightBarOnHist();
+      }
+    // }
+
+    this.canvas.highlightBarOnHistColor();
+    let max = this.type === 'negative' ? this.min : this.max;
+    let h = (this.data[index].score) / max * this.canvas.height;
+    this.canvas.context.fillRect(this.histBarWidth * index, this.canvas.height - h, this.histBarWidth, h);
+    this.highlightBarOnHistIndex = index;
+  }
+
+  returnHighlightBarOnHist() {
+    this.canvas.setNomalColor();
+    let max = this.type === 'negative' ? this.min : this.max;
+    let d = this.data[this.highlightBarOnHistIndex];
+    if (typeof d !== 'undefined'){
+      let h_ = (d.score) / max * this.canvas.height;
+      this.canvas.context.fillRect(this.histBarWidth * this.highlightBarOnHistIndex, this.canvas.height - h_, this.histBarWidth, h_);
+    }
   }
 
 
@@ -132,7 +161,7 @@ export class Hist {
         if (this.canvas.isFillHist) {
           let rect = event.target.getBoundingClientRect();
           let mouseX = Math.abs(event.clientX - rect.left);
-          let index = Math.floor(mouseX / this.histWidth);
+          let index = Math.floor(mouseX / this.histBarWidth);
 
           document.getElementById("canvasWrapper").classList.add("canvasWrapperPointer");
           // console.log(index);
@@ -140,14 +169,18 @@ export class Hist {
           this.canvas.tooltipHist[0].innerText = this.canvas.mouseOnCountry;
           this.canvas.tooltipHist.css({opacity: 1.0});
 
-          this.canvas.tooltipHist.css({top: event.clientY * 0.95});
+          this.canvas.tooltipHist.css({top: Math.max(event.clientY - 70, window.innerHeight - this.canvas.height - 20)});
           this.canvas.tooltipHist.css({left: event.clientX * 1.0 - this.canvas.tooltipHist.width() / 2 - 5});
+
+          this.highlightBarOnHist(index);
 
         } else {
           document.getElementById("canvasWrapper").classList.remove("canvasWrapperPointer");
           this.canvas.tooltipHist.css({opacity: 0.0});
           this.canvas.tooltipHist.css({top: 0});
           this.canvas.tooltipHist.css({left: 0});
+
+          this.returnHighlightBarOnHist();
         }
       }
     }
@@ -157,26 +190,38 @@ export class Hist {
     this.canvas.tooltipHist.css({opacity: 0.0});
   }
 
+  // clickHistRanking() {
+  //   if (this.getSelectedTypeFromButton() === this.type) {
+  //     if (this.checkIsTravelManual()) {
+  //       if (this.canvas.isFillHist) {
+  //         // if (!isMoveCamera) {
+  //         this.infoBord.location.deletePin();
+  //         this.infoBord.displayInfo(this.canvas.mouseOnCountry);
+  //         // }
+  //       }
+  //     }
+  //   }
+  // }
+
   clickHistRanking() {
     if (this.getSelectedTypeFromButton() === this.type) {
-      if (this.checkIsTravelManual()) {
-        if (this.canvas.isFillHist) {
-          // if (!isMoveCamera) {
-          console.log('click', this.canvas.mouseOnCountry, this.type);
-          this.infoBord.location.deletePin();
-          console.log(this.type);
-          this.infoBord.displayInfo(this.canvas.mouseOnCountry);
-          console.log('conducted', this.type);
-          // }
+      if (this.canvas.isFillHist) {
+        if (!this.checkIsTravelManual()) {
+          // this.isOnClickHist = true;
         }
+        this.isOnClickHist = true;
+        this.infoBord.location.deletePin();
+        this.infoBord.displayInfo(this.canvas.mouseOnCountry);
       }
     }
   }
 
   getSelectedTypeFromButton() {
-    let type = $('.wbButton1.selectedBtn')[0].id.slice(0, -4);
-    if (typeof type === 'undefined') {
-      type = 'pantheon'
+    let type;
+    if (this.checkIsTravelManual()){
+      type = $('.wbButton1.selectedBtn')[0].id.slice(0, -4);
+    }else{
+      type = 'pantheon';
     }
     return type
   }
