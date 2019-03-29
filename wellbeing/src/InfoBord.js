@@ -185,7 +185,7 @@ export class InfoBord {
       let longitude = locationResult.longitude;
       // Location.moveCamera(latitude, longitude);
 
-       this.location.moveCamera(latitude, longitude);
+       return this.location.moveCamera(latitude, longitude);
 
       // $('#country').empty().append(countryName);
       // $('#country4').empty().append(countryName);

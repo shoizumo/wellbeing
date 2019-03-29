@@ -364,7 +364,6 @@ import {timeline} from './data/timeline';
 
       TweenMax.killAll();
       locationObj.deletePin();
-      stopTravel();
       clearSmallText();
 
       // この処理終了後に、checkedの値が変わるため、変更前の値に基づいて分岐
@@ -632,7 +631,6 @@ import {timeline} from './data/timeline';
 
       TweenMax.killAll();
       locationObj.deletePin();
-      stopTravel();
       dataList['pantheonData'].drawHist(drawHistDurationNomal, 'travel');
 
       $('#wbButton2').css("display", 'none');
@@ -789,6 +787,7 @@ import {timeline} from './data/timeline';
 
 
     stopTravel = function () {
+      console.log('stopTravel');
       clearInterval(travelSetInterval);
     };
 
@@ -802,6 +801,7 @@ import {timeline} from './data/timeline';
       let isClear = false;
 
       function travel() {
+        let clearMoveCameraId;
         if (i > 0) {
           if (numPinList === locationObj.pinList.length) {
             isClear = true;
@@ -815,8 +815,11 @@ import {timeline} from './data/timeline';
         let data = dataList['pantheonData'];
         let countryName = data.scoreData[i].country;
         data.highlightBar(countryName);
-        infoBordObj.displayInfo(countryName);
-        i++;
+
+        console.log('displayInfo')
+        clearMoveCameraId = infoBordObj.displayInfo(countryName);
+        // i++;
+        i = i+50;
 
         if (isClear) {
           for (let i = 0, l = locationObj.pinList.length; l > i; i++) {
@@ -826,17 +829,21 @@ import {timeline} from './data/timeline';
           }
         }
         travelIndex = i;  // val for continue
-        if (i > pantheon.length - 1) {
-          console.log('clearInterval', i);
+        if (!data.isOnClickHist) {
+          if (i <= pantheon.length) {
+            console.log(i)
+            travelSetInterval = setTimeout(travel, 6185);  // 1200(=20m) / 194(Num of Pantheon data)
+          }
+        } else {
+          console.log('stop')
+          clearInterval(clearMoveCameraId);
           clearInterval(travelSetInterval);
         }
-
-        console.log(data.isOnClickHist)
-        if (data.isOnClickHist){
-          clickStopMoveBtn()
-        }
-
-        travelSetInterval = setTimeout(travel, 6185);  // 1200(=20m) / 194(Num of Pantheon data)
+        // console.log(data.isOnClickHist);
+        // if (data.isOnClickHist){
+        //   clickStopMoveBtn();
+        //   return;
+        // }
       }
 
       travelSetInterval = setTimeout(travel, 2000);  // 1800(=30m) / 194(Num of Pantheon data)

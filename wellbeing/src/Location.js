@@ -19,6 +19,8 @@ export class Location {
     this.pinList = [];
 
     this.isMoveCamera = false;
+
+    this.clearMoveCameraId = 0;
   }
 
 
@@ -37,6 +39,7 @@ export class Location {
 
 
   moveCamera(latitude, longitude) {
+    clearInterval(this.clearMoveCameraId);
     let targetPos = this.convertGeoCoords(latitude, longitude);
     let targetVec = targetPos.sub(this.center);
     let prevVec = this.camera.position.sub(this.center);
@@ -55,20 +58,23 @@ export class Location {
       count++
     };
 
-    let id = setInterval(() => {
+    let clearId = setInterval(() => {
       this.earth.rotation.y = 0;
       this.isMoveCamera = true;
       this.controls.enableRotate = false;
       moveCameraQuaternion(stepAngle);
       if (count > step - 1) {
         this.createPin(latitude, longitude);
-        clearInterval(id);
+        clearInterval(clearId);
         this.isMoveCamera = false;
         if (this.checkIsTravelManual()) {
           this.controls.enableRotate = true;
         }
       }
     }, 1000 / step);
+
+    this.clearMoveCameraId = clearId;
+    return clearId;
   }
 
 
