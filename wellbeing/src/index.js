@@ -396,13 +396,13 @@ import {timeline} from './data/timeline';
 
     function clickStopMoveBtn() {
       if (isMoveStop) {
+        stopMove.style.backgroundColor = '#647d7d';
         stopMove.innerText = 'Play';
         stopTravel();
-        stopMove.style.backgroundColor = '#647d7d';
       } else {
+        stopMove.style.backgroundColor = '#111111';
         stopMove.innerText = 'Stop';
         travelPantheon(travelIndex);
-        stopMove.style.backgroundColor = '#111111';
       }
       isMoveStop = !isMoveStop;
     }
@@ -741,50 +741,6 @@ import {timeline} from './data/timeline';
       isTouchInfoObject = true;
     }
 
-    ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-    /*
-    // travel ranking country
-    */
-    // travelWellbeing = function (index = 0) {
-    //   stopTravel();  // clear previous travel
-    //   let i = index;
-    //   travelSetInterval = setInterval(function () {
-    //     if (i > 0) {
-    //       locationObj.pinList[i - 1].children[0].material.color.setHex(0xC9C7B7);
-    //       locationObj.pinList[i - 1].children[1].material.color.setHex(0xC9C7B7);
-    //     }
-    //
-    //     let selectedType = returnSelectedWBtype();
-    //     let data = dataList[selectedType];
-    //     let countryName = data.scoreData[i].country;
-    //     data.highlightBar(countryName);
-    //     infoBordObj.displayInfo(countryName);
-    //     i++;
-    //     travelIndex = i;  // val for continue
-    //     if (i > wbLength - 1) {
-    //       // if (i > 3 - 1) {
-    //       console.log('clearInterval', i);
-    //       clearInterval(travelSetInterval);
-    //
-    //       // next travel
-    //       setTimeout(() => {
-    //         const wbType = {'ladderData': 1, 'positiveData': 2, 'negativeData': 3, 'gdpData': 0};
-    //         const type = e.target.id.slice(0, -4) + 'Data';
-    //         const nextIndex = wbType[type];
-    //         setSelectedDataTypeButton(nextIndex);
-    //         dataList[type].drawHist(drawHistDurationNomal, 'new');
-    //
-    //         infoBordObj.fadeInfoBoardVisual();
-    //         infoBordObj.fadeInfoBoardText();
-    //
-    //         locationObj.deletePin();
-    //         travelWellbeing();
-    //       }, 5000);
-    //     }
-    //   }, 3140);  // 1800(=30m) / 143(Num of well-being data) / 4
-    // };
-
 
     stopTravel = function () {
       console.log('stopTravel');
@@ -801,49 +757,53 @@ import {timeline} from './data/timeline';
       let isClear = false;
 
       function travel() {
-        let clearMoveCameraId;
-        if (i > 0) {
-          if (numPinList === locationObj.pinList.length) {
-            isClear = true;
-          }
-          let pins = locationObj.pinList[locationObj.pinList.length - 1].children;
-          pins[0].material.color.setHex(0xC9C7B7);
-          pins[1].material.color.setHex(0xC9C7B7);
-          numPinList = locationObj.pinList.length;
-        }
-
         let data = dataList['pantheonData'];
-        let countryName = data.scoreData[i].country;
-        data.highlightBar(countryName);
 
-        console.log('displayInfo')
-        clearMoveCameraId = infoBordObj.displayInfo(countryName);
-        // i++;
-        i = i+50;
-
-        if (isClear) {
-          for (let i = 0, l = locationObj.pinList.length; l > i; i++) {
-            let pins = locationObj.pinList[i].children;
+        if (!data.isOnClickHist) {
+          if (i > 0) {
+            if (numPinList === locationObj.pinList.length) {
+              isClear = true;
+            }
+            let pins = locationObj.pinList[locationObj.pinList.length - 1].children;
             pins[0].material.color.setHex(0xC9C7B7);
             pins[1].material.color.setHex(0xC9C7B7);
+            numPinList = locationObj.pinList.length;
           }
-        }
-        travelIndex = i;  // val for continue
-        if (!data.isOnClickHist) {
+          let countryName = data.scoreData[i].country;
+          data.highlightBar(countryName);
+          infoBordObj.displayInfo(countryName);
+          // i++;
+          i = i + 50;
+
+          if (isClear) {
+            for (let i = 0, l = locationObj.pinList.length; l > i; i++) {
+              let pins = locationObj.pinList[i].children;
+              pins[0].material.color.setHex(0xC9C7B7);
+              pins[1].material.color.setHex(0xC9C7B7);
+            }
+          }
+          travelIndex = i;  // val for continue
+
+
           if (i <= pantheon.length) {
-            console.log(i)
             travelSetInterval = setTimeout(travel, 6185);  // 1200(=20m) / 194(Num of Pantheon data)
           }
         } else {
-          console.log('stop')
-          clearInterval(clearMoveCameraId);
-          clearInterval(travelSetInterval);
+          if (travelIndex !== 0) {
+            TweenMax.killAll();
+            infoBordObj.positiveTween.cancel();
+            infoBordObj.negativeTween.cancel();
+            infoBordObj.gdpTween.cancel();
+            clearInterval(travelSetInterval);
+          }
+
+          // stop buttonを'STOP'状態にする
+          isMoveStop = false;
+          stopMove.innerText = 'Play';
+          stopMove.style.backgroundColor = '#647d7d';
+
+          data.isOnClickHist = false;
         }
-        // console.log(data.isOnClickHist);
-        // if (data.isOnClickHist){
-        //   clickStopMoveBtn();
-        //   return;
-        // }
       }
 
       travelSetInterval = setTimeout(travel, 2000);  // 1800(=30m) / 194(Num of Pantheon data)

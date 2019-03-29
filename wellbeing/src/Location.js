@@ -74,7 +74,6 @@ export class Location {
     }, 1000 / step);
 
     this.clearMoveCameraId = clearId;
-    return clearId;
   }
 
 

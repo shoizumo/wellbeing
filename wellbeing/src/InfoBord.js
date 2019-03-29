@@ -159,21 +159,14 @@ export class InfoBord {
     if (typeof res !== 'undefined') {
       this.displayVisualInfo(res, Object.keys(this.dataset.wbData).length);
       this.displayTextInfo(countryName, res);  // テキストでの結果表示
+      let wellbeingType = $('.wbButton1.selectedBtn')[0].id.slice(0, -4);
+      this.displayTimeline(wellbeingType, countryName, this.timelineSVG, this.timelineOffset);
 
-      // if (!this.isPantheon) {
-      //   if ($('.infoType.selectedBtn')[0].id.slice(4,) === 'Linechart') {
-          let wellbeingType = $('.wbButton1.selectedBtn')[0].id.slice(0, -4);
-          this.displayTimeline(wellbeingType, countryName, this.timelineSVG, this.timelineOffset);
-      //   }
-      // }
     } else {
       this.displayVisulalNoInfo(countryName);
       this.displayTextNoInfo(countryName);
-      // if (!this.isPantheon) {
-      //   if ($('.infoType.selectedBtn')[0].id.slice(4,) === 'Linechart') {
-          this.displayTimelineNoInfo(countryName);
-      //   }
-      // }
+      this.displayTimelineNoInfo(countryName);
+
     }
     // display pantheon data / no data
     this.displayPantheon(countryName);
@@ -183,15 +176,10 @@ export class InfoBord {
     if (typeof locationResult.latitude !== 'undefined') {
       let latitude = locationResult.latitude;
       let longitude = locationResult.longitude;
-      // Location.moveCamera(latitude, longitude);
+      this.location.moveCamera(latitude, longitude);
 
-       return this.location.moveCamera(latitude, longitude);
-
-      // $('#country').empty().append(countryName);
-      // $('#country4').empty().append(countryName);
     }
   }
-
 
   /* ulility */
   calcWbInfo(countryName) {
