@@ -614,11 +614,6 @@ import {timeline} from './data/timeline';
         setSelectedDataTypeButton(index);
         dataList[type].drawHist(drawHistDurationNomal, 'new');
 
-        // /* travel type check */
-        // if (!checkIsTravelManual()) {
-        //   locationObj.deletePin();
-        //   travelWellbeing();
-        // }
       }, false);
     }
 
@@ -772,8 +767,7 @@ import {timeline} from './data/timeline';
           let countryName = data.scoreData[i].country;
           data.highlightBar(countryName);
           infoBordObj.displayInfo(countryName);
-          // i++;
-          i = i + 50;
+          i++;
 
           if (isClear) {
             for (let i = 0, l = locationObj.pinList.length; l > i; i++) {

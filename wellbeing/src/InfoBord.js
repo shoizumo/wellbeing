@@ -392,8 +392,8 @@ export class InfoBord {
       }
     }
     let rank = this.searchTimelineRank(type, countryName);
-    const spanSize = '<span style="font-size: 18px;">';
-    const spanWeight = '<span style="font-weight: 200;">';
+    const spanSize = '<span style="font-size: 14px;">';
+    const spanWeight = '<span style="font-size: 18px;">';
     document.getElementById("country4").innerHTML = countryName + spanWeight + ' ( ' + type.slice(0, 1).toUpperCase() + ':' + rank.rank + spanSize + rank.rankOrdinal + '</span>' + ' ) ' + '</span>';
     let max, min;
     if (type === 'ladder') {
