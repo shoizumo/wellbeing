@@ -12,11 +12,12 @@ export class HistCanvas {
 
     this.tooltipHist = $('#tooltipHist');
     this.mouseOnCountry = '';
-    this.histArea.addEventListener('mousemove', this.getCanvasColor.bind(this), false);
 
-    this.isFillHist = false;
+    this.isOnFillHist = false;
 
     this.drawSetInterval = '';
+
+    this.histArea.addEventListener('mousemove', this.getCanvasColor.bind(this), false);
   }
 
   get width() {
@@ -39,7 +40,7 @@ export class HistCanvas {
 
     // if nofill, isInfoObject = false
     // isInfoObject = (pixelData[0] > 0);  // 不要かも？
-    this.isFillHist = (pixelData[0] > 0);
+    this.isOnFillHist = (pixelData[0] > 0);
   }
 
   getEventLocation(element, event) {
@@ -62,10 +63,6 @@ export class HistCanvas {
     }
     return undefined;
   }
-
-  // setAlpha(alpha) {
-  //   this.globalAlpha = alpha;
-  // }
 
 
   setNomalColor() {

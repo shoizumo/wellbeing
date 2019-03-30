@@ -637,7 +637,7 @@ import {timeline} from './data/timeline';
 
     function offPantheon() {
       stopTravel();
-      
+
       infoBordObj.isPantheon = false;
       $('#infoBoard3').css("display", 'none');
       $(".infoType").removeClass("selectedBtn");

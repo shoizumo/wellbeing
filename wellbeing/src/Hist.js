@@ -162,9 +162,9 @@ export class Hist {
 
   onHistRanking(event) {
     if (this.getSelectedTypeFromButton() === this.type) {
-      // console.log('onHist', isFillHist);
+      // console.log('onHist', isOnFillHist);
       if (this.isHistDisplay) {
-        if (this.canvas.isFillHist) {
+        if (this.canvas.isOnFillHist) {
           let rect = event.target.getBoundingClientRect();
           let mouseX = Math.abs(event.clientX - rect.left);
           let index = Math.floor(mouseX / this.histBarWidth);
@@ -194,12 +194,13 @@ export class Hist {
 
   outHistRanking() {
     this.canvas.tooltipHist.css({opacity: 0.0});
+    this.returnHighlightBarOnHist();
   }
 
 
   clickHistRanking() {
     if (this.getSelectedTypeFromButton() === this.type) {
-      if (this.canvas.isFillHist) {
+      if (this.canvas.isOnFillHist) {
         this.isOnClickHist = true;
         this.infoBord.location.deletePin();
         this.infoBord.displayInfo(this.canvas.mouseOnCountry);
