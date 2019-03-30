@@ -351,6 +351,26 @@ import {timeline} from './data/timeline';
 
     //////////////////////////////////////////////////////////////////////////
     /* switch travel type button */
+    let stopMove = document.getElementById('stopMove');
+    stopMove.addEventListener('click', clickStopMoveBtn, false);
+
+    function clickStopMoveBtn() {
+      if (isMoveStop) {
+        stopMove.style.backgroundColor = '#647d7d';
+        stopMove.innerText = 'Play';
+        stopTravel();
+      } else {
+        // Pantheon のclick状態を解除しておく
+        dataList['pantheonData'].isOnClickHist = false;
+
+        stopMove.style.backgroundColor = '#111111';
+        stopMove.innerText = 'Stop';
+        travelPantheon(travelIndex);
+      }
+      isMoveStop = !isMoveStop;
+    }
+
+
     travelModeSwitch = document.getElementById('travelModeSwitch-label');
     travelModeSwitch.addEventListener('click', () => {
       changeTravelMode();
@@ -389,22 +409,6 @@ import {timeline} from './data/timeline';
       document.getElementById("Positive2s").innerHTML = '';
       document.getElementById("Negative2s").innerHTML = '';
       document.getElementById("GDP2s").innerHTML = '';
-    }
-
-    let stopMove = document.getElementById('stopMove');
-    stopMove.addEventListener('click', clickStopMoveBtn, false);
-
-    function clickStopMoveBtn() {
-      if (isMoveStop) {
-        stopMove.style.backgroundColor = '#647d7d';
-        stopMove.innerText = 'Play';
-        stopTravel();
-      } else {
-        stopMove.style.backgroundColor = '#111111';
-        stopMove.innerText = 'Stop';
-        travelPantheon(travelIndex);
-      }
-      isMoveStop = !isMoveStop;
     }
     //////////////////////////////////////////////////////////////////////////
 
@@ -632,6 +636,8 @@ import {timeline} from './data/timeline';
     }
 
     function offPantheon() {
+      stopTravel();
+      
       infoBordObj.isPantheon = false;
       $('#infoBoard3').css("display", 'none');
       $(".infoType").removeClass("selectedBtn");
@@ -793,17 +799,12 @@ import {timeline} from './data/timeline';
 
           // stop buttonを'STOP'状態にする
           isMoveStop = false;
-          stopMove.innerText = 'Play';
-          stopMove.style.backgroundColor = '#647d7d';
-
           data.isOnClickHist = false;
         }
       }
 
       travelSetInterval = setTimeout(travel, 2000);  // 1800(=30m) / 194(Num of Pantheon data)
     };
-
-    // clickStopMoveBtn();
 
     ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 

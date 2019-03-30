@@ -200,12 +200,14 @@ export class Hist {
   clickHistRanking() {
     if (this.getSelectedTypeFromButton() === this.type) {
       if (this.canvas.isFillHist) {
-        if (!this.checkIsTravelManual()) {
-          // this.isOnClickHist = true;
-        }
         this.isOnClickHist = true;
         this.infoBord.location.deletePin();
         this.infoBord.displayInfo(this.canvas.mouseOnCountry);
+
+        // travel modeのためにクリック時に表示が変わるように
+        let stopMove = document.getElementById('stopMove');
+        stopMove.innerText = 'Play';
+        stopMove.style.backgroundColor = '#647d7d';
       }
     }
   }
