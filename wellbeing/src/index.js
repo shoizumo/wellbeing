@@ -107,7 +107,7 @@ import {timeline} from './data/timeline';
   let killTweenTextAnimation;
 
 
-  let drawHistDurationNomal = 1500;
+  let drawHistDurationNomal = 1000;
   let drawHistDurationRedraw = 0;
 
 

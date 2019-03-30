@@ -39,7 +39,7 @@ export class InfoBord {
     this.setInfoBtn();
 
     this.timelineSVG = $('#infoBoardTimeline')[0].children[1];
-    this.timelineDuration = 0.065;
+    this.timelineDuration = 1000;
     this.timelineOffset = 20;
     this.timelineYearList = [2005, 2006, 2007, 2008, 2009, 20010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018];
     this.timelineOffset = 20;
@@ -446,7 +446,7 @@ export class InfoBord {
 
         clearInterval(this.timelineSetInterval);
       }
-    }, this.timelineDuration * 1500);
+    }, this.timelineDuration / 14);
   }
 
 
@@ -455,7 +455,7 @@ export class InfoBord {
     let line = this.svgLine(startX, startY, endX, endY, svg);
 
     // line animation
-    TweenMax.fromTo(line, this.timelineDuration,
+    TweenMax.fromTo(line, this.timelineDuration / 14000,
         {attr: {x2: startX, y2: startY}},
         {
           attr: {x2: endX, y2: endY},
