@@ -126,7 +126,7 @@ import {timeline} from './data/timeline';
 
     /* device check */
     userAgent = navigator.userAgent;
-    if (userAgent.indexOf('iPhone') > 0 || userAgent.indexOf('Android') > 0 && userAgent.indexOf('Mobile') > 0) {
+    if (userAgent.indexOf('iPad') > 0 || userAgent.indexOf('iPhone') > 0 || userAgent.indexOf('Android') > 0 && userAgent.indexOf('Mobile') > 0) {
       isSP = true;
     }
 
