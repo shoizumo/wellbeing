@@ -55,16 +55,19 @@ export class InfoBord {
         let infoType = e.target.id.slice(4,);
         if (infoType === 'Text') {
           console.log('text');
-          this.setInfoTypeText();
+
+          let isTravelModeManual = document.getElementById("travelModeSwitch-checkbox").checked;
+          if (isTravelModeManual) {
+            this.setInfoTypeText();
+          }else{
+            this.setInfoTypePantheon();
+          }
         } else if (infoType === 'Piechart') {
           console.log('piechart');
           this.setInfoTypePiechart();
         } else if (infoType === 'Linechart') {
           console.log('linechart');
           this.setInfoTypeLinechart();
-        } else {
-          console.log('none');
-          this.setInfoTypeNone();
         }
       })
     }
@@ -645,6 +648,7 @@ export class InfoBord {
     $('#infoBoard2s').css("display", 'block');
 
     $(".infoType").removeClass("selectedBtn");
+    this.infoBtn[0].classList.add("selectedBtn");
   };
 
 
