@@ -20,6 +20,7 @@ export class Hist {
     this.isOnClickHist = false;
 
     this.highlightBarOnHistIndex = -1;
+    this.soundMouseOver = histCanvas.soundMouseOverObj;
   }
 
 
@@ -132,6 +133,8 @@ export class Hist {
   highlightBarOnHist(index) {
     if (this.highlightBarOnHistIndex !== index) {
       this.returnHighlightBarOnHist();
+
+      this.soundMouseOver.play()
     }
 
     this.canvas.highlightBarOnHistColor();
@@ -180,6 +183,8 @@ export class Hist {
 
           this.highlightBarOnHist(index);
 
+
+
         } else {
           document.getElementById("canvasWrapper").classList.remove("canvasWrapperPointer");
           this.canvas.tooltipHist.css({opacity: 0.0});
@@ -209,6 +214,7 @@ export class Hist {
         let stopMove = document.getElementById('stopMove');
         stopMove.innerText = 'Play';
         stopMove.style.backgroundColor = '#647d7d';
+
       }
     }
   }

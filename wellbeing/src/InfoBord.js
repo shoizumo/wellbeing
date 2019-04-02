@@ -378,7 +378,7 @@ export class InfoBord {
     document.getElementById("GDP2").innerHTML = '';
 
     // small text for pantheon
-    document.getElementById("Ladder2s").innerHTML = 'No data';
+    document.getElementById("Ladder2s").innerHTML = 'No ｗell-being data';
     document.getElementById("Positive2s").innerHTML = '';
     document.getElementById("Negative2s").innerHTML = '';
     document.getElementById("GDP2s").innerHTML = '';

@@ -4,8 +4,7 @@ import {InfoBord} from './InfoBord';
 import {HistCanvas} from './HistCanvas';
 import {Hist} from './Hist';
 import {Menu} from './Menu';
-import {Audio} from './Audio';
-
+import {Howl, Howler} from 'howler';
 
 import {country_data} from './data/country_data';
 import {latlon} from './data/lat_lon';
@@ -275,11 +274,29 @@ import {timeline} from './data/timeline';
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+    let soundBGM = new Howl({
+      src: ['sound/bgm.mp3'],
+      loop: true,
+      volume: 0.2,
+    });
+
+    let soundMouseOver = new Howl({
+      src: ['sound/mouse_over.mp3'],
+      loop: false,
+      volume: 0.7,
+    });
+
+    let soundMoveCamera = new Howl({
+      src: ['sound/move_camera.mp3'],
+      loop: false,
+      volume: 0.7,
+    });
+
 
     const datasetdObj = new Dataset(wbData, pantheon, timeline);
-    const locationObj = new Location(latlon, earth, controls, camera);
+    const locationObj = new Location(latlon, earth, controls, camera, soundMoveCamera);
     const infoBordObj = new InfoBord(datasetdObj, locationObj);
-    const histCanvas = new HistCanvas();
+    const histCanvas = new HistCanvas(soundMouseOver);
 
 
     const ladderData = new Hist(datasetdObj.ladder, datasetdObj.ladderScore, 'ladder', infoBordObj, histCanvas);
@@ -413,15 +430,23 @@ import {timeline} from './data/timeline';
     //////////////////////////////////////////////////////////////////////////
 
 
+
     //////////////////////////////////////////////////////////////////////////
     /* start button */
     let startButton = document.getElementsByClassName('startButton');
     for (let i = 0, l = startButton.length; l > i; i++) {
       startButton[i].addEventListener('click', function(){
 
+        soundBGM.play();
+
+
         let isSoundOn = this.id === 'soundOn';
-        const audioObj = new Audio(isSoundOn);
-        audioObj.play();
+        Howler.mute(!isSoundOn);
+        document.addEventListener('dblclick', () => {
+          isSoundOn = !isSoundOn;
+          Howler.mute(!isSoundOn);
+        });
+
 
         let duration = 5.0;
         // let ease = Back.easeOut.config(1);

@@ -25,5 +25,8 @@
     "gulp-sourcemaps": "^2.6.5",
     "webpack": "^4.29.6",
     "webpack-cli": "^3.3.0"
+  },
+  "dependencies": {
+    "howler": "^2.1.1"
   }
 }

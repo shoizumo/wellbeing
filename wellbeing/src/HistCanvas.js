@@ -1,5 +1,5 @@
 export class HistCanvas {
-  constructor() {
+  constructor(soundMouseOverObj) {
     this.histArea = document.querySelector("#histgram");
     this.context = this.histArea.getContext("2d");
     // this.setCanvasSize();
@@ -18,6 +18,8 @@ export class HistCanvas {
     this.drawSetInterval = '';
 
     this.histArea.addEventListener('mousemove', this.getCanvasColor.bind(this), false);
+
+    this.soundMouseOverObj = soundMouseOverObj;
   }
 
   get width() {

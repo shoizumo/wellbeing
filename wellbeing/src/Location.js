@@ -1,11 +1,12 @@
 export class Location {
-  constructor(latlon, earthObj, controlsObj, cameraObj) {
+  constructor(latlon, earthObj, controlsObj, cameraObj, soundObj) {
     this.data = latlon;
     this.numData = Object.keys(latlon).length;
 
     this.earth = earthObj;
     this.controls = controlsObj;
     this.camera = cameraObj;
+    this.soundObj = soundObj;
 
     const pinRadius = 0.0025;
     this.pinSphereRadius = 0.01;
@@ -51,6 +52,8 @@ export class Location {
     let step = 100;
     let stepAngle = angle / step;
     let count = 0;
+    this.soundObj.play()
+
     let moveCameraQuaternion = (stepAngle) => {
       q.setFromAxisAngle(crossVec, stepAngle);
       this.camera.position.applyQuaternion(q);
