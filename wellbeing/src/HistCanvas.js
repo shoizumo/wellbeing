@@ -1,14 +1,14 @@
 export class HistCanvas {
   constructor(soundMouseOverObj) {
-    this.histArea = document.querySelector("#histgram");
+    this.histArea = document.querySelector("#histogram");
     this.context = this.histArea.getContext("2d");
     // this.setCanvasSize();
     this.context.globalAlpha = 1.0;  // for safari(fillStyle alpha doesn't work)
 
-    const histgram = $('#histgram');
-    this.histArea.width = histgram.width();
-    this.histArea.height = histgram.height();
-    this.previousWidth = histgram.width();
+    const histogram = $('#histogram');
+    this.histArea.width = histogram.width();
+    this.histArea.height = histogram.height();
+    this.previousWidth = histogram.width();
 
     this.tooltipHist = $('#tooltipHist');
     this.mouseOnCountry = '';

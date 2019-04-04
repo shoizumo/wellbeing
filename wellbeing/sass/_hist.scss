@@ -31,7 +31,7 @@
   }
 }
 
-#histgram {
+#histogram {
   width: 320px;
   height: 90px;
 
@@ -83,6 +83,19 @@
     border: 5px solid transparent;
     border-top: 5px solid #646464;
   }
+}
+
+#zoomCanvas {
+  pointer-events: none;
+  border-radius:75px;
+
+  display:none;
+  position: absolute;
+  top: 0;
+  left: 0;
+  -webkit-box-shadow: 0 0 10px #000;
+  -moz-box-shadow: 0 0 10px #000;
+  box-shadow: 0 0 10px #000;
 }
 
 

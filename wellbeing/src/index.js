@@ -516,6 +516,57 @@ import {timeline} from './data/timeline';
     //////////////////////////////////////////////////////////////////////////
 
 
+    let main = document.getElementById("histogram");
+    let zoom = document.getElementById("zoomCanvas");
+    let zoomCtx = zoom.getContext("2d");
+
+
+    const zoomSize = 50;
+    main.addEventListener("mousemove", function (e) {
+      // console.log(main, e)
+      // console.log(e.clientX - zoomSize / 2, e.clientY - zoomSize / 2, zoomSize, zoomSize);
+
+      zoomCtx.fillStyle = "rgb(0, 0, 0)";
+      zoomCtx.fillRect(0, 0, zoom.width, zoom.height);
+
+      let clientRect = this.getBoundingClientRect() ;
+      let positionX = clientRect.left + window.pageXOffset ;
+      let positionY = clientRect.top + window.pageYOffset ;
+
+      let X = e.clientX - positionX;
+      let Y = e.clientY - positionY;
+
+      zoomCtx.drawImage(main, X-zoomSize/2, Y-zoomSize/2, zoomSize, zoomSize, 0, 0, zoom.width, zoom.height);      // zoomCtx.drawImage(main, 150, 175, zoomSize, zoomSize, 0, 0, zoom.width, zoom.height);
+
+      // chromaKey();
+
+      zoom.style.left = e.pageX - zoom.width / 2 + "px";
+      zoom.style.top = e.pageY - zoom.height / 2 + "px";
+      zoom.style.display = "block";
+    });
+
+    main.addEventListener("mouseout", function () {
+      zoom.style.display = "none";
+    });
+
+
+    // クロマキー処理
+    function chromaKey() {
+        let imageData = zoomCtx.getImageData(0, 0, zoom.width, zoom.height);
+        let data = imageData.data;
+        for (let i = 0, l = data.length; i < l; i += 4) {
+            if (data[i] === 255) {
+                data[i + 3] = 0;
+            }
+        }
+        let newImageData = new ImageData(new Uint8ClampedArray(data), zoom.width, zoom.height);
+        zoomCtx.putImageData(newImageData, 0, 0);
+    }
+
+
+
+
+
     //////////////////////////////////////////////////////////////////////////
     /* window size setting */
     window.addEventListener('resize', () => {
@@ -527,7 +578,7 @@ import {timeline} from './data/timeline';
       canvasHeight = window.innerHeight;
 
       if (isFinishStartTween) {
-        let histWidth = $('#histgram').width();
+        let histWidth = $('#histogram').width();
         if (dataList['ladderData'].canvas.previousWidth !== histWidth) {
           // dataListのうち、1つだけ更新すればOK！？
           dataList['ladderData'].canvas.width = histWidth;
