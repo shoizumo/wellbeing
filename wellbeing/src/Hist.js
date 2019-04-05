@@ -183,8 +183,6 @@ export class Hist {
 
           this.highlightBarOnHist(index);
 
-
-
         } else {
           document.getElementById("canvasWrapper").classList.remove("canvasWrapperPointer");
           this.canvas.tooltipHist.css({opacity: 0.0});

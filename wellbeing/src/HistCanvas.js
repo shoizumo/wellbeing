@@ -17,9 +17,14 @@ export class HistCanvas {
 
     this.drawSetInterval = '';
 
-    this.histArea.addEventListener('mousemove', this.getCanvasColor.bind(this), false);
+    this.histArea.addEventListener('mousemove', this.mouseMoveHist.bind(this), false);
+    this.histArea.addEventListener('mouseout', this.magnifyOff.bind(this), false);
 
     this.soundMouseOverObj = soundMouseOverObj;
+
+    this.zoom = document.getElementById("zoomCanvas");
+    this.zoomCtx = this.zoom.getContext("2d");
+    this.zoomSize = 50;
   }
 
   get width() {
@@ -34,6 +39,36 @@ export class HistCanvas {
     this.histArea.width = w;
     this.previousWidth = w;
   }
+
+
+  mouseMoveHist(event){
+    this.magnifyOn(event);
+    this.getCanvasColor(event);
+  }
+
+  magnifyOn(event) {
+      this.zoomCtx.fillStyle = "rgb(0, 0, 0)";
+      this.zoomCtx.fillRect(0, 0, this.zoom.width, this.zoom.height);
+
+      let clientRect = this.histArea.getBoundingClientRect() ;
+      let positionX = clientRect.left + window.pageXOffset ;
+      let positionY = clientRect.top + window.pageYOffset ;
+
+      let X = event.clientX - positionX;
+      let Y = event.clientY - positionY;
+
+      this.zoomCtx.drawImage(this.histArea, X-this.zoomSize/2, Y-this.zoomSize/2, this.zoomSize, this.zoomSize, 0, 0, this.zoom.width, this.zoom.height);
+
+      this.zoom.style.left = event.pageX - this.zoom.width / 2 + "px";
+      this.zoom.style.top = event.pageY - this.zoom.height / 2 + "px";
+      this.zoom.style.display = "block";
+  }
+
+  magnifyOff() {
+    this.zoom.style.display = "none";
+  }
+
+
 
   getCanvasColor(event) {
     let eventLocation = this.getEventLocation(this.histArea, event);
