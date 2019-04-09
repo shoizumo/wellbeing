@@ -2,7 +2,6 @@ export class HistCanvas {
   constructor(soundMouseOverObj) {
     this.histArea = document.querySelector("#histogram");
     this.context = this.histArea.getContext("2d");
-    // this.setCanvasSize();
     this.context.globalAlpha = 1.0;  // for safari(fillStyle alpha doesn't work)
 
     const histogram = $('#histogram');
@@ -24,7 +23,9 @@ export class HistCanvas {
 
     this.zoom = document.getElementById("zoomCanvas");
     this.zoomCtx = this.zoom.getContext("2d");
-    this.zoomSize = 50;
+    this.zoomSize = 100;
+
+    this.isMagnifyingOn = true;
   }
 
   get width() {
@@ -61,7 +62,7 @@ export class HistCanvas {
 
       this.zoom.style.left = event.pageX - this.zoom.width / 2 + "px";
       this.zoom.style.top = event.pageY - this.zoom.height / 2 + "px";
-      this.zoom.style.display = "block";
+      this.zoom.style.display = this.isMagnifyingOn ? "block" : "none";
   }
 
   magnifyOff() {
@@ -76,7 +77,6 @@ export class HistCanvas {
     let pixelData = this.context.getImageData(eventLocation.x, eventLocation.y, 1, 1).data;
 
     // if nofill, isInfoObject = false
-    // isInfoObject = (pixelData[0] > 0);  // 不要かも？
     this.isOnFillHist = (pixelData[0] > 0);
   }
 

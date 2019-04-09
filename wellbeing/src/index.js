@@ -430,9 +430,35 @@ import {timeline} from './data/timeline';
     //////////////////////////////////////////////////////////////////////////
 
 
+    /* modal sound button */
+    let optionSoundBtn = document.getElementsByClassName('optionSound');
+    for (let i = 0, l = optionSoundBtn.length; i < l; i++) {
+      optionSoundBtn[i].addEventListener('click', (e) => {
+        $(".optionSound").removeClass("selectedBtn");
+        optionSoundBtn[i].classList.add("selectedBtn");
+
+        let isSoundOn = e.target.id === 'optionSoundOn';
+        Howler.mute(!isSoundOn);
+      })
+    }
+
+    /* modal Magnifying button */
+    let optionMagnifyingBtn = document.getElementsByClassName('optionMagnifying');
+    for (let i = 0, l = optionMagnifyingBtn.length; i < l; i++) {
+      optionMagnifyingBtn[i].addEventListener('click', (e) => {
+        $(".optionMagnifying").removeClass("selectedBtn");
+        optionMagnifyingBtn[i].classList.add("selectedBtn");
+
+        histCanvas.isMagnifyingOn = e.target.id === 'optionMagnifyingOn';
+
+      })
+    }
+    optionMagnifyingBtn[0].classList.add("selectedBtn");
+
+
 
     //////////////////////////////////////////////////////////////////////////
-    /* start button */
+    /* start button(sound setting) */
     let startButton = document.getElementsByClassName('startButton');
     for (let i = 0, l = startButton.length; l > i; i++) {
       startButton[i].addEventListener('click', function(){
@@ -442,10 +468,7 @@ import {timeline} from './data/timeline';
 
         let isSoundOn = this.id === 'soundOn';
         Howler.mute(!isSoundOn);
-        document.addEventListener('dblclick', () => {
-          isSoundOn = !isSoundOn;
-          Howler.mute(!isSoundOn);
-        });
+        optionSoundBtn[isSoundOn ? 0 : 1].classList.add("selectedBtn");
 
 
         let duration = 5.0;

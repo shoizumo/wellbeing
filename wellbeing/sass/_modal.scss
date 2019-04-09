@@ -71,7 +71,7 @@ modal window(responsive)
 /* modal1 */
 
 /* modal2 */
-＃settingContent {
+#settingContent {
   grid-raw: 2 / 3;
 
   display: grid;
@@ -161,11 +161,11 @@ modal window(responsive)
 #settingContentTitle3 {
   /*border: 1px dotted #aaaaaa;*/
   background: #d7d7d7;
-  grid-raw: 4 / 5;
+  grid-raw: 5 / 6;
 }
 
 #infoType {
-  grid-raw: 5 / 6;
+  grid-raw: 6 / 7;
 
   li {
     border: 1px dotted #aaaaaa;
@@ -177,6 +177,97 @@ modal window(responsive)
     }
   }
 }
+
+/* modal3 */
+#optionContent {
+  grid-raw: 2 / 3;
+
+  display: grid;
+  grid-template-columns: ($modalContentWidth / 2);
+  grid-template-rows: 40px 60px 40px 60px 40px 60px;
+
+  width: ($modalContentWidth / 2);
+  height: ($modalContentWidth / 2);
+
+  @include media(w_600) {
+    grid-template-columns: $modalContentWidth;
+    width: $modalContentWidth;
+
+  }
+}
+
+
+#optionContent {
+  ul {
+    list-style: none;
+    overflow: hidden;
+  }
+
+  p {
+    /* title */
+    text-align: center;
+    font-size: 1.2em;
+    height: 40px;
+    line-height: 40px;
+  }
+
+  li {
+    text-align: center;
+    font-size: 1.0em;
+    float: left;
+    height: 60px;
+    line-height: 60px;
+
+    &:hover {
+      background: $buttonColor;
+      cursor: pointer;
+    }
+  }
+}
+
+#optionContentTitle1 {
+  /*border: 1px dotted #aaaaaa;*/
+  background: #d7d7d7;
+  grid-raw: 1 / 2;
+}
+
+#optionSound {
+  grid-raw: 2 / 3;
+
+  li {
+    border: 1px dotted #aaaaaa;
+    width: ($modalContentWidth / 2) / $numOnOff - 2px;
+    height: 58px;
+
+    @include media(w_600) {
+      width: $modalContentWidth / $numOnOff - 2px;
+    }
+  }
+}
+
+
+#optionContentTitle2 {
+  /*border: 1px dotted #aaaaaa;*/
+  background: #d7d7d7;
+  grid-raw: 3 / 4;
+}
+
+#optionMagnifying {
+  grid-raw: 4 / 5;
+
+  li {
+    border: 1px dotted #aaaaaa;
+    width: ($modalContentWidth / 2) / $numOnOff - 2px;
+    height: 58px;
+
+    @include media(w_600) {
+      width: $modalContentWidth / $numOnOff - 2px;
+    }
+  }
+}
+
+
+
 
 #wbButton2 {
   position: fixed;
