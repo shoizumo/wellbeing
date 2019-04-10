@@ -494,8 +494,8 @@ import {timeline} from './data/timeline';
 
             setTimeout(() => {
               setSelectedDataTypeButton(0);
-              infoBordObj.infoBtn[2].classList.add("selectedBtn"); // infoBordObj.setInfoTypeLinechart
-              infoBordObj.setInfoTypeLinechart();
+              infoBordObj.infoBtn[1].classList.add("selectedBtn"); // infoBordObj.setInfoTypeLinechart
+              infoBordObj.setInfoTypePiechart();
               setManualModeTravel();
 
             }, 400);
@@ -673,7 +673,7 @@ import {timeline} from './data/timeline';
       infoBordObj.isPantheon = true;
       $('#infoBoard3').css("display", 'block');
       $(".infoType").removeClass("selectedBtn");
-      infoBordObj.infoBtn[2].classList.add("selectedBtn");
+      infoBordObj.infoBtn[1].classList.add("selectedBtn");
       infoBordObj.setInfoTypePantheon();
 
       TweenMax.killAll();
@@ -689,8 +689,8 @@ import {timeline} from './data/timeline';
       infoBordObj.isPantheon = false;
       $('#infoBoard3').css("display", 'none');
       $(".infoType").removeClass("selectedBtn");
-      infoBordObj.infoBtn[2].classList.add("selectedBtn");
-      infoBordObj.setInfoTypeLinechart();
+      infoBordObj.infoBtn[1].classList.add("selectedBtn");
+      infoBordObj.setInfoTypePiechart();
 
       TweenMax.killAll();
       locationObj.deletePin();
