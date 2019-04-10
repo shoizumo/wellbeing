@@ -277,19 +277,19 @@ import {timeline} from './data/timeline';
     let soundBGM = new Howl({
       src: ['sound/bgm.mp3'],
       loop: true,
-      volume: 0.2,
+      volume: 0.1,
     });
 
     let soundMouseOver = new Howl({
       src: ['sound/mouse_over.mp3'],
       loop: false,
-      volume: 0.7,
+      volume: 0.05,
     });
 
     let soundMoveCamera = new Howl({
       src: ['sound/move_camera.mp3'],
       loop: false,
-      volume: 0.7,
+      volume: 1.0,
     });
 
 
@@ -672,6 +672,7 @@ import {timeline} from './data/timeline';
     function onPantheon() {
       infoBordObj.isPantheon = true;
       $('#infoBoard3').css("display", 'block');
+      // $('#infoBoard3Title').css("display", 'block');
       $(".infoType").removeClass("selectedBtn");
       infoBordObj.infoBtn[2].classList.add("selectedBtn");
       infoBordObj.setInfoTypePantheon();
@@ -688,6 +689,7 @@ import {timeline} from './data/timeline';
 
       infoBordObj.isPantheon = false;
       $('#infoBoard3').css("display", 'none');
+      $('#infoBoard3Title').css("display", 'none');
       $(".infoType").removeClass("selectedBtn");
       infoBordObj.infoBtn[2].classList.add("selectedBtn");
       infoBordObj.setInfoTypeLinechart();

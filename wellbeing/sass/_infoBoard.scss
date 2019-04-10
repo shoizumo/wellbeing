@@ -257,3 +257,15 @@ infoBoard3(pantheon)
   }
 }
 
+#infoBoard3Title {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  margin-top: -60px;
+  margin-left:-100px;
+  color: #cccccc;
+  font-family: $font-main;
+  font-weight: 500;
+  font-size: 25px;
+  display: none;
+}

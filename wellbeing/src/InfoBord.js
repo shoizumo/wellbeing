@@ -594,6 +594,7 @@ export class InfoBord {
 
     this.fadeInfoBoardPantheon();
     setTimeout(() => {
+      $('#infoBoard3Title').css("display", 'block');
       this.tweenP1 = TweenMax.to("#country3", 1.0, {
         opacity: 1.0,
         onComplete: () => {
@@ -669,6 +670,7 @@ export class InfoBord {
 
   fadeInfoBoardPantheon() {
     $('#country3').css({opacity: 0.0});
+    // $('#infoBoard3Title').css({opacity: 0.0});
     $('.infoBoardContent3').css({opacity: 0.0}).css("display", 'none');
   };
 
