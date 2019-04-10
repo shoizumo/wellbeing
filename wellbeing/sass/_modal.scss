@@ -44,6 +44,10 @@ modal window(responsive)
     margin-left: -($modalContentWidth / 2);
     width: $modalContentWidth;
   }
+
+  span {
+    font-size: 0.8em !important;
+  }
 }
 
 .modalTitle {
@@ -67,6 +71,27 @@ modal window(responsive)
   font-size: 2.0em;
   cursor: pointer;
 }
+
+
+.contentBtnTitle{
+  font-weight: 500;
+}
+
+#dataNote {
+  p {
+    font-weight: 100 !important;
+    font-size: 0.7em !important;
+    height: 15px !important;
+    line-height: 15px !important;
+  }
+
+  #dataNoteTitle{
+    font-weight: 300 !important;
+    font-size: 0.8em !important;
+    height: 20px !important;
+  }
+}
+
 
 /* modal1 */
 
@@ -267,6 +292,17 @@ modal window(responsive)
 }
 
 
+/* modal4 */
+#dataContent {
+  p {
+    margin-left: 10px;
+    text-align: left;
+    font-size: 1.2em;
+    height: 40px;
+    line-height: 40px;
+  }
+}
+
 
 
 #wbButton2 {
@@ -322,6 +358,26 @@ modal window(responsive)
 
     @include media(w_600) {
       width: $modalContentWidth / $numInfoType - 3px
+    }
+  }
+
+  _::-webkit-full-page-media, _:future, :root #optionSound li {
+    border: 1px dotted #aaaaaa;
+    width: ($modalContentWidth / 2) / $numOnOff - 3px;
+    height: 57px;
+
+    @include media(w_600) {
+      width: $modalContentWidth / $numOnOff - 3px
+    }
+  }
+
+  _::-webkit-full-page-media, _:future, :root #optionMagnifying li {
+    border: 1px dotted #aaaaaa;
+    width: ($modalContentWidth / 2) / $numOnOff - 3px;
+    height: 57px;
+
+    @include media(w_600) {
+      width: $modalContentWidth / $numOnOff - 3px
     }
   }
 }

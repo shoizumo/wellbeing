@@ -5,7 +5,7 @@
       <meta name="viewport" content="width=device-width,initial-scale=1">
       <link rel="stylesheet" href="lib/jquery-ui.css">
       <!--<link href="https://fonts.googleapis.com/css?family=Nunito:200,300,400,600" rel="stylesheet">-->
-      <link href="https://fonts.googleapis.com/css?family=Roboto:100,300,400,700" rel="stylesheet">
+      <link href="https://fonts.googleapis.com/css?family=Roboto:100,300,400,500,700" rel="stylesheet">
       <link rel="stylesheet" href="css/main.css">
 
       <script data-src="shader/main.vert" charset="utf-8" data-name="myShaderMain" type="x-shader/x-vertex"></script>
@@ -148,8 +148,8 @@
           <li><a id="menu1" class="menu">About</a></li>
           <li><a id="menu2" class="menu">Setting</a></li>
           <li><a id='menu3' class="menu">Option</a></li>
-          <li><a id='menu4' class="menu">Menu2</a></li>
-          <li><a id='menu5' class="menu">Menu3</a></li>
+          <li><a id='menu4' class="menu">Data</a></li>
+          <!--<li><a id='menu5' class="menu">Menu3</a></li>-->
         </ul>
       </nav>
 
@@ -161,7 +161,7 @@
 
       <!--about-->
       <div id="modalContentWrapper1" class="modalContentWrapper infoObject">
-        <div id="modalContent1" class="modalContent">
+        <div class="modalContent">
           <p class="modalTitle">About</p>
           <p>This is ...</p>
           <p class="modalClose">×</p>
@@ -171,12 +171,12 @@
 
       <!--setting-->
       <div id="modalContentWrapper2" class="modalContentWrapper infoObject">
-        <div id="modalContent2" class="modalContent">
+        <div class="modalContent">
           <p class="modalTitle">Setting</p>
 
           <div id="settingContent">
 
-            <p id="settingContentTitle1">Data type</p>
+            <p id="settingContentTitle1" class="contentBtnTitle">Data type</p>
             <ul id="wbButton1">
               <li id="ladderBtn1" class="wbButton wbButton1">Life Evaluation</li>
               <li id="positiveBtn1" class="wbButton wbButton1">Positive Experience</li>
@@ -184,13 +184,13 @@
               <li id="gdpBtn1" class="wbButton wbButton1">GDP per capita</li>
             </ul>
 
-            <p id="settingContentTitle2">Travel Mode</p>
+            <p id="settingContentTitle2" class="contentBtnTitle">Travel Mode</p>
             <ul id="travelMode">
               <li id="manualMode" class="travelMode">Manual</li>
               <li id="autoMode" class="travelMode">Auto</li>
             </ul>
 
-            <p id="settingContentTitle3">Information style</p>
+            <p id="settingContentTitle3" class="contentBtnTitle">Information style</p>
             <ul id="infoType">
               <li id="infoText" class="infoType">Text</li>
               <li id="infoPiechart" class="infoType">Pie chart</li>
@@ -206,18 +206,18 @@
 
       <!--option-->
       <div id="modalContentWrapper3" class="modalContentWrapper infoObject">
-        <div id="modalContent3" class="modalContent">
+        <div class="modalContent">
           <p class="modalTitle">Option</p>
 
           <div id="optionContent">
 
-            <p id="optionContentTitle1">Sound</p>
+            <p id="optionContentTitle1" class="contentBtnTitle">Sound</p>
             <ul id="optionSound">
               <li id="optionSoundOn" class="optionSound">ON</li>
               <li id="optionSoundOff" class="optionSound">OFF</li>
             </ul>
 
-            <p id="optionContentTitle2">Magnifying glass</p>
+            <p id="optionContentTitle2" class="contentBtnTitle">Magnifying glass</p>
             <ul id="optionMagnifying">
               <li id="optionMagnifyingOn" class="optionMagnifying">ON</li>
               <li id="optionMagnifyingOff" class="optionMagnifying">OFF</li>
@@ -227,6 +227,60 @@
           <p class="modalClose">×</p>
         </div>
       </div>
+
+
+      <!--Data-->
+      <div id="modalContentWrapper4" class="modalContentWrapper infoObject">
+        <div class="modalContent">
+          <p class="modalTitle">Data</p>
+
+          <div id="dataContent">
+            <p>- Life Evaluation<span> (in 2018)</span> :
+              <a href="http://worldhappiness.report/ed/2019/" target="_blank">
+              World Happiness Report
+                </a>
+            </p>
+            <p>- Positive Experience Index<span> (in 2018)</span> :
+              <a href="http://worldhappiness.report/ed/2019/" target="_blank">
+                World Happiness Report
+              </a>
+            </p>
+            <p>- Negative Experience Index<span> (in 2018)</span> :
+              <a href="http://worldhappiness.report/ed/2019/" target="_blank">
+                World Happiness Report
+              </a>
+            </p>
+            <p>- GDP per capita<span> (in 2017)</span> :
+              <a href="https://data.worldbank.org/indicator/NY.GDP.PCAP.CD" target="_blank">
+                World Bank
+              </a>
+              /
+              <a href="https://www.imf.org/external/datamapper/NGDPDPC@WEO/OEMDC/ADVEC/WEOWORLD" target="_blank">
+                IMF
+              </a>
+            </p>
+            <p>- Globally known people :
+              <a href="http://pantheon.media.mit.edu/" target="_blank">
+                Pantheon
+              </a>
+            </p>
+
+            <div id="dataNote">
+              <p id="dataNoteTitle">Note:</p>
+              <p>Bahrain, Central African Republic, Congo [DRC], Ghana, Hong Kong, Hungary
+                Iceland, Iraq, Jamaica, Kuwait, Lesotho, Paraguay, Poland, South Sudan,
+                Tajikistan, Trinidad and Tobago are used Life Evaluation, Positive Experience Index,
+                Negative Experience Index data in 2017, Somalia is used data in 2016.
+              Jordan is used Positive Experience Index, Negative Experience Index data in 2017.
+              South Sudan is used GDP data in 2016, Venezuela is used data in 2014.
+              </p>
+            </div>
+
+          </div>
+          <p class="modalClose">×</p>
+        </div>
+      </div>
+
 
       <script src="lib/jquery-3.3.1.min.js"></script>
       <script src="lib/jquery-ui.min.js"></script>
