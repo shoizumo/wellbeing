@@ -241,8 +241,9 @@ infoBoard3(pantheon)
 
 #country3 {
   /*opacity: 0.0;*/
-  line-height: 25px;
-  font-size: 22px;
+  line-height: 40px;
+  font-size: 27px;
+  font-weight: 400;
 }
 
 .infoBoardContent3 a {
@@ -252,20 +253,10 @@ infoBoard3(pantheon)
   line-height: 30px;
   font-size: 18px;
 
+  //margin-top: 50px;
+  margin-left:28px;
+
   &:hover {
     color: #aeccfc;
   }
-}
-
-#infoBoard3Title {
-  position: fixed;
-  top: 50%;
-  left: 50%;
-  margin-top: -60px;
-  margin-left:-100px;
-  color: #cccccc;
-  font-family: $font-main;
-  font-weight: 500;
-  font-size: 25px;
-  display: none;
 }

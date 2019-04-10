@@ -107,7 +107,8 @@ export class HistCanvas {
   }
 
   setHighlightColor() {
-    this.context.fillStyle = "rgb(150, 50, 50)";
+    // this.context.fillStyle = "rgb(150, 50, 50)";
+    this.context.fillStyle = "rgb(120, 120, 30)";
   }
 
   highlightBarOnHistColor() {

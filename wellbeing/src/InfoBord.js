@@ -574,7 +574,7 @@ export class InfoBord {
         pIndex = i;
       }
     }
-    document.getElementById("country3").innerHTML = countryName;
+    document.getElementById("country3").innerHTML = countryName + ' <span style="font-size: 15px;"> is famous for </span>';
     let numPanheonPeople = 5;
     for (let i = 0; numPanheonPeople > i; i++) {
       infoBoardContent3[i].innerHTML = ''; // clear previous result
@@ -604,7 +604,7 @@ export class InfoBord {
           });
         }
       })
-    }, 1000);
+    }, 800);
   }
 
 
@@ -670,7 +670,6 @@ export class InfoBord {
 
   fadeInfoBoardPantheon() {
     $('#country3').css({opacity: 0.0});
-    // $('#infoBoard3Title').css({opacity: 0.0});
     $('.infoBoardContent3').css({opacity: 0.0}).css("display", 'none');
   };
 

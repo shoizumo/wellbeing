@@ -103,7 +103,7 @@ export class Location {
   }
 
   makePinObj() {
-    const pinMaterial = new THREE.MeshPhongMaterial({color: 0xf15b47});  // あとで色を変えることがあるから、毎回設定
+    const pinMaterial = new THREE.MeshPhongMaterial({color: 0xf9ff54});  // あとで色を変えることがあるから、毎回設定
     let cone = new THREE.Mesh(this.pinConeGeometry, pinMaterial);
     cone.position.y = this.pinHeight * 0.5;
     cone.rotation.x = Math.PI;
