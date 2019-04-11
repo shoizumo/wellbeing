@@ -52,7 +52,7 @@ export class Location {
     let step = 100;
     let stepAngle = angle / step;
     let count = 0;
-    this.soundObj.play()
+    this.soundObj.play();
 
     let moveCameraQuaternion = (stepAngle) => {
       q.setFromAxisAngle(crossVec, stepAngle);

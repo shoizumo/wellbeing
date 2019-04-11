@@ -20,11 +20,12 @@ h2{
   text-align: center;
   color: #F2F2F2;
   @include z-index(menu);
-  font-family: $font-main;
-  font-weight: 700;
-  font-size: 3em;
+  //font-family: $font-main;
+  font-family: 'Source Sans Pro';
+  font-weight: 600;
+  font-size: 3.5em;
   width:100%;
-  letter-spacing: 0.04em
+  letter-spacing: 0.01em
 }
 
 #webgl{

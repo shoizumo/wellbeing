@@ -793,7 +793,6 @@ import {timeline} from './data/timeline';
 
 
     stopTravel = function () {
-      console.log('stopTravel');
       clearInterval(travelSetInterval);
     };
 
@@ -807,6 +806,7 @@ import {timeline} from './data/timeline';
       let isClear = false;
 
       function travel() {
+        $('#infoBoard2s').css("display", 'block');
         let data = dataList['pantheonData'];
 
         if (!data.isOnClickHist) {
@@ -824,6 +824,8 @@ import {timeline} from './data/timeline';
           infoBordObj.displayInfo(countryName);
           i++;
 
+          // i = i + 50;
+
           if (isClear) {
             for (let i = 0, l = locationObj.pinList.length; l > i; i++) {
               let pins = locationObj.pinList[i].children;
@@ -834,10 +836,27 @@ import {timeline} from './data/timeline';
           travelIndex = i;  // val for continue
 
 
-          if (i <= pantheon.length) {
+          if (i <= data.data.length - 1) {
             travelSetInterval = setTimeout(travel, 6185);  // 1200(=20m) / 194(Num of Pantheon data)
+          }else{
+
+            // 1周したらリセットしてはじめから
+            i = 0;
+            setTimeout(function () {
+              data.drawHist(drawHistDurationNomal, 'travel');
+              locationObj.deletePin();
+              infoBordObj.fadeInfoBoardVisual();
+              infoBordObj.fadeInfoBoardText();
+              $('#infoBoard2s').css("display", 'none');
+            }, 8000);
+            // data.drawHist(drawHistDurationNomal, 'new');
+            travelSetInterval = setTimeout(travel, 10000);  // 1200(=20m) / 194(Num of Pantheon data)
           }
+
+
+
         } else {
+          // histをクリックしたとき
           if (travelIndex !== 0) {
             TweenMax.killAll();
             infoBordObj.positiveTween.cancel();
