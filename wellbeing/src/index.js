@@ -106,6 +106,7 @@ import {timeline} from './data/timeline';
   let killTweenTextAnimation;
 
 
+  let drawHistDurationInit = 2000;
   let drawHistDurationNomal = 1000;
   let drawHistDurationRedraw = 0;
 
@@ -289,7 +290,7 @@ import {timeline} from './data/timeline';
     let soundMoveCamera = new Howl({
       src: ['sound/move_camera.mp3'],
       loop: false,
-      volume: 0.5,
+      volume: 0.3,
     });
 
 
@@ -501,7 +502,7 @@ import {timeline} from './data/timeline';
             }, 400);
             setTimeout(() => {
               // landBase.material.opacity = 1.0;
-              dataList['ladderData'].drawHist(drawHistDurationNomal, 'new');
+              dataList['ladderData'].drawHist(drawHistDurationInit, 'new');
 
 
               isFinishStartTween = true;

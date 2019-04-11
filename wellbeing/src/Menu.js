@@ -1,7 +1,7 @@
 export class Menu {
 
   static initMenu() {
-    $('.navToggle').click(function () {
+    $('.navToggle').click(function (e) {
       $(this).toggleClass('active');
 
       if ($(this).hasClass('active')) {
@@ -9,10 +9,12 @@ export class Menu {
       } else {
         $('.globalMenu').removeClass('active');
       }
+
+      e.stopPropagation();
     });
 
-    // if content is clicked, close menu.
-    $('.globalMenu').click(function () {
+    // if content is clicked, close menu (use stopPropagation)
+    $('body').click(function () {
       $('.navToggle').removeClass('active');
       $('.globalMenu').removeClass('active');
     });
@@ -23,8 +25,7 @@ export class Menu {
     for (let i = 0, l = menuSetting.length; i < l; i++) {
       menuSetting[i].addEventListener('click', (e) => {
         let id = e.target.id.slice(4,);
-        // $(this).blur();
-        $('menuSetting').blur();
+        // $('menuSetting').blur();
         if ($("#modalOverlay")[0]) {
           return false;
         }
@@ -33,12 +34,12 @@ export class Menu {
 
         // contentごとに書き換え
         $("#modalContentWrapper" + id.toString()).fadeIn(400);
-        $("#modalOverlay, .modalClose").unbind()
-            .click(function () {
-              $("#modalContentWrapper" + id.toString() + ", #modalOverlay").fadeOut(400, function () {
-                $("#modalOverlay").remove();
-              });
-            });
+        $("#modalOverlay, .modalClose").unbind();
+        $("#modalOverlay, .modalClose, .navToggle").click(function () {
+          $("#modalContentWrapper" + id.toString() + ", #modalOverlay").fadeOut(400, function () {
+            $("#modalOverlay").remove();
+          });
+        });
       }, false);
     }
   }
