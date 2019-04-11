@@ -665,7 +665,7 @@ import {timeline} from './data/timeline';
         const type = e.target.id.slice(0, -4) + 'Data';
         const index = wbType[type];
         setSelectedDataTypeButton(index);
-        dataList[type].drawHist(drawHistDurationNomal, 'new');
+        dataList[type].drawHist(drawHistDurationNomal, 'wbButton');
 
       }, false);
     }

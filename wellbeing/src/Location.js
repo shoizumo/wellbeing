@@ -39,7 +39,7 @@ export class Location {
   }
 
 
-  moveCamera(latitude, longitude) {
+  moveCamera(latitude, longitude, drawType=0) {
     clearInterval(this.clearMoveCameraId);
     let targetPos = this.convertGeoCoords(latitude, longitude);
     let targetVec = targetPos.sub(this.center);
@@ -52,7 +52,11 @@ export class Location {
     let step = 100;
     let stepAngle = angle / step;
     let count = 0;
-    this.soundObj.play();
+
+    if (drawType !== 'wbButton'){
+      this.soundObj.play();
+    }
+
 
     let moveCameraQuaternion = (stepAngle) => {
       q.setFromAxisAngle(crossVec, stepAngle);

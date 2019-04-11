@@ -54,6 +54,14 @@ export class Hist {
             this.infoBord.displayInfo(this.infoBord.countryNameDisplayed);
           // }
         }
+
+        if (drawType === 'wbButton') {
+          // if (this.checkIsTravelManual()) {
+            this.infoBord.location.deletePin();
+            this.infoBord.displayInfo(this.infoBord.countryNameDisplayed, drawType);
+          // }
+        }
+
       }
     }
   };

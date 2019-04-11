@@ -143,7 +143,7 @@ export class InfoBord {
     return text;
   }
 
-  displayInfo(countryName) {
+  displayInfo(countryName, drawType=0) {
     this.countryNameDisplayed = countryName;
     if (!this.isFirstDisplay) {
       TweenMax.killAll();
@@ -179,7 +179,7 @@ export class InfoBord {
     if (typeof locationResult.latitude !== 'undefined') {
       let latitude = locationResult.latitude;
       let longitude = locationResult.longitude;
-      this.location.moveCamera(latitude, longitude);
+      this.location.moveCamera(latitude, longitude, drawType);
 
     }
   }
