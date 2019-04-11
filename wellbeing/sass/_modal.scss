@@ -333,11 +333,13 @@ modal window(responsive)
   }
 
   @include media(w_600) {
-    margin-left: 10px;
-    text-align: left;
-    font-size: 1.2em;
-    height: 40px;
-    line-height: 40px;
+    p {
+      margin-left: 10px;
+      text-align: left;
+      font-size: 1.2em;
+      height: 40px;
+      line-height: 40px;
+    }
   }
 }
 
