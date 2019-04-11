@@ -98,9 +98,29 @@ modal window(responsive)
   p {
     margin-left: 10px;
     text-align: left;
-    font-size: 1.2em;
-    height: 40px;
-    line-height: 40px;
+    font-size: 1.0em;
+
+    height: 22px;
+    line-height: 22px;
+  }
+
+  #credit{
+    margin-top: 230px;
+    margin-left: 0;
+    text-align: center;
+    font-size: 0.4em;
+  }
+
+  @include media(w_600) {
+    p {
+      font-size: 1.2em;
+      height: 40px;
+      line-height: 40px;
+    }
+    #credit{
+      margin-top: 220px;
+      font-size: 0.8em;
+    }
   }
 }
 
@@ -307,12 +327,51 @@ modal window(responsive)
   p {
     margin-left: 10px;
     text-align: left;
+    font-size: 0.6em;
+    height: 30px;
+    line-height: 20px;
+  }
+
+  @include media(w_600) {
+    margin-left: 10px;
+    text-align: left;
     font-size: 1.2em;
     height: 40px;
     line-height: 40px;
   }
 }
 
+
+///* modal1 */
+//#aboutContent {
+//  p {
+//    margin-left: 10px;
+//    text-align: left;
+//    font-size: 1.0em;
+//
+//    height: 22px;
+//    line-height: 22px;
+//  }
+//
+//  #credit{
+//    margin-top: 230px;
+//    margin-left: 0;
+//    text-align: center;
+//    font-size: 0.4em;
+//  }
+//
+//  @include media(w_600) {
+//    p {
+//      font-size: 1.2em;
+//      height: 40px;
+//      line-height: 40px;
+//    }
+//    #credit{
+//      margin-top: 220px;
+//      font-size: 0.8em;
+//    }
+//  }
+//}
 
 
 #wbButton2 {

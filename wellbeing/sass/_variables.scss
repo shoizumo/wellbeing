@@ -13,7 +13,7 @@ $layer: (
 }
 
 $breakpointsList: (
-        w_600: "screen and (min-width: 600px)",
+        w_600: "screen and (min-width: 600px)", // 実際にはmaxの意味で間違えて使っている、、
         w500_680: "screen and (min-width: 500px) and (max-width: 680px)", // tablet
         w680_800: "screen and (min-width: 680px) and (max-width: 800px)", // PC(narrow)
         w800_1000: "screen and (min-width: 800px) and (max-width: 1000px)", // PC(medium)
