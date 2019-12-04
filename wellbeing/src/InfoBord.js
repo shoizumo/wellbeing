@@ -89,6 +89,18 @@ export class InfoBord {
     }
   }
 
+  getWidth() {
+    if (this.windowWidth < 680) {
+      return 320;
+    } else if (this.windowWidth >= 680 && this.windowWidth < 800) {
+      return 480;
+    } else if (this.windowWidth >= 800 && this.windowWidth < 1000) {
+      return 600;
+    } else {
+      return 800;
+    }
+  }
+
   get height() {
     return this.windowWidth < 1000 ? 80 : 105;
   }
@@ -505,7 +517,7 @@ export class InfoBord {
 
   addTimelineScale(yearList, offset, index) {
     let timelineScaleArea = document.getElementById('infoBoardTimelineScale');
-    let width = (timelineScaleArea.width.baseVal.value - offset * 2) / (yearList.length - 1);
+    let width = (this.getWidth() - offset * 2) / (yearList.length - 1);
     let px = '10px';
 
     let textX = String(width * index + offset) + 'px';

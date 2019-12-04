@@ -565,6 +565,7 @@ import {timeline} from './data/timeline';
             dataList[selectedType].drawHist(drawHistDurationRedraw, 'redraw');
           }
         }
+        infoBordObj.displayInfo(infoBordObj.countryNameDisplayed);
       }
     }, false);
 
